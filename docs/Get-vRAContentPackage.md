@@ -17,6 +17,7 @@ Retrieve vRA Content Packages
 ### Id
 
 Specify the ID of a Content Package
+
 * Required: true
 * Position: named
 * Default value: 
@@ -25,6 +26,7 @@ Specify the ID of a Content Package
 ### Name
 
 Specify the Name of a Content Package
+
 * Required: true
 * Position: named
 * Default value: 
@@ -33,6 +35,7 @@ Specify the Name of a Content Package
 ### Limit
 
 The number of entries returned per page from the API. This has a default value of 100.
+
 * Required: false
 * Position: named
 * Default value: 100

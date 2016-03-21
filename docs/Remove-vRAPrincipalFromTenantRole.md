@@ -17,6 +17,7 @@ Remove a vRA Principal from a Tenant Role
 ### TenantId
 
 Specify the Tenant Id
+
 * Required: true
 * Position: 1
 * Default value: 
@@ -25,6 +26,7 @@ Specify the Tenant Id
 ### PrincipalId
 
 Specify the Principal Id
+
 * Required: true
 * Position: 2
 * Default value: 
@@ -33,6 +35,7 @@ Specify the Principal Id
 ### RoleId
 
 Specify the Role Id
+
 * Required: true
 * Position: 3
 * Default value: 
@@ -40,12 +43,14 @@ Specify the Role Id
 
 ### WhatIf
 
+
 * Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Confirm
+
 
 * Required: false
 * Position: named

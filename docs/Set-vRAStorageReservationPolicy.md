@@ -17,6 +17,7 @@ Update a vRA Storage Reservation Policy
 ### Id
 
 Storage Reservation Policy Id
+
 * Required: true
 * Position: named
 * Default value: 
@@ -25,6 +26,7 @@ Storage Reservation Policy Id
 ### Name
 
 Storage Reservation Policy Name
+
 * Required: true
 * Position: named
 * Default value: 
@@ -33,6 +35,7 @@ Storage Reservation Policy Name
 ### NewName
 
 Storage Reservation Policy NewName
+
 * Required: false
 * Position: named
 * Default value: 
@@ -41,6 +44,7 @@ Storage Reservation Policy NewName
 ### Description
 
 Storage Reservation Policy Description
+
 * Required: false
 * Position: named
 * Default value: 
@@ -49,6 +53,7 @@ Storage Reservation Policy Description
 ### JSON
 
 Body text to send in JSON format
+
 * Required: true
 * Position: named
 * Default value: 
@@ -56,12 +61,14 @@ Body text to send in JSON format
 
 ### WhatIf
 
+
 * Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Confirm
+
 
 * Required: false
 * Position: named

@@ -18,6 +18,7 @@ However, if a request is submitted for a catalogitem without the appropriate ent
 ### Id
 
 The id of the catalog item
+
 * Required: true
 * Position: named
 * Default value: 
@@ -26,6 +27,7 @@ The id of the catalog item
 ### Name
 
 The name of the catalog item
+
 * Required: true
 * Position: named
 * Default value: 
@@ -34,6 +36,7 @@ The name of the catalog item
 ### Limit
 
 The number of entries returned per page from the API. This has a default value of 100.
+
 * Required: false
 * Position: named
 * Default value: 100

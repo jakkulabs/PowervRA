@@ -17,6 +17,7 @@ Remove a vRA Tenant Directory
 ### Id
 
 Tenant Id
+
 * Required: true
 * Position: 1
 * Default value: 
@@ -25,6 +26,7 @@ Tenant Id
 ### Domain
 
 Tenant Directory Domain
+
 * Required: true
 * Position: 2
 * Default value: 
@@ -32,12 +34,14 @@ Tenant Directory Domain
 
 ### WhatIf
 
+
 * Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Confirm
+
 
 * Required: false
 * Position: named

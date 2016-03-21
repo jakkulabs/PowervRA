@@ -17,6 +17,7 @@ Retrieve vRA Tenants. Make sure to have permission to access all Tenant informat
 ### Id
 
 Specify the ID of a Tenant
+
 * Required: false
 * Position: 1
 * Default value: 
@@ -25,6 +26,7 @@ Specify the ID of a Tenant
 ### Limit
 
 The number of entries returned per page from the API. This has a default value of 100.
+
 * Required: false
 * Position: 2
 * Default value: 100

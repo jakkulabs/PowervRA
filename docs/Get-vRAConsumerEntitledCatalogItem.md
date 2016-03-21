@@ -20,6 +20,7 @@ Consumer API for entitled catalog items exposed for users. Consumer Entitled Cat
 
 ### Id
 
+
 * Required: true
 * Position: named
 * Default value: 
@@ -28,6 +29,7 @@ Consumer API for entitled catalog items exposed for users. Consumer Entitled Cat
 ### Name
 
 The name of the catalog item
+
 * Required: true
 * Position: named
 * Default value: 
@@ -36,6 +38,7 @@ The name of the catalog item
 ### Limit
 
 The number of entries returned per page from the API. This has a default value of 100.
+
 * Required: false
 * Position: named
 * Default value: 100

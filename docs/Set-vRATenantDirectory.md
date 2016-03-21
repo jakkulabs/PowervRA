@@ -17,6 +17,7 @@ Update a vRA Tenant Directory
 ### ID
 
 Tenant ID
+
 * Required: true
 * Position: named
 * Default value: 
@@ -25,12 +26,14 @@ Tenant ID
 ### Name
 
 Tenant Directory Name
+
 * Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Description
+
 
 * Required: false
 * Position: named
@@ -40,6 +43,7 @@ Tenant Directory Name
 ### Alias
 
 Tenant Directory Alias
+
 * Required: false
 * Position: named
 * Default value: 
@@ -48,6 +52,7 @@ Tenant Directory Alias
 ### Type
 
 Tenant Directory Type
+
 * Required: false
 * Position: named
 * Default value: 
@@ -56,6 +61,7 @@ Tenant Directory Type
 ### Domain
 
 Tenant Directory Domain
+
 * Required: true
 * Position: named
 * Default value: 
@@ -64,6 +70,7 @@ Tenant Directory Domain
 ### UserNameDN
 
 DN of the Username to authenticate the Tenant Directory with
+
 * Required: false
 * Position: named
 * Default value: 
@@ -72,6 +79,7 @@ DN of the Username to authenticate the Tenant Directory with
 ### Password
 
 Password of the Username to authenticate the Tenant Directory with
+
 * Required: false
 * Position: named
 * Default value: 
@@ -80,6 +88,7 @@ Password of the Username to authenticate the Tenant Directory with
 ### URL
 
 Tenant Directory URL, e.g. ldap://dc01.vrademo.local:389
+
 * Required: false
 * Position: named
 * Default value: 
@@ -88,6 +97,7 @@ Tenant Directory URL, e.g. ldap://dc01.vrademo.local:389
 ### GroupBaseSearchDN
 
 Tenant Directory GroupBaseSearchDN
+
 * Required: false
 * Position: named
 * Default value: 
@@ -96,6 +106,7 @@ Tenant Directory GroupBaseSearchDN
 ### UserBaseSearchDN
 
 Tenant Directory UserBaseSearchDN
+
 * Required: false
 * Position: named
 * Default value: 
@@ -104,6 +115,7 @@ Tenant Directory UserBaseSearchDN
 ### Subdomains
 
 Tenant Directory Subdomains
+
 * Required: false
 * Position: named
 * Default value: 
@@ -112,6 +124,7 @@ Tenant Directory Subdomains
 ### GroupBaseSearchDNs
 
 Tenant Directory GroupBaseSearchDNs
+
 * Required: false
 * Position: named
 * Default value: 
@@ -120,6 +133,7 @@ Tenant Directory GroupBaseSearchDNs
 ### UserBaseSearchDNs
 
 Tenant Directory UserBaseSearchDNs
+
 * Required: false
 * Position: named
 * Default value: 
@@ -128,6 +142,7 @@ Tenant Directory UserBaseSearchDNs
 ### DomainAdminUsername
 
 Tenant Directory DomainAdminUserName
+
 * Required: false
 * Position: named
 * Default value: 
@@ -136,6 +151,7 @@ Tenant Directory DomainAdminUserName
 ### DomainAdminPassword
 
 Tenant Directory DomainAdminPassword
+
 * Required: false
 * Position: named
 * Default value: 
@@ -144,6 +160,7 @@ Tenant Directory DomainAdminPassword
 ### Certificate
 
 Tenant Directory Certificate
+
 * Required: false
 * Position: named
 * Default value: 
@@ -152,6 +169,7 @@ Tenant Directory Certificate
 ### TrustAll
 
 Tenant Directory TrustAll
+
 * Required: false
 * Position: named
 * Default value: False
@@ -160,6 +178,7 @@ Tenant Directory TrustAll
 ### UseGlobalCatalog
 
 Tenant Directory UseGlobalCatalog
+
 * Required: false
 * Position: named
 * Default value: False
@@ -168,6 +187,7 @@ Tenant Directory UseGlobalCatalog
 ### JSON
 
 Body text to send in JSON format
+
 * Required: true
 * Position: named
 * Default value: 
@@ -175,12 +195,14 @@ Body text to send in JSON format
 
 ### WhatIf
 
+
 * Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Confirm
+
 
 * Required: false
 * Position: named

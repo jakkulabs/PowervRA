@@ -22,6 +22,7 @@ If no switch is passed then the request id will be returned
 ### Id
 
 The Id of the catalog item to request
+
 * Required: true
 * Position: named
 * Default value: 
@@ -30,6 +31,7 @@ The Id of the catalog item to request
 ### RequestedFor
 
 The user principal that the request is for (e.g. user@vsphere.local). If not specified the current user is used
+
 * Required: false
 * Position: named
 * Default value: 
@@ -38,6 +40,7 @@ The user principal that the request is for (e.g. user@vsphere.local). If not spe
 ### Description
 
 A description for the request
+
 * Required: false
 * Position: named
 * Default value: 
@@ -46,6 +49,7 @@ A description for the request
 ### Reasons
 
 Reasons for the request
+
 * Required: false
 * Position: named
 * Default value: 
@@ -54,6 +58,7 @@ Reasons for the request
 ### JSON
 
 JSON string containing the request template
+
 * Required: true
 * Position: named
 * Default value: 
@@ -62,6 +67,7 @@ JSON string containing the request template
 ### Wait
 
 Wait for the request to complete
+
 * Required: false
 * Position: named
 * Default value: False
@@ -69,12 +75,14 @@ Wait for the request to complete
 
 ### WhatIf
 
+
 * Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Confirm
+
 
 * Required: false
 * Position: named

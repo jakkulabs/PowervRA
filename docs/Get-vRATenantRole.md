@@ -17,6 +17,7 @@ Retrieve vRA Tenant Role
 ### TenantId
 
 Specify the Tenant Id
+
 * Required: true
 * Position: 1
 * Default value: 
@@ -25,6 +26,7 @@ Specify the Tenant Id
 ### PrincipalId
 
 Specify the Principal Id
+
 * Required: true
 * Position: 2
 * Default value: 
@@ -33,6 +35,7 @@ Specify the Principal Id
 ### Limit
 
 The number of entries returned per page from the API. This has a default value of 100.
+
 * Required: false
 * Position: 3
 * Default value: 100

@@ -19,6 +19,7 @@ A service must be owned by a specific organization and all the activities it con
 ### Id
 
 The id of the service
+
 * Required: false
 * Position: named
 * Default value: 
@@ -27,6 +28,7 @@ The id of the service
 ### Name
 
 The Name of the service
+
 * Required: false
 * Position: named
 * Default value: 
@@ -35,6 +37,7 @@ The Name of the service
 ### Limit
 
 The number of entries returned per page from the API. This has a default value of 100.
+
 * Required: false
 * Position: named
 * Default value: 100

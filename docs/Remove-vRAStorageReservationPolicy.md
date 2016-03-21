@@ -17,6 +17,7 @@ Remove a vRA Storage Reservation Policy
 ### Id
 
 Storage Reservation Policy ID
+
 * Required: true
 * Position: named
 * Default value: 
@@ -25,6 +26,7 @@ Storage Reservation Policy ID
 ### Name
 
 Storage Reservation Policy Name
+
 * Required: true
 * Position: named
 * Default value: 
@@ -32,12 +34,14 @@ Storage Reservation Policy Name
 
 ### WhatIf
 
+
 * Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Confirm
+
 
 * Required: false
 * Position: named

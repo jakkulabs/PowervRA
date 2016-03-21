@@ -17,6 +17,7 @@ Create a vRA Storage Reservation Policy
 ### Name
 
 Storage Reservation Policy Name
+
 * Required: true
 * Position: named
 * Default value: 
@@ -25,6 +26,7 @@ Storage Reservation Policy Name
 ### Description
 
 Storage Reservation Policy Description
+
 * Required: false
 * Position: named
 * Default value: 
@@ -33,6 +35,7 @@ Storage Reservation Policy Description
 ### JSON
 
 Body text to send in JSON format
+
 * Required: true
 * Position: named
 * Default value: 
@@ -40,12 +43,14 @@ Body text to send in JSON format
 
 ### WhatIf
 
+
 * Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Confirm
+
 
 * Required: false
 * Position: named

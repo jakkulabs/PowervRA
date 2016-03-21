@@ -18,6 +18,7 @@ It allows similar resources to be grouped together.
 ### Id
 
 The id of the resource type
+
 * Required: false
 * Position: named
 * Default value: 
@@ -26,6 +27,7 @@ The id of the resource type
 ### Name
 
 The Name of the resource type
+
 * Required: false
 * Position: named
 * Default value: 
@@ -34,6 +36,7 @@ The Name of the resource type
 ### Limit
 
 The number of entries returned per page from the API. This has a default value of 100.
+
 * Required: false
 * Position: named
 * Default value: 100

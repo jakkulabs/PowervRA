@@ -17,6 +17,7 @@ Remove a vRA Reservation Policy
 ### Id
 
 Reservation Policy ID
+
 * Required: true
 * Position: named
 * Default value: 
@@ -25,6 +26,7 @@ Reservation Policy ID
 ### Name
 
 Reservation Policy Name
+
 * Required: true
 * Position: named
 * Default value: 
@@ -32,12 +34,14 @@ Reservation Policy Name
 
 ### WhatIf
 
+
 * Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Confirm
+
 
 * Required: false
 * Position: named

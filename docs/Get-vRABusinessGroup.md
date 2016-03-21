@@ -17,6 +17,7 @@ Retrieve vRA Business Groups
 ### TenantId
 
 Specify the ID of a Tenant
+
 * Required: true
 * Position: 1
 * Default value: 
@@ -25,6 +26,7 @@ Specify the ID of a Tenant
 ### Name
 
 Specify the Name of a Business Group
+
 * Required: false
 * Position: 2
 * Default value: 
@@ -33,6 +35,7 @@ Specify the Name of a Business Group
 ### Limit
 
 The number of entries returned per page from the API. This has a default value of 100.
+
 * Required: false
 * Position: 3
 * Default value: 100

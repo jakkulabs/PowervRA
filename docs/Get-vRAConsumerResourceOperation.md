@@ -19,6 +19,7 @@ These operations can be invoked / accessed by consumers through the self-service
 ### Id
 
 The id of the resource operation
+
 * Required: true
 * Position: named
 * Default value: 

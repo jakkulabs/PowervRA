@@ -17,6 +17,7 @@ Create a vRA ContentPackage
 ### Name
 
 Content Package Name
+
 * Required: true
 * Position: named
 * Default value: 
@@ -25,6 +26,7 @@ Content Package Name
 ### Description
 
 Content Package Description
+
 * Required: false
 * Position: named
 * Default value: 
@@ -33,6 +35,7 @@ Content Package Description
 ### BlueprintId
 
 Blueprint Ids to include in the Content Package
+
 * Required: true
 * Position: named
 * Default value: 
@@ -41,6 +44,7 @@ Blueprint Ids to include in the Content Package
 ### BlueprintName
 
 Blueprint Names to include in the Content Package
+
 * Required: true
 * Position: named
 * Default value: 
@@ -49,6 +53,7 @@ Blueprint Names to include in the Content Package
 ### JSON
 
 Body text to send in JSON format
+
 * Required: true
 * Position: named
 * Default value: 
@@ -56,12 +61,14 @@ Body text to send in JSON format
 
 ### WhatIf
 
+
 * Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Confirm
+
 
 * Required: false
 * Position: named

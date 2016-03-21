@@ -17,6 +17,7 @@ Retrieve vRA entitlement either by id or name. Passing no parameters will return
 ### Id
 
 The id of the entitlement
+
 * Required: false
 * Position: named
 * Default value: 
@@ -25,6 +26,7 @@ The id of the entitlement
 ### Name
 
 The Name of the entitlement
+
 * Required: false
 * Position: named
 * Default value: 
@@ -33,6 +35,7 @@ The Name of the entitlement
 ### Limit
 
 The number of entries returned per page from the API. This has a default value of 100.
+
 * Required: false
 * Position: named
 * Default value: 100

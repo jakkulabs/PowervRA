@@ -17,6 +17,7 @@ Retrieve vRA Authorization Role
 ### Id
 
 Specify the Id of a Role
+
 * Required: false
 * Position: 1
 * Default value: 
@@ -25,6 +26,7 @@ Specify the Id of a Role
 ### Limit
 
 The number of entries returned per page from the API. This has a default value of 100.
+
 * Required: false
 * Position: 2
 * Default value: 100

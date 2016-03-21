@@ -17,6 +17,7 @@ Retrieve vRA Tenant Directory Status
 ### Id
 
 Specify the ID of a Tenant
+
 * Required: true
 * Position: 1
 * Default value: 
@@ -25,6 +26,7 @@ Specify the ID of a Tenant
 ### Domain
 
 Specify the Domain of a Tenant Directory
+
 * Required: false
 * Position: 2
 * Default value: 

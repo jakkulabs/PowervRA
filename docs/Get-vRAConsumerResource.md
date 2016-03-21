@@ -17,6 +17,7 @@ A Resource represents a deployed artifact that has been provisioned by a provide
 ### Id
 
 The id of the resource
+
 * Required: false
 * Position: named
 * Default value: 
@@ -25,6 +26,7 @@ The id of the resource
 ### Name
 
 The Name of the resource
+
 * Required: false
 * Position: named
 * Default value: 
@@ -33,6 +35,7 @@ The Name of the resource
 ### WithExtendedData
 
 Populate resources' extended data by calling their provider
+
 * Required: false
 * Position: named
 * Default value: False
@@ -41,6 +44,7 @@ Populate resources' extended data by calling their provider
 ### WithOperations
 
 Populate resources' operations attribute by calling the provider. This will force withExtendedData to true.
+
 * Required: false
 * Position: named
 * Default value: False
@@ -49,6 +53,7 @@ Populate resources' operations attribute by calling the provider. This will forc
 ### Limit
 
 The number of entries returned per page from the API. This has a default value of 100.
+
 * Required: false
 * Position: named
 * Default value: 100

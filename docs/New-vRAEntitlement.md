@@ -17,6 +17,7 @@ Create a new entitlement
 ### Name
 
 The name of the entitlement
+
 * Required: true
 * Position: named
 * Default value: 
@@ -25,6 +26,7 @@ The name of the entitlement
 ### Description
 
 A description of the entitlement
+
 * Required: false
 * Position: named
 * Default value: 
@@ -33,6 +35,7 @@ A description of the entitlement
 ### BusinessGroup
 
 The business group that will be associated with the entitlement
+
 * Required: true
 * Position: named
 * Default value: 
@@ -43,6 +46,7 @@ The business group that will be associated with the entitlement
 Users or groups that will be associated with the entitlement
 
 If this parameter is not specified, the entitlement will be created as DRAFT
+
 * Required: false
 * Position: named
 * Default value: 
@@ -51,6 +55,7 @@ If this parameter is not specified, the entitlement will be created as DRAFT
 ### EntitledCatalogItems
 
 One or more entitled catalog item
+
 * Required: false
 * Position: named
 * Default value: 
@@ -59,6 +64,7 @@ One or more entitled catalog item
 ### EntitledResourceOperations
 
 The externalId of one or more entitled resource operation (e.g. Infrastructure.Machine.Action.PowerOn)
+
 * Required: false
 * Position: named
 * Default value: 
@@ -67,6 +73,7 @@ The externalId of one or more entitled resource operation (e.g. Infrastructure.M
 ### EntitledServices
 
 One or more entitled service
+
 * Required: false
 * Position: named
 * Default value: 
@@ -75,6 +82,7 @@ One or more entitled service
 ### JSON
 
 Body text to send in JSON format
+
 * Required: true
 * Position: named
 * Default value: 
@@ -82,12 +90,14 @@ Body text to send in JSON format
 
 ### WhatIf
 
+
 * Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Confirm
+
 
 * Required: false
 * Position: named

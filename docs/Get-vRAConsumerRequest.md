@@ -17,6 +17,7 @@ Get information about vRA requests. These are the same services that you will se
 ### Id
 
 The Id of the request to query
+
 * Required: true
 * Position: named
 * Default value: 
@@ -25,6 +26,7 @@ The Id of the request to query
 ### RequestNumber
 
 The reqest number of the request to query
+
 * Required: true
 * Position: named
 * Default value: 
@@ -33,6 +35,7 @@ The reqest number of the request to query
 ### Limit
 
 The number of entries returned per page from the API. This has a default value of 100.
+
 * Required: false
 * Position: named
 * Default value: 100

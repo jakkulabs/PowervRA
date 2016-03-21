@@ -17,6 +17,7 @@ Wrapper for Invoke-RestMethod with vRA specifics
 ### Method
 
 REST Method: GET, POST, PUT or DELETE
+
 * Required: true
 * Position: 1
 * Default value: 
@@ -25,6 +26,7 @@ REST Method: GET, POST, PUT or DELETE
 ### URI
 
 API URI, e.g. /identity/api/tenants
+
 * Required: true
 * Position: 2
 * Default value: 
@@ -33,6 +35,7 @@ API URI, e.g. /identity/api/tenants
 ### Body
 
 REST Body in JSON format
+
 * Required: false
 * Position: 3
 * Default value: 

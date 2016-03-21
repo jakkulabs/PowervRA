@@ -17,6 +17,7 @@ Update an existing entitlement
 ### Id
 
 The id of the entitlement
+
 * Required: true
 * Position: named
 * Default value: 
@@ -25,6 +26,7 @@ The id of the entitlement
 ### Name
 
 The name of the entitlement
+
 * Required: false
 * Position: named
 * Default value: 
@@ -33,6 +35,7 @@ The name of the entitlement
 ### Description
 
 A description of the entitlement
+
 * Required: false
 * Position: named
 * Default value: 
@@ -41,6 +44,7 @@ A description of the entitlement
 ### Principals
 
 Users or groups that will be associated with the entitlement
+
 * Required: false
 * Position: named
 * Default value: 
@@ -49,6 +53,7 @@ Users or groups that will be associated with the entitlement
 ### EntitledCatalogItems
 
 One or more entitled catalog item
+
 * Required: false
 * Position: named
 * Default value: 
@@ -57,6 +62,7 @@ One or more entitled catalog item
 ### EntitledResourceOperations
 
 The externalId of one or more entitled resource operation (e.g. Infrastructure.Machine.Action.PowerOn)
+
 * Required: false
 * Position: named
 * Default value: 
@@ -65,6 +71,7 @@ The externalId of one or more entitled resource operation (e.g. Infrastructure.M
 ### EntitledServices
 
 One or more entitled service
+
 * Required: false
 * Position: named
 * Default value: 
@@ -73,6 +80,7 @@ One or more entitled service
 ### Status
 
 The status of the entitlement. Accepted values are ACTIVE and INACTIVE
+
 * Required: false
 * Position: named
 * Default value: 
@@ -80,12 +88,14 @@ The status of the entitlement. Accepted values are ACTIVE and INACTIVE
 
 ### WhatIf
 
+
 * Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Confirm
+
 
 * Required: false
 * Position: named

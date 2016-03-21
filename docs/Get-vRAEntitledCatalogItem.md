@@ -20,6 +20,7 @@ API for administrators to interact with catalog items that they are entitled to.
 
 ### Id
 
+
 * Required: true
 * Position: named
 * Default value: 
@@ -28,6 +29,7 @@ API for administrators to interact with catalog items that they are entitled to.
 ### Name
 
 The name of the catalog item
+
 * Required: true
 * Position: named
 * Default value: 
@@ -36,6 +38,7 @@ The name of the catalog item
 ### Limit
 
 The number of entries returned per page from the API. This has a default value of 100.
+
 * Required: false
 * Position: named
 * Default value: 100

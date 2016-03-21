@@ -17,6 +17,7 @@ Update a vRA catalog item
 ### Id
 
 The id of the catalog item
+
 * Required: true
 * Position: named
 * Default value: 
@@ -25,6 +26,7 @@ The id of the catalog item
 ### Status
 
 The status of the catalog item (e.g. PUBLISHED, RETIRED, STAGING)
+
 * Required: false
 * Position: named
 * Default value: 
@@ -33,6 +35,7 @@ The status of the catalog item (e.g. PUBLISHED, RETIRED, STAGING)
 ### Quota
 
 The Quota of the catalog item
+
 * Required: false
 * Position: named
 * Default value: 0
@@ -41,6 +44,7 @@ The Quota of the catalog item
 ### Service
 
 The Service to assign the catalog item to
+
 * Required: false
 * Position: named
 * Default value: 
@@ -49,6 +53,7 @@ The Service to assign the catalog item to
 ### NewAndNoteworthy
 
 Mark the catalog item as New and noteworthy in the UI
+
 * Required: false
 * Position: named
 * Default value: False
@@ -56,12 +61,14 @@ Mark the catalog item as New and noteworthy in the UI
 
 ### WhatIf
 
+
 * Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Confirm
+
 
 * Required: false
 * Position: named

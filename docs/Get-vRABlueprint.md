@@ -17,6 +17,7 @@ Retrieve vRA Blueprints
 ### Id
 
 Specify the ID of a Blueprint
+
 * Required: true
 * Position: named
 * Default value: 
@@ -25,6 +26,7 @@ Specify the ID of a Blueprint
 ### Name
 
 Specify the Name of a Blueprint
+
 * Required: true
 * Position: named
 * Default value: 
@@ -33,6 +35,7 @@ Specify the Name of a Blueprint
 ### Limit
 
 The number of entries returned per page from the API. This has a default value of 100.
+
 * Required: false
 * Position: named
 * Default value: 100

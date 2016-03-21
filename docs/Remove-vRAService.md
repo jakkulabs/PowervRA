@@ -17,6 +17,7 @@ Remove a vRA Service
 ### Id
 
 The id of the service
+
 * Required: true
 * Position: 1
 * Default value: 
@@ -24,12 +25,14 @@ The id of the service
 
 ### WhatIf
 
+
 * Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Confirm
+
 
 * Required: false
 * Position: named

@@ -17,6 +17,7 @@ Remove a vRA Tenant
 ### Id
 
 Tenant ID
+
 * Required: true
 * Position: 1
 * Default value: 
@@ -24,12 +25,14 @@ Tenant ID
 
 ### WhatIf
 
+
 * Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Confirm
+
 
 * Required: false
 * Position: named

@@ -16,12 +16,14 @@ Disconnect from a vRA server by removing the authorization token and the global 
 
 ### WhatIf
 
+
 * Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Confirm
+
 
 * Required: false
 * Position: named

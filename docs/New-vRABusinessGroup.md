@@ -17,6 +17,7 @@ Create a vRA Business Group
 ### TenantId
 
 Tenant ID
+
 * Required: true
 * Position: named
 * Default value: 
@@ -25,6 +26,7 @@ Tenant ID
 ### Name
 
 Business Group Name
+
 * Required: true
 * Position: named
 * Default value: 
@@ -33,6 +35,7 @@ Business Group Name
 ### Description
 
 Business Group Description
+
 * Required: false
 * Position: named
 * Default value: 
@@ -41,6 +44,7 @@ Business Group Description
 ### BusinessGroupManager
 
 Business Group Managers
+
 * Required: false
 * Position: named
 * Default value: 
@@ -49,6 +53,7 @@ Business Group Managers
 ### SupportUser
 
 Business Group Support Users
+
 * Required: false
 * Position: named
 * Default value: 
@@ -57,6 +62,7 @@ Business Group Support Users
 ### User
 
 Business Group Users
+
 * Required: false
 * Position: named
 * Default value: 
@@ -65,6 +71,7 @@ Business Group Users
 ### MachinePrefixId
 
 Machine Prefix Id
+
 * Required: false
 * Position: named
 * Default value: 
@@ -73,6 +80,7 @@ Machine Prefix Id
 ### SendManagerEmailsTo
 
 Send Manager Emails To
+
 * Required: true
 * Position: named
 * Default value: 
@@ -81,6 +89,7 @@ Send Manager Emails To
 ### JSON
 
 Body text to send in JSON format
+
 * Required: true
 * Position: named
 * Default value: 
@@ -88,12 +97,14 @@ Body text to send in JSON format
 
 ### WhatIf
 
+
 * Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Confirm
+
 
 * Required: false
 * Position: named

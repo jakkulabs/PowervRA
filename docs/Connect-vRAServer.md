@@ -17,6 +17,7 @@ Connect to a vRA Server and generate a connection object with Servername, Token 
 ### Server
 
 vRA Server to connect to
+
 * Required: true
 * Position: named
 * Default value: 
@@ -25,6 +26,7 @@ vRA Server to connect to
 ### Tenant
 
 Tenant to connect to
+
 * Required: true
 * Position: named
 * Default value: 
@@ -33,6 +35,7 @@ Tenant to connect to
 ### Username
 
 Username to connect with
+
 * Required: true
 * Position: named
 * Default value: 
@@ -41,6 +44,7 @@ Username to connect with
 ### Password
 
 Password to connect with
+
 * Required: true
 * Position: named
 * Default value: 
@@ -49,6 +53,7 @@ Password to connect with
 ### Credential
 
 Credential object to connect with
+
 * Required: true
 * Position: named
 * Default value: 
@@ -57,6 +62,7 @@ Credential object to connect with
 ### IgnoreCertRequirements
 
 Ignore requirements to use fully signed certificates
+
 * Required: false
 * Position: named
 * Default value: False

@@ -25,6 +25,7 @@ Currently unsupported interactive actions:
 ### Name
 
 The name of the service
+
 * Required: true
 * Position: named
 * Default value: 
@@ -33,6 +34,7 @@ The name of the service
 ### Description
 
 A description of the service
+
 * Required: false
 * Position: named
 * Default value: 
@@ -41,6 +43,7 @@ A description of the service
 ### Owner
 
 The owner of the service
+
 * Required: false
 * Position: named
 * Default value: 
@@ -49,6 +52,7 @@ The owner of the service
 ### SupportTeam
 
 The support team of the service
+
 * Required: false
 * Position: named
 * Default value: 
@@ -57,6 +61,7 @@ The support team of the service
 ### JSON
 
 A json string of type service (catalog-service/api/docs/el_ns0_service.html)
+
 * Required: true
 * Position: named
 * Default value: 
@@ -64,12 +69,14 @@ A json string of type service (catalog-service/api/docs/el_ns0_service.html)
 
 ### WhatIf
 
+
 * Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Confirm
+
 
 * Required: false
 * Position: named

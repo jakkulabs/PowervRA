@@ -17,6 +17,7 @@ Create a vRA Tenant
 ### Name
 
 Tenant Name
+
 * Required: true
 * Position: named
 * Default value: 
@@ -25,6 +26,7 @@ Tenant Name
 ### Description
 
 Tenant Description
+
 * Required: false
 * Position: named
 * Default value: 
@@ -33,6 +35,7 @@ Tenant Description
 ### URLName
 
 Tenant URL Name
+
 * Required: true
 * Position: named
 * Default value: 
@@ -41,6 +44,7 @@ Tenant URL Name
 ### ContactEmail
 
 Tenant Contact Email
+
 * Required: false
 * Position: named
 * Default value: 
@@ -49,6 +53,7 @@ Tenant Contact Email
 ### ID
 
 Tenant ID
+
 * Required: true
 * Position: named
 * Default value: 
@@ -57,6 +62,7 @@ Tenant ID
 ### JSON
 
 Body text to send in JSON format
+
 * Required: true
 * Position: named
 * Default value: 
@@ -64,12 +70,14 @@ Body text to send in JSON format
 
 ### WhatIf
 
+
 * Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Confirm
+
 
 * Required: false
 * Position: named

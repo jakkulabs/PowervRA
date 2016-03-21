@@ -17,6 +17,7 @@ Remove a vRA Business Group
 ### TenantId
 
 Tenant Id
+
 * Required: true
 * Position: named
 * Default value: 
@@ -25,6 +26,7 @@ Tenant Id
 ### Id
 
 Business Group Id
+
 * Required: true
 * Position: named
 * Default value: 
@@ -33,6 +35,7 @@ Business Group Id
 ### Name
 
 Business Group Name
+
 * Required: true
 * Position: named
 * Default value: 
@@ -40,12 +43,14 @@ Business Group Name
 
 ### WhatIf
 
+
 * Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Confirm
+
 
 * Required: false
 * Position: named

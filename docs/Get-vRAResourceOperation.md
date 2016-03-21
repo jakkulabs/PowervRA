@@ -18,6 +18,7 @@ The types are defined by the provider types. It allows similar resources to be g
 ### Id
 
 The id of the resource operation
+
 * Required: true
 * Position: named
 * Default value: 
@@ -26,6 +27,7 @@ The id of the resource operation
 ### ExternalId
 
 The external id of the resource operation
+
 * Required: true
 * Position: named
 * Default value: 
@@ -34,6 +36,7 @@ The external id of the resource operation
 ### Name
 
 The name of the resource operation
+
 * Required: true
 * Position: named
 * Default value: 
@@ -42,6 +45,7 @@ The name of the resource operation
 ### Limit
 
 The number of entries returned per page from the API. This has a default value of 100.
+
 * Required: false
 * Position: named
 * Default value: 100

@@ -17,6 +17,7 @@ Export a vRA Content Package
 ### Id
 
 Specify the ID of a Content Package
+
 * Required: true
 * Position: named
 * Default value: 
@@ -25,6 +26,7 @@ Specify the ID of a Content Package
 ### Name
 
 Specify the Name of a Content Package
+
 * Required: true
 * Position: named
 * Default value: 
@@ -33,6 +35,7 @@ Specify the Name of a Content Package
 ### File
 
 Specify the Filename to export to
+
 * Required: true
 * Position: named
 * Default value: 

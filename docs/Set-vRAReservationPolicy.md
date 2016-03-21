@@ -17,6 +17,7 @@ Update a vRA Reservation Policy
 ### Id
 
 Reservation Policy Id
+
 * Required: true
 * Position: named
 * Default value: 
@@ -25,6 +26,7 @@ Reservation Policy Id
 ### Name
 
 Reservation Policy Name
+
 * Required: true
 * Position: named
 * Default value: 
@@ -33,6 +35,7 @@ Reservation Policy Name
 ### NewName
 
 Reservation Policy NewName
+
 * Required: false
 * Position: named
 * Default value: 
@@ -41,6 +44,7 @@ Reservation Policy NewName
 ### Description
 
 Reservation Policy Description
+
 * Required: false
 * Position: named
 * Default value: 
@@ -49,6 +53,7 @@ Reservation Policy Description
 ### JSON
 
 Body text to send in JSON format
+
 * Required: true
 * Position: named
 * Default value: 
@@ -56,12 +61,14 @@ Body text to send in JSON format
 
 ### WhatIf
 
+
 * Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Confirm
+
 
 * Required: false
 * Position: named
