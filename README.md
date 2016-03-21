@@ -28,4 +28,4 @@ Documentation for each command can be viewed with Get-Help, e.g.:
 Get-Help Get-vRAEntitlement
 ```
 
-Alternatively check out our Read the Docs site: http://powervra.readthedocs.org/en/latest/
+Alternatively check out our [Read the Docs site](http://powervra.readthedocs.org/en/latest/ "Title")
