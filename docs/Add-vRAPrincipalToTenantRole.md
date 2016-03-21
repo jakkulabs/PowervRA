@@ -17,6 +17,7 @@ Add a vRA Principal to a Tenant Role
 ### TenantId
 
 Specify the Tenant Id
+
 * Required: true
 * Position: 1
 * Default value: 
