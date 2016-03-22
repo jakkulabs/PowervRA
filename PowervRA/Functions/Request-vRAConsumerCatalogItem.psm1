@@ -59,7 +59,7 @@
 
     Param (
 
-    [parameter(Mandatory=$true,ValueFromPipeline=$true, ParameterSetName="Standard")]
+    [parameter(Mandatory=$true,ValueFromPipeline=$false, ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
     [String]$Id,
     
@@ -103,7 +103,7 @@
             else {
 
                 # --- Get request Template
-                $JSON = Get-vRAEntitledCatalogItemRequestTemplate -Id $Id
+                $JSON = Get-vRAConsumerCatalogItemRequestTemplate -Id $Id
 
                 if ($PSBoundParameters.ContainsKey("RequestedFor")-or 
                     $PSBoundParameters.ContainsKey("Description") -or 
