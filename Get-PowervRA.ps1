@@ -121,7 +121,7 @@
                 if ($PSBoundParameters.ContainsKey('ImportAfterInstall')) {
 
                     Write-Verbose -Message "Importing module"
-                    Import-Module -Name "PowervRA"
+                    Import-Module -Name "PowervRA" -Force
 
                 }
 
