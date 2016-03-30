@@ -15,6 +15,9 @@
     .PARAMETER Limit
     The number of entries returned per page from the API. This has a default value of 100.
 
+    .PARAMETER Page
+    The page of response to return
+
     .INPUTS
     System.String
 
@@ -46,9 +49,13 @@
     [ValidateNotNullOrEmpty()]
     [String[]]$RequestNumber,    
     
-    [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+    [parameter(Mandatory=$false,ValueFromPipeline=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [String]$Limit = "100"    
+    [String]$Limit = "100",
+ 
+    [parameter(Mandatory=$false,ValueFromPipeline=$false,ParameterSetName="Standard")]
+    [ValidateNotNullOrEmpty()]
+    [int]$Page = "1"
        
     )    
 
@@ -180,53 +187,99 @@
             }
             # --- If no parameters are passed return all requests
             'Standard' {
+
+                $URI = "/catalog-service/api/consumer/requests?limit=$($Limit)"
+
+                # --- Make the first request to determine the size of the request
+                $Response = Invoke-vRARestMethod -Method GET -URI $URI
+
+                if (!$PSBoundParameters.ContainsKey("Page")){
+
+                    # --- Get every page back
+                    $TotalPages = $Response.metadata.totalPages.ToInt32($null)
+
+                }
+                else {
+
+                    # --- Set TotalPages to 1
+                    $TotalPages = 2
+
+                }
+
+                # --- Initialise an empty array
+                $ResponseObject = @()
+
+                while ($true){
+
+                    Write-Verbose -Message "Getting response for page $($Page) of $($Response.metadata.totalPages)"
+
+                    $PagedUri = "$($URI)&page=$($Page)&`$orderby=requestNumber%20asc"
+
+                    $Response = Invoke-vRARestMethod -Method GET -URI $PagedUri
+
+                    Write-Verbose -Message "GET : $($PagedUri)"
+
+                    $Response = Invoke-vRARestMethod -Method GET -URI $PagedUri
             
-                Write-Verbose -Message "Preparing GET to $($URI)?limit=$($Limit)"
+                    Write-Verbose -Message "Paged Response contains $($Response.content.Count) records"
 
-                $Response = Invoke-vRARestMethod -Method GET -URI "$($URI)?limit=$($Limit)"
-            
-                Write-Verbose -Message "Response contains $($Response.content.Length) records"
+                    foreach ($Request in $Response.content) {
 
-                foreach ($Request in $Response.content) {
+                        $Object = [pscustomobject] @{
 
-                    [pscustomobject] @{
+                            Id = $Request.id
+                            IconId = $Request.iconId
+                            Version = $Requestt.version
+                            RequestNumber = $Request.RequestNumber
+                            State = $Request.state
+                            Description = $Request.description
+                            Reasons = $Request.reasons
+                            RequestedFor = $Request.requestedFor
+                            RequestedBy = $Request.requestedBy
+                            Organization = $Request.organization
+                            RequestorEntitlementId = $RRequest.requestorEntitlementId
+                            PreApprovalId = $Request.preApprovalId
+                            PostApprovalId = $Request.postApprovalId
+                            DateCreated = $Request.dateCreated
+                            LastUpdated = $Request.lastUpdated
+                            DateSubmitted = $Request.dateSubmitted
+                            DateApproved = $Request.dateApproved
+                            DateCompleted = $Request.dateCompleted
+                            Quote = $Request.quote
+                            RequestCompletion = $Request.requestCompletion
+                            RequestData = $Request.requestData
+                            RetriesRemaining = $Request.retriesRemaining
+                            RequestedItemName = $Request.requestedItemName
+                            RequestedItemDescription = $Request.requestedItemDescription
+                            Components = $Request.components
+                            StateName = $Request.stateName
+                            CatalogItemProviderBinding = $Request.catalogItemProviderBinding
+                            WaitingStatus = $Requestt.waitingStatus
+                            ExecutionStatus = $Request.executionStatus
+                            ApprovalStatus = $Request.approvalStatus
+                            Phase = $Request.phase
+                            CatalogItemRef = $Requestt.catalogItemRef
 
-                        Id = $Request.id
-                        IconId = $Request.iconId
-                        Version = $Requestt.version
-                        RequestNumber = $Request.RequestNumber
-                        State = $Request.state
-                        Description = $Request.description
-                        Reasons = $Request.reasons
-                        RequestedFor = $Request.requestedFor
-                        RequestedBy = $Request.requestedBy
-                        Organization = $Request.organization
-                        RequestorEntitlementId = $RRequest.requestorEntitlementId
-                        PreApprovalId = $Request.preApprovalId
-                        PostApprovalId = $Request.postApprovalId
-                        DateCreated = $Request.dateCreated
-                        LastUpdated = $Request.lastUpdated
-                        DateSubmitted = $Request.dateSubmitted
-                        DateApproved = $Request.dateApproved
-                        DateCompleted = $Request.dateCompleted
-                        Quote = $Request.quote
-                        RequestCompletion = $Request.requestCompletion
-                        RequestData = $Request.requestData
-                        RetriesRemaining = $Request.retriesRemaining
-                        RequestedItemName = $Request.requestedItemName
-                        RequestedItemDescription = $Request.requestedItemDescription
-                        Components = $Request.components
-                        StateName = $Request.stateName
-                        CatalogItemProviderBinding = $Request.catalogItemProviderBinding
-                        WaitingStatus = $Requestt.waitingStatus
-                        ExecutionStatus = $Request.executionStatus
-                        ApprovalStatus = $Request.approvalStatus
-                        Phase = $Request.phase
-                        CatalogItemRef = $Requestt.catalogItemRef
+                        }
+
+                        $ResponseObject += $Object
 
                     }
 
-                }
+                    # --- Break loop
+                    if ($Page -ge $TotalPages) {
+
+                        break
+
+                    }
+
+                    # --- Increment the current page by 1
+                    $Page++
+
+                }         
+
+                # --- Return requests
+                $ResponseObject
 
                 break
     
