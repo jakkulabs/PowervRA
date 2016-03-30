@@ -46,9 +46,9 @@
     [ValidateNotNullOrEmpty()]
     [String]$Server,
 
-    [parameter(Mandatory=$true)]
+    [parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
-    [String]$Tenant,  
+    [String]$Tenant = "vsphere.local",  
     
     [parameter(Mandatory=$true,ParameterSetName="Username")]
     [ValidateNotNullOrEmpty()]
@@ -125,10 +125,15 @@ try {
                     
         Server = "https://$($Server)"
         Token = $Response.id
-        Tenant = $Tenant
+        Tenant = $Null
         Username = $Username
+        APIVersion = $Null
         SignedCertificates = $SignedCertificates
     }
+
+    # --- Update vRAConnection with tenant and api version
+    $Global:vRAConnection.Tenant = (Get-vRATenant -Id $Tenant).id
+    $Global:vRAConnection.APIVersion = (Get-vRAVersion).APIVersion
 }
 catch [Exception]{
 
