@@ -202,7 +202,7 @@
                 else {
 
                     # --- Set TotalPages to 1
-                    $TotalPages = 2
+                    $TotalPages = 1
 
                 }
 
