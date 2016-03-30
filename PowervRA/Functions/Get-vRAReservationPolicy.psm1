@@ -54,22 +54,19 @@
                 
                 foreach ($ReservationPolicyId in $Id){
 
-                    $URI = "/reservation-service/api/reservations/policies?`$filter=id%20eq%20'$($ReservationPolicyId)'&reservationPolicyTypeId%20eq%20'Infrastructure.Reservation.Policy.ComputeResource'"
+                    $URI = "/reservation-service/api/reservations/policies/$($ReservationPolicyId)"
 
                     # --- Run vRA REST Request
                     $Response = Invoke-vRARestMethod -Method GET -URI $URI
 
-                    foreach ($ReservationPolicy in $Response.content){
+                    [pscustomobject]@{
 
-                        [pscustomobject]@{
-
-                            Name = $ReservationPolicy.name
-                            Id = $ReservationPolicy.id                
-                            Description = $ReservationPolicy.description
-                            CreatedDate = $ReservationPolicy.createdDate
-                            LastUpdated = $ReservationPolicy.lastUpdated
-                            ReservationPolicyTypeId = $ReservationPolicy.reservationPolicyTypeId
-                        }
+                        Name = $Response.name
+                        Id = $Response.id                
+                        Description = $Response.description
+                        CreatedDate = $Response.createdDate
+                        LastUpdated = $Response.lastUpdated
+                        ReservationPolicyTypeId = $Response.reservationPolicyTypeId
                     }
                 }                              
             
