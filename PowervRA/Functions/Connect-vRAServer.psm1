@@ -46,9 +46,9 @@
     [ValidateNotNullOrEmpty()]
     [String]$Server,
 
-    [parameter(Mandatory=$true)]
+    [parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
-    [String]$Tenant,  
+    [String]$Tenant = "vsphere.local",  
     
     [parameter(Mandatory=$true,ParameterSetName="Username")]
     [ValidateNotNullOrEmpty()]
@@ -129,6 +129,7 @@ try {
         Username = $Username
         SignedCertificates = $SignedCertificates
     }
+
 }
 catch [Exception]{
 

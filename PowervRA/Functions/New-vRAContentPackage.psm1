@@ -76,106 +76,70 @@
     process {
 
         switch ($PsCmdlet.ParameterSetName) 
-            { 
-                "ById"  {                
-                    
-                    if ($BlueprintId.Count -gt 1){
+        { 
+            "ById"  {                
 
-                        $BlueprintId | ForEach-Object {
+                $Object = [pscustomObject] @{
 
-                            $BlueprintIdJoin += '"' + $_ + '"'
-                        }
-                        $Id = $BlueprintIdJoin -replace '""', '","'
-                    }
-                    else {
-
-                        $Id = '"' + $BlueprintId + '"'
-                    }
-
-                    $Body = @"
-                    {
-                        "name": "$($Name)",
-                        "description": "$($Description)",
-                        "contents":[ $($Id) ]
-                    }
-"@
-
-                    if ($PSCmdlet.ShouldProcess($Name)){
-
-                        $URI = "/content-management-service/api/packages"
-
-                        # --- Run vRA REST Request
-                        $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body
-
-                        # --- Output the Successful Result
-                        Get-vRAContentPackage -Name $Name
-                    }
-                        
-            
-                    break
+                    name = $Name
+                    description = $Description
+                    contents = @()
                 }
 
-                "ByName"  {
-                
-                    $Blueprints = Get-vRABlueprint -Name $BlueprintName
-                    $BlueprintId = $Blueprints.Id
+                foreach ($Id in $BlueprintId) {
 
-                    if ($BlueprintId.Count -gt 1){
+                    $Object.contents += $Id
 
-                        $BlueprintId | ForEach-Object {
-
-                            $BlueprintIdJoin += '"' + $_ + '"'
-                        }
-                        $Id = $BlueprintIdJoin -replace '""', '","'
-                    }
-                    else {
-
-                        $Id = '"' + $BlueprintId + '"'
-                    }
-
-                    $Body = @"
-                    {
-                        "name": "$($Name)",
-                        "description": "$($Description)",
-                        "contents":[ $($Id) ]
-                    }
-"@
-
-                    if ($PSCmdlet.ShouldProcess($Name)){
-
-                        $URI = "/content-management-service/api/packages"
-
-                        # --- Run vRA REST Request
-                        $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body
-
-                        # --- Output the Successful Result
-                        Get-vRAContentPackage -Name $Name
-                    } 
-                
-                    break
                 }
 
-                "JSON"  {
+                $Body = $Object | ConvertTo-Json                    
 
-                    $Data = ($JSON | ConvertFrom-Json)
-        
-                    $Body = $JSON
-                    $Name = $Data.name  
-
-                    if ($PSCmdlet.ShouldProcess($Name)){
-
-                        $URI = "/content-management-service/api/packages"
-
-                        # --- Run vRA REST Request
-                        $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body
-
-                        # --- Output the Successful Result
-                        Get-vRAContentPackage -Name $Name
-                    } 
-                
-                    break
-                }
+                break
             }
+
+            "ByName"  {
+                
+                $Object = [pscustomObject] @{
+
+                    name = $Name
+                    description = $Description
+                    contents = @()
+                }
+
+                foreach ($BPName in $BlueprintName) {
+
+                    $Id = (Get-vRABlueprint -Name $BPName).Id
+
+                    $Object.contents += $Id
+
+                }
+
+                $Body = $Object | ConvertTo-Json 
+                
+                break
+            }
+
+            "JSON"  {
+
+                $Data = ($JSON | ConvertFrom-Json)
+        
+                $Body = $JSON
+                $Name = $Data.name  
+                
+                break
+            }
+        }
+
+        if ($PSCmdlet.ShouldProcess($Name)){
+
+            $URI = "/content-management-service/api/packages"
+
+            # --- Run vRA REST Request
+            $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body
+
+            # --- Output the Successful Result
+            Get-vRAContentPackage -Name $Name
+        } 
     }
     end {
         
