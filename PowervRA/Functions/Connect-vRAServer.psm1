@@ -125,15 +125,11 @@ try {
                     
         Server = "https://$($Server)"
         Token = $Response.id
-        Tenant = $Null
+        Tenant = $Tenant
         Username = $Username
-        APIVersion = $Null
         SignedCertificates = $SignedCertificates
     }
 
-    # --- Update vRAConnection with tenant and api version
-    $Global:vRAConnection.Tenant = (Get-vRATenant -Id $Tenant).id
-    $Global:vRAConnection.APIVersion = (Get-vRAVersion).APIVersion
 }
 catch [Exception]{
 
