@@ -54,30 +54,27 @@
                 
                 foreach ($ContentPackageId in $Id){
 
-                    $URI = "/content-management-service/api/packages?`$filter=id%20eq%20'$($ContentPackageId)'"
+                    $URI = "/content-management-service/api/packages/$($ContentPackageId)"
 
                     # --- Run vRA REST Request
                     $Response = Invoke-vRARestMethod -Method GET -URI $URI
                     
-                    if (-not $Response.content){
+                    if (-not $Response){
                     
                         throw "Unable to retrieve Content Package with Id $($Id)"
                     }              
+                    
+                    [pscustomobject]@{
 
-                    foreach ($ContentPackage in $Response.content){
-
-                        [pscustomobject]@{
-
-                            Name = $ContentPackage.name
-                            Id = $ContentPackage.id                
-                            Description = $ContentPackage.description
-                            TenantId = $ContentPackage.tenantId
-                            SubtenantId = $ContentPackage.subtenantId
-                            Contents = $ContentPackage.contents
-                            CreatedDate = $ContentPackage.createdDate
-                            LastUpdated = $ContentPackage.lastUpdated
-                            version = $ContentPackage.version
-                        }
+                        Name = $Response.name
+                        Id = $Response.id                
+                        Description = $Response.description
+                        TenantId = $Response.tenantId
+                        SubtenantId = $Response.subtenantId
+                        Contents = $Response.contents
+                        CreatedDate = $Response.createdDate
+                        LastUpdated = $Response.lastUpdated
+                        version = $Response.version
                     }
                 }                              
             
