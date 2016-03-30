@@ -4,8 +4,9 @@
     Get a resource operation
 
     .DESCRIPTION
-    Resource Type API exposed to administrators.Resource types is a type assigned to resources. 
-    The types are defined by the provider types. It allows similar resources to be grouped together.
+    A resource operation represents a Day-2 operation that can be performed on a resource. 
+    Resource operations are registered in the Service Catalog and target a specific resource type. 
+    These operations can be invoked / accessed by consumers through the self-service interface on the resources they own.
     
     .PARAMETER Id
     The id of the resource operation
