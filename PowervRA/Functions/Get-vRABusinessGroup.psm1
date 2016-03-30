@@ -49,14 +49,14 @@ try {
     # --- Get business group by name
     if ($PSBoundParameters.ContainsKey("Name")) {
 
-        $URI = "/identity/api/tenants/$($TenantId)/subtenants?limit=$($Limit)"
-
-        # --- Run vRA REST Request
-        $Response = Invoke-vRARestMethod -Method GET -URI $URI
-        
         foreach ($BusinessGroupName in $Name){
+
+            $URI = "/identity/api/tenants/$($TenantId)/subtenants?`$filter=name%20eq%20'$($BusinessGroupName)'"
+
+            # --- Run vRA REST Request
+            $Response = Invoke-vRARestMethod -Method GET -URI $URI
             
-            $BusinessGroup = $Response.content | Where-Object {$_.name -eq $BusinessGroupName}
+            $BusinessGroup = $Response.content
             
             if (-not $BusinessGroup){
 
