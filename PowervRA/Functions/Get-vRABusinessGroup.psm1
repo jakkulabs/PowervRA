@@ -22,7 +22,7 @@
     System.Management.Automation.PSObject.
     
     .EXAMPLE
-    Get-vRABusinessGroup -TenantId Tenant01
+    Get-vRABusinessGroup
 
     .EXAMPLE
     Get-vRABusinessGroup -TenantId Tenant01 -Name BusinessGroup01,BusinessGroup02
@@ -31,7 +31,7 @@
 
     Param (
 
-    [parameter(Mandatory=$true)]
+    [parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
     [String]$TenantId,
     
@@ -45,6 +45,16 @@
     )
                 
 try {
+
+    # --- Check the TenantId
+    if ($PSBoundParameters.ContainsKey("TenantId")) {
+
+        $TenantId = (Get-vRATenant -Id $TenantId).Id
+    }
+    else {
+
+        $TenantId = $Global:vRAConnection.Tenant
+    }
 
     # --- Get business group by name
     if ($PSBoundParameters.ContainsKey("Name")) {
