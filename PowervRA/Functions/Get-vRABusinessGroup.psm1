@@ -33,7 +33,7 @@
 
     [parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
-    [String]$TenantId,
+    [String]$TenantId = $Global:vRAConnection.Tenant,
     
     [parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
@@ -50,10 +50,6 @@ try {
     if ($PSBoundParameters.ContainsKey("TenantId")) {
 
         $TenantId = (Get-vRATenant -Id $TenantId).Id
-    }
-    else {
-
-        $TenantId = $Global:vRAConnection.Tenant
     }
 
     # --- Get business group by name
