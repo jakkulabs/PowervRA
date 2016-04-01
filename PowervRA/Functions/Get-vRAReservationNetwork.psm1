@@ -1,16 +1,16 @@
-﻿function Get-vRAReservationStorage {
+﻿function Get-vRAReservationNetwork {
 <#
     .SYNOPSIS
-    Get available storage for a compute resource
+    Get available networks for a compute resource
     
     .DESCRIPTION
-    Get available storage for a compute resource
+    Get available network for a compute resource
 
     .PARAMETER SchemaClassId
     The SchemaClassid id for the reservation type
     
     .PARAMETER Name
-    The name of the storage
+    The name of the network
 
     .INPUTS
     System.String
@@ -19,10 +19,10 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    Get-vRAReservationStorage -SchemaClassId Infrastructure.Reservation.Virtual.vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d -Name DataStore01
+    Get-vRAReservationNetwork -SchemaClassId Infrastructure.Reservation.Virtual.vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d -Name VMNetwork
 
     .EXAMPLE
-    Get-vRAReservationStorage -SchemaClassId Infrastructure.Reservation.Virtual.vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d
+    Get-vRAReservationNetwork -SchemaClassId Infrastructure.Reservation.Virtual.vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d
 
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
@@ -68,9 +68,9 @@
 
             'ByName' { 
 
-                foreach ($StorageName in $Name) {
+                foreach ($NetworkName in $Name) {
 
-                    $URI = "/reservation-service/api/data-service/schema/$($SchemaClassId)/default/reservationStorages/values"
+                    $URI = "/reservation-service/api/data-service/schema/$($SchemaClassId)/default/reservationNetworks/values"
             
                     Write-Verbose -Message "Preparing POST to $($URI)"
 
@@ -78,23 +78,23 @@
 
                     Write-Verbose -Message "SUCCESS"
 
-                    # --- Get the storage resource by name
-                    $Storage = $Response.values | Where-Object {$_.label -eq $StorageName}
+                    # --- Get the network resource by name
+                    $Network = $Response.values | Where-Object {$_.label -eq $NetworkName}
 
-                    if(!$Storage) {
+                    if(!$Network) {
 
-                        throw "Could not find storage with name $($StorageName)"
+                        throw "Could not find network with name $($NetworkName)"
 
                     }
 
                     [pscustomobject] @{
 
-                        Type = $Storage.underlyingValue.type
-                        ComponentTypeId = $Storage.underlyingValue.componentTypeId
-                        ComponentId = $Storage.underlyingValue.componentId
-                        ClassId = $Storage.underlyingValue.classId
-                        TypeFilter = $Storage.underlyingValue.TypeFilter
-                        Values = $Storage.underlyingValue.values
+                        Type = $Network.underlyingValue.type
+                        ComponentTypeId = $Network.underlyingValue.componentTypeId
+                        ComponentId = $Network.underlyingValue.componentId
+                        ClassId = $Network.underlyingValue.classId
+                        TypeFilter = $Network.underlyingValue.TypeFilter
+                        Values = $Network.underlyingValue.values
 
                     }
 
@@ -106,7 +106,7 @@
 
             'Standard' {
 
-                $URI = "/reservation-service/api/data-service/schema/$($SchemaClassId)/default/reservationStorages/values"
+                $URI = "/reservation-service/api/data-service/schema/$($SchemaClassId)/default/reservationNetworks/values"
 
                 Write-Verbose -Message "Preparing POST to $($URI)"
 
@@ -114,18 +114,18 @@
 
                 Write-Verbose -Message "SUCCESS"
 
-                # --- Return all storage 
-                foreach ($Storage in $Response.values) {
+                # --- Return all networks 
+                foreach ($Network in $Response.values) {
 
                     [pscustomobject] @{
                         
-                        Type = $Storage.underlyingValue.type
-                        Name = $Storage.label
-                        ComponentTypeId = $Storage.underlyingValue.componentTypeId
-                        ComponentId = $Storage.underlyingValue.componentId
-                        ClassId = $Storage.underlyingValue.classId
-                        TypeFilter = $Storage.underlyingValue.TypeFilter
-                        Values = $Storage.underlyingValue.values
+                        Type = $Network.underlyingValue.type
+                        Name = $Network.label
+                        ComponentTypeId = $Network.underlyingValue.componentTypeId
+                        ComponentId = $Network.underlyingValue.componentId
+                        ClassId = $Network.underlyingValue.classId
+                        TypeFilter = $Network.underlyingValue.TypeFilter
+                        Values = $Network.underlyingValue.values
 
                     }                
                 

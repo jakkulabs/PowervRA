@@ -1,16 +1,16 @@
-﻿function Get-vRAReservationStorage {
+﻿function Get-vRAReservationResourcePool {
 <#
     .SYNOPSIS
-    Get available storage for a compute resource
+    Get available resource pools for a compute resource
     
     .DESCRIPTION
-    Get available storage for a compute resource
+    Get available resource pools for a compute resource
 
     .PARAMETER SchemaClassId
     The SchemaClassid id for the reservation type
     
     .PARAMETER Name
-    The name of the storage
+    The name of the resource pool
 
     .INPUTS
     System.String
@@ -19,10 +19,10 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    Get-vRAReservationStorage -SchemaClassId Infrastructure.Reservation.Virtual.vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d -Name DataStore01
+    Get-vRAReservationResourcePool -SchemaClassId Infrastructure.Reservation.Virtual.vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d -Name ResourcePool1
 
     .EXAMPLE
-    Get-vRAReservationStorage -SchemaClassId Infrastructure.Reservation.Virtual.vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d
+    Get-vRAReservationResourcePool -SchemaClassId Infrastructure.Reservation.Virtual.vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d
 
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
@@ -68,9 +68,9 @@
 
             'ByName' { 
 
-                foreach ($StorageName in $Name) {
+                foreach ($ResourcePoolName in $Name) {
 
-                    $URI = "/reservation-service/api/data-service/schema/$($SchemaClassId)/default/reservationStorages/values"
+                    $URI = "/reservation-service/api/data-service/schema/$($SchemaClassId)/default/resourcePool/values"
             
                     Write-Verbose -Message "Preparing POST to $($URI)"
 
@@ -78,23 +78,22 @@
 
                     Write-Verbose -Message "SUCCESS"
 
-                    # --- Get the storage resource by name
-                    $Storage = $Response.values | Where-Object {$_.label -eq $StorageName}
+                    # --- Get the resource pool by name
+                    $ResourcePool = $Response.values | Where-Object {$_.label -eq $ResourcePoolName}
 
-                    if(!$Storage) {
+                    if(!$ResourcePool) {
 
-                        throw "Could not find storage with name $($StorageName)"
+                        throw "Could not find resource pool with name $($ResourcePoolName)"
 
                     }
 
                     [pscustomobject] @{
 
-                        Type = $Storage.underlyingValue.type
-                        ComponentTypeId = $Storage.underlyingValue.componentTypeId
-                        ComponentId = $Storage.underlyingValue.componentId
-                        ClassId = $Storage.underlyingValue.classId
-                        TypeFilter = $Storage.underlyingValue.TypeFilter
-                        Values = $Storage.underlyingValue.values
+                        Type = $ResourcePool.underlyingValue.type
+                        ComponentId = $ResourcePool.underlyingValue.componentId
+                        ClassId = $ResourcePool.underlyingValue.classId
+                        Id = $ResourcePool.underlyingValue.id
+                        Label = $ResourcePool.underlyingValue.label
 
                     }
 
@@ -106,7 +105,7 @@
 
             'Standard' {
 
-                $URI = "/reservation-service/api/data-service/schema/$($SchemaClassId)/default/reservationStorages/values"
+                $URI = "/reservation-service/api/data-service/schema/$($SchemaClassId)/default/resourcePool/values"
 
                 Write-Verbose -Message "Preparing POST to $($URI)"
 
@@ -114,18 +113,16 @@
 
                 Write-Verbose -Message "SUCCESS"
 
-                # --- Return all storage 
-                foreach ($Storage in $Response.values) {
+                # --- Return all resource pools
+                foreach ($ResourcePool in $Response.values) {
 
                     [pscustomobject] @{
                         
-                        Type = $Storage.underlyingValue.type
-                        Name = $Storage.label
-                        ComponentTypeId = $Storage.underlyingValue.componentTypeId
-                        ComponentId = $Storage.underlyingValue.componentId
-                        ClassId = $Storage.underlyingValue.classId
-                        TypeFilter = $Storage.underlyingValue.TypeFilter
-                        Values = $Storage.underlyingValue.values
+                        Type = $ResourcePool.underlyingValue.type
+                        ComponentId = $ResourcePool.underlyingValue.componentId
+                        ClassId = $ResourcePool.underlyingValue.classId
+                        Id = $ResourcePool.underlyingValue.id
+                        Label = $ResourcePool.underlyingValue.label
 
                     }                
                 
