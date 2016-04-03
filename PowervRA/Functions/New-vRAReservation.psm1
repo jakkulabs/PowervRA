@@ -1,16 +1,16 @@
 ﻿function New-vRAReservation {
 <#
     .SYNOPSIS
-    Create a new entitlement
+    Create a new reservation
 
     .DESCRIPTION
-    Create a new entitlement
+    Create a new reservation
 
     .PARAMETER Name
-    The name of the entitlement
+    The name of the reservation
 
     .PARAMETER Description
-    A description of the entitlement
+    A description of the reservation
 
     .PARAMETER BusinessGroup
     The business group that will be associated with the entitlement
@@ -48,45 +48,37 @@
     [ValidateNotNullOrEmpty()]
     [String]$Name,
 
-    [parameter(Mandatory=$true,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [String]$Tenant,
-
-    [parameter(Mandatory=$true,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [String]$BusinessGroup,
-
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
     [String]$ReservationPolicy,
 
-    [parameter(Mandatory=$true,ParameterSetName="Standard")]
+    [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [Int]$Priority,
+    [Int]$Priority = 0,
 
     [parameter(Mandatory=$true,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
     [String]$ComputeResource,
 
-    [parameter(Mandatory=$true,ParameterSetName="Standard")]
+    [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
     [Int]$Quota = 0,
 
     [parameter(Mandatory=$true,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [Int]$Memory,
+    [Int]$MemoryMB,
 
     [parameter(Mandatory=$true,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [String[]]$Storage,
+    [PSObject[]]$Storage,
+
+    [parameter(Mandatory=$false,ParameterSetName="Standard")]
+    [ValidateNotNullOrEmpty()]
+    [PSObject[]]$Network,
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
     [String]$Resourcepool,
-
-    [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [String[]]$Network,
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
@@ -95,7 +87,75 @@
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="JSON")]
     [ValidateNotNullOrEmpty()]
     [String]$JSON
-    )    
+    )
+    
+    DynamicParam {
+
+        # --- Define the parameter dictionary
+        $RuntimeParameterDictionary = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary           
+
+        # --- Dynamic Param:Type
+        $ParameterName = "Type"
+
+        $ParameterAttribute = New-Object System.Management.Automation.ParameterAttribute
+        $ParameterAttribute.Mandatory = $true
+        $ParameterAttribute.ParameterSetName = "Standard"
+
+        $AttributeCollection =  New-Object System.Collections.ObjectModel.Collection[System.Attribute]        
+        $AttributeCollection.Add($ParameterAttribute)
+
+        # --- Set the dynamic values
+        $ValidateSetValues = Get-vRAReservationType | Select -ExpandProperty Name
+
+        $ValidateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($ValidateSetValues)
+        $AttributeCollection.Add($ValidateSetAttribute)
+        
+        $RuntimeParameter = New-Object System.Management.Automation.RuntimeDefinedParameter($ParameterName, [String], $AttributeCollection)
+        $RuntimeParameterDictionary.Add($ParameterName, $RuntimeParameter)
+
+        # --- Dynamic Param:Tenant
+        $ParameterName = "Tenant"
+
+        $ParameterAttribute = New-Object System.Management.Automation.ParameterAttribute
+        $ParameterAttribute.Mandatory = $true
+        $ParameterAttribute.ParameterSetName = "Standard"
+        
+        $AttributeCollection =  New-Object System.Collections.ObjectModel.Collection[System.Attribute]        
+        $AttributeCollection.Add($ParameterAttribute)
+
+        # --- Set the dynamic values
+        $ValidateSetValues = (Invoke-vRARestMethod -Method GET -URI "/reservation-service/api/reservations/tenants?limit=9999").content | Select-Object -ExpandProperty id
+        
+        $ValidateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($ValidateSetValues)
+        $AttributeCollection.Add($ValidateSetAttribute)
+
+        $RuntimeParameter = New-Object System.Management.Automation.RuntimeDefinedParameter($ParameterName, [String], $AttributeCollection)
+        $RuntimeParameterDictionary.Add($ParameterName, $RuntimeParameter)
+
+        # --- Dynamic Param:BusinessGroup
+
+        $ParameterName = "BusinessGroup"
+
+        $ParameterAttribute = New-Object System.Management.Automation.ParameterAttribute
+        $ParameterAttribute.Mandatory = $true
+        $ParameterAttribute.ParameterSetName = "Standard"
+
+        $AttributeCollection =  New-Object System.Collections.ObjectModel.Collection[System.Attribute]        
+        $AttributeCollection.Add($ParameterAttribute)
+
+        # --- Set the dynamic values
+        $ValidateSetValues = (Invoke-vRARestMethod -Method GET -URI "/reservation-service/api/reservations/subtenants?limit=9999&tenantId=$($Tenant)").content | Select-Object -ExpandProperty name
+        
+        $ValidateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($ValidateSetValues)
+        $AttributeCollection.Add($ValidateSetAttribute)
+
+        $RuntimeParameter = New-Object System.Management.Automation.RuntimeDefinedParameter($ParameterName, [String], $AttributeCollection)
+        $RuntimeParameterDictionary.Add($ParameterName, $RuntimeParameter)
+
+        # --- Return the dynamic parameters
+        return $RuntimeParameterDictionary
+
+    } 
 
     begin {
     
@@ -104,8 +164,6 @@
     process {
 
         try {
-
-            $SchemaClassId = "Infrastructure.Reservation.Virtual.vSphere"
 
             switch ($PSCmdlet.ParameterSetName){
 
@@ -122,26 +180,30 @@
 
                 'Standard' {
 
-                    # --- Ensure that the tenant id is correct
-                    $TenantId = (Get-vRATenant -Id $Tenant).id
+                    Write-Verbose -Message "Preparing reservation payload"
                     
-                    # --- Get the business group  id
-                    $BusinessGroupId = (Get-vRABusinessGroup -TenantId $TenantId -Name $BusinessGroup).id
+                    #Get the reservation type id
+                    $ReservationTypeId = (Get-vRAReservationType -Name $PSBoundParameters.Type).id
 
-                    # --- If reservation policy has been specified, get the id
-                    $ReservationPolicyId = "null"
+                    $TenantId = $PSBoundParameters.Tenant
+                    
+                    $BusinessGroupId = (Get-vRABusinessGroup -TenantId $TenantId -Name $PSBoundParameters.BusinessGroup).id
 
                     if ($PSBoundParameters.ContainsKey("ReservationPolicy")){
 
-                        $ReservationPolicyId = Get-vRAReservationPolicy -Name $ReservationPolicy
+                        $ReservationPolicyId = (Get-vRAReservationPolicy -Name $ReservationPolicy).id
+
+                    }
+                    else {
+
+                        $ReservationPolicyId = "null"
 
                     }
 
-                    # --- Build the initial payload
                     $JSON = @"
                         {
                           "name": "$($Name)",
-                          "reservationTypeId": "Infrastructure.Reservation.Virtual.vSphere",
+                          "reservationTypeId": "$($ReservationTypeId)",
                           "tenantId": "$($TenantId)",
                           "subTenantId": "$($BusinessGroupId)",
                           "enabled": true,
@@ -181,132 +243,162 @@
                         }
 "@
 
-                    $JSON
                     # --- Convert the body to an object and begin adding extensionData
                     $ReservationObject = $JSON | ConvertFrom-Json
 
                     # --- Set the compute resource
+                    if ($PSBoundParameters.Type -eq "vSphere") {
 
-                    $ComputeResourceObject = Get-vRAReservationComputeResource -SchemaClassId $SchemaClassId -Name $ComputeResource
+                        Write-Verbose -Message "Creating reservation for type $($PSBoundParameters.Type)"
 
-                    $ComputeResourceJSON = @"
+                        $ComputeResourceObject = Get-vRAReservationComputeResource -Type $PSBoundParameters.Type -Name $ComputeResource
 
-                        {
-                            "key": "computeResource",
-                            "value": {
-                                "type" : "entityRef",
-                                "componentId" : null,
-                                "classId" : "ComputeResource",
-                                "id" : "$($ComputeResourceObject.Id)",
-                                "label" : "$($ComputeResourceObject.Label)"                  
-                            
-                            }
+                        Write-Verbose -Message "Found compute resource $($ComputeResource)"
 
-                        }
-"@
-                    
-                    $ReservationObject.extensionData.entries += ($ComputeResourceJSON | ConvertFrom-Json)
+                        $ComputeResourceJSON = @"
 
-                    # --- Set the resource pool
-
-                    if ($PSBoundParameters.ContainsKey("ResourcePool")){
-
-                        $ResourcePoolObject = Get-vRAReservationResourcePool -SchemaClassId $SchemaClassId -ComputeResourceId $ComputeResourceObject.Id -Name $Resourcepool
-
-                        $ResourcePoolJSON = @"
-                    
                             {
-                                "key": "resourcePool",
+                                "key": "computeResource",
                                 "value": {
-                                    "type": "entityRef",
-                                    "componentId": null,
-                                    "classId": "ResourcePools",
-                                    "id": "$($ResourcePoolObject.id)",
-                                    "label": "$($ResourcePoolObject.name)"
+                                    "type" : "entityRef",
+                                    "componentId" : null,
+                                    "classId" : "ComputeResource",
+                                    "id" : "$($ComputeResourceObject.Id)",
+                                    "label" : "$($ComputeResourceObject.Label)"                  
+                            
                                 }
-                            }                     
+
+                            }
 "@
                     
-                    $ReservationObject.extensionData.entries += ($ResourcePoolJSON | ConvertFrom-Json)                
-                                    
-                    }
+                        $ReservationObject.extensionData.entries += ($ComputeResourceJSON | ConvertFrom-Json)
 
-                    # --- Set the quota
+                        # --- Set the quota
 
-                    $MachineQuotaJSON = @"
+                        Write-Verbose -Message "Setting machine quota to $($Quota)"
+
+                        $MachineQuotaJSON = @"
                    
-                        {
-                            "key": "machineQuota",
-                            "value": {
-                                "type": "integer",
-                                "value": $($Quota)
-                            }  
-                        } 
+                            {
+                                "key": "machineQuota",
+                                "value": {
+                                    "type": "integer",
+                                    "value": $($Quota)
+                                }  
+                            } 
 "@
                                                                  
-                    $ReservationObject.extensionData.entries += ($MachineQuotaJSON | ConvertFrom-Json)               
+                        $ReservationObject.extensionData.entries += ($MachineQuotaJSON | ConvertFrom-Json)
 
-                    # --- Set the networks
+                        # --- Set the networks
+                        Write-Verbose -Message "Setting networks"
 
-                    $ReservationNetworksJSON = @"
+                        $ReservationNetworksJSON = @"
                     
-                        {
-                            "key": "reservationNetworks",
-                            "value": {
-                                "type": "multiple",
-                                "elementTypeId": "COMPLEX",
-                                "items": []
-                            }
-                        }
-"@
-
-                    $ReservationNetworks = $ReservationNetworksJSON | ConvertFrom-Json
-
-                    foreach ($NetworkName in $Network) {
-
-                        $NetworkObject = Get-vRAReservationNetwork -SchemaClassId $SchemaClassId -ComputeResourceId $ComputeResourceObject.Id -Name $NetworkName
-
-                        $ReservationNetworks.value.items += $NetworkObject
-
-                    }
-
-                    $ReservationObject.extensionData.entries += $ReservationNetworks
-
-                    # --- Set the storage
-
-                    
-
-                    # --- Set the memory
-                    #TODO Add validation
-                    #$MemoryObject = Get-vRAReservationMemory -SchemaClassId $SchemaClassId -ComputeResourceId $ComputeResourceObject.id
-
-                    $ReservationMemoryJson = @"
-
-                        {
-                            "key":  "reservationMemory",
-                            "value":  {
-                                "type":  "complex",
-                                "componentTypeId":  "com.vmware.csp.iaas.blueprint.service",
-                                "componentId":  null,
-                                "classId":  "Infrastructure.Reservation.Memory",
-                                "typeFilter":  null,
-                                "values":  {
-                                     "entries":  [
-                                        {
-                                            "key":  "memoryReservedSizeMb",
-                                            "value":  {
-                                                "type":  "integer",
-                                                "value":  $($Memory)
-                                            }
-                                        }
-                                    ]
+                            {
+                                "key": "reservationNetworks",
+                                "value": {
+                                    "type": "multiple",
+                                    "elementTypeId": "COMPLEX",
+                                    "items": []
                                 }
                             }
-
-                        }
 "@
 
-                    $ReservationObject.extensionData.entries += ($ReservationMemoryJson | ConvertFrom-Json)
+                        $ReservationNetworks = $ReservationNetworksJSON | ConvertFrom-Json
+
+                        foreach ($NetworkDefinition in $Network) {
+
+                            $ReservationNetworks.value.items += $NetworkDefinition
+
+                        }
+
+                        $ReservationObject.extensionData.entries += $ReservationNetworks
+
+                        # --- Set the storage
+                        Write-Verbose -Message "Setting storage"
+
+                        $ReservationStoragesJSON = @"
+
+                            {
+                                "key":  "reservationStorages",
+                                "value":  {
+                                    "type":  "multiple",
+                                    "elementTypeId":  "COMPLEX",
+                                    "items":  []
+
+                                }
+                            }
+"@
+
+                        $ReservationStorages = $ReservationStoragesJSON | ConvertFrom-Json
+
+                        foreach ($StorageDefinition in $Storage) {
+
+                            $ReservationStorages.value.items += $StorageDefinition
+
+                        }
+
+                        $ReservationObject.extensionData.entries += $ReservationStorages
+                   
+                        # --- Set the memory
+                        #TODO Add validation
+                        Write-Verbose -Message "Setting memory"
+
+                        $ReservationMemoryJson = @"
+
+                            {
+                                "key":  "reservationMemory",
+                                "value":  {
+                                    "type":  "complex",
+                                    "componentTypeId":  "com.vmware.csp.iaas.blueprint.service",
+                                    "componentId":  null,
+                                    "classId":  "Infrastructure.Reservation.Memory",
+                                    "typeFilter":  null,
+                                    "values":  {
+                                         "entries":  [
+                                            {
+                                                "key":  "memoryReservedSizeMb",
+                                                "value":  {
+                                                    "type":  "integer",
+                                                    "value":  $($MemoryMB)
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+
+                            }
+"@
+
+                        $ReservationObject.extensionData.entries += ($ReservationMemoryJson | ConvertFrom-Json)
+
+                        # --- Set the resource pool
+                        Write-Verbose "Setting resource pool"
+
+                        if ($PSBoundParameters.ContainsKey("ResourcePool")){
+
+                            $ResourcePoolObject = Get-vRAReservationResourcePool -Type $PSBoundParameters.Type -ComputeResourceId $ComputeResourceObject.Id -Name $Resourcepool
+
+                            $ResourcePoolJSON = @"
+                    
+                                {
+                                    "key": "resourcePool",
+                                    "value": {
+                                        "type": "entityRef",
+                                        "componentId": null,
+                                        "classId": "ResourcePools",
+                                        "id": "$($ResourcePoolObject.id)",
+                                        "label": "$($ResourcePoolObject.name)"
+                                    }
+                                }                     
+"@
+                    
+                            $ReservationObject.extensionData.entries += ($ResourcePoolJSON | ConvertFrom-Json)                
+                                    
+                        }
+
+                    }
 
                     break
 
@@ -314,9 +406,7 @@
 
             }
     
-            $Body = $ReservationObject | ConvertTo-Json -Depth 100
-
-            $Body
+            $Body = $ReservationObject | ConvertTo-Json -Depth 500
 
             if ($PSCmdlet.ShouldProcess($Name)){
 

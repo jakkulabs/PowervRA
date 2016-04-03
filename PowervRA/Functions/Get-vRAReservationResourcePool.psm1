@@ -29,10 +29,6 @@
 
     Param (
 
-    [parameter(Mandatory=$true, ValueFromPipelineByPropertyName)]
-    [ValidateNotNullOrEmpty()]
-    [String]$SchemaClassId,
-
     [parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
     [String]$ComputeResourceId,
@@ -41,104 +37,141 @@
     [ValidateNotNullOrEmpty()]
     [String[]]$Name
        
-    )    
+    )
+    
+    DynamicParam {
+    
+        # --- Define the parameter dictionary
+        $RuntimeParameterDictionary = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary           
 
-    try {
+        # --- Dynamic Param:Type
+        $ParameterName = "Type"
 
-        # --- Set the body for the POST
-        $Body = @"
+        $ParameterAttribute = New-Object System.Management.Automation.ParameterAttribute
+        $ParameterAttribute.Mandatory = $true
+        $ParameterAttribute.ParameterSetName = "__AllParameterSets"
 
-        {
-          "text": "",
-          "dependencyValues": {
-            "entries": [{
-              "key": "computeResource",
-              "value": {
-                "type": "entityRef",
-                "componentId": null,
-                "classId": "ComputeResource",
-                "id": "$($ComputeResourceId)"
+        $AttributeCollection =  New-Object System.Collections.ObjectModel.Collection[System.Attribute]        
+        $AttributeCollection.Add($ParameterAttribute)
+
+        # --- Set the dynamic values
+        $ValidateSetValues = Get-vRAReservationType | Select -ExpandProperty Name
+
+        $ValidateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($ValidateSetValues)
+        $AttributeCollection.Add($ValidateSetAttribute)
+        
+        $RuntimeParameter = New-Object System.Management.Automation.RuntimeDefinedParameter($ParameterName, [String], $AttributeCollection)
+        $RuntimeParameterDictionary.Add($ParameterName, $RuntimeParameter)
+    
+        # --- Return the dynamic parameters
+        return $RuntimeParameterDictionary    
+    
+    }
+    
+    begin {}
+    
+    process {        
+
+        try {
+
+            $SchemaClassId = (Get-vRAReservationType -Name $PSBoundParameters.Type).schemaClassId
+
+            # --- Set the body for the POST
+            $Body = @"
+
+            {
+              "text": "",
+              "dependencyValues": {
+                "entries": [{
+                  "key": "computeResource",
+                  "value": {
+                    "type": "entityRef",
+                    "componentId": null,
+                    "classId": "ComputeResource",
+                    "id": "$($ComputeResourceId)"
+                  }
+                }]
               }
-            }]
-          }
-        }
+            }
 "@
         
-        switch ($PsCmdlet.ParameterSetName) {
+            switch ($PsCmdlet.ParameterSetName) {
 
-            'ByName' { 
+                'ByName' { 
 
-                foreach ($ResourcePoolName in $Name) {
+                    foreach ($ResourcePoolName in $Name) {
 
-                    $URI = "/reservation-service/api/data-service/schema/$($SchemaClassId)/default/resourcePool/values"
+                        $URI = "/reservation-service/api/data-service/schema/$($SchemaClassId)/default/resourcePool/values"
             
-                    Write-Verbose -Message "Preparing POST to $($URI)"
+                        Write-Verbose -Message "Preparing POST to $($URI)"
 
-                    $Response = Invoke-vRARestMethod -Method POST -URI "$($URI)" -Body $Body
+                        $Response = Invoke-vRARestMethod -Method POST -URI "$($URI)" -Body $Body
 
-                    Write-Verbose -Message "SUCCESS"
+                        Write-Verbose -Message "SUCCESS"
 
-                    # --- Get the resource pool by name
-                    $ResourcePool = $Response.values | Where-Object {$_.label -eq $ResourcePoolName}
+                        # --- Get the resource pool by name
+                        $ResourcePool = $Response.values | Where-Object {$_.label -eq $ResourcePoolName}
 
-                    if(!$ResourcePool) {
+                        if(!$ResourcePool) {
 
-                        throw "Could not find resource pool with name $($ResourcePoolName)"
+                            throw "Could not find resource pool with name $($ResourcePoolName)"
+
+                        }
+
+                        [pscustomobject] @{
+
+                            Type = $ResourcePool.underlyingValue.type
+                            ComponentId = $ResourcePool.underlyingValue.componentId
+                            ClassId = $ResourcePool.underlyingValue.classId
+                            Id = $ResourcePool.underlyingValue.id
+                            Label = $ResourcePool.underlyingValue.label
+
+                        }
 
                     }
 
-                    [pscustomobject] @{
-
-                        Type = $ResourcePool.underlyingValue.type
-                        ComponentId = $ResourcePool.underlyingValue.componentId
-                        ClassId = $ResourcePool.underlyingValue.classId
-                        Id = $ResourcePool.underlyingValue.id
-                        Label = $ResourcePool.underlyingValue.label
-
-                    }
+                    break
 
                 }
 
-                break
+                'Standard' {
 
-            }
+                    $URI = "/reservation-service/api/data-service/schema/$($SchemaClassId)/default/resourcePool/values"
 
-            'Standard' {
+                    Write-Verbose -Message "Preparing POST to $($URI)"
 
-                $URI = "/reservation-service/api/data-service/schema/$($SchemaClassId)/default/resourcePool/values"
+                    $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body
 
-                Write-Verbose -Message "Preparing POST to $($URI)"
+                    Write-Verbose -Message "SUCCESS"
 
-                $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body
+                    # --- Return all resource pools
+                    foreach ($ResourcePool in $Response.values) {
 
-                Write-Verbose -Message "SUCCESS"
-
-                # --- Return all resource pools
-                foreach ($ResourcePool in $Response.values) {
-
-                    [pscustomobject] @{
+                        [pscustomobject] @{
                         
-                        Type = $ResourcePool.underlyingValue.type
-                        ComponentId = $ResourcePool.underlyingValue.componentId
-                        ClassId = $ResourcePool.underlyingValue.classId
-                        Id = $ResourcePool.underlyingValue.id
-                        Label = $ResourcePool.underlyingValue.label
+                            Type = $ResourcePool.underlyingValue.type
+                            ComponentId = $ResourcePool.underlyingValue.componentId
+                            ClassId = $ResourcePool.underlyingValue.classId
+                            Id = $ResourcePool.underlyingValue.id
+                            Label = $ResourcePool.underlyingValue.label
 
-                    }                
+                        }                
                 
-                }            
+                    }            
 
-                break
+                    break
     
+                }
+
             }
-
-        }
            
-    }
-    catch [Exception]{
+        }
+        catch [Exception]{
         
-        throw
+            throw
 
-    }   
+        }  
+        
+    } 
      
 }

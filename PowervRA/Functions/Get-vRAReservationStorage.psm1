@@ -6,8 +6,8 @@
     .DESCRIPTION
     Get available storage for a compute resource
 
-    .PARAMETER SchemaClassId
-    The SchemaClassid id for the reservation type
+    .PARAMETER Type
+    The reservation type
     
     .PARAMETER Name
     The name of the storage
@@ -19,19 +19,15 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    Get-vRAReservationStorage -SchemaClassId Infrastructure.Reservation.Virtual.vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d -Name DataStore01
+    Get-vRAReservationStorage -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d -Name DataStore01
 
     .EXAMPLE
-    Get-vRAReservationStorage -SchemaClassId Infrastructure.Reservation.Virtual.vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d
+    Get-vRAReservationStorage -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d
 
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
-
-    [parameter(Mandatory=$true, ValueFromPipelineByPropertyName)]
-    [ValidateNotNullOrEmpty()]
-    [String]$SchemaClassId,
 
     [parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
@@ -41,107 +37,144 @@
     [ValidateNotNullOrEmpty()]
     [String[]]$Name
        
-    )    
+    )
+    
+    DynamicParam {
+    
+        # --- Define the parameter dictionary
+        $RuntimeParameterDictionary = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary           
 
-    try {
+        # --- Dynamic Param:Type
+        $ParameterName = "Type"
 
-        # --- Set the body for the POST
-        $Body = @"
+        $ParameterAttribute = New-Object System.Management.Automation.ParameterAttribute
+        $ParameterAttribute.Mandatory = $true
+        $ParameterAttribute.ParameterSetName = "__AllParameterSets"
 
-        {
-          "text": "",
-          "dependencyValues": {
-            "entries": [{
-              "key": "computeResource",
-              "value": {
-                "type": "entityRef",
-                "componentId": null,
-                "classId": "ComputeResource",
-                "id": "$($ComputeResourceId)"
+        $AttributeCollection =  New-Object System.Collections.ObjectModel.Collection[System.Attribute]        
+        $AttributeCollection.Add($ParameterAttribute)
+
+        # --- Set the dynamic values
+        $ValidateSetValues = Get-vRAReservationType | Select -ExpandProperty Name
+
+        $ValidateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($ValidateSetValues)
+        $AttributeCollection.Add($ValidateSetAttribute)
+        
+        $RuntimeParameter = New-Object System.Management.Automation.RuntimeDefinedParameter($ParameterName, [String], $AttributeCollection)
+        $RuntimeParameterDictionary.Add($ParameterName, $RuntimeParameter)
+    
+        # --- Return the dynamic parameters
+        return $RuntimeParameterDictionary    
+    
+    }        
+
+    begin {}
+
+    process {
+
+        try {
+
+            $SchemaClassId = (Get-vRAReservationType -Name $PSBoundParameters.Type).schemaClassid
+
+            # --- Set the body for the POST
+            $Body = @"
+
+            {
+              "text": "",
+              "dependencyValues": {
+                "entries": [{
+                  "key": "computeResource",
+                  "value": {
+                    "type": "entityRef",
+                    "componentId": null,
+                    "classId": "ComputeResource",
+                    "id": "$($ComputeResourceId)"
+                  }
+                }]
               }
-            }]
-          }
-        }
+            }
 "@
         
-        switch ($PsCmdlet.ParameterSetName) {
+            switch ($PsCmdlet.ParameterSetName) {
 
-            'ByName' { 
+                'ByName' { 
 
-                foreach ($StorageName in $Name) {
+                    foreach ($StorageName in $Name) {
 
-                    $URI = "/reservation-service/api/data-service/schema/$($SchemaClassId)/default/reservationStorages/values"
+                        $URI = "/reservation-service/api/data-service/schema/$($SchemaClassId)/default/reservationStorages/values"
             
-                    Write-Verbose -Message "Preparing POST to $($URI)"
+                        Write-Verbose -Message "Preparing POST to $($URI)"
 
-                    $Response = Invoke-vRARestMethod -Method POST -URI "$($URI)" -Body $Body
+                        $Response = Invoke-vRARestMethod -Method POST -URI "$($URI)" -Body $Body
 
-                    Write-Verbose -Message "SUCCESS"
+                        Write-Verbose -Message "SUCCESS"
 
-                    # --- Get the storage resource by name
-                    $Storage = $Response.values | Where-Object {$_.label -eq $StorageName}
+                        # --- Get the storage resource by name
+                        $Storage = $Response.values | Where-Object {$_.label -eq $StorageName}
 
-                    if(!$Storage) {
+                        if(!$Storage) {
 
-                        throw "Could not find storage with name $($StorageName)"
+                            throw "Could not find storage with name $($StorageName)"
+
+                        }
+
+                        [pscustomobject] @{
+
+                            Type = $Storage.underlyingValue.type
+                            ComponentTypeId = $Storage.underlyingValue.componentTypeId
+                            ComponentId = $Storage.underlyingValue.componentId
+                            ClassId = $Storage.underlyingValue.classId
+                            TypeFilter = $Storage.underlyingValue.TypeFilter
+                            Values = $Storage.underlyingValue.values
+
+                        }
 
                     }
 
-                    [pscustomobject] @{
-
-                        Type = $Storage.underlyingValue.type
-                        ComponentTypeId = $Storage.underlyingValue.componentTypeId
-                        ComponentId = $Storage.underlyingValue.componentId
-                        ClassId = $Storage.underlyingValue.classId
-                        TypeFilter = $Storage.underlyingValue.TypeFilter
-                        Values = $Storage.underlyingValue.values
-
-                    }
+                    break
 
                 }
 
-                break
+                'Standard' {
 
-            }
+                    $URI = "/reservation-service/api/data-service/schema/$($SchemaClassId)/default/reservationStorages/values"
 
-            'Standard' {
+                    Write-Verbose -Message "Preparing POST to $($URI)"
 
-                $URI = "/reservation-service/api/data-service/schema/$($SchemaClassId)/default/reservationStorages/values"
+                    $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body
 
-                Write-Verbose -Message "Preparing POST to $($URI)"
+                    Write-Verbose -Message "SUCCESS"
 
-                $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body
+                    # --- Return all storage 
+                    foreach ($Storage in $Response.values) {
 
-                Write-Verbose -Message "SUCCESS"
-
-                # --- Return all storage 
-                foreach ($Storage in $Response.values) {
-
-                    [pscustomobject] @{
+                        [pscustomobject] @{
                         
-                        Type = $Storage.underlyingValue.type
-                        Name = $Storage.label
-                        ComponentTypeId = $Storage.underlyingValue.componentTypeId
-                        ComponentId = $Storage.underlyingValue.componentId
-                        ClassId = $Storage.underlyingValue.classId
-                        TypeFilter = $Storage.underlyingValue.TypeFilter
-                        Values = $Storage.underlyingValue.values
+                            Type = $Storage.underlyingValue.type
+                            Name = $Storage.label
+                            ComponentTypeId = $Storage.underlyingValue.componentTypeId
+                            ComponentId = $Storage.underlyingValue.componentId
+                            ClassId = $Storage.underlyingValue.classId
+                            TypeFilter = $Storage.underlyingValue.TypeFilter
+                            Values = $Storage.underlyingValue.values
 
-                    }                
+                        }                
                 
-                }            
+                    }            
 
-                break
+                    break
     
+                }
+
             }
+           
+        }
+        catch [Exception]{
+        
+            throw
 
         }
-           
-    }
-    catch [Exception]{
         
-        throw
-
     }   
      
 }
