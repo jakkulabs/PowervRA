@@ -25,7 +25,7 @@
 
     Param (
 
-    [parameter(Mandatory=$true,ValueFromPipeline=$false,ParameterSetName="ById")]
+    [parameter(Mandatory=$true,ValueFromPipeline=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
     [String[]]$Id          
 

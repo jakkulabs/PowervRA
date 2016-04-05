@@ -49,31 +49,30 @@
 
     try {
     
-        $URI = "/advanced-designer-service/api/tenants/$($Global:vRAConnection.Tenant)/blueprints"
-
-        # --- Run vRA REST Request
-        $Response = Invoke-vRARestMethod -Method GET -URI $URI   
                      
         switch ($PsCmdlet.ParameterSetName) 
         { 
-            "ById"  {                 
-
+            "ById"  {
+            
                 foreach ($ASDBlueprintId in $Id){
-                    
-                    $ASDBlueprint = $Response.content | Where-Object {$_.Id.id -eq $ASDBlueprintId}
+
+                    $URI = "/advanced-designer-service/api/tenants/$($Global:vRAConnection.Tenant)/blueprints/$($ASDBlueprintId)"
+
+                    # --- Run vRA REST Request
+                    $Response = Invoke-vRARestMethod -Method GET -URI $URI
 
                     [pscustomobject]@{
 
-                        Name = $ASDBlueprint.name
-                        Id = $ASDBlueprint.id.id               
-                        Description = $ASDBlueprint.description
-                        WorkflowId = $ASDBlueprint.workflowId
-                        CatalogRequestInfoHidden = $ASDBlueprint.catalogRequestInfoHidden
-                        Forms = $ASDBlueprint.forms
-                        Status = $ASDBlueprint.status
-                        StatusName = $ASDBlueprint.statusName
-                        Version = $ASDBlueprint.version
-                        OutputParameter = $ASDBlueprint.outputParameter
+                        Name = $Response.name
+                        Id = $Response.id.id               
+                        Description = $Response.description
+                        WorkflowId = $Response.workflowId
+                        CatalogRequestInfoHidden = $Response.catalogRequestInfoHidden
+                        Forms = $Response.forms
+                        Status = $Response.status
+                        StatusName = $Response.statusName
+                        Version = $Response.version
+                        OutputParameter = $Response.outputParameter
                     } 
                 }                                
             
@@ -84,27 +83,47 @@
 
                foreach ($ASDBlueprintName in $Name){
 
-                    $ASDBlueprint = $Response.content | Where-Object {$_.name -eq $ASDBlueprintName}
+                    $URI = "/advanced-designer-service/api/tenants/$($Global:vRAConnection.Tenant)/blueprints?`$filter=name%20eq%20'$($ASDBlueprintName)'"
 
-                    [pscustomobject]@{
+                    # --- Run vRA REST Request
+                    $Response = Invoke-vRARestMethod -Method GET -URI $URI
 
-                        Name = $ASDBlueprint.name
-                        Id = $ASDBlueprint.id.id               
-                        Description = $ASDBlueprint.description
-                        WorkflowId = $ASDBlueprint.workflowId
-                        CatalogRequestInfoHidden = $ASDBlueprint.catalogRequestInfoHidden
-                        Forms = $ASDBlueprint.forms
-                        Status = $ASDBlueprint.status
-                        StatusName = $ASDBlueprint.statusName
-                        Version = $ASDBlueprint.version
-                        OutputParameter = $ASDBlueprint.outputParameter
-                    } 
+                    if ($Response.content){
+                    
+                        $ASDBlueprints = $Response.content
+                    }
+                    else {
+
+                        throw "Unable to find Service Blueprint with name $($ASDBlueprintName)"
+                    }
+
+                    foreach ($ASDBlueprint in $ASDBlueprints){
+
+                        [pscustomobject]@{
+
+                            Name = $ASDBlueprint.name
+                            Id = $ASDBlueprint.id.id               
+                            Description = $ASDBlueprint.description
+                            WorkflowId = $ASDBlueprint.workflowId
+                            CatalogRequestInfoHidden = $ASDBlueprint.catalogRequestInfoHidden
+                            Forms = $ASDBlueprint.forms
+                            Status = $ASDBlueprint.status
+                            StatusName = $ASDBlueprint.statusName
+                            Version = $ASDBlueprint.version
+                            OutputParameter = $ASDBlueprint.outputParameter
+                        }
+                    }
                 }  
                 
                 break
             }
 
             "Standard"  {
+
+                $URI = "/advanced-designer-service/api/tenants/$($Global:vRAConnection.Tenant)/blueprints"
+
+                # --- Run vRA REST Request
+                $Response = Invoke-vRARestMethod -Method GET -URI $URI
 
                 $ASDBlueprints = $Response.content
 
