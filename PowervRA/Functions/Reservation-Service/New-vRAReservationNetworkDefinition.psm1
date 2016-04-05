@@ -3,29 +3,40 @@
     .SYNOPSIS
     
     .DESCRIPTION
+
+    .PARAMETER Type
+    The reservation type
         
+    .PARAMETER ComputeResourceId
+    The id of the compute resource
+
     .PARAMETER Path
-    The storage path
+    The network path
     
     .PARAMETER ReservationSizeGB
-    The size in GB of this reservation
-    
-    .PARAMETER Priority
-    The priority of storage 
+    The network profile
 
     .INPUTS
     System.String.
-    System.Int.
 
     .OUTPUTS
     System.Management.Automation.PSObject
 
     .EXAMPLE
+    $Network1 = New-vRAReservationNetworkDefinition -Type vSphere -ComputeResourceId 75ae3400-beb5-4b0b-895a-0484413c93b1 -Path "VM Network" -Profile "Test"
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
+
+    [parameter(Mandatory=$true)]
+    [ValidateNotNullOrEmpty()]
+    [String]$Type,
+
+    [parameter(Mandatory=$true)]
+    [ValidateNotNullOrEmpty()]
+    [String]$ComputeResourceId,
 
     [parameter(Mandatory=$true,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
@@ -33,42 +44,9 @@
     
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [String]$Profile,
+    [String]$Profile
 
-    [parameter(Mandatory=$true,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [String]$ComputeResourceId
-
-    )
-    
-    DynamicParam {
-    
-        # --- Define the parameter dictionary
-        $RuntimeParameterDictionary = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary           
-
-        # --- Dynamic Param:Type
-        $ParameterName = "Type"
-
-        $ParameterAttribute = New-Object System.Management.Automation.ParameterAttribute
-        $ParameterAttribute.Mandatory = $true
-        $ParameterAttribute.ParameterSetName = "Standard"
-
-        $AttributeCollection =  New-Object System.Collections.ObjectModel.Collection[System.Attribute]        
-        $AttributeCollection.Add($ParameterAttribute)
-
-        # --- Set the dynamic values
-        $ValidateSetValues = Get-vRAReservationType | Select -ExpandProperty Name
-
-        $ValidateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($ValidateSetValues)
-        $AttributeCollection.Add($ValidateSetAttribute)
-        
-        $RuntimeParameter = New-Object System.Management.Automation.RuntimeDefinedParameter($ParameterName, [String], $AttributeCollection)
-        $RuntimeParameterDictionary.Add($ParameterName, $RuntimeParameter)
-    
-        # --- Return the dynamic parameters
-        return $RuntimeParameterDictionary    
-    
-    }        
+    )    
 
     begin {
     

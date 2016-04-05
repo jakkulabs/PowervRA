@@ -37,65 +37,71 @@
     [ValidateNotNullOrEmpty()]
     [String[]]$Name   
        
-    )    
-
-    try {
-
-        switch ($PSCmdlet.ParameterSetName) {
-
-            'ById' {
-
-                foreach ($ReservationId in $Id) {
-
-                    if ($PSCmdlet.ShouldProcess($ReservationId)){
-
-                        $URI = "/reservation-service/api/reservations/$($Id)"
-            
-                        Write-Verbose -Message "Preparing DELETE to $($URI)"
-
-                        $Response = Invoke-vRARestMethod -Method DELETE -URI "$($URI)"
-
-                        Write-Verbose -Message "SUCCESS"
-
-                    }
-
-                }
-
-                break
-
-            }
-
-            'ByName' {
-
-                foreach ($ReservationName in $Name) {
-
-                    if ($PSCmdlet.ShouldProcess($ReservationName)){
-
-                        $Id = (Get-vRAReservation -Name $ReservationName).id
-
-                        $URI = "/reservation-service/api/reservations/$($Id)"
-            
-                        Write-Verbose -Message "Preparing DELETE to $($URI)"
-
-                        $Response = Invoke-vRARestMethod -Method DELETE -URI "$($URI)"
-
-                        Write-Verbose -Message "SUCCESS"
-
-                    }
-
-                }
-
-                break
-
-            }
-  
-        }
+    )
     
-    }
-    catch [Exception]{
-        
-        throw
+    begin {}
+    
+    process {    
 
+        try {
+
+            switch ($PSCmdlet.ParameterSetName) {
+
+                'ById' {
+
+                    foreach ($ReservationId in $Id) {
+
+                        if ($PSCmdlet.ShouldProcess($ReservationId)){
+
+                            $URI = "/reservation-service/api/reservations/$($Id)"
+            
+                            Write-Verbose -Message "Preparing DELETE to $($URI)"
+
+                            $Response = Invoke-vRARestMethod -Method DELETE -URI "$($URI)"
+
+                            Write-Verbose -Message "SUCCESS"
+
+                        }
+
+                    }
+
+                    break
+
+                }
+
+                'ByName' {
+
+                    foreach ($ReservationName in $Name) {
+
+                        if ($PSCmdlet.ShouldProcess($ReservationName)){
+
+                            $Id = (Get-vRAReservation -Name $ReservationName).id
+
+                            $URI = "/reservation-service/api/reservations/$($Id)"
+            
+                            Write-Verbose -Message "Preparing DELETE to $($URI)"
+
+                            $Response = Invoke-vRARestMethod -Method DELETE -URI "$($URI)"
+
+                            Write-Verbose -Message "SUCCESS"
+
+                        }
+
+                    }
+
+                    break
+
+                }
+  
+            }
+    
+        }
+        catch [Exception]{
+        
+            throw
+
+        }
+        
     }   
      
 }

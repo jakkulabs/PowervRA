@@ -34,23 +34,88 @@
     The amount of memory available to this reservation
 
     .PARAMETER Storage
+    The storage that will be associated with the reservation
 
     .PARAMETER Network
+    The network that will be associated with this reservation
 
     .PARAMETER ResourcePool
+    The resource pool that will be associated with this reservation
 
     .PARAMETER EnableAlerts
+    Enable alerts
+
+    .PARAMETER EmailBusinessGroupManager
+    Email the alerts to the business group manager
+
+    .PARAMETER Recipients
+    The recipients that will recieve email alerts
+
+    .PARAMETER StorageAlertPercentageLevel
+    The threshold for storage alerts
+
+    .PARAMETER MemoryAlertPercentageLevel
+    The threshold for memory alerts
+
+    .PARAMETER CPUAlertPercentageLevel
+    The threshold for cpu alerts
+
+    .PARAMETER MachineAlertPercentageLevel
+    The threshold for machine alerts
+
+    .PARAMETER AlertFrequencyReminder
+    Alert frequency in days
 
     .PARAMETER JSON
     Body text to send in JSON format
 
+    .PARAMETER NewName
+    If passing a JSON payload NewName can be used to set the reservation name
+
     .INPUTS
-    System.String.
+    System.String
+    System.Int
+    System.Management.Automation.PSObject
 
     .OUTPUTS
     System.Management.Automation.PSObject
 
     .EXAMPLE
+    # --- Get the compute resource id
+    $ComputeResource = Get-vRAReservationComputeResource -Type vSphere -Name "Cluster01 (vCenter)"
+
+    # --- Get the network definition
+    $NetworkDefinitionArray = @()
+    $Network1 = New-vRAReservationNetworkDefinition -Type vSphere -ComputeResourceId $ComputeResource.Id -Path "VM Network" -Profile "Test-Profile"
+    $NetworkDefinitionArray += $Network1
+
+    # --- Get the storage definition
+    $StorageDefinitionArray = @()
+    $Storage1 = New-vRAReservationStorageDefinition -Type vSphere -ComputeResourceId $ComputeResource.Id -Path "Datastore1" -ReservedSizeGB 10 -Priority 0 
+    $StorageDefinitionArray += $Storage1
+
+    # --- Set the parameters and create the reservation
+    $Param = @{
+
+        Type = "vSphere"
+        Name = "Reservation01"
+        Tenant = "Tenant01"
+        BusinessGroup = "Default Business Group[Tenant01]"
+        #ReservationPolicy = ""
+        #Priority = 0
+        ComputeResource = "Cluster01 (vCenter)"
+        #Quota = 0
+        MemoryMB = 2048
+        Storage = $StorageDefinitionArray
+        Resourcepool = "Resources"
+        Network = $NetworkDefinitionArray
+        EnableAlerts = $false
+
+    }
+
+    New-vrareservation @Param -Verbose
+
+
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
@@ -105,12 +170,45 @@
     [String]$Resourcepool,
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
+    [ValidateSet("TRUE","FALSE")]
+    [String]$EnableAlerts = "FALSE",
+
+    [parameter(Mandatory=$false,ParameterSetName="Standard")]
+    [ValidateSet("TRUE","FALSE")]
+    [String]$EmailBusinessGroupManager = "FALSE",
+
+    [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [String]$EnableAlerts = $false,
+    [String[]]$Recipients,
+
+    [parameter(Mandatory=$false,ParameterSetName="Standard")]
+    [ValidateNotNullOrEmpty()]
+    [Int]$StorageAlertPercentageLevel = 80,
+
+    [parameter(Mandatory=$false,ParameterSetName="Standard")]
+    [ValidateNotNullOrEmpty()]
+    [Int]$MemoryAlertPercentageLevel = 80,
+
+    [parameter(Mandatory=$false,ParameterSetName="Standard")]
+    [ValidateNotNullOrEmpty()]
+    [Int]$CPUAlertPercentageLevel = 80,
+
+    [parameter(Mandatory=$false,ParameterSetName="Standard")]
+    [ValidateNotNullOrEmpty()]
+    [Int]$MachineAlertPercentageLevel = 80,
+
+    [parameter(Mandatory=$false,ParameterSetName="Standard")]
+    [ValidateNotNullOrEmpty()]
+    [Int]$AlertFrequencyReminder = 20,
 
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="JSON")]
     [ValidateNotNullOrEmpty()]
-    [String]$JSON
+    [String]$JSON,
+
+    [parameter(Mandatory=$false,ParameterSetName="JSON")]
+    [ValidateNotNullOrEmpty()]
+    [String]$NewName
+
     )
  
     begin {
@@ -130,6 +228,17 @@
                     $Data = ($JSON | ConvertFrom-Json)      
                     $Name = $Data.name
 
+                    # --- if a new name has been passed set it
+                    if ($PSBoundParameters.ContainsKey("NewName")){
+
+                        Write-Verbose -Message "Setting reservaiton name to $($NewName)"
+
+                        $Data.name = $NewName
+
+                        $Body = $Data | ConvertTo-Json -Depth 100 -Compress
+
+                    }
+
                     break
 
                 }
@@ -138,9 +247,9 @@
 
                     Write-Verbose -Message "Preparing reservation payload"
                   
-                    $ReservationTypeId = (Get-vRAReservationType -Name $PSBoundParameters.Type).id
+                    $ReservationTypeId = (Get-vRAReservationType -Name $Type).id
 
-                    $BusinessGroupId = (Get-vRABusinessGroup -TenantId $TenantId -Name $BusinessGroup).id
+                    $BusinessGroupId = (Get-vRABusinessGroup -TenantId $Tenant -Name $BusinessGroup).id
 
                     if ($PSBoundParameters.ContainsKey("ReservationPolicy")){
 
@@ -154,10 +263,10 @@
                     }
 
                     Write-Verbose -Message "Reservation name is $($Name)"
-                    Write-Verbose -Message "ReservationTypeId for $PSBoundParameters.Types is $ReservationTypeId"
+                    Write-Verbose -Message "ReservationTypeId for $($Type) is $($ReservationTypeId)"
                     Write-Verbose -Message "Tenant is $($Tenant)"
-                    Write-Verbose -Message "BusinessGroupId for $BusinessGroup is $BusinessGroupId"
-                    Write-Verbose -Message "ReservationPolicyId for $ReservationPolicy is $ReservationPolicyId"
+                    Write-Verbose -Message "BusinessGroupId for $($BusinessGroup) is $($BusinessGroupId)"
+                    Write-Verbose -Message "ReservationPolicyId for $($ReservationPolicy) is $($ReservationPolicyId)"
                     Write-Verbose -Message "Priority is $($Priority)"
                     Write-Verbose -Message "Alerts enabled: $($EnableAlerts)"
 
@@ -171,32 +280,11 @@
                           "priority": $($Priority),
                           "reservationPolicyId": $($ReservationPolicyId),
                           "alertPolicy": {
-                            "enabled": $($EnableAlerts.ToString().toLower()),
+                            "enabled": $($EnableAlerts.ToLower()),
                             "frequencyReminder": 20,
-                            "emailBgMgr": false,
+                            "emailBgMgr": $($EmailBusinessGroupManager.ToLower()),
                             "recipients": [],
-                            "alerts": [
-                              {
-                                "alertPercentLevel": 80,
-                                "referenceResourceId": "storage",
-                                "id": "storage"
-                              },
-                              {
-                                "alertPercentLevel": 80,
-                                "referenceResourceId": "memory",
-                                "id": "memory"
-                              },
-                              {
-                                "alertPercentLevel": 80,
-                                "referenceResourceId": "cpu",
-                                "id": "cpu"
-                              },
-                              {
-                                "alertPercentLevel": 80,
-                                "referenceResourceId": "machine",
-                                "id": "machine"
-                              }
-                            ]
+                            "alerts": []
                           },
                           "extensionData": {
                             "entries": []
@@ -207,17 +295,61 @@
                     # --- Convert the body to an object and begin adding extensionData
                     $ReservationObject = $Template | ConvertFrom-Json
 
+                    if ($EnableAlerts -eq "TRUE" -and $PSBoundParameters.ContainsKey("Recipients")) {
+
+                        foreach ($Recipient in $Recipients) {
+
+                            $ReservationObject.alertPolicy.recipients += $Recipient
+
+                        }
+
+                    }
+
                     switch ($PSBoundParameters.Type) {
 
                         'vSphere' {
+
+                            # ---
+                            # --- Alert Policy
+                            # ---
+
+                            $AlertsTemplate = @"
+
+                                [
+
+                                    {
+                                        "alertPercentLevel": $($StorageAlertPercentageLevel),
+                                        "referenceResourceId": "storage",
+                                        "id": "storage"
+                                    },
+                                    {
+                                        "alertPercentLevel": $($MemoryAlertPercentageLevel),
+                                        "referenceResourceId": "memory",
+                                        "id": "memory"
+                                    },
+                                    {
+                                        "alertPercentLevel": $($CPUAlertPercentageLevel),
+                                        "referenceResourceId": "cpu",
+                                        "id": "cpu"
+                                    },
+                                    {
+                                       "alertPercentLevel": $($MachineAlertPercentageLevel),
+                                        "referenceResourceId": "machine",
+                                        "id": "machine"
+                                    }
+
+                                ]
+"@
+                            
+                            $ReservationObject.alertPolicy.alerts += $AlertsTemplate | ConvertFrom-Json                            
 
                             # --- 
                             # --- Compute Resource
                             # ---
 
-                            Write-Verbose -Message "Adding extensionData for reservation for type $($PSBoundParameters.Type)"
+                            Write-Verbose -Message "Adding extensionData for reservation for type $($Type)"
 
-                            $ComputeResourceObject = Get-vRAReservationComputeResource -Type $PSBoundParameters.Type -Name $ComputeResource
+                            $ComputeResourceObject = Get-vRAReservationComputeResource -Type $Type -Name $ComputeResource
 
                             Write-Verbose -Message "Found compute resource $($ComputeResource) with id $($ComputeResource.id)"
 
@@ -357,7 +489,7 @@
 
                                 Write-Verbose "Setting resource pool"
 
-                                $ResourcePoolObject = Get-vRAReservationResourcePool -Type $PSBoundParameters.Type -ComputeResourceId $ComputeResourceObject.Id -Name $Resourcepool
+                                $ResourcePoolObject = Get-vRAReservationResourcePool -Type $Type -ComputeResourceId $ComputeResourceObject.Id -Name $Resourcepool
 
                                 $ResourcePoolTemplate = @"
                     
@@ -436,16 +568,19 @@
                             Write-Verbose -Message "Support for this reservation type has not been added"
                             break                        
                         
-                        }    
+                        }                           
 
                     }
+
+
+                    $Body = $ReservationObject | ConvertTo-Json -Depth 500
+
+                    $Body
 
                 }
 
             }
     
-            $Body = $ReservationObject | ConvertTo-Json -Depth 500
-
             if ($PSCmdlet.ShouldProcess($Name)){
 
                 $URI = "/reservation-service/api/reservations"

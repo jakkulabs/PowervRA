@@ -21,11 +21,20 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
+    $Storage1 = New-vRAReservationStorageDefinition -Type vSphere -ComputeResourceId 75ae3400-beb5-4b0b-895a-0484413c93b1 -Path "Datastore01" -ReservedSizeGB 10 -Priority 0 
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
+
+    [parameter(Mandatory=$true)]
+    [ValidateNotNullOrEmpty()]
+    [String]$Type,
+
+    [parameter(Mandatory=$true)]
+    [ValidateNotNullOrEmpty()]
+    [String]$ComputeResourceId,
 
     [parameter(Mandatory=$true,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
@@ -37,43 +46,10 @@
 
     [parameter(Mandatory=$true,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [Int]$Priority = 0,
-
-    [parameter(Mandatory=$true,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [String]$ComputeResourceId
+    [Int]$Priority = 0
 
     )
    
-    DynamicParam {
-    
-        # --- Define the parameter dictionary
-        $RuntimeParameterDictionary = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary           
-
-        # --- Dynamic Param:Type
-        $ParameterName = "Type"
-
-        $ParameterAttribute = New-Object System.Management.Automation.ParameterAttribute
-        $ParameterAttribute.Mandatory = $true
-        $ParameterAttribute.ParameterSetName = "__AllParameterSets"
-
-        $AttributeCollection =  New-Object System.Collections.ObjectModel.Collection[System.Attribute]        
-        $AttributeCollection.Add($ParameterAttribute)
-
-        # --- Set the dynamic values
-        $ValidateSetValues = Get-vRAReservationType | Select -ExpandProperty Name
-
-        $ValidateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($ValidateSetValues)
-        $AttributeCollection.Add($ValidateSetAttribute)
-        
-        $RuntimeParameter = New-Object System.Management.Automation.RuntimeDefinedParameter($ParameterName, [String], $AttributeCollection)
-        $RuntimeParameterDictionary.Add($ParameterName, $RuntimeParameter)
-    
-        # --- Return the dynamic parameters
-        return $RuntimeParameterDictionary    
-    
-    }        
-
     begin {
     
     }
@@ -83,7 +59,7 @@
         try {
 
             # --- Get storage information
-            $Storage = Get-vRAReservationStorage -Type $PSBoundParameters.Type -ComputeResourceId $ComputeResourceId -Name $Path
+            $Storage = Get-vRAReservationStorage -Type $Type -ComputeResourceId $ComputeResourceId -Name $Path
 
             $StoragePath = ($Storage.values.entries | Where-Object {$_.key -eq "storagePath"}).value
 
