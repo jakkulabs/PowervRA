@@ -59,7 +59,7 @@
  
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [Int]$Page = "1"
+    [Int]$Page = 1
        
     )    
 

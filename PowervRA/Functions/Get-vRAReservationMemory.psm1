@@ -25,38 +25,13 @@
 
     [parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
+    [String]$Type,
+
+    [parameter(Mandatory=$true)]
+    [ValidateNotNullOrEmpty()]
     [String]$ComputeResourceId
        
     )
-    
-    DynamicParam {
-    
-        # --- Define the parameter dictionary
-        $RuntimeParameterDictionary = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary           
-
-        # --- Dynamic Param:Type
-        $ParameterName = "Type"
-
-        $ParameterAttribute = New-Object System.Management.Automation.ParameterAttribute
-        $ParameterAttribute.Mandatory = $true
-        $ParameterAttribute.ParameterSetName = "__AllParameterSets"
-
-        $AttributeCollection =  New-Object System.Collections.ObjectModel.Collection[System.Attribute]        
-        $AttributeCollection.Add($ParameterAttribute)
-
-        # --- Set the dynamic values
-        $ValidateSetValues = Get-vRAReservationType | Select -ExpandProperty Name
-
-        $ValidateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($ValidateSetValues)
-        $AttributeCollection.Add($ValidateSetAttribute)
-        
-        $RuntimeParameter = New-Object System.Management.Automation.RuntimeDefinedParameter($ParameterName, [String], $AttributeCollection)
-        $RuntimeParameterDictionary.Add($ParameterName, $RuntimeParameter)
-    
-        # --- Return the dynamic parameters
-        return $RuntimeParameterDictionary    
-    
-    }
     
     begin {}
     
@@ -64,7 +39,7 @@
 
         try {
 
-            $SchemaClassId = (Get-vRAReservationType -Name $PSBoundParameters.Type).schemaClassId
+            $SchemaClassId = (Get-vRAReservationType -Name $Type).schemaClassId
 
             # --- Set the body for the POST
             $Body = @"
