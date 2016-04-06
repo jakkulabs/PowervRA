@@ -308,7 +308,7 @@
                     switch ($PSBoundParameters.Type) {
 
                         'vSphere' {
-
+                            
                             # ---
                             # --- Alert Policy
                             # ---
@@ -347,7 +347,7 @@
                             # --- Compute Resource
                             # ---
 
-                            Write-Verbose -Message "Adding extensionData for reservation for type $($Type)"
+                            Write-Verbose -Message "Adding extensionData for type $($Type)"
 
                             $ComputeResourceObject = Get-vRAReservationComputeResource -Type $Type -Name $ComputeResource
 
@@ -507,12 +507,190 @@
                     
                                 $ReservationObject.extensionData.entries += ($ResourcePoolTemplate | ConvertFrom-Json)                
                                     
+                            }
+
+
+                            break
+
                         }
 
+                        'vCloud Air' {
 
-                        break
+                            # ---
+                            # --- Alert Policy
+                            # ---
 
-                    }
+                            $AlertsTemplate = @"
+
+                                [
+
+                                    {
+                                        "alertPercentLevel": $($StorageAlertPercentageLevel),
+                                        "referenceResourceId": "storage",
+                                        "id": "storage"
+                                    },
+                                    {
+                                        "alertPercentLevel": $($MemoryAlertPercentageLevel),
+                                        "referenceResourceId": "memory",
+                                        "id": "memory"
+                                    },
+                                    {
+                                        "alertPercentLevel": $($CPUAlertPercentageLevel),
+                                        "referenceResourceId": "cpu",
+                                        "id": "cpu"
+                                    },
+                                    {
+                                       "alertPercentLevel": $($MachineAlertPercentageLevel),
+                                        "referenceResourceId": "machine",
+                                        "id": "machine"
+                                    }
+
+                                ]
+"@
+                            
+                            $ReservationObject.alertPolicy.alerts += $AlertsTemplate | ConvertFrom-Json                            
+
+                            # --- 
+                            # --- Compute Resource
+                            # ---
+
+                            Write-Verbose -Message "Adding extensionData for type $($Type)"
+
+                            $ComputeResourceObject = Get-vRAReservationComputeResource -Type $Type -Name $ComputeResource
+
+                            Write-Verbose -Message "Found compute resource $($ComputeResource) with id $($ComputeResource.id)"
+
+                            $ComputeResourceTemplate = @"
+
+                                {
+                                    "key": "computeResource",
+                                    "value": {
+                                        "type" : "entityRef",
+                                        "componentId" : null,
+                                        "classId" : "ComputeResource",
+                                        "id" : "$($ComputeResourceObject.Id)",
+                                        "label" : "$($ComputeResourceObject.Label)"                  
+                            
+                                    }
+
+                                }
+"@
+                    
+                            $ReservationObject.extensionData.entries += ($ComputeResourceTemplate | ConvertFrom-Json)
+
+                            # --- 
+                            # --- Machine Quota
+                            # ---
+
+                            Write-Verbose -Message "Setting machine quota to $($Quota)"
+
+                            $MachineQuotaTemplate = @"
+                   
+                                {
+                                    "key": "machineQuota",
+                                    "value": {
+                                        "type": "integer",
+                                        "value": $($Quota)
+                                    }  
+                                } 
+"@
+                                                                 
+                            $ReservationObject.extensionData.entries += ($MachineQuotaTemplate | ConvertFrom-Json)
+
+                            # --- 
+                            # --- Reservation Networks
+                            # ---
+                            
+                            Write-Verbose -Message "Setting reservation networks"
+
+                            $ReservationNetworksTemplate = @"
+                    
+                                {
+                                    "key": "reservationNetworks",
+                                    "value": {
+                                        "type": "multiple",
+                                        "elementTypeId": "COMPLEX",
+                                        "items": []
+                                    }
+                                }
+"@
+
+                            $ReservationNetworks = $ReservationNetworksTemplate | ConvertFrom-Json
+
+                            foreach ($NetworkDefinition in $Network) {
+
+                                $ReservationNetworks.value.items += $NetworkDefinition
+
+                            }
+
+                            $ReservationObject.extensionData.entries += $ReservationNetworks
+
+                            # ---
+                            # --- Reservation Storages
+                            # ---
+
+                            Write-Verbose -Message "Setting reservation storage"
+
+                            $ReservationStoragesTemplate = @"
+
+                                {
+                                    "key":  "reservationStorages",
+                                    "value":  {
+                                        "type":  "multiple",
+                                        "elementTypeId":  "COMPLEX",
+                                        "items":  []
+
+                                    }
+                                }
+"@
+
+                            $ReservationStorages = $ReservationStoragesTemplate | ConvertFrom-Json
+
+                            foreach ($StorageDefinition in $Storage) {
+
+                                $ReservationStorages.value.items += $StorageDefinition
+
+                            }
+
+                            $ReservationObject.extensionData.entries += $ReservationStorages
+                   
+                            # ---
+                            # --- Reservation Memory
+                            # ---
+
+                            Write-Verbose -Message "Setting reservation memory"
+
+                            $ReservationMemoryTemplate = @"
+
+                                {
+                                    "key":  "reservationMemory",
+                                    "value":  {
+                                        "type":  "complex",
+                                        "componentTypeId":  "com.vmware.csp.iaas.blueprint.service",
+                                        "componentId":  null,
+                                        "classId":  "Infrastructure.Reservation.Memory",
+                                        "typeFilter":  null,
+                                        "values":  {
+                                             "entries":  [
+                                                {
+                                                    "key":  "memoryReservedSizeMb",
+                                                    "value":  {
+                                                        "type":  "integer",
+                                                        "value":  $($MemoryMB)
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+
+                                }
+"@
+
+                            $ReservationObject.extensionData.entries += ($ReservationMemoryTemplate | ConvertFrom-Json)
+
+                            break
+
+                        }
 
                         'Amazon' {
                         
@@ -529,13 +707,6 @@
                         }
 
                         'vCloud' {
-                        
-                            Write-Verbose -Message "Support for this reservation type has not been added"
-                            break                        
-                        
-                        }
-
-                        'vCloud Air' {
                         
                             Write-Verbose -Message "Support for this reservation type has not been added"
                             break                        
@@ -574,8 +745,6 @@
 
 
                     $Body = $ReservationObject | ConvertTo-Json -Depth 500
-
-                    $Body
 
                 }
 
