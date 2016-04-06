@@ -113,7 +113,7 @@
 
     }
 
-    New-vrareservation @Param -Verbose
+    New-vRAReservation @Param -Verbose
 
 
 #>

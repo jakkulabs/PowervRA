@@ -13,7 +13,7 @@
     .PARAMETER Path
     The network path
     
-    .PARAMETER ReservationSizeGB
+    .PARAMETER Profile
     The network profile
 
     .INPUTS
@@ -40,11 +40,11 @@
 
     [parameter(Mandatory=$true,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [String]$Path,
+    [String]$NetworkPath,
     
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [String]$Profile
+    [String]$NetworkProfile
 
     )    
 
@@ -56,7 +56,7 @@
 
         try {
 
-            $SchemaClassId = (Get-vRAReservationType -Name $PSBoundParameters.Type).SchemaClassid
+            $SchemaClassId = (Get-vRAReservationType -Name $Type).SchemaClassid
 
             # --- Define object
             $NetworkDefinitionJSON = @"
@@ -80,24 +80,24 @@
             $NetworkDefinition = $NetworkDefinitionJSON | ConvertFrom-Json
 
             # --- Get network information
-            $Network = Get-vRAReservationNetwork -Type $PSBoundParameters.Type -ComputeResourceId $ComputeResourceId -Name $Path
+            $Network = Get-vRAReservationNetwork -Type $Type -ComputeResourceId $ComputeResourceId -Name $NetworkPath
 
-            $NetworkPath = ($Network.values.entries | Where-Object {$_.key -eq "networkPath"})
+            $Path = ($Network.values.entries | Where-Object {$_.key -eq "networkPath"})
 
             # --- Add the network path to the network definition
-            $NetworkDefinition.values.entries += $NetworkPath
+            $NetworkDefinition.values.entries += $Path
 
-            if ($Profile) {
+            if ($NetworkProfile) {
 
-                $Response = Invoke-vRARestMethod -Method GET -URI "/iaas-proxy-provider/api/network/profiles?`$filter=name%20eq%20'$($Profile)'"
+                $Response = Invoke-vRARestMethod -Method GET -URI "/iaas-proxy-provider/api/network/profiles?`$filter=name%20eq%20'$($NetworkProfile)'"
 
                 if ($Response.content.Count -eq 0) {
 
-                    throw "Could not find network profile with name $($Profile)"
+                    throw "Could not find network profile with name $($NetworkProfile)"
 
                 }
 
-                $NetworkProfile = $Response.content[0]
+                $Profile = $Response.content[0]
 
                 $NetworkProfileJSON = @"
 
@@ -107,17 +107,17 @@
                                       "type":  "entityRef",
                                       "componentId":  null,
                                       "classId":  "Network",
-                                      "id":  "$($NetworkProfile.id)",
-                                      "label":  "$($NetworkProfile.name)"
+                                      "id":  "$($Profile.id)",
+                                      "label":  "$($Profile.name)"
                                   }
                     }
 
 "@
 
-                $NetworkProfile = $NetworkProfileJSON | ConvertFrom-Json 
+                $Profile = $NetworkProfileJSON | ConvertFrom-Json 
 
                 # --- Add the network profile to the network definition
-                $NetworkDefinition.values.entries += $NetworkProfile
+                $NetworkDefinition.values.entries += $Profile
 
             }
 
