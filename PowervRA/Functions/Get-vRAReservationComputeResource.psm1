@@ -37,7 +37,7 @@
 
     [parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
-    [String[]]$Type,
+    [String]$Type,
 
     [parameter(Mandatory=$true,ParameterSetName="ById")]
     [ValidateNotNullOrEmpty()]
