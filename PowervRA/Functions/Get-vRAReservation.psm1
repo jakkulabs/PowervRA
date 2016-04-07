@@ -180,8 +180,6 @@
 
                     $PagedUri = "$($URI)&page=$($Page)&`$orderby=name%20asc"
 
-                    $Response = Invoke-vRARestMethod -Method GET -URI $PagedUri
-
                     Write-Verbose -Message "GET : $($PagedUri)"
 
                     $Response = Invoke-vRARestMethod -Method GET -URI $PagedUri
@@ -190,7 +188,7 @@
 
                     foreach ($Reservation in $Response.content) {
 
-                        [pscustomobject] @{
+                        $Object = [pscustomobject] @{
 
                             CreatedDate = $Reservation.createdDate
                             LastUpdated = $Reservation.lastUpdated
