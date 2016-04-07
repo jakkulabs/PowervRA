@@ -24,7 +24,7 @@
     .PARAMETER Priority
     The priority of the reservation
 
-    .PARAMETER ComputeResource
+    .PARAMETER ComputeResourceId
     The compute resource that will be associated with the reservation
 
     .PARAMETER Quota
@@ -86,7 +86,7 @@
 
     # --- Get the network definition
     $NetworkDefinitionArray = @()
-    $Network1 = New-vRAReservationNetworkDefinition -Type vSphere -ComputeResourceId $ComputeResource.Id -Path "VM Network" -Profile "Test-Profile"
+    $Network1 = New-vRAReservationNetworkDefinition -Type vSphere -ComputeResourceId $ComputeResource.Id -NetworkPath "VM Network" -NetworkProfile "Test-Profile"
     $NetworkDefinitionArray += $Network1
 
     # --- Get the storage definition
@@ -103,7 +103,7 @@
         BusinessGroup = "Default Business Group[Tenant01]"
         #ReservationPolicy = ""
         #Priority = 0
-        ComputeResource = "Cluster01 (vCenter)"
+        ComputeResourceId = $ComputeResource.Id
         #Quota = 0
         MemoryMB = 2048
         Storage = $StorageDefinitionArray
@@ -147,7 +147,7 @@
 
     [parameter(Mandatory=$true,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [String]$ComputeResource,
+    [String]$ComputeResourceId,
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
@@ -349,9 +349,9 @@
 
                             Write-Verbose -Message "Adding extensionData for type $($Type)"
 
-                            $ComputeResourceObject = Get-vRAReservationComputeResource -Type $Type -Name $ComputeResource
+                            $ComputeResourceObject = Get-vRAReservationComputeResource -Type $Type -Id $ComputeResourceId
 
-                            Write-Verbose -Message "Found compute resource $($ComputeResource) with id $($ComputeResource.id)"
+                            Write-Verbose -Message "Found compute resource $($ComputeResourceObject.label) with id $($ComputeResourceId)"
 
                             $ComputeResourceTemplate = @"
 
@@ -361,8 +361,8 @@
                                         "type" : "entityRef",
                                         "componentId" : null,
                                         "classId" : "ComputeResource",
-                                        "id" : "$($ComputeResourceObject.Id)",
-                                        "label" : "$($ComputeResourceObject.Label)"                  
+                                        "id" : "$($ComputeResourceId)",
+                                        "label" : "$($ComputeResourceObject.label)"                  
                             
                                     }
 
@@ -489,7 +489,7 @@
 
                                 Write-Verbose "Setting resource pool"
 
-                                $ResourcePoolObject = Get-vRAReservationResourcePool -Type $Type -ComputeResourceId $ComputeResourceObject.Id -Name $Resourcepool
+                                $ResourcePoolObject = Get-vRAReservationResourcePool -Type $Type -ComputeResourceId $ComputeResourceId -Name $Resourcepool
 
                                 $ResourcePoolTemplate = @"
                     
@@ -556,9 +556,9 @@
 
                             Write-Verbose -Message "Adding extensionData for type $($Type)"
 
-                            $ComputeResourceObject = Get-vRAReservationComputeResource -Type $Type -Name $ComputeResource
+                            $ComputeResourceObject = Get-vRAReservationComputeResource -Type $Type -Id $ComputeResourceId
 
-                            Write-Verbose -Message "Found compute resource $($ComputeResource) with id $($ComputeResource.id)"
+                            Write-Verbose -Message "Found compute resource $($ComputeResourceObject.label) with id $($ComputeResourceId)"
 
                             $ComputeResourceTemplate = @"
 
@@ -568,8 +568,8 @@
                                         "type" : "entityRef",
                                         "componentId" : null,
                                         "classId" : "ComputeResource",
-                                        "id" : "$($ComputeResourceObject.Id)",
-                                        "label" : "$($ComputeResourceObject.Label)"                  
+                                        "id" : "$($ComputeResourceId)",
+                                        "label" : "$($ComputeResourceObject.label)"                  
                             
                                     }
 
