@@ -75,6 +75,7 @@
     .INPUTS
     System.String
     System.Int
+    System.Management.Automation.SwitchParameter
     System.Management.Automation.PSObject
 
     .OUTPUTS
@@ -170,12 +171,12 @@
     [String]$Resourcepool,
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [ValidateSet("TRUE","FALSE")]
-    [String]$EnableAlerts = "FALSE",
+    [ValidateNotNullOrEmpty()]
+    [Switch]$EnableAlerts = $False,
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [ValidateSet("TRUE","FALSE")]
-    [String]$EmailBusinessGroupManager = "FALSE",
+    [ValidateNotNullOrEmpty()]
+    [Switch]$EmailBusinessGroupManager = $False,
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
@@ -262,13 +263,45 @@
 
                     }
 
+                    # --- Enable alerts
+                    # --- Convert boolean to a string value for the payload
+                    if ($EnableAlerts) {
+
+                        $EnableAlertsAsString = "true"
+
+                    }
+                    else {
+
+                        $EnableAlertsAsString = "false"
+
+                    }
+
+                    # --- Email business group manager
+                    # --- Convert boolean to a string value for the payload
+                    if ($EmailBusinessGroupManager) {
+
+                        $EmailBusinessGroupManagerAsString = "true"
+
+                    }
+                    else {
+
+                        $EmailBusinessGroupManagerAsString = "false"
+
+                    }
+
+
+
+
+
+
                     Write-Verbose -Message "Reservation name is $($Name)"
                     Write-Verbose -Message "ReservationTypeId for $($Type) is $($ReservationTypeId)"
                     Write-Verbose -Message "Tenant is $($Tenant)"
                     Write-Verbose -Message "BusinessGroupId for $($BusinessGroup) is $($BusinessGroupId)"
                     Write-Verbose -Message "ReservationPolicyId for $($ReservationPolicy) is $($ReservationPolicyId)"
                     Write-Verbose -Message "Priority is $($Priority)"
-                    Write-Verbose -Message "Alerts enabled: $($EnableAlerts)"
+                    Write-Verbose -Message "Alerts enabled: $($EnableAlertsAsString)"
+                    Write-Verbose -Message "Email business group manager: $($EmailBusinessGroupManagerAsString)"
 
                     $Template = @"
                         {
@@ -280,9 +313,9 @@
                           "priority": $($Priority),
                           "reservationPolicyId": $($ReservationPolicyId),
                           "alertPolicy": {
-                            "enabled": $($EnableAlerts.ToLower()),
+                            "enabled": $($EnableAlertsAsString),
                             "frequencyReminder": 20,
-                            "emailBgMgr": $($EmailBusinessGroupManager.ToLower()),
+                            "emailBgMgr": $($EmailBusinessGroupManagerAsString),
                             "recipients": [],
                             "alerts": []
                           },

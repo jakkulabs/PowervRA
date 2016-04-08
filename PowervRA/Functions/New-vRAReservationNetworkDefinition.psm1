@@ -1,8 +1,11 @@
 ﻿function New-vRAReservationNetworkDefinition {
 <#
     .SYNOPSIS
+    Creates a new network definition for a reservation.
     
     .DESCRIPTION
+    Creates a new network definition for a reservation. This cmdlet is used to create a custom
+    complex network object. One or more of these can be added to an array and passed to New-vRAReservation.
 
     .PARAMETER Type
     The reservation type
@@ -23,8 +26,9 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
+    $NetworkDefinitionArray = @()
     $Network1 = New-vRAReservationNetworkDefinition -Type vSphere -ComputeResourceId 75ae3400-beb5-4b0b-895a-0484413c93b1 -Path "VM Network" -Profile "Test"
-
+    $NetworkDefinitionArray += $Networ1
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 

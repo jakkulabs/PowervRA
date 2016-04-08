@@ -178,8 +178,6 @@
 
                     $PagedUri = "$($URI)&page=$($Page)&`$orderby=name%20asc"
 
-                    $Response = Invoke-vRARestMethod -Method GET -URI $PagedUri
-
                     Write-Verbose -Message "GET : $($PagedUri)"
 
                     $Response = Invoke-vRARestMethod -Method GET -URI $PagedUri
