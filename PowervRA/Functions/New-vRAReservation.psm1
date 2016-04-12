@@ -48,7 +48,7 @@
     .PARAMETER EmailBusinessGroupManager
     Email the alerts to the business group manager
 
-    .PARAMETER Recipients
+    .PARAMETER AlertRecipients
     The recipients that will recieve email alerts
 
     .PARAMETER StorageAlertPercentageLevel
@@ -63,7 +63,7 @@
     .PARAMETER MachineAlertPercentageLevel
     The threshold for machine alerts
 
-    .PARAMETER AlertFrequencyReminder
+    .PARAMETER AlertReminderFrequency
     Alert frequency in days
 
     .PARAMETER JSON
@@ -118,7 +118,7 @@
 
 
 #>
-[CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(SupportsShouldProcess,ConfirmImpact="High",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
@@ -168,7 +168,7 @@
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [String]$Resourcepool,
+    [String]$ResourcePool,
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
@@ -180,7 +180,7 @@
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [String[]]$Recipients,
+    [String[]]$AlertRecipients,
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
@@ -200,7 +200,7 @@
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [Int]$AlertFrequencyReminder = 20,
+    [Int]$AlertReminderFrequency = 20,
 
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="JSON")]
     [ValidateNotNullOrEmpty()]
@@ -314,7 +314,7 @@
                           "reservationPolicyId": $($ReservationPolicyId),
                           "alertPolicy": {
                             "enabled": $($EnableAlertsAsString),
-                            "frequencyReminder": 20,
+                            "frequencyReminder": $AlertReminderFrequency,
                             "emailBgMgr": $($EmailBusinessGroupManagerAsString),
                             "recipients": [],
                             "alerts": []
@@ -328,9 +328,9 @@
                     # --- Convert the body to an object and begin adding extensionData
                     $ReservationObject = $Template | ConvertFrom-Json
 
-                    if ($EnableAlerts -eq "TRUE" -and $PSBoundParameters.ContainsKey("Recipients")) {
+                    if ($EnableAlerts -eq "TRUE" -and $PSBoundParameters.ContainsKey("AlertRecipients")) {
 
-                        foreach ($Recipient in $Recipients) {
+                        foreach ($Recipient in $AlertRecipients) {
 
                             $ReservationObject.alertPolicy.recipients += $Recipient
 
@@ -532,8 +532,8 @@
                                             "type": "entityRef",
                                             "componentId": null,
                                             "classId": "ResourcePools",
-                                            "id": "$($ResourcePoolObject.id)",
-                                            "label": "$($ResourcePoolObject.name)"
+                                            "id": "$($ResourcePoolObject.Id)",
+                                            "label": "$($ResourcePoolObject.Label)"
                                         }
                                     }                     
 "@
