@@ -30,7 +30,7 @@
     .PARAMETER Quota
     The number of machines that can be provisioned in the reservation
 
-    .PARAMETER MemoryMB
+    .PARAMETER MemoryGB
     The amount of memory available to this reservation
 
     .PARAMETER Storage
@@ -106,7 +106,7 @@
         #Priority = 0
         ComputeResourceId = $ComputeResource.Id
         #Quota = 0
-        MemoryMB = 2048
+        MemoryGB = 2048
         Storage = $StorageDefinitionArray
         Resourcepool = "Resources"
         Network = $NetworkDefinitionArray
@@ -156,7 +156,7 @@
 
     [parameter(Mandatory=$true,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [Int]$MemoryMB,
+    [Int]$MemoryGB,
 
     [parameter(Mandatory=$true,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
@@ -486,6 +486,10 @@
 
                             Write-Verbose -Message "Setting reservation memory"
 
+                            # --- Calculate the memory value in MB
+
+                            $MemoryMB = [Math]::Round(($MemoryGB * 1024 * 1024 * 1024 / 1MB),4,[MidPointRounding]::AwayFromZero)  
+
                             $ReservationMemoryTemplate = @"
 
                                 {
@@ -692,6 +696,10 @@
                             # ---
 
                             Write-Verbose -Message "Setting reservation memory"
+
+                            # --- Calculate the memory value in MB
+
+                            $MemoryMB = [Math]::Round(($MemoryGB * 1024 * 1024 * 1024 / 1MB),4,[MidPointRounding]::AwayFromZero)  
 
                             $ReservationMemoryTemplate = @"
 
