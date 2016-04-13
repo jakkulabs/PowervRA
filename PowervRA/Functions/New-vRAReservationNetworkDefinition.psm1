@@ -13,10 +13,10 @@
     .PARAMETER ComputeResourceId
     The id of the compute resource
 
-    .PARAMETER Path
+    .PARAMETER NetworkPath
     The network path
     
-    .PARAMETER Profile
+    .PARAMETER NetworkProfile
     The network profile
 
     .INPUTS

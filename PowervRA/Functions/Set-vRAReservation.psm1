@@ -21,14 +21,8 @@
     .PARAMETER Quota
     The number of machines that can be provisioned in the reservation
 
-    .PARAMETER MemoryMB
+    .PARAMETER MemoryGB
     The amount of memory available to this reservation
-
-    .PARAMETER Storage
-    The storage that will be associated with the reservation
-
-    .PARAMETER Network
-    The network that will be associated with this reservation
 
     .PARAMETER ResourcePool
     The resource pool that will be associated with this reservation
@@ -103,15 +97,7 @@
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [Int]$MemoryMB,
-
-    [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [PSObject[]]$Storage,
-
-    [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [PSObject[]]$Network,
+    [Int]$MemoryGB,
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNull()]
@@ -346,47 +332,14 @@
                     }
 
                     # ---
-                    # --- Reservation Network
-                    # ---
-
-                    if ($PSBoundParameters.ContainsKey("Network")) {
-
-                        Write-Verbose -Message "Updating Available Networks"
-
-                        $ReservationNetworks = $Reservation.exensionData.entries | Where-Object {$_.key -eq "reservationNetworks"}
-
-                        foreach ($NetworkDefinition in $Network) {
-
-                            $ReservationNetworks += $NetworkDefinition
-
-                        }
-
-
-                    }
-
-                    # ---
-                    # --- Reservation Storages
-                    # ---
-
-                    if ($PSBoundParameters.ContainsKey("Storage")){
-
-                        Write-Verbose -Message "Updating Available Storage"
-
-                        $ReservatonStorages = $Reservation.extensionData.entries | Where-Object {$_.key -eq "reservationStorages"}
-
-                        foreach ($StorageDefinition in $Storage) {
-
-                            $ReservationStorages += $StorageDefinition
-
-                        }
-
-                    }
-
-                    # ---
                     # --- Reservation Memory
                     # ---
 
-                    if ($PSBoundParameters.ContainsKey("MemoryMB")) {
+                    if ($PSBoundParameters.ContainsKey("MemoryGB")) {
+
+                        # --- Calculate the memory value in MB
+
+                        $MemoryMB = [Math]::Round(($MemoryGB * 1024 * 1024 * 1024 / 1MB),4,[MidPointRounding]::AwayFromZero)  
 
                         $ReservationMemory = $Reservation.extensionData.entries | Where-Object {$_.key -eq "reservationMemory"}
 
@@ -537,47 +490,14 @@
                     }
 
                     # ---
-                    # --- Reservation Network
-                    # ---
-
-                    if ($PSBoundParameters.ContainsKey("Network")) {
-
-                        Write-Verbose -Message "Updating Available Networks"
-
-                        $ReservationNetworks = $Reservation.exensionData.entries | Where-Object {$_.key -eq "reservationNetworks"}
-
-                        foreach ($NetworkDefinition in $Network) {
-
-                            $ReservationNetworks += $NetworkDefinition
-
-                        }
-
-
-                    }
-
-                    # ---
-                    # --- Reservation Storages
-                    # ---
-
-                    if ($PSBoundParameters.ContainsKey("Storage")){
-
-                        Write-Verbose -Message "Updating Available Storage"
-
-                        $ReservatonStorages = $Reservation.extensionData.entries | Where-Object {$_.key -eq "reservationStorages"}
-
-                        foreach ($StorageDefinition in $Storage) {
-
-                            $ReservationStorages += $StorageDefinition
-
-                        }
-
-                    }
-
-                    # ---
                     # --- Reservation Memory
                     # ---
 
-                    if ($PSBoundParameters.ContainsKey("MemoryMB")) {
+                    if ($PSBoundParameters.ContainsKey("MemoryGB")) {
+
+                        # --- Calculate the memory value in MB
+
+                        $MemoryMB = [Math]::Round(($MemoryGB * 1024 * 1024 * 1024 / 1MB),4,[MidPointRounding]::AwayFromZero)                          
 
                         $ReservationMemory = $Reservation.extensionData.entries | Where-Object {$_.key -eq "reservationMemory"}
 
@@ -644,7 +564,7 @@
 
             }
     
-            if ($PSCmdlet.ShouldProcess($Name)){
+            if ($PSCmdlet.ShouldProcess($Id)){
 
                 $URI = "/reservation-service/api/reservations/$($Id)"
                 
