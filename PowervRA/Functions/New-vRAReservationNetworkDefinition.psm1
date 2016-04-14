@@ -84,7 +84,7 @@
             $NetworkDefinition = $NetworkDefinitionJSON | ConvertFrom-Json
 
             # --- Get network information
-            $Network = Get-vRAReservationNetwork -Type $Type -ComputeResourceId $ComputeResourceId -Name $NetworkPath
+            $Network = Get-vRAReservationComputeResourceNetwork -Type $Type -ComputeResourceId $ComputeResourceId -Name $NetworkPath
 
             $Path = ($Network.values.entries | Where-Object {$_.key -eq "networkPath"})
 

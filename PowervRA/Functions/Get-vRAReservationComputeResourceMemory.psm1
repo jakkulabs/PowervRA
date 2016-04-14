@@ -1,4 +1,4 @@
-﻿function Get-vRAReservationMemory {
+﻿function Get-vRAReservationComputeResourceMemory {
 <#
     .SYNOPSIS
     Get available memory for a compute resource
@@ -16,7 +16,7 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    Get-vRAReservationMemory -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d
+    Get-vRAReservationComputeResourceMemory -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d
 
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]

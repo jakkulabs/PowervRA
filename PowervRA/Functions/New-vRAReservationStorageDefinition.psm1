@@ -64,7 +64,7 @@
         try {
 
             # --- Get storage information
-            $Storage = Get-vRAReservationStorage -Type $Type -ComputeResourceId $ComputeResourceId -Name $Path
+            $Storage = Get-vRAReservationComputeResourceStorage -Type $Type -ComputeResourceId $ComputeResourceId -Name $Path
 
             $StoragePath = ($Storage.values.entries | Where-Object {$_.key -eq "storagePath"}).value
 

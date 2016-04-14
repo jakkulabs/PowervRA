@@ -108,7 +108,7 @@
         #Quota = 0
         MemoryGB = 2048
         Storage = $StorageDefinitionArray
-        Resourcepool = "Resources"
+        ResourcePool = "Resources"
         Network = $NetworkDefinitionArray
         EnableAlerts = $false
 
@@ -526,7 +526,7 @@
 
                                 Write-Verbose "Setting resource pool"
 
-                                $ResourcePoolObject = Get-vRAReservationResourcePool -Type $Type -ComputeResourceId $ComputeResourceId -Name $Resourcepool
+                                $ResourcePoolObject = Get-vRAReservationComputeResourceResourcePool -Type $Type -ComputeResourceId $ComputeResourceId -Name $Resourcepool
 
                                 $ResourcePoolTemplate = @"
                     

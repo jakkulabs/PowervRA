@@ -134,6 +134,7 @@
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
     [Int]$AlertFrequencyReminder
+
     )
  
     begin {
@@ -377,7 +378,7 @@
 
                                 # --- Update the existing resource pool                            
 
-                                $NewResourcePool = Get-vRAReservationResourcePool -Type $ReservationTypeName -ComputeResourceId $ComputeResourceId -Name $ResourcePool
+                                $NewResourcePool = Get-vRAReservationComputeResourceResourcePool -Type $ReservationTypeName -ComputeResourceId $ComputeResourceId -Name $ResourcePool
 
                                 $ResourcePoolId = $NewResourcePool.id
 
@@ -396,7 +397,7 @@
 
                             Write-Verbose -Message "Setting Resource Pool To $($ResourcePool)"
 
-                            $NewResourcePool = Get-vRAReservationResourcePool -Type $ReservationTypeName -ComputeResourceId $ComputeResourceId -Name $ResourcePool                        
+                            $NewResourcePool = Get-vRAReservationComputeResourceResourcePool -Type $ReservationTypeName -ComputeResourceId $ComputeResourceId -Name $ResourcePool                        
 
                             $ResourcePoolTemplate = @"
                     

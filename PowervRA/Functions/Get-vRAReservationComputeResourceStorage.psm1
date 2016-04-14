@@ -1,4 +1,4 @@
-﻿function Get-vRAReservationStorage {
+﻿function Get-vRAReservationComputeResourceStorage {
 <#
     .SYNOPSIS
     Get available storage for a compute resource
@@ -19,10 +19,10 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    Get-vRAReservationStorage -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d -Name DataStore01
+    Get-vRAReservationComputeResourceStorage -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d -Name DataStore01
 
     .EXAMPLE
-    Get-vRAReservationStorage -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d
+    Get-vRAReservationComputeResourceStorage -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d
 
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]

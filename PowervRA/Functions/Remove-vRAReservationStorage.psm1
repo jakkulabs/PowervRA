@@ -1,4 +1,4 @@
-﻿function Add-vRAReservationStorage {
+﻿function Remove-vRAReservationStorage {
 <#
     .SYNOPSIS
     Add storage to an existing vRA reservation
@@ -40,15 +40,7 @@
 
     [parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
-    [String]$Path,
-
-    [parameter(Mandatory=$true)]
-    [ValidateNotNullOrEmpty()]
-    [Int]$ReservedSizeGB,
-
-    [parameter(Mandatory=$false)]
-    [ValidateNotNullOrEmpty()]
-    [Int]$Priority = 0
+    [String]$Path
 
     )
  
@@ -65,25 +57,42 @@
             $URI = "/reservation-service/api/reservations/$($id)"
 
             $Reservation = Invoke-vRARestMethod -Method GET -URI $URI
-
+            
             $ReservationTypeName = (Get-vRAReservationType -Id $Reservation.reservationTypeId).name
 
-            $ComputeResourceId = ($Reservation.extensionData.entries | Where-Object {$_.key -eq "computeResource"}).value.id            
+            $ComputeResourceId = ($Reservation.extensionData.entries | Where-Object {$_.key -eq "computeResource"}).value.id                         
 
             # ---
-            # --- Add Storage
+            # --- Remove Storage
             # ---
 
-            Write-Verbose -Message "Creating New Storage Definition"
+            Write-Verbose -Message "Removing Storage From Reservation"
 
-            $StorageDefinition = New-vRAReservationStorageDefinition -Type $ReservationTypeName -ComputeResourceId $ComputeResourceId -Path $Path -ReservedSizeGB $ReservedSizeGB -Priority $Priority
+            $ReservationStoragePath = (Get-vRAReservationStorage -Type $ReservationTypeName -ComputeResourceId $ComputeResourceId -Name $Path).values.entries | Where-Object {$_.key -eq "storagePath"}
 
-            $ReservatonStorages = $Reservation.extensionData.entries | Where-Object {$_.key -eq "reservationStorages"}
+            $ReservationStoragePathId = $ReservationStoragePath.value.id
 
-            Write-Verbose -Message "Adding Storage To Reservation"
+            $Storage = $Reservation.extensionData.entries | Where-Object {$_.key -eq "reservationStorages"}  
 
-            $ReservatonStorages.value.items += $StorageDefinition         
-    
+            $StorageItems = $Storage.value.items
+
+            foreach ($Item in $StorageItems) {
+
+                $StoragePath = $item.values.entries | Where-Object {$_.key -eq "StoragePath"}
+                $StorageEnabled = $item.values.entries | Where-Object {$_.key -eq "storageEnabled"}
+
+                Write-Verbose -Message "StoragePath $($StoragePath.value.id) -> $($ReservationStoragePathId)"
+
+                if ($StoragePath.value.id -eq $ReservationStoragePathId) {
+
+                    Write-Verbose -Message "Setting to false"
+
+                    $StorageEnabled.value.value = "false"
+
+                }
+
+            }
+
             if ($PSCmdlet.ShouldProcess($Id)){
 
                 $URI = "/reservation-service/api/reservations/$($Id)"

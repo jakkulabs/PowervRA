@@ -1,16 +1,16 @@
-﻿function Get-vRAReservationResourcePool {
+﻿function Get-vRAReservationComputeResourceNetwork {
 <#
     .SYNOPSIS
-    Get available resource pools for a compute resource
+    Get available networks for a compute resource
     
     .DESCRIPTION
-    Get available resource pools for a compute resource
+    Get available network for a compute resource
 
     .PARAMETER Type
     The reservation type
     
     .PARAMETER Name
-    The name of the resource pool
+    The name of the network
 
     .INPUTS
     System.String
@@ -19,10 +19,10 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    Get-vRAReservationResourcePool -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d -Name ResourcePool1
+    Get-vRAReservationComputeResourceNetwork -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d -Name VMNetwork
 
     .EXAMPLE
-    Get-vRAReservationResourcePool -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d
+    Get-vRAReservationComputeResourceNetwork -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d
 
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
@@ -74,9 +74,9 @@
 
                 'ByName' { 
 
-                    foreach ($ResourcePoolName in $Name) {
+                    foreach ($NetworkName in $Name) {
 
-                        $URI = "/reservation-service/api/data-service/schema/$($SchemaClassId)/default/resourcePool/values"
+                        $URI = "/reservation-service/api/data-service/schema/$($SchemaClassId)/default/reservationNetworks/values"
             
                         Write-Verbose -Message "Preparing POST to $($URI)"
 
@@ -84,22 +84,23 @@
 
                         Write-Verbose -Message "SUCCESS"
 
-                        # --- Get the resource pool by name
-                        $ResourcePool = $Response.values | Where-Object {$_.label -eq $ResourcePoolName}
+                        # --- Get the network resource by name
+                        $Network = $Response.values | Where-Object {$_.label -eq $NetworkName}
 
-                        if(!$ResourcePool) {
+                        if(!$Network) {
 
-                            throw "Could not find resource pool with name $($ResourcePoolName)"
+                            throw "Could not find network with name $($NetworkName)"
 
                         }
 
                         [pscustomobject] @{
 
-                            Type = $ResourcePool.underlyingValue.type
-                            ComponentId = $ResourcePool.underlyingValue.componentId
-                            ClassId = $ResourcePool.underlyingValue.classId
-                            Id = $ResourcePool.underlyingValue.id
-                            Label = $ResourcePool.underlyingValue.label
+                            Type = $Network.underlyingValue.type
+                            ComponentTypeId = $Network.underlyingValue.componentTypeId
+                            ComponentId = $Network.underlyingValue.componentId
+                            ClassId = $Network.underlyingValue.classId
+                            TypeFilter = $Network.underlyingValue.TypeFilter
+                            Values = $Network.underlyingValue.values
 
                         }
 
@@ -111,7 +112,7 @@
 
                 'Standard' {
 
-                    $URI = "/reservation-service/api/data-service/schema/$($SchemaClassId)/default/resourcePool/values"
+                    $URI = "/reservation-service/api/data-service/schema/$($SchemaClassId)/default/reservationNetworks/values"
 
                     Write-Verbose -Message "Preparing POST to $($URI)"
 
@@ -119,16 +120,18 @@
 
                     Write-Verbose -Message "SUCCESS"
 
-                    # --- Return all resource pools
-                    foreach ($ResourcePool in $Response.values) {
+                    # --- Return all networks 
+                    foreach ($Network in $Response.values) {
 
                         [pscustomobject] @{
                         
-                            Type = $ResourcePool.underlyingValue.type
-                            ComponentId = $ResourcePool.underlyingValue.componentId
-                            ClassId = $ResourcePool.underlyingValue.classId
-                            Id = $ResourcePool.underlyingValue.id
-                            Label = $ResourcePool.underlyingValue.label
+                            Type = $Network.underlyingValue.type
+                            Name = $Network.label
+                            ComponentTypeId = $Network.underlyingValue.componentTypeId
+                            ComponentId = $Network.underlyingValue.componentId
+                            ClassId = $Network.underlyingValue.classId
+                            TypeFilter = $Network.underlyingValue.TypeFilter
+                            Values = $Network.underlyingValue.values
 
                         }                
                 
@@ -145,8 +148,8 @@
         
             throw
 
-        }  
+        }
         
-    } 
+    }   
      
 }
