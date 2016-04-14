@@ -18,8 +18,6 @@
 
     .INPUTS
     System.String.
-    System.Int.
-    System.Management.Automation.SwitchParameter
 
     .OUTPUTS
     System.Management.Automation.PSObject
