@@ -5,6 +5,7 @@ $JSON = Get-Content .\Variables.json -Raw | ConvertFrom-JSON
 Describe -Name 'Connectivity Tests' -Fixture {
 
     It -Name "Attempting to ping the vRA Appliance $($JSON.Connection.vRAAppliance)" -Test {
+
         $ping = Test-Connection -ComputerName $JSON.Connection.vRAAppliance -Quiet
         $ping | Should be $true
     }
