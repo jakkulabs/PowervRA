@@ -30,7 +30,7 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    Get-vRAReservation -Name "Reservation01" | Set-vRAReservationStorage -Path "Datastore01"  -ReservedSizeGB 20 -Priority 10 -Verbose
+    Get-vRAReservation -Name "Reservation01" | Set-vRAReservationStorage -Path "Datastore01"  -ReservedSizeGB 20 -Priority 10
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")][OutputType('System.Management.Automation.PSObject')]
