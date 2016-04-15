@@ -120,6 +120,9 @@
 
                 if ($PSBoundParameters.ContainsKey('ImportAfterInstall')) {
 
+                    Write-Verbose -Message "Attempting to remove old module from session"
+                    Remove-Module -Name "PowervRA" -Force -ErrorAction SilentlyContinue
+
                     Write-Verbose -Message "Importing module"
                     Import-Module -Name "PowervRA" -Force
 
