@@ -118,7 +118,7 @@
 
 
 #>
-[CmdletBinding(SupportsShouldProcess,ConfirmImpact="High",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
@@ -311,10 +311,10 @@
                           "subTenantId": "$($BusinessGroupId)",
                           "enabled": true,
                           "priority": $($Priority),
-                          "reservationPolicyId": $($ReservationPolicyId),
+                          "reservationPolicyId": "$($ReservationPolicyId)",
                           "alertPolicy": {
                             "enabled": $($EnableAlertsAsString),
-                            "frequencyReminder": $AlertReminderFrequency,
+                            "frequencyReminder": $($AlertReminderFrequency),
                             "emailBgMgr": $($EmailBusinessGroupManagerAsString),
                             "recipients": [],
                             "alerts": []
