@@ -24,6 +24,7 @@
 
     .OUTPUTS
     System.Management.Automation.PSObject
+    System.Object[]
 
     .EXAMPLE
     Get-vRAReservation -Id 75ae3400-beb5-4b0b-895a-0484413c93b1
@@ -41,7 +42,7 @@
     Get-vRAReservation -Page 1
 
 #>
-[CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject', 'System.Object[]')]
 
     Param (
 

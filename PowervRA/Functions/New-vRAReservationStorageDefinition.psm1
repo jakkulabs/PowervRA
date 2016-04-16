@@ -29,7 +29,7 @@
     $StorageDefinitionArray += $Storage1
 
 #>
-[CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
@@ -49,7 +49,7 @@
     [ValidateNotNullOrEmpty()]
     [Int]$ReservedSizeGB,
 
-    [parameter(Mandatory=$true,ParameterSetName="Standard")]
+    [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
     [Int]$Priority = 0
 

@@ -24,6 +24,7 @@
 
     .OUTPUTS
     System.Management.Automation.PSObject
+    System.Object[]
 
     .EXAMPLE
     Get-vRAReservationType -Id "Infrastructure.Reservation.Cloud.vCloud"
@@ -41,7 +42,7 @@
     Get-vRAReservationType -Page 1
 
 #>
-[CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject' , 'System.Object[]')]
 
     Param (
 

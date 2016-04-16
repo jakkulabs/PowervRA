@@ -130,7 +130,7 @@
     [ValidateNotNullOrEmpty()]
     [String]$Name,
 
-    [parameter(Mandatory=$true,ParameterSetName="Standard")]
+    [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
     [String]$Tenant = $Global:vRAConnection.Tenant,
 

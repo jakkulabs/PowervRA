@@ -30,7 +30,7 @@
     $Network1 = New-vRAReservationNetworkDefinition -Type vSphere -ComputeResourceId 75ae3400-beb5-4b0b-895a-0484413c93b1 -Path "VM Network" -Profile "Test"
     $NetworkDefinitionArray += $Networ1
 #>
-[CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
@@ -59,8 +59,6 @@
     process {
 
         try {
-
-            $SchemaClassId = (Get-vRAReservationType -Name $Type).SchemaClassid
 
             # --- Define object
             $NetworkDefinitionJSON = @"
