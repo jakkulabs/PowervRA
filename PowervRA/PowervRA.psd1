@@ -12,7 +12,7 @@
 # RootModule = ''
 
 # Version number of this module.
-ModuleVersion = '1.0.2'
+ModuleVersion = '1.1.0'
 
 # ID used to uniquely identify this module
 GUID = 'bbe31f5e-6a10-4859-8b71-2aaef94a8be5'
@@ -64,6 +64,8 @@ PowerShellVersion = '4.0'
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 NestedModules = 'Functions\Add-vRAPrincipalToTenantRole.psm1',
+				'Functions\Add-vRAReservationNetwork.psm1',
+				'Functions\Add-vRAReservationStorage.psm1',
 				'Functions\Connect-vRAServer.psm1',
 				'Functions\Disconnect-vRAServer.psm1',
 				'Functions\Export-vRAContentPackage.psm1',
@@ -85,7 +87,15 @@ NestedModules = 'Functions\Add-vRAPrincipalToTenantRole.psm1',
 				'Functions\Get-vRAEntitledCatalogItem.psm1',
 				'Functions\Get-vRAEntitlement.psm1',
 				'Functions\Get-vRAGroupPrincipal.psm1',
+				'Functions\Get-vRAReservation.psm1',
+				'Functions\Get-vRAReservationComputeResource.psm1',
+				'Functions\Get-vRAReservationComputeResourceMemory.psm1',
+				'Functions\Get-vRAReservationComputeResourceNetwork.psm1',
+				'Functions\Get-vRAReservationComputeResourceResourcePool.psm1',
+				'Functions\Get-vRAReservationComputeResourceStorage.psm1',
 				'Functions\Get-vRAReservationPolicy.psm1',
+				'Functions\Get-vRAReservationTemplate.psm1',
+				'Functions\Get-vRAReservationType.psm1',
 				'Functions\Get-vRAResourceOperation.psm1',
 				'Functions\Get-vRAResourceType.psm1',
 				'Functions\Get-vRAService.psm1',
@@ -101,13 +111,17 @@ NestedModules = 'Functions\Add-vRAPrincipalToTenantRole.psm1',
 				'Functions\New-vRABusinessGroup.psm1',
 				'Functions\New-vRAContentPackage.psm1',
 				'Functions\New-vRAEntitlement.psm1',
+				'Functions\New-vRAReservation.psm1',
+				'Functions\New-vRAReservationNetworkDefinition.psm1',
 				'Functions\New-vRAReservationPolicy.psm1',
+				'Functions\New-vRAReservationStorageDefinition.psm1',
 				'Functions\New-vRAService.psm1',
 				'Functions\New-vRAStorageReservationPolicy.psm1',
 				'Functions\New-vRATenant.psm1',
 				'Functions\New-vRATenantDirectory.psm1',
 				'Functions\Remove-vRABusinessGroup.psm1',
 				'Functions\Remove-vRAPrincipalFromTenantRole.psm1',
+				'Functions\Remove-vRAReservation.psm1',
 				'Functions\Remove-vRAReservationPolicy.psm1',
 				'Functions\Remove-vRAService.psm1',
 				'Functions\Remove-vRAStorageReservationPolicy.psm1',
@@ -117,14 +131,17 @@ NestedModules = 'Functions\Add-vRAPrincipalToTenantRole.psm1',
 				'Functions\Set-vRABusinessGroup.psm1',
 				'Functions\Set-vRACatalogItem.psm1',
 				'Functions\Set-vRAEntitlement.psm1',
+				'Functions\Set-vRAReservation.psm1',
+				'Functions\Set-vRAReservationNetwork.psm1',
 				'Functions\Set-vRAReservationPolicy.psm1',
+				'Functions\Set-vRAReservationStorage.psm1',
 				'Functions\Set-vRAService.psm1',
 				'Functions\Set-vRAStorageReservationPolicy.psm1',
 				'Functions\Set-vRATenant.psm1',
 				'Functions\Set-vRATenantDirectory.psm1'
 
 # Functions to export from this module
-FunctionsToExport = 'Add-vRAPrincipalToTenantRole','Connect-vRAServer','Disconnect-vRAServer','Export-vRAContentPackage','Get-vRAApplianceServiceStatus','Get-vRAAuthorizationRole','Get-vRABlueprint','Get-vRABusinessGroup','Get-vRACatalogItem','Get-vRACatalogPrincipal','Get-vRAConsumerCatalogItem','Get-vRAConsumerCatalogItemRequestTemplate','Get-vRAConsumerEntitledCatalogItem','Get-vRAConsumerRequest','Get-vRAConsumerResource','Get-vRAConsumerResourceOperation','Get-vRAConsumerResourceType','Get-vRAConsumerService','Get-vRAContentPackage','Get-vRAEntitledCatalogItem','Get-vRAEntitlement','Get-vRAGroupPrincipal','Get-vRAReservationPolicy','Get-vRAResourceOperation','Get-vRAResourceType','Get-vRAService','Get-vRAServiceBlueprint','Get-vRAStorageReservationPolicy','Get-vRATenant','Get-vRATenantDirectory','Get-vRATenantDirectoryStatus','Get-vRATenantRole','Get-vRAUserPrincipal','Get-vRAVersion','Invoke-vRARestMethod','New-vRABusinessGroup','New-vRAContentPackage','New-vRAEntitlement','New-vRAReservationPolicy','New-vRAService','New-vRAStorageReservationPolicy','New-vRATenant','New-vRATenantDirectory','Remove-vRABusinessGroup','Remove-vRAPrincipalFromTenantRole','Remove-vRAReservationPolicy','Remove-vRAService','Remove-vRAStorageReservationPolicy','Remove-vRATenant','Remove-vRATenantDirectory','Request-vRAConsumerCatalogItem','Set-vRABusinessGroup','Set-vRACatalogItem','Set-vRAEntitlement','Set-vRAReservationPolicy','Set-vRAService','Set-vRAStorageReservationPolicy','Set-vRATenant','Set-vRATenantDirectory'
+FunctionsToExport = 'Add-vRAPrincipalToTenantRole','Add-vRAReservationNetwork','Add-vRAReservationStorage','Connect-vRAServer','Disconnect-vRAServer','Export-vRAContentPackage','Get-vRAApplianceServiceStatus','Get-vRAAuthorizationRole','Get-vRABlueprint','Get-vRABusinessGroup','Get-vRACatalogItem','Get-vRACatalogPrincipal','Get-vRAConsumerCatalogItem','Get-vRAConsumerCatalogItemRequestTemplate','Get-vRAConsumerEntitledCatalogItem','Get-vRAConsumerRequest','Get-vRAConsumerResource','Get-vRAConsumerResourceOperation','Get-vRAConsumerResourceType','Get-vRAConsumerService','Get-vRAContentPackage','Get-vRAEntitledCatalogItem','Get-vRAEntitlement','Get-vRAGroupPrincipal','Get-vRAReservation','Get-vRAReservationComputeResource','Get-vRAReservationComputeResourceMemory','Get-vRAReservationComputeResourceNetwork','Get-vRAReservationComputeResourceResourcePool','Get-vRAReservationComputeResourceStorage','Get-vRAReservationPolicy','Get-vRAReservationTemplate','Get-vRAReservationType','Get-vRAResourceOperation','Get-vRAResourceType','Get-vRAService','Get-vRAServiceBlueprint','Get-vRAStorageReservationPolicy','Get-vRATenant','Get-vRATenantDirectory','Get-vRATenantDirectoryStatus','Get-vRATenantRole','Get-vRAUserPrincipal','Get-vRAVersion','Invoke-vRARestMethod','New-vRABusinessGroup','New-vRAContentPackage','New-vRAEntitlement','New-vRAReservation','New-vRAReservationNetworkDefinition','New-vRAReservationPolicy','New-vRAReservationStorageDefinition','New-vRAService','New-vRAStorageReservationPolicy','New-vRATenant','New-vRATenantDirectory','Remove-vRABusinessGroup','Remove-vRAPrincipalFromTenantRole','Remove-vRAReservation','Remove-vRAReservationPolicy','Remove-vRAService','Remove-vRAStorageReservationPolicy','Remove-vRATenant','Remove-vRATenantDirectory','Request-vRAConsumerCatalogItem','Set-vRABusinessGroup','Set-vRACatalogItem','Set-vRAEntitlement','Set-vRAReservation','Set-vRAReservationNetwork','Set-vRAReservationPolicy','Set-vRAReservationStorage','Set-vRAService','Set-vRAStorageReservationPolicy','Set-vRATenant','Set-vRATenantDirectory'
 
 # Cmdlets to export from this module
 CmdletsToExport = '*'
