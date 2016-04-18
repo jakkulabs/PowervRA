@@ -16,15 +16,14 @@
     The number of entries returned per page from the API. This has a default value of 100.
 
     .PARAMETER Page
-    The page of response to return. All pages are retuend by default
+    The page of response to return. All pages are retuend by default.
 
     .INPUTS
-    System.String
-    System.Int
+    System.String.
+    System.Int.
 
     .OUTPUTS
-    System.Management.Automation.PSObject
-    System.Object[]
+    System.Management.Automation.PSObject.
 
     .EXAMPLE
     Get-vRAReservationType -Id "Infrastructure.Reservation.Cloud.vCloud"
@@ -34,12 +33,6 @@
 
     .EXAMPLE
     Get-vRAReservationType
-
-    .EAXMPLE
-    Get-vRAReservationType -Limit 20
-
-    .EXAMPLE
-    Get-vRAReservationType -Page 1
 
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject' , 'System.Object[]')]
