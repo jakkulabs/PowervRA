@@ -1,6 +1,8 @@
 # Welcome to PowervRA
 PowervRA is a PowerShell module built on top of the services exposed by the vRealize Automation 7 REST API.
 
+Note: this module is not in any way developed or supported by anyone officially affiliated with VMware
+
 ## Compatibility
 
 **vRA: version 7.0** - some of the functions may work with version 6.2.x, but we haven't tested them (yet). Also, they have not been tested with 7.0.1.
