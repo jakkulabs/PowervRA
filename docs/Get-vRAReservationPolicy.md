@@ -53,7 +53,7 @@ System.Management.Automation.PSObject.
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRAReservationPolicy
+PS C:\>Get-vRAReservationPolicy
 
 
 
@@ -63,7 +63,7 @@ C:\PS>Get-vRAReservationPolicy
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Get-vRAReservationPolicy -Id "068afd10-560f-4360-aa52-786a28573fdc"
+PS C:\>Get-vRAReservationPolicy -Id "068afd10-560f-4360-aa52-786a28573fdc"
 
 
 
@@ -73,6 +73,6 @@ C:\PS>Get-vRAReservationPolicy -Id "068afd10-560f-4360-aa52-786a28573fdc"
 
 -------------------------- EXAMPLE 3 --------------------------
 
-C:\PS>Get-vRAReservationPolicy -Name "ReservationPolicy01","ReservationPolicy02"
+PS C:\>Get-vRAReservationPolicy -Name "ReservationPolicy01","ReservationPolicy02"
 ```
 

@@ -53,7 +53,7 @@ System.Management.Automation.PSObject.
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRAContentPackage
+PS C:\>Get-vRAContentPackage
 
 
 
@@ -63,7 +63,7 @@ C:\PS>Get-vRAContentPackage
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Get-vRAContentPackage -Id "b2d72c5d-775b-400c-8d79-b2483e321bae"
+PS C:\>Get-vRAContentPackage -Id "b2d72c5d-775b-400c-8d79-b2483e321bae"
 
 
 
@@ -73,6 +73,6 @@ C:\PS>Get-vRAContentPackage -Id "b2d72c5d-775b-400c-8d79-b2483e321bae"
 
 -------------------------- EXAMPLE 3 --------------------------
 
-C:\PS>Get-vRAContentPackage -Name "ContentPackage01","ContentPackage02"
+PS C:\>Get-vRAContentPackage -Name "ContentPackage01","ContentPackage02"
 ```
 

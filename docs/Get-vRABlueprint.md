@@ -53,7 +53,7 @@ System.Management.Automation.PSObject.
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRABlueprint
+PS C:\>Get-vRABlueprint
 
 
 
@@ -63,7 +63,7 @@ C:\PS>Get-vRABlueprint
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Get-vRABlueprint -Id "309100fd-b8ce-4e8c-ac8c-a667b8ace54f"
+PS C:\>Get-vRABlueprint -Id "309100fd-b8ce-4e8c-ac8c-a667b8ace54f"
 
 
 
@@ -73,6 +73,6 @@ C:\PS>Get-vRABlueprint -Id "309100fd-b8ce-4e8c-ac8c-a667b8ace54f"
 
 -------------------------- EXAMPLE 3 --------------------------
 
-C:\PS>Get-vRABlueprint -Name "Blueprint01","Blueprint02"
+PS C:\>Get-vRABlueprint -Name "Blueprint01","Blueprint02"
 ```
 

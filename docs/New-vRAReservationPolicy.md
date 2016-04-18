@@ -69,7 +69,7 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>New-vRAReservationPolicy -Name ReservationPolicy01 -Description "This is Reservation Policy 01"
+PS C:\>New-vRAReservationPolicy -Name ReservationPolicy01 -Description "This is Reservation Policy 01"
 
 
 
@@ -79,7 +79,7 @@ C:\PS>New-vRAReservationPolicy -Name ReservationPolicy01 -Description "This is R
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>$JSON = @"
+PS C:\>$JSON = @"
 
 
 {

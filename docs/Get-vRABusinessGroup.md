@@ -5,7 +5,7 @@
 Retrieve vRA Business Groups
 
 ## SYNTAX
- Get-vRABusinessGroup [-TenantId] <String> [[-Name] <String[]>] [[-Limit] <String>] [<CommonParameters>]    
+ Get-vRABusinessGroup [[-TenantId] <String>] [[-Name] <String[]>] [[-Limit] <String>] [<CommonParameters>]    
 
 ## DESCRIPTION
 
@@ -18,9 +18,9 @@ Retrieve vRA Business Groups
 
 Specify the ID of a Tenant
 
-* Required: true
+* Required: false
 * Position: 1
-* Default value: 
+* Default value: $Global:vRAConnection.Tenant
 * Accept pipeline input: false
 
 ### Name
@@ -53,7 +53,7 @@ System.Management.Automation.PSObject.
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRABusinessGroup -TenantId Tenant01
+PS C:\>Get-vRABusinessGroup
 
 
 
@@ -63,6 +63,6 @@ C:\PS>Get-vRABusinessGroup -TenantId Tenant01
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Get-vRABusinessGroup -TenantId Tenant01 -Name BusinessGroup01,BusinessGroup02
+PS C:\>Get-vRABusinessGroup -TenantId Tenant01 -Name BusinessGroup01,BusinessGroup02
 ```
 

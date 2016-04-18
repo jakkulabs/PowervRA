@@ -60,7 +60,7 @@ None
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Remove-vRAReservationPolicy -Id "34ae1d6c-9972-4736-acdb-7ee109ad1dbd"
+PS C:\>Remove-vRAReservationPolicy -Id "34ae1d6c-9972-4736-acdb-7ee109ad1dbd"
 
 
 
@@ -70,7 +70,7 @@ C:\PS>Remove-vRAReservationPolicy -Id "34ae1d6c-9972-4736-acdb-7ee109ad1dbd"
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Remove-vRAReservationPolicy -Name "ReservationPolicy01"
+PS C:\>Remove-vRAReservationPolicy -Name "ReservationPolicy01"
 
 
 
@@ -80,6 +80,6 @@ C:\PS>Remove-vRAReservationPolicy -Name "ReservationPolicy01"
 
 -------------------------- EXAMPLE 3 --------------------------
 
-C:\PS>Get-vRAReservationPolicy -Name "ReservationPolicy01" | Remove-vRAReservationPolicy -Confirm:$false
+PS C:\>Get-vRAReservationPolicy -Name "ReservationPolicy01" | Remove-vRAReservationPolicy -Confirm:$false
 ```
 

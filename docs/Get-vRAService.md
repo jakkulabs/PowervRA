@@ -55,7 +55,7 @@ System.Management.Automation.PSObject.
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRAService
+PS C:\>Get-vRAService
 
 
 
@@ -65,7 +65,7 @@ C:\PS>Get-vRAService
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Get-vRAService -Id 332d38d5-c8db-4519-87a7-7ef9f358091a
+PS C:\>Get-vRAService -Id 332d38d5-c8db-4519-87a7-7ef9f358091a
 
 
 
@@ -75,6 +75,6 @@ C:\PS>Get-vRAService -Id 332d38d5-c8db-4519-87a7-7ef9f358091a
 
 -------------------------- EXAMPLE 3 --------------------------
 
-C:\PS>Get-vRAService -Name "Default Service"
+PS C:\>Get-vRAService -Name "Default Service"
 ```
 

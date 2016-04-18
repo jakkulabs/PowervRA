@@ -48,7 +48,7 @@ System.Management.Automation.PSObject.
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRACatalogPrincipal -Id group@vsphere.local
+PS C:\>Get-vRACatalogPrincipal -Id group@vsphere.local
 
 
 
@@ -58,7 +58,7 @@ C:\PS>Get-vRACatalogPrincipal -Id group@vsphere.local
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Get-vRACatalogPrincipal -Id user@vsphere.local
+PS C:\>Get-vRACatalogPrincipal -Id user@vsphere.local
 
 
 
@@ -68,6 +68,6 @@ C:\PS>Get-vRACatalogPrincipal -Id user@vsphere.local
 
 -------------------------- EXAMPLE 3 --------------------------
 
-C:\PS>Get-vRACatalogPrincipal -Id group@vsphere.local
+PS C:\>Get-vRACatalogPrincipal -Id group@vsphere.local
 ```
 

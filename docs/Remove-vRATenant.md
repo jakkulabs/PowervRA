@@ -51,7 +51,7 @@ None
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Remove-vRATenant -Id Tenant02
+PS C:\>Remove-vRATenant -Id Tenant02
 
 
 
@@ -61,6 +61,6 @@ C:\PS>Remove-vRATenant -Id Tenant02
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Get-vRATenant -Id Tenant02 | Remove-vRATenant -Confirm:$false
+PS C:\>Get-vRATenant -Id Tenant02 | Remove-vRATenant -Confirm:$false
 ```
 

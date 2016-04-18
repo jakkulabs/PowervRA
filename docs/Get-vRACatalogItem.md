@@ -54,7 +54,7 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRACatalogItem
+PS C:\>Get-vRACatalogItem
 
 
 
@@ -64,7 +64,7 @@ C:\PS>Get-vRACatalogItem
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Get-vRACatalogItem -Limit 9999
+PS C:\>Get-vRACatalogItem -Limit 9999
 
 
 
@@ -74,7 +74,7 @@ C:\PS>Get-vRACatalogItem -Limit 9999
 
 -------------------------- EXAMPLE 3 --------------------------
 
-C:\PS>Get-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e
+PS C:\>Get-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e
 
 
 
@@ -84,6 +84,6 @@ C:\PS>Get-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e
 
 -------------------------- EXAMPLE 4 --------------------------
 
-C:\PS>Get-vRACatalogItem -Name Centos_Template
+PS C:\>Get-vRACatalogItem -Name Centos_Template
 ```
 

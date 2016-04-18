@@ -87,7 +87,7 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Set-vRAStorageReservationPolicy -Id "34ae1d6c-9972-4736-acdb-7ee109ad1dbd" -NewName "NewName" -Description "This is the New Name"
+PS C:\>Set-vRAStorageReservationPolicy -Id "34ae1d6c-9972-4736-acdb-7ee109ad1dbd" -NewName "NewName" -Description "This is the New Name"
 
 
 
@@ -97,7 +97,7 @@ C:\PS>Set-vRAStorageReservationPolicy -Id "34ae1d6c-9972-4736-acdb-7ee109ad1dbd"
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Set-vRAStorageReservationPolicy -Name StorageReservationPolicy01 -NewName "NewName" -Description "This is the New Name"
+PS C:\>Set-vRAStorageReservationPolicy -Name StorageReservationPolicy01 -NewName "NewName" -Description "This is the New Name"
 
 
 
@@ -107,7 +107,7 @@ C:\PS>Set-vRAStorageReservationPolicy -Name StorageReservationPolicy01 -NewName 
 
 -------------------------- EXAMPLE 3 --------------------------
 
-C:\PS>$JSON = @"
+PS C:\>$JSON = @"
 
 
 {

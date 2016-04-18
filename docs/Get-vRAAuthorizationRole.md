@@ -44,7 +44,7 @@ System.Management.Automation.PSObject.
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRAAuthorizationRole
+PS C:\>Get-vRAAuthorizationRole
 
 
 
@@ -54,6 +54,6 @@ C:\PS>Get-vRAAuthorizationRole
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Get-vRAAuthorizationRole -Id CSP_TENANT_ADMIN
+PS C:\>Get-vRAAuthorizationRole -Id CSP_TENANT_ADMIN
 ```
 

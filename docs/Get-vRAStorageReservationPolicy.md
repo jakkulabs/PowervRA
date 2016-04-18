@@ -53,7 +53,7 @@ System.Management.Automation.PSObject.
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRAStorageReservationPolicy
+PS C:\>Get-vRAStorageReservationPolicy
 
 
 
@@ -63,7 +63,7 @@ C:\PS>Get-vRAStorageReservationPolicy
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Get-vRAStorageReservationPolicy -Id "068afd10-560f-4360-aa52-786a28573fdc"
+PS C:\>Get-vRAStorageReservationPolicy -Id "068afd10-560f-4360-aa52-786a28573fdc"
 
 
 
@@ -73,6 +73,6 @@ C:\PS>Get-vRAStorageReservationPolicy -Id "068afd10-560f-4360-aa52-786a28573fdc"
 
 -------------------------- EXAMPLE 3 --------------------------
 
-C:\PS>Get-vRAStorageReservationPolicy -Name "StorageReservationPolicy01","StorageReservationPolicy02"
+PS C:\>Get-vRAStorageReservationPolicy -Name "StorageReservationPolicy01","StorageReservationPolicy02"
 ```
 

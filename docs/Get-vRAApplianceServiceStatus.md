@@ -44,7 +44,7 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRAApplianceServiceStatus
+PS C:\>Get-vRAApplianceServiceStatus
 
 
 
@@ -54,7 +54,7 @@ C:\PS>Get-vRAApplianceServiceStatus
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Get-vRAApplianceServiceStatus -Limit 9999
+PS C:\>Get-vRAApplianceServiceStatus -Limit 9999
 
 
 
@@ -64,6 +64,6 @@ C:\PS>Get-vRAApplianceServiceStatus -Limit 9999
 
 -------------------------- EXAMPLE 3 --------------------------
 
-C:\PS>Get-vRAApplianceServiceStatus -Name iaas-service
+PS C:\>Get-vRAApplianceServiceStatus -Name iaas-service
 ```
 

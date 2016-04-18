@@ -96,7 +96,7 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>New-vRATenant -Name Tenant01 -Description "This is Tenant01" -URLName Tenant01 -ContactEmail admin.user@tenant01.local -ID Tenant01
+PS C:\>New-vRATenant -Name Tenant01 -Description "This is Tenant01" -URLName Tenant01 -ContactEmail admin.user@tenant01.local -ID Tenant01
 
 
 
@@ -106,7 +106,7 @@ C:\PS>New-vRATenant -Name Tenant01 -Description "This is Tenant01" -URLName Tena
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>$JSON = @"
+PS C:\>$JSON = @"
 
 
 {

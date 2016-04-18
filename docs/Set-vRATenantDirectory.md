@@ -5,7 +5,7 @@
 Update a vRA Tenant Directory
 
 ## SYNTAX
- Set-vRATenantDirectory -ID <String> [-Name <String>] [-Description <String>] [-Alias <String>] [-Type <String>] -Domain <String> [-UserNameDN <String>]  [-Password <String>] [-URL <String>] [-GroupBaseSearchDN <String>] [-UserBaseSearchDN <String>] [-Subdomains <String>] [-GroupBaseSearchDNs <String[]>]  [-UserBaseSearchDNs <String[]>] [-DomainAdminUsername <String>] [-DomainAdminPassword <String>] [-Certificate <String>] [-TrustAll] [-UseGlobalCatalog]  [-WhatIf] [-Confirm] [<CommonParameters>] Set-vRATenantDirectory -ID <String> -Domain <String> -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Set-vRATenantDirectory -ID <String> [-Name <String>] [-Description <String>] [-Alias <String>] [-Type <String>] -Domain <String> [-UserNameDN <String>] [-Password <String>] [-URL <String>] [-GroupBaseSearchDN <String>] [-UserBaseSearchDN <String>] [-Subdomains  <String>] [-GroupBaseSearchDNs <String[]>] [-UserBaseSearchDNs <String[]>] [-DomainAdminUsername <String>] [-DomainAdminPassword <String>] [-Certificate <String>] [-TrustAll] [-UseGlobalCatalog] [-WhatIf] [-Confirm] [<CommonParameters>] Set-vRATenantDirectory -ID <String> -Domain <String> -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]    
 
 ## DESCRIPTION
 
@@ -221,8 +221,7 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Set-vRATenantDirectory -ID Tenant01 -Domain vrademo.local -GroupBaseSearchDNs "OU=Groups,OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -userBaseSearchDNs 
-"OU=Users,OU=Tenant01,OU=Tenants,DC=vrademo,DC=local"
+PS C:\>Set-vRATenantDirectory -ID Tenant01 -Domain vrademo.local -GroupBaseSearchDNs "OU=Groups,OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -userBaseSearchDNs "OU=Users,OU=Tenant01,OU=Tenants,DC=vrademo,DC=local"
 
 
 
@@ -232,7 +231,7 @@ C:\PS>Set-vRATenantDirectory -ID Tenant01 -Domain vrademo.local -GroupBaseSearch
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>$JSON = @"
+PS C:\>$JSON = @"
 
 
 {

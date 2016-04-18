@@ -51,7 +51,7 @@ None
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Remove-vRAService -Id "d00d3631-997c-40f7-90e8-7ccbc153c20c"
+PS C:\>Remove-vRAService -Id "d00d3631-997c-40f7-90e8-7ccbc153c20c"
 
 
 
@@ -61,7 +61,7 @@ C:\PS>Remove-vRAService -Id "d00d3631-997c-40f7-90e8-7ccbc153c20c"
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Get-vRAService -Id "d00d3631-997c-40f7-90e8-7ccbc153c20c" | Remove-vRAService
+PS C:\>Get-vRAService -Id "d00d3631-997c-40f7-90e8-7ccbc153c20c" | Remove-vRAService
 
 
 
@@ -71,6 +71,6 @@ C:\PS>Get-vRAService -Id "d00d3631-997c-40f7-90e8-7ccbc153c20c" | Remove-vRAServ
 
 -------------------------- EXAMPLE 3 --------------------------
 
-C:\PS>Get-vRAService | Where-Object {$_.name -ne "Default Service"} | Remove-vRAService
+PS C:\>Get-vRAService | Where-Object {$_.name -ne "Default Service"} | Remove-vRAService
 ```
 

@@ -71,7 +71,7 @@ System.Management.Automation.PSObject.
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRAConsumerResource
+PS C:\>Get-vRAConsumerResource
 
 
 
@@ -81,7 +81,7 @@ C:\PS>Get-vRAConsumerResource
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Get-vRAConsumerResource -WithExtendedData
+PS C:\>Get-vRAConsumerResource -WithExtendedData
 
 
 
@@ -91,7 +91,7 @@ C:\PS>Get-vRAConsumerResource -WithExtendedData
 
 -------------------------- EXAMPLE 3 --------------------------
 
-C:\PS>Get-vRAConsumerResource -WithOperations
+PS C:\>Get-vRAConsumerResource -WithOperations
 
 
 
@@ -101,7 +101,7 @@ C:\PS>Get-vRAConsumerResource -WithOperations
 
 -------------------------- EXAMPLE 4 --------------------------
 
-C:\PS>Get-vRAConsumerResource -Id "6195fd70-7243-4dc9-b4f3-4b2300e15ef8"
+PS C:\>Get-vRAConsumerResource -Id "6195fd70-7243-4dc9-b4f3-4b2300e15ef8"
 
 
 
@@ -111,6 +111,6 @@ C:\PS>Get-vRAConsumerResource -Id "6195fd70-7243-4dc9-b4f3-4b2300e15ef8"
 
 -------------------------- EXAMPLE 5 --------------------------
 
-C:\PS>Get-vRAConsumerResource -Name "vm-01"
+PS C:\>Get-vRAConsumerResource -Name "vm-01"
 ```
 

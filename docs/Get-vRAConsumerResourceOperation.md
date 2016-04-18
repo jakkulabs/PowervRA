@@ -5,7 +5,7 @@
 Get a consumer resource operation
 
 ## SYNTAX
- Get-vRAConsumerResourceOperation [<CommonParameters>] Get-vRAConsumerResourceOperation -Id <String[]> [<CommonParameters>]    
+ Get-vRAConsumerResourceOperation -Id <String[]> [<CommonParameters>]    
 
 ## DESCRIPTION
 
@@ -37,6 +37,6 @@ System.Management.Automation.PSObject.
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRAConsumerResourceOperation -Id "a4d57b16-9706-471b-9960-d0855fe544bb"
+PS C:\>Get-vRAConsumerResourceOperation -Id "a4d57b16-9706-471b-9960-d0855fe544bb"
 ```
 
