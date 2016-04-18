@@ -1,17 +1,16 @@
 # Get-vRAReservation
 
 ## SYNOPSIS
-    
 
-Get-vRAReservation [-Limit <int>] [-Page <int>] [<CommonParameters>]
-
-Get-vRAReservation -Id <string[]> [<CommonParameters>]
-
-Get-vRAReservation -Name <string[]> [<CommonParameters>]
+Get a reservation    
 
 
 ## SYNTAX
- syntaxItem                                                                                                                                                                                                                                                                     ----------                                                                                                                                                                                                                                                                     {@{name=Get-vRAReservation; CommonParameters=True; WorkflowCommonParameters=False; parameter=System.Object[]}, @{name=Get-vRAReservation; CommonParameters=True; WorkflowCommonParameters=False; parameter=System.Object[]}, @{name=Get-vRAReservation; CommonParameters=Tr...   
+Get-vRAReservation [-Limit <int>] [-Page <int>]  [<CommonParameters>]
+
+Get-vRAReservation -Id <string[]>  [<CommonParameters>]
+
+Get-vRAReservation -Name <string[]>  [<CommonParameters>]  
 ## PARAMETERS
 
 
