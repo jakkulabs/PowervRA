@@ -5,7 +5,7 @@
 Update a vRA Reservation Policy
 
 ## SYNTAX
- Set-vRAReservationPolicy -Id <String> [-NewName <String>] [-Description <String>] [-WhatIf] [-Confirm] [<CommonParameters>] Set-vRAReservationPolicy -Name <String> [-NewName <String>] [-Description <String>] [-WhatIf] [-Confirm] [<CommonParameters>] Set-vRAReservationPolicy -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Set-vRAReservationPolicy -Id <String> [-NewName <String>] [-Description <String>] [-WhatIf] [-Confirm]  [<CommonParameters>] Set-vRAReservationPolicy -Name <String> [-NewName <String>] [-Description <String>] [-WhatIf] [-Confirm]  [<CommonParameters>] Set-vRAReservationPolicy -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]    
 
 ## DESCRIPTION
 
@@ -87,7 +87,8 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-PS C:\>Set-vRAReservationPolicy -Id "34ae1d6c-9972-4736-acdb-7ee109ad1dbd" -NewName "NewName" -Description "This is the New Name"
+PS C:\>Set-vRAReservationPolicy -Id "34ae1d6c-9972-4736-acdb-7ee109ad1dbd" -NewName "NewName" -Description "This is 
+the New Name"
 
 
 

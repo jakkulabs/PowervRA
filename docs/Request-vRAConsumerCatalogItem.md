@@ -5,7 +5,7 @@
 Request a vRA catalog item
 
 ## SYNTAX
- Request-vRAConsumerCatalogItem -Id <String> [-RequestedFor <String>] [-Description <String>] [-Reasons <String>] [-Wait] [-WhatIf] [-Confirm] [<CommonParameters>] Request-vRAConsumerCatalogItem -JSON <String> [-Wait] [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Request-vRAConsumerCatalogItem -Id <String> [-RequestedFor <String>] [-Description <String>] [-Reasons <String>]  [-Wait] [-WhatIf] [-Confirm] [<CommonParameters>] Request-vRAConsumerCatalogItem -JSON <String> [-Wait] [-WhatIf] [-Confirm] [<CommonParameters>]    
 
 ## DESCRIPTION
 
@@ -101,7 +101,8 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-PS C:\>$Template = Get-vRAConsumerEntitledCatalogItem -Id "dab4e578-57c5-4a30-b3b7-2a5cefa52e9e" | Get-vRAConsumerCatalogItemRequestTemplate
+PS C:\>$Template = Get-vRAConsumerEntitledCatalogItem -Id "dab4e578-57c5-4a30-b3b7-2a5cefa52e9e" | 
+Get-vRAConsumerCatalogItemRequestTemplate
 
 
 $Resource = Request-vRAConsumerCatalogItem -JSON $Template -Wait -Verbose
@@ -111,7 +112,8 @@ $Resource = Request-vRAConsumerCatalogItem -JSON $Template -Wait -Verbose
 
 -------------------------- EXAMPLE 2 --------------------------
 
-PS C:\>$Template = Get-vRAConsumerEntitledCatalogItem -Id "dab4e578-57c5-4a30-b3b7-2a5cefa52e9e" | Get-vRAConsumerCatalogItemRequestTemplate
+PS C:\>$Template = Get-vRAConsumerEntitledCatalogItem -Id "dab4e578-57c5-4a30-b3b7-2a5cefa52e9e" | 
+Get-vRAConsumerCatalogItemRequestTemplate
 
 
 $RequestId = Request-vRAConsumerCatalogItem -JSON $Template -Verbose
@@ -141,6 +143,7 @@ PS C:\>Request-vRAConsumerCatalogItem -Id "dab4e578-57c5-4a30-b3b7-2a5cefa52e9e"
 
 -------------------------- EXAMPLE 5 --------------------------
 
-PS C:\>Request-vRAConsumerCatalogItem -Id "dab4e578-57c5-4a30-b3b7-2a5cefa52e9e" -Description "Test" -Reasons "Test Reason"
+PS C:\>Request-vRAConsumerCatalogItem -Id "dab4e578-57c5-4a30-b3b7-2a5cefa52e9e" -Description "Test" -Reasons "Test 
+Reason"
 ```
 

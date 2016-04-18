@@ -5,7 +5,7 @@
 Create a vRA Service for the current tenant
 
 ## SYNTAX
- New-vRAService -Name <String> [-Description <String>] [-Owner <String>] [-SupportTeam <String>] [-WhatIf] [-Confirm] [<CommonParameters>] New-vRAService -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ New-vRAService -Name <String> [-Description <String>] [-Owner <String>] [-SupportTeam <String>] [-WhatIf] [-Confirm]  [<CommonParameters>] New-vRAService -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]    
 
 ## DESCRIPTION
 
@@ -105,7 +105,8 @@ PS C:\>New-vRAService -Name "New Service"
 
 -------------------------- EXAMPLE 2 --------------------------
 
-PS C:\>New-vRAService -Name "New Service" -Description "A new service" -Owner user@vsphere.local -SupportTeam customgroup@vsphere.local
+PS C:\>New-vRAService -Name "New Service" -Description "A new service" -Owner user@vsphere.local -SupportTeam 
+customgroup@vsphere.local
 
 
 

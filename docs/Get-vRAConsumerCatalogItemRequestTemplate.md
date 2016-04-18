@@ -93,6 +93,7 @@ PS C:\>Get-vRAConsumerEntitledCatalogItem -Name Centos_Template | Get-vRAConsume
 
 -------------------------- EXAMPLE 5 --------------------------
 
-PS C:\>Get-vRAConsumerEntitledCatalogItem -Name Centos_Template | Get-vRAConsumerCatalogItemRequestTemplate | ConvertFrom-Json
+PS C:\>Get-vRAConsumerEntitledCatalogItem -Name Centos_Template | Get-vRAConsumerCatalogItemRequestTemplate | 
+ConvertFrom-Json
 ```
 

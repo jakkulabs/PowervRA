@@ -69,7 +69,8 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-PS C:\>New-vRAStorageReservationPolicy -Name StorageReservationPolicy01 -Description "This is Storage Reservation Policy 01"
+PS C:\>New-vRAStorageReservationPolicy -Name StorageReservationPolicy01 -Description "This is Storage Reservation 
+Policy 01"
 
 
 

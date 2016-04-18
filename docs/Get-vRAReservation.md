@@ -1,59 +1,89 @@
 # Get-vRAReservation
 
 ## SYNOPSIS
-
-Get a reservation    
-
+    
+Get a reservation
 
 ## SYNTAX
-Get-vRAReservation [-Limit <int>] [-Page <int>]  [<CommonParameters>]
+ Get-vRAReservation [-Limit <Int32>] [-Page <Int32>] [<CommonParameters>] Get-vRAReservation -Id <String[]> [<CommonParameters>] Get-vRAReservation -Name <String[]> [<CommonParameters>]    
 
-Get-vRAReservation -Id <string[]>  [<CommonParameters>]
+## DESCRIPTION
 
-Get-vRAReservation -Name <string[]>  [<CommonParameters>]  
+Get a reservation
+
 ## PARAMETERS
 
 
 ### Id
 
+The id of the reservation
 
 * Required: true
-* Position: Named
-* Default value: 
-* Accept pipeline input: false
-
-### Limit
-
-
-* Required: false
-* Position: Named
+* Position: named
 * Default value: 
 * Accept pipeline input: false
 
 ### Name
 
+The name of the reservation
 
 * Required: true
-* Position: Named
+* Position: named
 * Default value: 
+* Accept pipeline input: false
+
+### Limit
+
+The number of entries returned per page from the API. This has a default value of 100.
+
+* Required: false
+* Position: named
+* Default value: 100
 * Accept pipeline input: false
 
 ### Page
 
+The page of response to return. All pages are retuend by default
 
 * Required: false
-* Position: Named
-* Default value: 
+* Position: named
+* Default value: 1
 * Accept pipeline input: false
 
 ## INPUTS
 
-None
-
+System.String
+System.Int
 
 ## OUTPUTS
 
 System.Management.Automation.PSObject
 System.Object[]
 
+## EXAMPLES
+```
+-------------------------- EXAMPLE 1 --------------------------
+
+PS C:\>Get-vRAReservation -Id 75ae3400-beb5-4b0b-895a-0484413c93b1
+
+
+
+
+
+
+
+-------------------------- EXAMPLE 2 --------------------------
+
+PS C:\>Get-vRAReservation -Name Reservation1
+
+
+
+
+
+
+
+-------------------------- EXAMPLE 3 --------------------------
+
+PS C:\>Get-vRAReservation
+```
 

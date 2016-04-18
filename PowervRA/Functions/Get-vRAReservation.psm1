@@ -35,12 +35,6 @@
     .EXAMPLE
     Get-vRAReservation 
 
-    .EAXMPLE
-    Get-vRAReservation -Limit 20
-
-    .EXAMPLE
-    Get-vRAReservation -Page 1
-
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject', 'System.Object[]')]
 
