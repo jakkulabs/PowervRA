@@ -44,7 +44,7 @@ System.Management.Automation.PSObject.
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRAGroupPrincipal
+PS C:\>Get-vRAGroupPrincipal
 
 
 
@@ -54,7 +54,7 @@ C:\PS>Get-vRAGroupPrincipal
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Get-vRAGroupPrincipal -Id group@vsphere.local
+PS C:\>Get-vRAGroupPrincipal -Id group@vsphere.local
 
 
 
@@ -64,6 +64,6 @@ C:\PS>Get-vRAGroupPrincipal -Id group@vsphere.local
 
 -------------------------- EXAMPLE 3 --------------------------
 
-C:\PS>Get-vRAGroupPrincipal -GroupName group@vsphere.local
+PS C:\>Get-vRAGroupPrincipal -GroupName group@vsphere.local
 ```
 

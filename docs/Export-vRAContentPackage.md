@@ -53,7 +53,7 @@ System.IO.FileInfo
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Export-vRAContentPackage -Id "b2d72c5d-775b-400c-8d79-b2483e321bae" -File C:\Packages\ContentPackage01.zip
+PS C:\>Export-vRAContentPackage -Id "b2d72c5d-775b-400c-8d79-b2483e321bae" -File C:\Packages\ContentPackage01.zip
 
 
 
@@ -63,6 +63,6 @@ C:\PS>Export-vRAContentPackage -Id "b2d72c5d-775b-400c-8d79-b2483e321bae" -File 
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Export-vRAContentPackage -Name "ContentPackage01" -File C:\Packages\ContentPackage01.zip
+PS C:\>Export-vRAContentPackage -Name "ContentPackage01" -File C:\Packages\ContentPackage01.zip
 ```
 

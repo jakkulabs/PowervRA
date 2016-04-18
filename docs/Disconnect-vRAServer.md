@@ -33,7 +33,7 @@ Disconnect from a vRA server by removing the authorization token and the global 
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Disconnect-vRAServer
+PS C:\>Disconnect-vRAServer
 
 
 
@@ -43,6 +43,6 @@ C:\PS>Disconnect-vRAServer
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Disconnect-vRAServer -Confirm:$false
+PS C:\>Disconnect-vRAServer -Confirm:$false
 ```
 

@@ -5,7 +5,7 @@
 Set a vRA Service
 
 ## SYNTAX
- Set-vRAService -Id <String> [-Name <String>] [-Description <String>] [-Status <String>] [-Owner <String>] [-SupportTeam <String>] [-WhatIf] [-Confirm]  [<CommonParameters>]    
+ Set-vRAService -Id <String> [-Name <String>] [-Description <String>] [-Status <String>] [-Owner <String>] [-SupportTeam <String>] [-WhatIf] [-Confirm] [<CommonParameters>]    
 
 ## DESCRIPTION
 
@@ -104,7 +104,7 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRAService -Name "Default" | Set-vRAService -Owner user@vsphere.local
+PS C:\>Get-vRAService -Name "Default" | Set-vRAService -Owner user@vsphere.local
 
 
 
@@ -114,7 +114,7 @@ C:\PS>Get-vRAService -Name "Default" | Set-vRAService -Owner user@vsphere.local
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1"
+PS C:\>Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1"
 
 
 
@@ -124,7 +124,7 @@ C:\PS>Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1"
 
 -------------------------- EXAMPLE 3 --------------------------
 
-C:\PS>Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Description "updated from posh"
+PS C:\>Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Description "updated from posh"
 
 
 
@@ -134,7 +134,7 @@ C:\PS>Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" 
 
 -------------------------- EXAMPLE 4 --------------------------
 
-C:\PS>Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Description "updated from posh" -Owner "user@vsphere.local"
+PS C:\>Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Description "updated from posh" -Owner "user@vsphere.local"
 
 
 
@@ -144,8 +144,7 @@ C:\PS>Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" 
 
 -------------------------- EXAMPLE 5 --------------------------
 
-C:\PS>Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Description "updated from posh" -Owner "user@vsphere.local" -SupportTeam 
-"support@vsphere.local"
+PS C:\>Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Description "updated from posh" -Owner "user@vsphere.local" -SupportTeam "support@vsphere.local"
 
 
 
@@ -155,7 +154,6 @@ C:\PS>Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" 
 
 -------------------------- EXAMPLE 6 --------------------------
 
-C:\PS>Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Description "updated from posh" -Owner "user@vsphere.local" -SupportTeam 
-"support@vsphere.local" -Status INACTIVE
+PS C:\>Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Description "updated from posh" -Owner "user@vsphere.local" -SupportTeam "support@vsphere.local" -Status INACTIVE
 ```
 

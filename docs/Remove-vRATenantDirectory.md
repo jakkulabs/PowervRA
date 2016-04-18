@@ -60,7 +60,7 @@ None
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Remove-vRATenantDirectory -Id Tenant01 -Domain vrademo.local
+PS C:\>Remove-vRATenantDirectory -Id Tenant01 -Domain vrademo.local
 
 
 
@@ -70,7 +70,7 @@ C:\PS>Remove-vRATenantDirectory -Id Tenant01 -Domain vrademo.local
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>$Id = "Tenant01"
+PS C:\>$Id = "Tenant01"
 
 
 Get-vRATenantDirectory -Id $Id | Remove-vRATenantDirectory -Id $Id -Confirm:$false

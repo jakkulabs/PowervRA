@@ -5,12 +5,7 @@
 Get information about vRA requests
 
 ## SYNTAX
-
- Get-vRAConsumerRequest [-Limit <String>] [-Page <Int32>] [<CommonParameters>]
-
- Get-vRAConsumerRequest -Id <String[]> [<CommonParameters>]
-
- Get-vRAConsumerRequest -RequestNumber <String[]> [<CommonParameters>]
+ Get-vRAConsumerRequest [-Limit <String>] [-Page <Int32>] [<CommonParameters>] Get-vRAConsumerRequest -Id <String[]> [<CommonParameters>] Get-vRAConsumerRequest -RequestNumber <String[]> [<CommonParameters>]    
 
 ## DESCRIPTION
 
@@ -62,6 +57,7 @@ System.String
 ## OUTPUTS
 
 System.Management.Automation.PSObject
+System.Object[]
 
 ## EXAMPLES
 ```

@@ -1,0 +1,19 @@
+{
+  "Connection":
+  {
+    "vRAAppliance": "vraap02.vrademo.local",
+    "Tenant": "Tenant01",
+    "Username": "TenantAdmin01@vrademo.local",
+    "Password": "P@ssword!"
+  },
+   "BusinessGroup":
+  {
+    "Name": "BusinessGroup100",
+    "Description": "Business Group 100",
+    "UpdatedDescription": "Business Group 100 Updated",
+    "Manager": "busgroupmgr100@vrademo.local",
+    "SupportUser": "busgroupsu100@vrademo.local",
+    "BasicUser": "busgroupbu100@vrademo.local",
+    "MachinePrefixId": "87e99513-cbea-4589-8678-c84c5907bdf2"
+  }
+}

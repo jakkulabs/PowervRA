@@ -53,6 +53,6 @@ System.Management.Automation.PSObject.
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRATenantRole -TenantId Tenant01 -PrincipalId Tenantadmin@vrademo.local
+PS C:\>Get-vRATenantRole -TenantId Tenant01 -PrincipalId Tenantadmin@vrademo.local
 ```
 

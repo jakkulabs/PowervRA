@@ -89,7 +89,7 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Set-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e -Status PUBLISHED
+PS C:\>Set-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e -Status PUBLISHED
 
 
 
@@ -99,7 +99,7 @@ C:\PS>Set-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e -Status PUBLIS
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Set-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e -Quota 1
+PS C:\>Set-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e -Quota 1
 
 
 
@@ -109,7 +109,7 @@ C:\PS>Set-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e -Quota 1
 
 -------------------------- EXAMPLE 3 --------------------------
 
-C:\PS>Set-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e -Service "Default Service"
+PS C:\>Set-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e -Service "Default Service"
 
 
 
@@ -119,7 +119,7 @@ C:\PS>Set-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e -Service "Defa
 
 -------------------------- EXAMPLE 4 --------------------------
 
-C:\PS>Set-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e -NewAndNoteworthy $false
+PS C:\>Set-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e -NewAndNoteworthy $false
 
 
 TODO:

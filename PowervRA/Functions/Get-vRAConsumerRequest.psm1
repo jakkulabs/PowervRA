@@ -23,6 +23,7 @@
 
     .OUTPUTS
     System.Management.Automation.PSObject
+    System.Object[]
 
     .EXAMPLE
     Get-vRAConsumerRequest
@@ -37,7 +38,7 @@
     Get-vRAConsumerRequest -RequestNumber 3
     
 #>
-[CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject', 'System.Object[]')]
 
     Param (
 

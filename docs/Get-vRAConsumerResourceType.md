@@ -54,7 +54,7 @@ System.Management.Automation.PSObject.
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRAConsumerResourceType
+PS C:\>Get-vRAConsumerResourceType
 
 
 
@@ -64,7 +64,7 @@ C:\PS>Get-vRAConsumerResourceType
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Get-vRAConsumerResourceType -Id "Infrastructure.Machine"
+PS C:\>Get-vRAConsumerResourceType -Id "Infrastructure.Machine"
 
 
 
@@ -74,6 +74,6 @@ C:\PS>Get-vRAConsumerResourceType -Id "Infrastructure.Machine"
 
 -------------------------- EXAMPLE 3 --------------------------
 
-C:\PS>Get-vRAConsumerResourceType -Name "Machine"
+PS C:\>Get-vRAConsumerResourceType -Name "Machine"
 ```
 

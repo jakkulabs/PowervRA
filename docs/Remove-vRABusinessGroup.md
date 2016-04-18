@@ -69,7 +69,7 @@ None
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Remove-vRABusinessGroup -TenantId Tenant01 -Id "f8e0d99e-c567-4031-99cb-d8410c841ed7"
+PS C:\>Remove-vRABusinessGroup -TenantId Tenant01 -Id "f8e0d99e-c567-4031-99cb-d8410c841ed7"
 
 
 
@@ -79,7 +79,7 @@ C:\PS>Remove-vRABusinessGroup -TenantId Tenant01 -Id "f8e0d99e-c567-4031-99cb-d8
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Remove-vRABusinessGroup -TenantId Tenant01 -Name "BusinessGroup01","BusinessGroup02"
+PS C:\>Remove-vRABusinessGroup -TenantId Tenant01 -Name "BusinessGroup01","BusinessGroup02"
 
 
 
@@ -89,6 +89,6 @@ C:\PS>Remove-vRABusinessGroup -TenantId Tenant01 -Name "BusinessGroup01","Busine
 
 -------------------------- EXAMPLE 3 --------------------------
 
-C:\PS>Get-vRABusinessGroup -TenantId Tenant01 -Name BusinessGroup01 | Remove-vRABusinessGroup -Confirm:$false
+PS C:\>Get-vRABusinessGroup -TenantId Tenant01 -Name BusinessGroup01 | Remove-vRABusinessGroup -Confirm:$false
 ```
 

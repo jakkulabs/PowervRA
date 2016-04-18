@@ -5,7 +5,7 @@
 Connect to a vRA Server
 
 ## SYNTAX
- Connect-vRAServer -Server <String> -Tenant <String> -Username <String> -Password <String> [-IgnoreCertRequirements] [<CommonParameters>] Connect-vRAServer -Server <String> -Tenant <String> -Credential <PSCredential> [-IgnoreCertRequirements] [<CommonParameters>]    
+ Connect-vRAServer -Server <String> [-Tenant <String>] -Username <String> -Password <String> [-IgnoreCertRequirements] [<CommonParameters>] Connect-vRAServer -Server <String> [-Tenant <String>] -Credential <PSCredential> [-IgnoreCertRequirements] [<CommonParameters>]    
 
 ## DESCRIPTION
 
@@ -27,9 +27,9 @@ vRA Server to connect to
 
 Tenant to connect to
 
-* Required: true
+* Required: false
 * Position: named
-* Default value: 
+* Default value: vsphere.local
 * Accept pipeline input: false
 
 ### Username
@@ -82,7 +82,7 @@ System.Management.Automation.PSObject.
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Connect-vRAServer -Server vraappliance01.domain.local -Tenant Tenant01 -Username TenantAdmin01 -Password P@ssword -IgnoreCertRequirements
+PS C:\>Connect-vRAServer -Server vraappliance01.domain.local -Tenant Tenant01 -Username TenantAdmin01 -Password P@ssword -IgnoreCertRequirements
 
 
 
@@ -92,6 +92,6 @@ C:\PS>Connect-vRAServer -Server vraappliance01.domain.local -Tenant Tenant01 -Us
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Connect-vRAServer -Server vraappliance01.domain.local -Tenant Tenant01 -Credential (Get-Credential)
+PS C:\>Connect-vRAServer -Server vraappliance01.domain.local -Tenant Tenant01 -Credential (Get-Credential)
 ```
 

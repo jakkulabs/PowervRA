@@ -44,7 +44,7 @@ System.Management.Automation.PSObject.
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRATenant
+PS C:\>Get-vRATenant
 
 
 
@@ -54,6 +54,6 @@ C:\PS>Get-vRATenant
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Get-vRATenant -Id Tenant01
+PS C:\>Get-vRATenant -Id Tenant01
 ```
 

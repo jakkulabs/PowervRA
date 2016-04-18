@@ -60,7 +60,7 @@ None
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Remove-vRAStorageReservationPolicy -Id "34ae1d6c-9972-4736-acdb-7ee109ad1dbd"
+PS C:\>Remove-vRAStorageReservationPolicy -Id "34ae1d6c-9972-4736-acdb-7ee109ad1dbd"
 
 
 
@@ -70,7 +70,7 @@ C:\PS>Remove-vRAStorageReservationPolicy -Id "34ae1d6c-9972-4736-acdb-7ee109ad1d
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Remove-vRAStorageReservationPolicy -Name "StorageReservationPolicy01"
+PS C:\>Remove-vRAStorageReservationPolicy -Name "StorageReservationPolicy01"
 
 
 
@@ -80,6 +80,6 @@ C:\PS>Remove-vRAStorageReservationPolicy -Name "StorageReservationPolicy01"
 
 -------------------------- EXAMPLE 3 --------------------------
 
-C:\PS>Get-vRAStorageReservationPolicy -Name "StorageReservationPolicy01" | Remove-vRAStorageReservationPolicy -Confirm:$false
+PS C:\>Get-vRAStorageReservationPolicy -Name "StorageReservationPolicy01" | Remove-vRAStorageReservationPolicy -Confirm:$false
 ```
 

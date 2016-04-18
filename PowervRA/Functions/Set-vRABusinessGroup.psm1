@@ -140,7 +140,7 @@
 
                 if ($BusinessGroup.Name){
 
-                    $Description = $BusinessGroup.Name
+                    $Name = $BusinessGroup.Name
                 }
             }
             if (-not($PSBoundParameters.ContainsKey("Description"))){

@@ -19,6 +19,6 @@ System.Management.Automation.PSObject.
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRAVersion
+PS C:\>Get-vRAVersion
 ```
 

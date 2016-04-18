@@ -53,7 +53,7 @@ System.Management.Automation.PSObject.
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRAUserPrincipal
+PS C:\>Get-vRAUserPrincipal
 
 
 
@@ -63,7 +63,7 @@ C:\PS>Get-vRAUserPrincipal
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Get-vRAUserPrincipal -LocalUsersOnly
+PS C:\>Get-vRAUserPrincipal -LocalUsersOnly
 
 
 
@@ -73,7 +73,7 @@ C:\PS>Get-vRAUserPrincipal -LocalUsersOnly
 
 -------------------------- EXAMPLE 3 --------------------------
 
-C:\PS>Get-vRAUserPrincipal -Id user@vsphere.local
+PS C:\>Get-vRAUserPrincipal -Id user@vsphere.local
 
 
 
@@ -83,6 +83,6 @@ C:\PS>Get-vRAUserPrincipal -Id user@vsphere.local
 
 -------------------------- EXAMPLE 4 --------------------------
 
-C:\PS>Get-vRAUserPrincipal -UserName user@vsphere.local
+PS C:\>Get-vRAUserPrincipal -UserName user@vsphere.local
 ```
 

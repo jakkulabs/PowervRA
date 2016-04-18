@@ -54,7 +54,7 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Invoke-vRARestMethod -Method GET -URI '/identity/api/tenants'
+PS C:\>Invoke-vRARestMethod -Method GET -URI '/identity/api/tenants'
 
 
 
@@ -64,7 +64,7 @@ C:\PS>Invoke-vRARestMethod -Method GET -URI '/identity/api/tenants'
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>$JSON = @"
+PS C:\>$JSON = @"
 
 
 {

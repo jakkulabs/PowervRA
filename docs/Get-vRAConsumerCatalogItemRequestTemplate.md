@@ -53,7 +53,7 @@ System.String
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRAConsumerCatalogItemRequestTemplate -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e
+PS C:\>Get-vRAConsumerCatalogItemRequestTemplate -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e
 
 
 
@@ -63,7 +63,7 @@ C:\PS>Get-vRAConsumerCatalogItemRequestTemplate -Id dab4e578-57c5-4a30-b3b7-2a5c
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Get-vRAConsumerCatalogItemRequestTemplate -Name Centos_Template
+PS C:\>Get-vRAConsumerCatalogItemRequestTemplate -Name Centos_Template
 
 
 
@@ -73,7 +73,7 @@ C:\PS>Get-vRAConsumerCatalogItemRequestTemplate -Name Centos_Template
 
 -------------------------- EXAMPLE 3 --------------------------
 
-C:\PS>Get-vRAConsumerEntitledCatalogItem | Get-vRAConsumerCatalogItemRequestTemplate
+PS C:\>Get-vRAConsumerEntitledCatalogItem | Get-vRAConsumerCatalogItemRequestTemplate
 
 
 
@@ -83,7 +83,7 @@ C:\PS>Get-vRAConsumerEntitledCatalogItem | Get-vRAConsumerCatalogItemRequestTemp
 
 -------------------------- EXAMPLE 4 --------------------------
 
-C:\PS>Get-vRAConsumerEntitledCatalogItem -Name Centos_Template | Get-vRAConsumerCatalogItemRequestTemplate
+PS C:\>Get-vRAConsumerEntitledCatalogItem -Name Centos_Template | Get-vRAConsumerCatalogItemRequestTemplate
 
 
 
@@ -93,6 +93,6 @@ C:\PS>Get-vRAConsumerEntitledCatalogItem -Name Centos_Template | Get-vRAConsumer
 
 -------------------------- EXAMPLE 5 --------------------------
 
-C:\PS>Get-vRAConsumerEntitledCatalogItem -Name Centos_Template | Get-vRAConsumerCatalogItemRequestTemplate | ConvertFrom-Json
+PS C:\>Get-vRAConsumerEntitledCatalogItem -Name Centos_Template | Get-vRAConsumerCatalogItemRequestTemplate | ConvertFrom-Json
 ```
 

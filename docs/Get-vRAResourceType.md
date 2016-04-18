@@ -54,7 +54,7 @@ System.Management.Automation.PSObject.
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRAResourceType
+PS C:\>Get-vRAResourceType
 
 
 
@@ -64,7 +64,7 @@ C:\PS>Get-vRAResourceType
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Get-vRAResourceType -Id "Infrastructure.Machine"
+PS C:\>Get-vRAResourceType -Id "Infrastructure.Machine"
 
 
 
@@ -74,6 +74,6 @@ C:\PS>Get-vRAResourceType -Id "Infrastructure.Machine"
 
 -------------------------- EXAMPLE 3 --------------------------
 
-C:\PS>Get-vRAResourceType -Name "Machine"
+PS C:\>Get-vRAResourceType -Name "Machine"
 ```
 

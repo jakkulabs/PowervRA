@@ -44,7 +44,7 @@ System.Management.Automation.PSObject.
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-C:\PS>Get-vRATenantDirectoryStatus -Id Tenant01 -Domain vrademo.local
+PS C:\>Get-vRATenantDirectoryStatus -Id Tenant01 -Domain vrademo.local
 
 
 
@@ -54,6 +54,6 @@ C:\PS>Get-vRATenantDirectoryStatus -Id Tenant01 -Domain vrademo.local
 
 -------------------------- EXAMPLE 2 --------------------------
 
-C:\PS>Get-vRATenantDirectoryStatus -Id Tenant01 -Domain vrademo.local,test.local
+PS C:\>Get-vRATenantDirectoryStatus -Id Tenant01 -Domain vrademo.local,test.local
 ```
 
