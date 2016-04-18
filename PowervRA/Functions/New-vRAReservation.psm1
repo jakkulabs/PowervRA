@@ -254,7 +254,7 @@
 
                     if ($PSBoundParameters.ContainsKey("ReservationPolicy")){
 
-                        $ReservationPolicyId = (Get-vRAReservationPolicy -Name $ReservationPolicy).id
+                        $ReservationPolicyId = (Get-vRAReservationPolicy -Name $ReservationPolicy).id               
 
                     }
                     else {
