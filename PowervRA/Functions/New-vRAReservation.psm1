@@ -102,10 +102,10 @@
         Name = "Reservation01"
         Tenant = "Tenant01"
         BusinessGroup = "Default Business Group[Tenant01]"
-        #ReservationPolicy = ""
-        #Priority = 0
+        ReservationPolicy = "ReservationPolicy1"
+        Priority = 0
         ComputeResourceId = $ComputeResource.Id
-        #Quota = 0
+        Quota = 0
         MemoryGB = 2048
         Storage = $StorageDefinitionArray
         ResourcePool = "Resources"
