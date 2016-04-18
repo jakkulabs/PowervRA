@@ -5,7 +5,7 @@
 Update a vRA Storage Reservation Policy
 
 ## SYNTAX
- Set-vRAStorageReservationPolicy -Id <String> [-NewName <String>] [-Description <String>] [-WhatIf] [-Confirm] [<CommonParameters>] Set-vRAStorageReservationPolicy -Name <String> [-NewName <String>] [-Description <String>] [-WhatIf] [-Confirm] [<CommonParameters>] Set-vRAStorageReservationPolicy -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Set-vRAStorageReservationPolicy -Id <String> [-NewName <String>] [-Description <String>] [-WhatIf] [-Confirm]  [<CommonParameters>] Set-vRAStorageReservationPolicy -Name <String> [-NewName <String>] [-Description <String>] [-WhatIf] [-Confirm]  [<CommonParameters>] Set-vRAStorageReservationPolicy -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]    
 
 ## DESCRIPTION
 
@@ -87,7 +87,8 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-PS C:\>Set-vRAStorageReservationPolicy -Id "34ae1d6c-9972-4736-acdb-7ee109ad1dbd" -NewName "NewName" -Description "This is the New Name"
+PS C:\>Set-vRAStorageReservationPolicy -Id "34ae1d6c-9972-4736-acdb-7ee109ad1dbd" -NewName "NewName" -Description 
+"This is the New Name"
 
 
 
@@ -97,7 +98,8 @@ PS C:\>Set-vRAStorageReservationPolicy -Id "34ae1d6c-9972-4736-acdb-7ee109ad1dbd
 
 -------------------------- EXAMPLE 2 --------------------------
 
-PS C:\>Set-vRAStorageReservationPolicy -Name StorageReservationPolicy01 -NewName "NewName" -Description "This is the New Name"
+PS C:\>Set-vRAStorageReservationPolicy -Name StorageReservationPolicy01 -NewName "NewName" -Description "This is the 
+New Name"
 
 
 

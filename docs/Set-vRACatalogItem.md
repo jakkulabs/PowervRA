@@ -5,7 +5,7 @@
 Update a vRA catalog item
 
 ## SYNTAX
- Set-vRACatalogItem -Id <String> [-Quota <Int32>] [-Service <String>] [-NewAndNoteworthy <Boolean>] [-WhatIf] [-Confirm] [<CommonParameters>] Set-vRACatalogItem -Id <String> [-Status <String>] [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Set-vRACatalogItem -Id <String> [-Quota <Int32>] [-Service <String>] [-NewAndNoteworthy <Boolean>] [-WhatIf]  [-Confirm] [<CommonParameters>] Set-vRACatalogItem -Id <String> [-Status <String>] [-WhatIf] [-Confirm] [<CommonParameters>]    
 
 ## DESCRIPTION
 
