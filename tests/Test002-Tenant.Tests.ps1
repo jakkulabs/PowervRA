@@ -31,6 +31,12 @@ Describe -Name 'Tenant Tests' -Fixture {
         $TenantDirectoryB.Name | Should Be $JSON.TenantDirectory.Name
     }
 
+    It -Name "Return named Tenant Directory Status for $($JSON.Tenant.Name)" -Test {
+
+        $TenantDirectoryStatusA = Get-vRATenantDirectoryStatus -Id $JSON.Tenant.Name -Domain $JSON.TenantDirectory.Domain
+        $TenantDirectoryStatusA.Tenant | Should Be $JSON.Tenant.Name
+    }
+
     It -Name "Add Named Principal to Tenant Role in $($JSON.Tenant.Name)" -Test {
 
         $TenantRoleA = Add-vRAPrincipalToTenantRole -TenantId $JSON.TenantRole.TenantId -PrincipalId $JSON.TenantRole.PrincipalId -RoleId $JSON.TenantRole.RoleId
