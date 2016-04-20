@@ -6,6 +6,44 @@
     "Username": "TenantAdmin01@vrademo.local",
     "Password": "P@ssword!"
   },
+    "DefaultTenantConnection":
+  {
+    "vRAAppliance": "vraap02.vrademo.local",
+    "Tenant": "vsphere.local",
+    "Username": "administrator@vsphere.local",
+    "Password": "P@ssword!"
+  },
+  "Tenant":
+  {
+    "Name": "Tenant100",
+    "Description": "Tenant 100",
+    "UpdatedDescription": "Tenant 100 Updated",
+    "URLName": "Tenant100",
+    "ContactEmail": "admin.user@tenant01.local",
+    "ID": "Tenant100"
+  },
+  "TenantDirectory":
+  {
+    "Name": "Tenant100",
+    "Description": "Tenant Directory 100",
+    "ID": "Tenant100",
+    "Type": "AD",
+    "Domain": "vrademo.local",
+    "UserNameDN": "CN=tenant100svc,OU=Users,OU=Tenant100,OU=Tenants,DC=vrademo,DC=local",
+    "Password": "P@ssword!",
+    "URL": "ldap://dc01.vrademo.local:389",
+    "GroupBaseSearchDN": "OU=Tenant100,OU=Tenants,DC=vrademo,DC=local",
+    "UpdatedGroupBaseSearchDNs": "OU=Tenants,DC=vrademo,DC=local",
+    "UserBaseSearchDN": "OU=Tenant100,OU=Tenants,DC=vrademo,DC=local",
+    "GroupBaseSearchDNs": "OU=Tenant100,OU=Tenants,DC=vrademo,DC=local",
+    "UserBaseSearchDNs": "OU=Tenant100,OU=Tenants,DC=vrademo,DC=local"
+  },
+  "TenantRole":
+  {
+    "TenantId": "Tenant100",
+    "PrincipalID": "tenantadmins100@vrademo.local",
+    "RoleId": "CSP_TENANT_ADMIN"
+  },
    "BusinessGroup":
   {
     "Name": "BusinessGroup100",
