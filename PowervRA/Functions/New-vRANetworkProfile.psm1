@@ -94,10 +94,6 @@
         [ValidateNotNullOrEmpty()]
         [String]$Description,
 
-        [parameter(Mandatory=$false)]
-        [ValidateNotNullOrEmpty()]
-        [Switch]$Hidden,    
-
         [parameter(Mandatory=$true)]
         [ValidateScript({$_ -match [IPAddress]$_ })]  
         [String]$SubnetMask,
@@ -155,7 +151,8 @@
         [ValidateNotNullOrEmpty()]
         [Int]$DHCPLeaseTime = 0,
         
-        [parameter(Mandatory=$false, ParameterSetName="Routed")]
+        [parameter(Mandatory=$
+        false, ParameterSetName="Routed")]
         [ValidateScript({$_ -match [IPAddress]$_ })] 
         [String]$RangeSubnetMask,
 
@@ -173,19 +170,6 @@
            
         try {
 
-            # --- Convert swtich value to a string 
-
-            if($Hidden) {
-
-                $BoolAsString = "true"
-
-            }
-            else {
-
-                $BoolAsString = "false"
-
-            }
-
             switch($PSBoundParameters.ProfileType) {
 
                 'External' {
@@ -202,7 +186,7 @@
                             "description": "$($Description)",
                             "createdDate": null,
                             "lastModifiedDate": null,
-                            "isHidden": $BoolAsString,
+                            "isHidden": false,
                             "definedRanges": [],
                             "profileType": "EXTERNAL",
                             "subnetMask": "$($SubnetMask)",
