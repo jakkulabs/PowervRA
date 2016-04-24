@@ -24,7 +24,6 @@
     .EXAMPLE
     Remove-vRANetworkProfile -Id 597ff2c1-a35f-4a81-bfd3-ca014
 
-
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High",DefaultParameterSetName="ById")]
 
