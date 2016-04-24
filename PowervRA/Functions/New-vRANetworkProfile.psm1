@@ -33,6 +33,9 @@
     .PARAMETER DNSSearchSuffix
     The DNS search suffix
 
+    .PARAMETER IPRanges
+    An array of ip address ranges
+
     .PARAMETER PrimaryWinsAddress
     The address of the primary wins server
 
@@ -45,6 +48,8 @@
     .PARAMETER ExternalNetworkProfile
     The external network profile that will be linked to that Routed or NAT network profile
 
+    .PARAMETER UseExternalNetworkProfileSettings
+
     .PARAMETER DHCPEnabled
     Enable DHCP for a NAT network profile. Nat type must be One-to-Many
 
@@ -53,12 +58,6 @@
 
     .PARAMETER DHCPEndAddress
     The end address of the dhcp range
-
-    .PARAMETER RangeSubnetMask
-    The subnet mask for the routed range
-
-    .PARAMETER BaseIPAddress
-    The base ip address for the routed range
 
     .INPUTS
     System.String.
@@ -69,7 +68,10 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    New-vRANetworkProfile -ProfileType External -Name Network-External -Description "External" -SubnetMask "255.255.255.0" -GatewayAddress "10.60.1.1" -PrimaryDNSAddress "10.60.1.100" -SecondaryDNSAddress "10.60.1.101" -DNSSuffix "corp.local" -DNSSearchSuffix "corp.local"
+    $DefinedRange1 = New-vRANetworkProfileIPRange -Name "External-Range-01" -Description "Example 1" -StatIPv4Address "10.60.1.2" -EndIPv4Address "10.60.1.5"
+    $DefinedRange2 = New-vRANetworkProfileIPRange -Name "External-Range-02" -Description "Example 2" -StatIPv4Address "10.60.1.10" -EndIPv4Address "10.60.1.20"
+
+    New-vRANetworkProfile -ProfileType External -Name Network-External -Description "External" -SubnetMask "255.255.255.0" -GatewayAddress "10.60.1.1" -PrimaryDNSAddress "10.60.1.100" -SecondaryDNSAddress "10.60.1.101" -DNSSuffix "corp.local" -DNSSearchSuffix "corp.local" -IPRanges $DefinedRange1,$DefinedRange2
 
     .EXAMPLE
     New-vRANetworkProfile -ProfileType NAT -Name Network-NAT -Description "NAT" -SubnetMask "255.255.255.0" -GatewayAddress "10.70.1.1" -PrimaryDNSAddress "10.70.1.100" -SecondaryDNSAddress "10.70.1.101" -DNSSuffix "corp.local" -DNSSearchSuffix "corp.local" -NatType ONETOMANY -ExternalNetworkProfile "Network-External" -DHCPEnabled -DHCPStartAddress "10.70.1.20" -DHCPEndAddress "10.70.1.30"
@@ -82,47 +84,75 @@
 
     Param (
 
-        [parameter(Mandatory=$true)]
-        [ValidateSet("External", "NAT", "Routed", "Private")]
+        [parameter(Mandatory=$true, ValueFromPipelineByPropertyName, ParameterSetName="External")]
+        [parameter(Mandatory=$true, ValueFromPipelineByPropertyName, ParameterSetName="NAT")]
+        [parameter(Mandatory=$true, ValueFromPipelineByPropertyName, ParameterSetName="Routed")]
+        [ValidateSet("External", "NAT", "Routed")]
         [String]$ProfileType,
 
-        [parameter(Mandatory=$true)]
+        [parameter(Mandatory=$true, ParameterSetName="External")]
+        [parameter(Mandatory=$true, ParameterSetName="NAT")]
+        [parameter(Mandatory=$true, ParameterSetName="Routed")]
         [ValidateNotNullOrEmpty()]
         [String]$Name,
     
-        [parameter(Mandatory=$false)]
+        [parameter(Mandatory=$false, ParameterSetName="External")]
+        [parameter(Mandatory=$false, ParameterSetName="NAT")]
+        [parameter(Mandatory=$false, ParameterSetName="Routed")]
         [ValidateNotNullOrEmpty()]
-        [String]$Description,
+        [String]$Description, 
 
-        [parameter(Mandatory=$true)]
+        [parameter(Mandatory=$true, ParameterSetName="External")]
+        [parameter(Mandatory=$true, ParameterSetName="NAT")]
+        [parameter(Mandatory=$true, ParameterSetName="Routed")]
         [ValidateScript({$_ -match [IPAddress]$_ })]  
         [String]$SubnetMask,
 
-        [parameter(Mandatory=$false)]
+        [parameter(Mandatory=$false, ParameterSetName="External")]
+        [parameter(Mandatory=$false, ParameterSetName="NAT")]
+        [parameter(Mandatory=$false, ParameterSetName="Routed")]
         [ValidateScript({$_ -match [IPAddress]$_ })]  
         [String]$GatewayAddress,
 
-        [parameter(Mandatory=$false)]
+        [parameter(Mandatory=$false, ParameterSetName="External")]
+        [parameter(Mandatory=$false, ParameterSetName="NAT")]
+        [parameter(Mandatory=$false, ParameterSetName="Routed")]
         [ValidateScript({$_ -match [IPAddress]$_ })]  
         [String]$PrimaryDNSAddress,
 
-        [parameter(Mandatory=$false)]
+        [parameter(Mandatory=$false, ParameterSetName="External")]
+        [parameter(Mandatory=$false, ParameterSetName="NAT")]
+        [parameter(Mandatory=$false, ParameterSetName="Routed")]
         [ValidateScript({$_ -match [IPAddress]$_ })]  
         [String]$SecondaryDNSAddress,
 
-        [parameter(Mandatory=$false)]
+        [parameter(Mandatory=$false, ParameterSetName="External")]
+        [parameter(Mandatory=$false, ParameterSetName="NAT")]
+        [parameter(Mandatory=$false, ParameterSetName="Routed")]
         [ValidateNotNullOrEmpty()]
         [String]$DNSSuffix,
 
-        [parameter(Mandatory=$false)]
+        [parameter(Mandatory=$false, ParameterSetName="External")]
+        [parameter(Mandatory=$false, ParameterSetName="NAT")]
+        [parameter(Mandatory=$false, ParameterSetName="Routed")]
         [ValidateNotNullOrEmpty()]
         [String]$DNSSearchSuffix,
 
-        [parameter(Mandatory=$false)]
+        [parameter(Mandatory=$true, ParameterSetName="External")]
+        [parameter(Mandatory=$false, ParameterSetName="NAT")]
+        [parameter(Mandatory=$true, ParameterSetName="Routed")]
+        [ValidateNotNullOrEmpty()]
+        [PSCustomObject[]]$IPRanges,
+
+        [parameter(Mandatory=$false, ParameterSetName="External")]
+        [parameter(Mandatory=$false, ParameterSetName="NAT")]
+        [parameter(Mandatory=$false, ParameterSetName="Routed")]
         [ValidateScript({$_ -match [IPAddress]$_ })] 
         [String]$PrimaryWinsAddress,
 
-        [parameter(Mandatory=$false)]
+        [parameter(Mandatory=$false, ParameterSetName="External")]
+        [parameter(Mandatory=$false, ParameterSetName="NAT")]
+        [parameter(Mandatory=$false, ParameterSetName="Routed")]
         [ValidateScript({$_ -match [IPAddress]$_ })]  
         [String]$SecondaryWinsAddress,
 
@@ -131,9 +161,14 @@
         [String]$NatType,
 
         [parameter(Mandatory=$true, ParameterSetName="NAT")]
-        [parameter(ParameterSetName="Routed")]
+        [parameter(Mandatory=$true, ParameterSetName="Routed")]
         [ValidateNotNullOrEmpty()]
         [String]$ExternalNetworkProfile,
+
+        [parameter(Mandatory=$false, ParameterSetName="NAT")]
+        [parameter(Mandatory=$false, ParameterSetName="Routed")]
+        [ValidateNotNullOrEmpty()]
+        [Switch]$UseExternalNetworkProfileSettings,
 
         [parameter(Mandatory=$false, ParameterSetName="NAT")]
         [ValidateNotNullOrEmpty()]
@@ -151,8 +186,7 @@
         [ValidateNotNullOrEmpty()]
         [Int]$DHCPLeaseTime = 0,
         
-        [parameter(Mandatory=$
-        false, ParameterSetName="Routed")]
+        [parameter(Mandatory=$false, ParameterSetName="Routed")]
         [ValidateScript({$_ -match [IPAddress]$_ })] 
         [String]$RangeSubnetMask,
 
@@ -195,11 +229,25 @@
                             "secondaryDnsAddress": "$($SecondaryDNSAddress)",
                             "dnsSuffix": "$($DNSSuffix)",
                             "dnsSearchSuffix": "$($DNSSearchSuffix)",
-                            "primaryWinsAddress": "$($PrimaryDNSAddress)",
-                            "secondaryWinsAddress": "$($SecondaryDNSAddress)"
+                            "primaryWinsAddress": "$($PrimaryWinsAddress)",
+                            "secondaryWinsAddress": "$($SecondaryWinsAddress)"
                         }
 
-"@             
+"@
+
+                    if ($PSBoundParameters.ContainsKey("IPRanges")) {
+
+                        $Object = $Template | ConvertFrom-Json
+
+                        foreach ($IPRange in $IPRanges) {
+
+                            $Object.definedRanges += $IPRange
+
+                        }
+
+                        $Template = $Object | ConvertTo-Json -Depth 20 -Compress
+
+                    }
                 
                     break
 
@@ -219,6 +267,48 @@
 
                     }
 
+                    if ($UseExternalNetworkProfileSettings) {
+
+                        Write-Verbose -Message "Using External Network Profile Settings"
+                    
+                        if ($ExternalNetworkProfileObject.primaryDNSAddress) {
+                        
+                            $PrimaryDNSAddress = $ExternalNetworKProfileObject.primaryDNSAddress
+
+                        }
+
+                        if ($ExternalNetworkProfileObject.secondaryDNSAddress) {
+
+                            $SecondaryDNSAddress = $ExternalNetworKProfileObject.secondaryDNSAddress
+
+                        }
+
+                        if ($ExternalNetworkProfileObject.dnsSuffix) {
+
+                            $DNSSuffix = $ExternalNetworKProfileObject.dnsSuffix
+
+                        }
+
+                        if ($ExternalNetworkProfileObject.dnsSearchSuffix) {
+
+                            $DNSSearchSuffix = $ExternalNetworKProfileObject.dnsSearchSuffix
+
+                        }
+
+                        if ($ExternalNetworkProfileObject.primaryWinsAddress) {
+
+                            $PrimaryWinsAddress = $ExternalNetworKProfileObject.primaryWinsAddress
+
+                        }
+
+                        if ($ExternalNetworkProfileObject.secondaryWinsAddress) {
+
+                            $SecondaryWinsAddress = $ExternalNetworKProfileObject.secondaryWinsAddress
+
+                        }
+
+                    }
+
                     # --- Define the network profile template
 
                     $Template = @"
@@ -229,7 +319,7 @@
                             "description": "$($Description)",
                             "createdDate": null,
                             "lastModifiedDate": null,
-                            "isHidden": $BoolAsString,
+                            "isHidden": false,
                             "definedRanges": [],
                             "profileType": "NAT",
                             "natType": "$($NatType)",
@@ -247,13 +337,13 @@
 
 "@
 
-                        # --- Enable DHCP
+                    # --- Enable DHCP
 
-                        if ($DHCPEnabled -and $NatType -eq "ONETOMANY") {
+                    if ($DHCPEnabled -and $NatType -eq "ONETOMANY") {
 
-                            Write-Verbose -Message "DHCP has been enabled and nat type is set to One-to-Many"
+                        Write-Verbose -Message "DHCP has been enabled and nat type is set to One-to-Many"
                             
-                            $DHCPConfigurationTemplate = @"
+                        $DHCPConfigurationTemplate = @"
 
                                 {
                                     "dhcpStartIPAddress": "$($DHCPStartAddress)",
@@ -261,20 +351,37 @@
                                     "dhcpLeaseTimeInSeconds": $($DHCPLeaseTime)
                                 }
 
+
+
 "@
-                            # --- Add the dhcp configuration to the network profile object
+                            
+                        # --- Add the dhcp configuration to the network profile object
 
-                            $Object = $Template | ConvertFrom-Json
+                        $Object = $Template | ConvertFrom-Json
 
-                            $DHCPConfiguration = $DHCPConfigurationTemplate | ConvertFrom-Json               
+                        $DHCPConfiguration = $DHCPConfigurationTemplate | ConvertFrom-Json               
 
-                            Add-Member -InputObject $Object -MemberType NoteProperty -Name "dhcpConfig" -Value $DHCPConfiguration
+                        Add-Member -InputObject $Object -MemberType NoteProperty -Name "dhcpConfig" -Value $DHCPConfiguration
 
-                            # --- Convert the modified object back to json
+                        # --- Convert the modified object back to json
 
-                            $Template = $Object | ConvertTo-Json -Depth 20 -Compress
+                        $Template = $Object | ConvertTo-Json -Depth 20 -Compress
+
+                    }
+
+                    if ($PSBoundParameters.ContainsKey("IPRanges")) {
+
+                        $Object = $Template | ConvertFrom-Json
+
+                        foreach ($IPRange in $IPRanges) {
+
+                            $Object.definedRanges += $IPRange
 
                         }
+
+                        $Template = $Object | ConvertTo-Json -Depth 20 -Compress
+
+                    }
                 
                     break
 
@@ -294,6 +401,48 @@
 
                     }
 
+                    if ($UseExternalNetworkProfileSettings) {
+
+                        Write-Verbose -Message "Using External Network Profile Settings"
+                    
+                        if ($ExternalNetworkProfileObject.primaryDNSAddress) {
+                        
+                            $PrimaryDNSAddress = $ExternalNetworKProfileObject.primaryDNSAddress
+
+                        }
+
+                        if ($ExternalNetworkProfileObject.secondaryDNSAddress) {
+
+                            $SecondaryDNSAddress = $ExternalNetworKProfileObject.secondaryDNSAddress
+
+                        }
+
+                        if ($ExternalNetworkProfileObject.dnsSuffix) {
+
+                            $DNSSuffix = $ExternalNetworKProfileObject.dnsSuffix
+
+                        }
+
+                        if ($ExternalNetworkProfileObject.dnsSearchSuffix) {
+
+                            $DNSSearchSuffix = $ExternalNetworKProfileObject.dnsSearchSuffix
+
+                        }
+
+                        if ($ExternalNetworkProfileObject.primaryWinsAddress) {
+
+                            $PrimaryWinsAddress = $ExternalNetworKProfileObject.primaryWinsAddress
+
+                        }
+
+                        if ($ExternalNetworkProfileObject.secondaryWinsAddress) {
+
+                            $SecondaryWinsAddress = $ExternalNetworKProfileObject.secondaryWinsAddress
+
+                        }
+
+                    }
+
                     # --- Define the network profile template
                
                     $Template = @"
@@ -304,7 +453,7 @@
                             "description": "$($Description)",
                             "createdDate": null,
                             "lastModifiedDate": null,
-                            "isHidden": $($BoolAsString),
+                            "isHidden": false,
                             "definedRanges": [],
                             "profileType": "ROUTED",
                             "rangeSubnetMask": "$($RangeSubnetMask)",
@@ -321,17 +470,23 @@
                         }
 
 "@
-                
+
+                    if ($PSBoundParameters.ContainsKey("IPRanges")) {
+
+                        $Object = $Template | ConvertFrom-Json
+
+                        foreach ($IPRange in $IPRanges) {
+
+                            $Object.definedRanges += $IPRange
+
+                        }
+
+                        $Template = $Object | ConvertTo-Json -Depth 20 -Compress
+
+                    }                
+
                     break
 
-                }
-
-                'Private' {
-
-                    Write-Verbose -Message "Support for this network profile type has not been added"
-                
-                    break
-                
                 }
 
             }
@@ -350,6 +505,7 @@
                 # --- Output the Successful Result
                 Get-vRANetworkProfile -Name $Name
             }
+
         }
         catch [Exception]{
 
