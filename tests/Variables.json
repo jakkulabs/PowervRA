@@ -44,6 +44,18 @@
     "PrincipalID": "tenantadmins100@vrademo.local",
     "RoleId": "CSP_TENANT_ADMIN"
   },
+  "ReservationPolicy":
+  {
+    "Name": "ReservationPolicy100",
+    "NewName": "ReservationPolicy100New",
+    "Description": "Reservation Policy 100"
+  },
+  "StorageReservationPolicy":
+  {
+    "Name": "StorageReservationPolicy100",
+    "NewName": "StorageReservationPolicy100New",
+    "Description": "Storage Reservation Policy 100"
+  },
    "BusinessGroup":
   {
     "Name": "BusinessGroup100",
