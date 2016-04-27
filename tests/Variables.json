@@ -65,5 +65,13 @@
     "SupportUser": "busgroupsu100@vrademo.local",
     "BasicUser": "busgroupbu100@vrademo.local",
     "MachinePrefixId": "87e99513-cbea-4589-8678-c84c5907bdf2"
+  },
+   "Service":
+  {
+    "Name": "Service100",
+    "Description": "Service 100",
+    "UpdatedDescription": "Service 100 Updated",
+    "Owner": "serviceowner01@vrademo.local",
+    "SupportTeam": "servicesupport01@vrademo.local"
   }
 }
