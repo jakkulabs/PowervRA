@@ -73,5 +73,15 @@
     "UpdatedDescription": "Service 100 Updated",
     "Owner": "serviceowner01@vrademo.local",
     "SupportTeam": "servicesupport01@vrademo.local"
+  },
+   "Entitlement":
+  {
+    "Name": "Entitlement",
+    "Description": "Entitlement ",
+    "UpdatedDescription": "Entitlement Updated",
+    "BusinessGroup": "BusinessGroup01",
+    "Principals": "TenantUsers01@vrademo.local",
+    "EntitledCatalogItems": "centos",
+    "EntitledServices": "Service01"
   }
 }

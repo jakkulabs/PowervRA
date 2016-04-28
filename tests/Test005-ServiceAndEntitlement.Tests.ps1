@@ -26,11 +26,25 @@ Describe -Name 'Service and Entitlement Tests' -Fixture {
         $ServiceD.Description | Should Be $JSON.Service.UpdatedDescription
     }
 
+    $Global:Suffix = Get-Random -Minimum 0 -Maximum 10001
+    It -Name "Create named Entitlement $($JSON.Entitlement.Name + $Global:Suffix)" -Test {
+        
+        $EntitlementA = New-vRAEntitlement -Name ($JSON.Entitlement.Name + $Global:Suffix) -Description $JSON.Entitlement.Description -BusinessGroup $JSON.Entitlement.BusinessGroup -Principals $JSON.Entitlement.Principals -EntitledServices $JSON.Entitlement.EntitledServices
+        $EntitlementA.Name | Should Be ($JSON.Entitlement.Name + $Global:Suffix) 
+    }
 
+    It -Name "Return named Entitlement $($JSON.Entitlement.Name + $Global:Suffix)" -Test {
 
+        $EntitlementB = Get-vRAEntitlement -Name ($JSON.Entitlement.Name + $Global:Suffix) 
+        $EntitlementB.Name | Should Be ($JSON.Entitlement.Name + $Global:Suffix) 
+    }
 
+    It -Name "Update named Entitlement $($JSON.Entitlement.Name + $Global:Suffix)" -Test {
 
-
+        $EntitlementC = Get-vRAEntitlement -Name ($JSON.Entitlement.Name + $Global:Suffix) 
+        $EntitlementD = Set-vRAEntitlement -Id $EntitlementC.Id -Description $JSON.Entitlement.UpdatedDescription -Confirm:$false
+        $EntitlementD.Description | Should Be $JSON.Entitlement.UpdatedDescription
+    }
 
     It -Name "Remove named Service $($JSON.Service.Name)" -Test {
 
