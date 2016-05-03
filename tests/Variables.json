@@ -83,5 +83,13 @@
     "Principals": "TenantUsers01@vrademo.local",
     "EntitledCatalogItems": "centos",
     "EntitledServices": "Service01"
+  },
+   "Blueprint":
+  {
+    "Name": "centos"
+  },
+   "ServiceBlueprint":
+  {
+    "Name": "Create cluster"
   }
 }
