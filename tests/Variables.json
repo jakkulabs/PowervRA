@@ -91,5 +91,12 @@
    "ServiceBlueprint":
   {
     "Name": "Create cluster"
+  },
+   "ContentPackage":
+  {
+    "Name": "ContentPackage100",
+    "Description": "Content Package 100 ",
+    "BlueprintName": "centos",
+    "FileName": "C:\\Packages\\ContentPackage100.zip"
   }
 }
