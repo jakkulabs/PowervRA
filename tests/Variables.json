@@ -98,5 +98,28 @@
     "Description": "Content Package 100 ",
     "BlueprintName": "centos",
     "FileName": "C:\\Packages\\ContentPackage100.zip"
+  },
+  "Reservation":
+  {
+    "Name": "Reservation100",
+    "UpdatedName": "Reservation100Updated",
+    "ComputeResourceName": "Cluster01 (vCenter)",
+    "ComputeResourceMemoryTotalSizeMB": "8191",
+    "NetworkPath": "VM Network",
+    "NetworkProfile": "PowervRA-External",
+    "AdditionalNetworkPath": "VM Network2",
+    "AdditionalNetworkProfile": "PowervRA-External",
+    "Datastore": "NFS001",
+    "DatastoreReservedSizeGB": "1",
+    "DatastorePriority": "0",
+    "AdditionalDatastore": "datastore1",
+    "AdditionalDatastoreReservedSizeGB": "0",
+    "AdditionalDatastorePriority": "1",
+    "BusinessGroup": "Default Business Group[Tenant01]",
+    "ReservationPolicy": "ReservationPolicy01",
+    "Priority": "0",
+    "Quota": "0",
+    "MemoryGB": "2048",
+    "ResourcePool": "Resources"
   }
 }
