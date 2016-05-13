@@ -13,6 +13,13 @@
     "Username": "administrator@vsphere.local",
     "Password": "P@ssword!"
   },
+  "UserConnection":
+  {
+    "vRAAppliance": "vraap02.vrademo.local",
+    "Tenant": "Tenant01",
+    "Username": "TenantUser01@vrademo.local",
+    "Password": "P@ssword!"
+  },
   "Tenant":
   {
     "Name": "Tenant100",
@@ -121,5 +128,21 @@
     "Quota": "0",
     "MemoryGB": "2048",
     "ResourcePool": "Resources"
+  },
+   "CatalogItem":
+  {
+    "Name": "centos",
+    "ConsumerResource": "vm30"
+  },
+   "Misc":
+  {
+    "ApplianceServiceName": "iaas-service",
+    "AuthorizationRole": "CSP_TENANT_ADMIN",
+    "ConsumerResourceOperationId": "a4d57b16-9706-471b-9960-d0855fe544bb",
+    "ResourceOperation": "Power On",
+    "ResourceTypeId": "Infrastructure.Machine",
+    "ConsumerService": "Default Service",
+    "GroupPrincipal": "TenantAdmins01@vrademo.local",
+    "UserPrincipal": "TenantAdmin01@vrademo.local"
   }
 }
