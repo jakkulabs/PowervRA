@@ -6,14 +6,8 @@ function Set-vRAUserPrincipal {
     .DESCRIPTION
     Update a vRA Principal (user)
 
-    .PARAMETER TenantId
-    Tenant ID
-    
-    .PARAMETER Name
-    Principal Name
-
-    .PARAMETER PrincipalId
-    Principal id in user@company.com format
+    .PARAMETER Id
+    The principal id of the user
     
     .PARAMETER FirstName
     First Name

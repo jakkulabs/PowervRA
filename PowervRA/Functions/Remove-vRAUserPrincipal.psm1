@@ -6,7 +6,7 @@
     .DESCRIPTION
     Remove a vRA local user principal
     
-    .PARAMETER PrincipalId
+    .PARAMETER Id
     The principal id of the user
 
     .INPUTS

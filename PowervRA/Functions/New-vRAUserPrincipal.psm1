@@ -9,9 +9,6 @@ function New-vRAUserPrincipal {
     .PARAMETER TenantId
     Tenant ID
     
-    .PARAMETER Name
-    Principal Name
-
     .PARAMETER PrincipalId
     Principal id in user@company.com format
     
@@ -29,6 +26,9 @@ function New-vRAUserPrincipal {
 
     .PARAMETER Password
     Users password
+    
+    .PARAMETER Credential
+    Credential object
     
     .PARAMETER JSON
     Body text to send in JSON format
@@ -68,10 +68,10 @@ function New-vRAUserPrincipal {
 
     Param (
 
-    [parameter(Mandatory=$true,ParameterSetName="Credential")]
-    [parameter(Mandatory=$true,ParameterSetName="Password")]    
+    [parameter(Mandatory=$false,ParameterSetName="Credential")]
+    [parameter(Mandatory=$false,ParameterSetName="Password")]    
     [ValidateNotNullOrEmpty()]
-    [String]$TenantId,
+    [String]$TenantId = $Global:vRAConnection.Tenant,
     
     [parameter(Mandatory=$true,ParameterSetName="Password")]
     [ValidateNotNullOrEmpty()]
