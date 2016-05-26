@@ -142,8 +142,7 @@
     "UserPrincipalLastName": "Admin",
     "UserPrincipalDescription": "Tenant Admin 02 Description",
     "UserPrincipalEmailAddress": "tenantadmin02@company.com",
-    "UserPrincipalPassword": "P@ssword!"
-    
+    "UserPrincipalPassword": "P@ssword!"    
   },  
    "Misc":
   {
