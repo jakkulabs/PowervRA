@@ -134,6 +134,17 @@
     "Name": "centos",
     "ConsumerResource": "vm30"
   },
+  "Principal":
+  {
+    "UserPrincipalId": "TeanantAdmin02@vsphere.local",
+    "UserPrincipalFirstName": "Tenant",
+    "UserPrincipalFirstNameUpdated": "Tenant-Updated",
+    "UserPrincipalLastName": "Admin",
+    "UserPrincipalDescription": "Tenant Admin 02 Description",
+    "UserPrincipalEmailAddress": "tenantadmin02@company.com",
+    "UserPrincipalPassword": "P@ssword!"
+    
+  },  
    "Misc":
   {
     "ApplianceServiceName": "iaas-service",
