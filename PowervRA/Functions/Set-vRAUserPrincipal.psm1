@@ -158,7 +158,7 @@ function Set-vRAUserPrincipal {
 
                     $URI = "/identity/api/tenants/$($PrincipalObject.TenantName)/principals/$($PrincipalId)"  
 
-                    Write-Verbose -Message "Preparing POST to $($URI)"     
+                    Write-Verbose -Message "Preparing PUT to $($URI)"     
 
                     # --- Run vRA REST Request           
                     Invoke-vRARestMethod -Method PUT -URI $URI -Body $Body | Out-Null
