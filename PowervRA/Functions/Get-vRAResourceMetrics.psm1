@@ -68,26 +68,28 @@
                     Write-Verbose -Message "Found machineid $($MachineId) for resource $($Resource.name)"
 
                     # --- Using $filter param here because GET method doesn't return stats
-                    $URI = "/management-service/api/management/metrics?limit=$($Limit)&`$filter=name%20eq%20'$($MachineId)'"
+                    $URI = "/management-service/api/management/metrics"
 
-                    Write-Verbose -Message "Preparing PUT to $($URI)"
+                    Write-Verbose -Message "Preparing GET to $($URI)"
 
                     $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body "{}"
+                    
+                    $Metric = $Response.Content | Where-Object {$_.iaasUuid -eq $MachineId}
 
                     Write-Verbose -Message "SUCCESS"
 
                     [pscustomobject] @{
 
-                        Moref = $Response.content.moref
-                        vCOPSUuid = $Response.content.vcopsUuid
-                        IaasUuid = $Response.content.iaasUuid
-                        ServerGuid = $Response.content.serverGuid
-                        PendingRequest = $Response.content.pendingRequest
-                        DailyCost = $Response.content.dailyCost
-                        ExpirationDate = $Response.content.expirationDate
-                        Health = $Response.content.health
-                        Stats = $Response.content.stats
-                        Strings = $Response.content.strings
+                        Moref = $Metric.moref
+                        vCOPSUuid = $Metric.vcopsUuid
+                        IaasUuid = $Metric.iaasUuid
+                        ServerGuid = $Metric.serverGuid
+                        PendingRequest = $Metric.pendingRequest
+                        DailyCost = $Metric.dailyCost
+                        ExpirationDate = $Metric.expirationDate
+                        Health = $Metric.health
+                        Stats = $Metric.stats
+                        Strings = $Metric.strings
 
                     }
 
@@ -109,29 +111,33 @@
                     Write-Verbose -Message "Found machineid $($MachineId) for resource $($ResourceName)"
 
                     # --- Using $filter param here because GET method doesn't return stats
-                    $URI = "/management-service/api/management/metrics?limit=$($Limit)&`$filter=name%20eq%20'$($MachineId)'"
+                    $URI = "/management-service/api/management/metrics"
 
-                    Write-Verbose -Message "Preparing PUT to $($URI)"
+                    Write-Verbose -Message "Preparing GET to $($URI)"
 
                     $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body "{}"
+                    
+                    $Metric = $Response.Content | Where-Object {$_.iaasUuid -eq $MachineId}
+
+                    Write-Verbose -Message "SUCCESS"
 
                     [pscustomobject] @{
 
-                        Moref = $Response.content.moref
-                        vCOPSUuid = $Response.content.vcopsUuid
-                        IaasUuid = $Response.content.iaasUuid
-                        ServerGuid = $Response.content.serverGuid
-                        PendingRequest = $Response.content.pendingRequest
-                        DailyCost = $Response.content.dailyCost
-                        ExpirationDate = $Response.content.expirationDate
-                        Health = $Response.content.health
-                        Stats = $Response.content.stats
-                        Strings = $Response.content.strings
+                        Moref = $Metric.moref
+                        vCOPSUuid = $Metric.vcopsUuid
+                        IaasUuid = $Metric.iaasUuid
+                        ServerGuid = $Metric.serverGuid
+                        PendingRequest = $Metric.pendingRequest
+                        DailyCost = $Metric.dailyCost
+                        ExpirationDate = $Metric.expirationDate
+                        Health = $Metric.health
+                        Stats = $Metric.stats
+                        Strings = $Metric.strings
 
                     }
-
+                    
                 }
-
+                    
                 break
 
             }
