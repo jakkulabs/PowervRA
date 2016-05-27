@@ -49,17 +49,14 @@ Describe -Name 'Misc Tests' -Fixture {
         $ConsumerServiceA.Name | Should Be $JSON.Misc.ConsumerService
     }
 
-    It -Name "Return named Group Principal for $($JSON.Misc.GroupPrincipal)" -Test {
-
-        $GroupPrincipalA = Get-vRAGroupPrincipal -Id $JSON.Misc.GroupPrincipal
-        $GroupPrincipalA.PrincipalId | Should Be $JSON.Misc.GroupPrincipal
+    It -Name "Return Metrics for a named Resource $($JSON.Misc.MetricsVM)" -Test {
+        
+        $MetricsA = Get-vRAResourceMetrics -Name $JSON.Misc.MetricsVM
+        
+        $MetricsA | Should Not Be $null
+        
     }
 
-    It -Name "Return named User Principal for $($JSON.Misc.UserPrincipal)" -Test {
-
-        $UserPrincipalA = Get-vRAUserPrincipal -Id $JSON.Misc.UserPrincipal
-        $UserPrincipalA.PrincipalId | Should Be $JSON.Misc.UserPrincipal
-    }
 }
 
 # --- Cleanup

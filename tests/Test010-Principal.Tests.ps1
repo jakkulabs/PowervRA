@@ -21,14 +21,12 @@ Describe -Name 'User Principal Tests' -Fixture {
         
     }
 
-    <#
     It -Name "Update named User Principal $($JSON.Principal.UserPrincipalId)" -Test {
 
         $UserPrincipalC = Set-vRAUserPrincipal -Id $JSON.Principal.UserPrincipalId -FirstName $JSON.Principal.UserPrincipalFirstNameUpdated
         $UserPrincipalC.FirstName | Should Be $JSON.Principal.UserPrincipalFirstNameUpdated
 
     }
-    #>    
 
     It -Name "Remove named User Principal $($JSON.Principal.UserPrincipalId)" -Test {
 
@@ -64,6 +62,7 @@ Describe -Name 'Group Principal Tests' -Fixture {
         
     }
 
+    <#
     It -Name "Update named Group Principal $($JSON.Principal.GroupPrincipalName)" -Test {
 
         # --- API Method does not work.
@@ -72,6 +71,7 @@ Describe -Name 'Group Principal Tests' -Fixture {
         $GroupPrincipalC.Description | Should Be $JSON.Principal.GroupPrincipalDescriptionUpdated
 
     }
+    #>
 
     It -Name "Remove named User Principal $($JSON.Principal.GroupPrincipalName)" -Test {
         

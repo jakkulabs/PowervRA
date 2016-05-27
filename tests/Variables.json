@@ -155,7 +155,6 @@
     "ResourceOperation": "Power On",
     "ResourceTypeId": "Infrastructure.Machine",
     "ConsumerService": "Default Service",
-    "GroupPrincipal": "TenantAdmins01@vrademo.local",
-    "UserPrincipal": "TenantAdmin01@vrademo.local"
+    "MetricsVM": "vm32"
   }
 }
