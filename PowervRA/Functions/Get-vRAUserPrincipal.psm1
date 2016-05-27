@@ -33,6 +33,9 @@
     .EXAMPLE
     Get-vRAUserPrincipal -UserName user@vsphere.local
     
+    .EXAMPLE
+    Get-vRAUserPrincipal -PrincipalId user@vsphere.local    
+    
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
@@ -40,7 +43,7 @@
 
     [parameter(Mandatory=$true, ParameterSetName="byId")]
     [ValidateNotNullOrEmpty()]
-    [Alias("UserName")]
+    [Alias("UserName","PrincipalId")]
     [String[]]$Id,
     
     [parameter(Mandatory=$false, ParameterSetName="Standard")]
