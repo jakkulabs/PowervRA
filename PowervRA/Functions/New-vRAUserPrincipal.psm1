@@ -6,8 +6,8 @@ function New-vRAUserPrincipal {
     .DESCRIPTION
     Create a vRA Principal (user)
 
-    .PARAMETER TenantId
-    Tenant ID
+    .PARAMETER Tenant
+    The tenant
     
     .PARAMETER PrincipalId
     Principal id in user@company.com format
@@ -40,7 +40,7 @@ function New-vRAUserPrincipal {
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    New-vRAUserPrincipal -TenantId vsphere.local -FirstName "Test" -LastName "User" -EmailAddress "user@company.com" -Description "a description" -Password "password" -PrincipalId "user@vsphere.local"
+    New-vRAUserPrincipal -Tenant vsphere.local -FirstName "Test" -LastName "User" -EmailAddress "user@company.com" -Description "a description" -Password "password" -PrincipalId "user@vsphere.local"
     
     .EXAMPLE
     $JSON = @"
@@ -71,7 +71,7 @@ function New-vRAUserPrincipal {
     [parameter(Mandatory=$false,ParameterSetName="Credential")]
     [parameter(Mandatory=$false,ParameterSetName="Password")]    
     [ValidateNotNullOrEmpty()]
-    [String]$TenantId = $Global:vRAConnection.Tenant,
+    [String]$Tenant = $Global:vRAConnection.Tenant,
     
     [parameter(Mandatory=$true,ParameterSetName="Password")]
     [ValidateNotNullOrEmpty()]
@@ -123,7 +123,7 @@ function New-vRAUserPrincipal {
             if ($PSBoundParameters.ContainsKey("JSON")){
         
                 $Body = $JSON
-                $TenantId = ($JSON | ConvertFrom-Json).tenantName
+                $Tenant = ($JSON | ConvertFrom-Json).tenantName
                 
             }
             else {
@@ -148,7 +148,7 @@ function New-vRAUserPrincipal {
                     "description" : "$($Description)",
                     "password" : "$($Password)",
                     "principalId": { "domain": "$($Domain)", "name": "$($Name)"} ,
-                    "tenantName" : "$($TenantId)",
+                    "tenantName" : "$($Tenant)",
                     "name" : "$($FirstName) $($LastName)"
                 }
 "@
@@ -157,7 +157,7 @@ function New-vRAUserPrincipal {
 
             if ($PSCmdlet.ShouldProcess($PrincipalId)){
 
-                $URI = "/identity/api/tenants/$($TenantId)/principals"  
+                $URI = "/identity/api/tenants/$($Tenant)/principals"  
 
                 Write-Verbose -Message "Preparing POST to $($URI)"     
 
