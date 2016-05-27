@@ -9,7 +9,7 @@ Describe -Name 'User Principal Tests' -Fixture {
 
     It -Name "Create named User Principal $($JSON.Principal.UserPrincipalId)" -Test {
 
-        $UserPrincipalA = New-vRAUserPrincipal -TenantId $JSON.Connection.Tenant -FirstName $JSON.Principal.UserPrincipalFirstName -LastName $JSON.Principal.UserPrincipalLastName -EmailAddress $JSON.Principal.UserPrincipalEmailAddress -Description $JSON.Principal.UserPrincipalDescription -Password $JSON.Principal.UserPrincipalPassword -PrincipalId $JSON.Principal.UserPrincipalId
+        $UserPrincipalA = New-vRAUserPrincipal -Tenant $JSON.Connection.Tenant -FirstName $JSON.Principal.UserPrincipalFirstName -LastName $JSON.Principal.UserPrincipalLastName -EmailAddress $JSON.Principal.UserPrincipalEmailAddress -Description $JSON.Principal.UserPrincipalDescription -Password $JSON.Principal.UserPrincipalPassword -PrincipalId $JSON.Principal.UserPrincipalId
         $UserPrincipalA.FirstName | Should Be $Json.Principal.UserPrincipalFirstName
                 
     }
@@ -40,6 +40,51 @@ Describe -Name 'User Principal Tests' -Fixture {
         catch {}
         
         $UserPrincipalD | Should Be $null
+                
+    }
+       
+}
+
+Describe -Name 'Group Principal Tests' -Fixture {
+
+    It -Name "Create named Custom Group $($JSON.Principal.GroupPrincipalName)" -Test {
+
+        $GroupPrincipalA = New-vRAGroupPrincipal -Tenant $JSON.Connection.Tenant -Name $JSON.Principal.GroupPrincipalName -Description $JSON.Principal.GroupPrincipalDescription
+        $GroupPrincipalA.Name | Should Be $JSON.Principal.GroupPrincipalName
+                        
+    }
+
+    It -Name "Return named Custom Group $($JSON.Principal.GroupPrincipalName)" -Test {
+        
+        $GroupPrincipalId = "$($JSON.Principal.GroupPrincipalName)@$($JSON.Connection.Tenant)"
+        $GroupPrincipalB = Get-vRAGroupPrincipal -Id $GroupPrincipalId
+        $GroupPrincipalB.Name | Should Be $JSON.Principal.GroupPrincipalName
+        
+    }
+
+    It -Name "Update named Group Principal $($JSON.Principal.GroupPrincipalName)" -Test {
+
+        # --- API Method does not work.
+        $GroupPrincipalId = "$($JSON.Principal.GroupPrincipalName)@$($JSON.Connection.Tenant)"
+        $GroupPrincipalC = Set-vRAGroupPrincipal -Id $GroupPrincipalId -Description $JSON.Principal.GroupPrincipalDescriptionUpdated
+        $GroupPrincipalC.Description | Should Be $JSON.Principal.GroupPrincipalDescriptionUpdated
+
+    }
+
+    It -Name "Remove named User Principal $($JSON.Principal.GroupPrincipalName)" -Test {
+        
+        $GroupPrincipalId = "$($JSON.Principal.GroupPrincipalName)@$($JSON.Connection.Tenant)"
+
+        Remove-vRAGroupPrincipal -Id $GroupPrincipalId -Confirm:$false
+        
+        try {
+            
+            $GroupPrincipalName = Get-vRAGroupPrincipal -Id  $GroupPrincipalId            
+            
+        }
+        catch {}
+        
+        $GroupPrincipalName | Should Be $null
                 
     }
        
