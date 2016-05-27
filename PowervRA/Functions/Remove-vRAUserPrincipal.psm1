@@ -38,16 +38,16 @@
     
     process {    
             
-        foreach ($PrincipalId in $Id){
+        foreach ($UserId in $Id){
                 
             try {
                 
-                if ($PSCmdlet.ShouldProcess($PrincipalId)){
+                if ($PSCmdlet.ShouldProcess($UserId)){
                     
                     # --- Get the user principal object
-                    $User = Get-vRAUserPrincipal -Id $PrincipalId
+                    $User = Get-vRAUserPrincipal -Id $UserId
 
-                    $URI = "/identity/api/tenants/$($User.TenantName)/principals/$($PrincipalId)"  
+                    $URI = "/identity/api/tenants/$($User.TenantName)/principals/$($UserId)"  
                     
                     Write-Verbose -Message "Preparing DELETE to $($URI)"                        
 
