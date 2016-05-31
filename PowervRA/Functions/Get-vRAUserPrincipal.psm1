@@ -35,7 +35,6 @@
     
     .EXAMPLE
     Get-vRAUserPrincipal -PrincipalId user@vsphere.local    
-    
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
@@ -45,6 +44,10 @@
     [ValidateNotNullOrEmpty()]
     [Alias("UserName","PrincipalId")]
     [String[]]$Id,
+    
+    [parameter(Mandatory=$false)]
+    [ValidateNotNullOrEmpty()]
+    [String]$Tenant = $Global:vRAConnection.Tenant,    
     
     [parameter(Mandatory=$false, ParameterSetName="Standard")]
     [Switch]$LocalUsersOnly,   
@@ -60,7 +63,7 @@
             
             foreach ($UserId in $Id){
 
-                $URI = "/identity/api/tenants/$($Global:vRAConnection.Tenant)/principals/$($UserId)"
+                $URI = "/identity/api/tenants/$($Tenant)/principals/$($UserId)"
 
                 # --- Run vRA REST Request
                 $Response = Invoke-vRARestMethod -Method GET -URI $URI
@@ -90,7 +93,7 @@
                 
             }
             
-            $URI = "/identity/api/tenants/$($Global:vRAConnection.Tenant)/principals?limit=$($Limit)$($Params)"
+            $URI = "/identity/api/tenants/$($Tenant)/principals?limit=$($Limit)$($Params)"
             
             # --- Run vRA REST Request
             $Response = Invoke-vRARestMethod -Method GET -URI $URI
