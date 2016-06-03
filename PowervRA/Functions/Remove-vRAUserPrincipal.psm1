@@ -8,6 +8,9 @@
     
     .PARAMETER Id
     The principal id of the user
+    
+    .PARAMETER Tenant
+    The tenant of the user
 
     .INPUTS
     System.String.

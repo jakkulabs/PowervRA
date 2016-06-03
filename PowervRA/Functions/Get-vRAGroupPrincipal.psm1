@@ -9,6 +9,9 @@
     .PARAMETER Id
     The Id of the group
     
+    .PARAMETER Tenant
+    The tenant of the group
+    
     .PARAMETER Limit
     The number of entries returned per page from the API. This has a default value of 100.
 
@@ -25,70 +28,86 @@
     Get-vRAGroupPrincipal -Id group@vsphere.local
     
     .EXAMPLE
-    Get-vRAGroupPrincipal -GroupName group@vsphere.local    
+    Get-vRAGroupPrincipal -PrincipalId group@vsphere.local    
 
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
-    [parameter(Mandatory=$true, ParameterSetName="ById")]
+    [parameter(Mandatory=$true,ParameterSetName="ById")]    
     [ValidateNotNullOrEmpty()]
-    [Alias("GroupName")]
+    [Alias("PrincipalId")]
     [String[]]$Id,
+    
+    [parameter(Mandatory=$false,ParameterSetName="Standard")]
+    [parameter(Mandatory=$true,ParameterSetName="ById")]    
+    [ValidateNotNullOrEmpty()]
+    [String]$Tenant = $Global:vRAConnection.Tenant,          
           
-    [parameter(Mandatory=$false)]
+    [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
     [String]$Limit = "100"
+    
     )
                 
     try {
-        # --- If the Id parameter is passed return only that Tenant
-        if ($PSBoundParameters.ContainsKey("Id")){ 
+
+        switch ($PsCmdlet.ParameterSetName) {
             
-            foreach ($GroupId in $Id){
+            'ById' {
+                
+                foreach ($GroupId in $Id){
 
-                $URI = "/identity/api/tenants/$($Global:vRAConnection.Tenant)/groups/$($GroupId)"
+                    $URI = "/identity/api/tenants/$($Tenant)/groups/$($GroupId)"
 
+                    # --- Run vRA REST Request
+                    $Response = Invoke-vRARestMethod -Method GET -URI $URI
+                
+                    [pscustomobject] @{
+
+                        GroupType = $Response.groupType
+                        Name = $Response.name
+                        Domain = $Response.domain
+                        Description = $Response.description
+                        PrincipalId = "$($Response.principalId.name)@$($Response.principalId.domain)"
+
+                    }                                    
+
+                }                
+   
+            }
+            
+            'Standard' {
+ 
+                $URI = "/identity/api/tenants/$($Tenant)/groups?limit=$($Limit)"
+                
                 # --- Run vRA REST Request
                 $Response = Invoke-vRARestMethod -Method GET -URI $URI
-            
-                [pscustomobject] @{
+                
+                foreach ($Principal in $Response.content) {
+                
+                    [pscustomobject] @{
 
-                    GroupType = $Response.groupType
-                    Name = $Response.name
-                    Domain = $Response.domain
-                    Description = $Response.description
-                    PrincipalId = "$($Response.principalId.name)@$($Response.principalId.domain)"
+                        GroupType = $Principal.groupType
+                        Name = $Principal.name
+                        Domain = $Principal.domain
+                        Description = $Principal.description
+                        PrincipalId = "$($Principal.principalId.name)@$($Principal.principalId.domain)"
 
-                }
-            }
+                    }
+
+                }               
+                                
+            }                             
+  
         }
-        else { 
-
-              
-            $URI = "/identity/api/tenants/$($Global:vRAConnection.Tenant)/groups?limit=$($Limit)"
-            
-            # --- Run vRA REST Request
-            $Response = Invoke-vRARestMethod -Method GET -URI $URI
-            
-            foreach ($Principal in $Response.content) {
-            
-                [pscustomobject] @{
-
-                    GroupType = $Principal.groupType
-                    Name = $Principal.name
-                    Domain = $Principal.domain
-                    Description = $Principal.description
-                    PrincipalId = "$($Principal.principalId.name)@$($Principal.principalId.domain)"
-
-                }
-
-            }
-        }
+        
     }
     catch [Exception]{
 
         throw
+        
     }
+    
 }

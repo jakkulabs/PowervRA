@@ -7,7 +7,7 @@ function New-vRAUserPrincipal {
     Create a vRA Principal (user)
 
     .PARAMETER Tenant
-    The tenant
+    The tenant of the user
     
     .PARAMETER PrincipalId
     Principal id in user@company.com format
@@ -179,4 +179,5 @@ function New-vRAUserPrincipal {
     end {
         
     }
+    
 }

@@ -59,8 +59,7 @@ function Set-vRAUserPrincipal {
     [parameter(Mandatory=$true,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
     [String]$Id,
-    
-    
+       
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
     [String]$Tenant = $Global:vRAConnection.Tenant,      

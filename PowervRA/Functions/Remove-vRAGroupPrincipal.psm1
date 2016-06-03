@@ -8,6 +8,9 @@
     
     .PARAMETER Id
     The principal id of the custom group
+    
+    .PARAMETER Tenant
+    The tenant of the group
 
     .INPUTS
     System.String.
@@ -28,7 +31,11 @@
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
     [ValidateNotNullOrEmpty()]
     [Alias("PrincipalId")]
-    [String[]]$Id
+    [String[]]$Id,
+    
+    [parameter(Mandatory=$false,ParameterSetName="Standard")]
+    [ValidateNotNullOrEmpty()]
+    [String]$Tenant = $Global:vRAConnection.Tenant    
     
     )    
 
@@ -45,9 +52,9 @@
                 if ($PSCmdlet.ShouldProcess($GroupId)){
                     
                     # --- Get the user principal object
-                    $Group = Get-vRAGroupPrincipal -Id $GroupId
+                    $Group = Get-vRAGroupPrincipal -Tenant $Tenant -Id $GroupId
 
-                    $URI = "/identity/api/tenants/$($Group.Domain)/groups/$($GroupId)"  
+                    $URI = "/identity/api/tenants/$($Tenant)/groups/$($GroupId)"  
                     
                     Write-Verbose -Message "Preparing DELETE to $($URI)"                        
 
