@@ -50,10 +50,7 @@
             try {
                 
                 if ($PSCmdlet.ShouldProcess($GroupId)){
-                    
-                    # --- Get the user principal object
-                    $Group = Get-vRAGroupPrincipal -Tenant $Tenant -Id $GroupId
-
+                   
                     $URI = "/identity/api/tenants/$($Tenant)/groups/$($GroupId)"  
                     
                     Write-Verbose -Message "Preparing DELETE to $($URI)"                        
