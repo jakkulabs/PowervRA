@@ -48,7 +48,7 @@
 
     [parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
-    [String[]]$Limit = "100"
+    [String]$Limit = "100"
 
     )
                 
