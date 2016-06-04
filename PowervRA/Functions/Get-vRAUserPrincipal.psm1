@@ -61,80 +61,92 @@
     [String]$Limit = "100"
     
     )
+    
+    being {}
+    
+    process {
                 
-    try {
-        
-        switch ($PSCmdlet.ParameterSetName){
+        try {
             
-            'ById'{
+            switch ($PSCmdlet.ParameterSetName){
+                
+                'ById'{
 
-                foreach ($UserId in $Id){
+                    foreach ($UserId in $Id){
 
-                    $URI = "/identity/api/tenants/$($Tenant)/principals/$($UserId)"
+                        $URI = "/identity/api/tenants/$($Tenant)/principals/$($UserId)"
 
+                        # --- Run vRA REST Request
+                        $Response = Invoke-vRARestMethod -Method GET -URI $URI
+                    
+                        [pscustomobject] @{
+
+                            FirstName = $Response.firstName
+                            LastName = $Response.lastName
+                            EmailAddress = $Response.emailAddress
+                            Description = $Response.description
+                            Locked = $Response.locked
+                            Disabled = $Response.disabled
+                            Password = $Response.password
+                            PrincipalId = "$($Response.principalId.name)@$($Response.principalId.domain)"
+                            TenantName = $Response.tenantName
+                            Name = $Response.name
+
+                        }
+                        
+                    }
+                    
+                    break
+                                    
+                }
+                
+                'Standard' {
+                        
+                    if ($PSBoundParameters.ContainsKey("LocalUsersOnly")) {
+                        
+                        $Params = "&localUsersOnly=true"
+                        
+                    }
+                    
+                    $URI = "/identity/api/tenants/$($Tenant)/principals?limit=$($Limit)$($Params)"
+                    
                     # --- Run vRA REST Request
                     $Response = Invoke-vRARestMethod -Method GET -URI $URI
-                
-                    [pscustomobject] @{
+                    
+                    foreach ($Principal in $Response.content) {
+                    
+                        [pscustomobject] @{
 
-                        FirstName = $Response.firstName
-                        LastName = $Response.lastName
-                        EmailAddress = $Response.emailAddress
-                        Description = $Response.description
-                        Locked = $Response.locked
-                        Disabled = $Response.disabled
-                        Password = $Response.password
-                        PrincipalId = "$($Response.principalId.name)@$($Response.principalId.domain)"
-                        TenantName = $Response.tenantName
-                        Name = $Response.name
+                            FirstName = $Principal.firstName
+                            LastName = $Principal.lastName
+                            EmailAddress = $Principal.emailAddress
+                            Description = $Principal.description
+                            Locked = $Principal.locked
+                            Disabled = $Principal.disabled
+                            Password = $Principal.password
+                            PrincipalId = "$($Principal.principalId.name)@$($Principal.principalId.domain)"
+                            TenantName = $Principal.tenantName
+                            Name = $Principal.name
 
+                        }
+                        
                     }
                     
+                    break                                
+                    
                 }
-                                
+        
             }
             
-            'Standard' {
-                     
-                if ($PSBoundParameters.ContainsKey("LocalUsersOnly")) {
-                    
-                    $Params = "&localUsersOnly=true"
-                    
-                }
-                
-                $URI = "/identity/api/tenants/$($Tenant)/principals?limit=$($Limit)$($Params)"
-                
-                # --- Run vRA REST Request
-                $Response = Invoke-vRARestMethod -Method GET -URI $URI
-                
-                foreach ($Principal in $Response.content) {
-                
-                    [pscustomobject] @{
+        }
+        catch [Exception]{
 
-                        FirstName = $Principal.firstName
-                        LastName = $Principal.lastName
-                        EmailAddress = $Principal.emailAddress
-                        Description = $Principal.description
-                        Locked = $Principal.locked
-                        Disabled = $Principal.disabled
-                        Password = $Principal.password
-                        PrincipalId = "$($Principal.principalId.name)@$($Principal.principalId.domain)"
-                        TenantName = $Principal.tenantName
-                        Name = $Principal.name
-
-                    }
-                    
-                }                                
-                
-            }
-     
+            throw
+            
         }
         
     }
-    catch [Exception]{
-
-        throw
-        
-    }
+    
+    end {}
     
 }

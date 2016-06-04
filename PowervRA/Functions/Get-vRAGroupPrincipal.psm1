@@ -50,64 +50,76 @@
     [String]$Limit = "100"
     
     )
+    
+    being {}
+    
+    process {
                 
-    try {
+        try {
 
-        switch ($PsCmdlet.ParameterSetName) {
-            
-            'ById' {
+            switch ($PsCmdlet.ParameterSetName) {
                 
-                foreach ($GroupId in $Id){
+                'ById' {
+                    
+                    foreach ($GroupId in $Id){
 
-                    $URI = "/identity/api/tenants/$($Tenant)/groups/$($GroupId)"
+                        $URI = "/identity/api/tenants/$($Tenant)/groups/$($GroupId)"
 
-                    # --- Run vRA REST Request
-                    $Response = Invoke-vRARestMethod -Method GET -URI $URI
-                
-                    [pscustomobject] @{
+                        # --- Run vRA REST Request
+                        $Response = Invoke-vRARestMethod -Method GET -URI $URI
+                    
+                        [pscustomobject] @{
 
-                        GroupType = $Response.groupType
-                        Name = $Response.name
-                        Domain = $Response.domain
-                        Description = $Response.description
-                        PrincipalId = "$($Response.principalId.name)@$($Response.principalId.domain)"
+                            GroupType = $Response.groupType
+                            Name = $Response.name
+                            Domain = $Response.domain
+                            Description = $Response.description
+                            PrincipalId = "$($Response.principalId.name)@$($Response.principalId.domain)"
 
-                    }                                    
-
-                }                
-   
-            }
-            
-            'Standard' {
- 
-                $URI = "/identity/api/tenants/$($Tenant)/groups?limit=$($Limit)"
-                
-                # --- Run vRA REST Request
-                $Response = Invoke-vRARestMethod -Method GET -URI $URI
-                
-                foreach ($Principal in $Response.content) {
-                
-                    [pscustomobject] @{
-
-                        GroupType = $Principal.groupType
-                        Name = $Principal.name
-                        Domain = $Principal.domain
-                        Description = $Principal.description
-                        PrincipalId = "$($Principal.principalId.name)@$($Principal.principalId.domain)"
+                        }                                    
 
                     }
+                    
+                    break                
+    
+                }
+                
+                'Standard' {
+    
+                    $URI = "/identity/api/tenants/$($Tenant)/groups?limit=$($Limit)"
+                    
+                    # --- Run vRA REST Request
+                    $Response = Invoke-vRARestMethod -Method GET -URI $URI
+                    
+                    foreach ($Principal in $Response.content) {
+                    
+                        [pscustomobject] @{
 
-                }               
-                                
-            }                             
-  
+                            GroupType = $Principal.groupType
+                            Name = $Principal.name
+                            Domain = $Principal.domain
+                            Description = $Principal.description
+                            PrincipalId = "$($Principal.principalId.name)@$($Principal.principalId.domain)"
+
+                        }
+
+                    }
+                    
+                    break              
+                                    
+                }
+                
+            }
+            
+        }
+        catch [Exception]{
+
+            throw
+            
         }
         
     }
-    catch [Exception]{
-
-        throw
-        
-    }
     
+    end {}
+        
 }
