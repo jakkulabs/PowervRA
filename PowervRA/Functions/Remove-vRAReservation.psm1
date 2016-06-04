@@ -53,7 +53,7 @@
 
                         if ($PSCmdlet.ShouldProcess($ReservationId)){
 
-                            $URI = "/reservation-service/api/reservations/$($Id)"
+                            $URI = "/reservation-service/api/reservations/$($ReservationId)"
             
                             Write-Verbose -Message "Preparing DELETE to $($URI)"
 
@@ -75,9 +75,9 @@
 
                         if ($PSCmdlet.ShouldProcess($ReservationName)){
 
-                            $Id = (Get-vRAReservation -Name $ReservationName).id
+                            $ReservationId = (Get-vRAReservation -Name $ReservationName).id
 
-                            $URI = "/reservation-service/api/reservations/$($Id)"
+                            $URI = "/reservation-service/api/reservations/$($ReservationId)"
             
                             Write-Verbose -Message "Preparing DELETE to $($URI)"
 
