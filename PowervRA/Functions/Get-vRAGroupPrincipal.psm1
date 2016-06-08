@@ -41,7 +41,7 @@
     [String[]]$Id,
     
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [parameter(Mandatory=$true,ParameterSetName="ById")]    
+    [parameter(Mandatory=$false,ParameterSetName="ById")]    
     [ValidateNotNullOrEmpty()]
     [String]$Tenant = $Global:vRAConnection.Tenant,          
           
