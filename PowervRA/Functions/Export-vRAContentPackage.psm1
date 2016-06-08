@@ -49,6 +49,11 @@ if (-not $Global:vRAConnection){
 
     throw "vRA Connection variable does not exist. Please run Connect-vRAServer first to create it"
 }
+# --- Test for vRA API version
+if ($Global:vRAConnection.APIVersion -lt 7){
+
+    throw "$($MyInvocation.MyCommand) is not supported with vRA API version $($Global:vRAConnection.APIVersion)"
+}
 
 # --- Work with Untrusted Certificates
 if (-not ($Global:vRAConnection.SignedCertificates)){
