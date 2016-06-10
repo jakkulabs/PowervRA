@@ -8,6 +8,9 @@
     
     .PARAMETER Id
     The principal id of the user
+    
+    .PARAMETER Tenant
+    The tenant of the user
 
     .INPUTS
     System.String.
@@ -28,12 +31,20 @@
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
     [ValidateNotNullOrEmpty()]
     [Alias("PrincipalId")]
-    [String[]]$Id
+    [String[]]$Id,
+    
+    [parameter(Mandatory=$false)]
+    [ValidateNotNullOrEmpty()]
+    [String]$Tenant = $Global:vRAConnection.Tenant      
     
     )    
 
     begin {
-    
+        # --- Test for vRA API version
+        if ($Global:vRAConnection.APIVersion -lt 7){
+
+            throw "$($MyInvocation.MyCommand) is not supported with vRA API version $($Global:vRAConnection.APIVersion)"
+        }    
     }
     
     process {    
@@ -43,11 +54,8 @@
             try {
                 
                 if ($PSCmdlet.ShouldProcess($UserId)){
-                    
-                    # --- Get the user principal object
-                    $User = Get-vRAUserPrincipal -Id $UserId
 
-                    $URI = "/identity/api/tenants/$($User.TenantName)/principals/$($UserId)"  
+                    $URI = "/identity/api/tenants/$($Tenant)/principals/$($UserId)"  
                     
                     Write-Verbose -Message "Preparing DELETE to $($URI)"                        
 

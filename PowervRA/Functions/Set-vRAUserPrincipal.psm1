@@ -9,6 +9,9 @@ function Set-vRAUserPrincipal {
     .PARAMETER Id
     The principal id of the user
     
+    .PARAMETER Tenant
+    The tenant of the user
+    
     .PARAMETER FirstName
     First Name
 
@@ -56,6 +59,10 @@ function Set-vRAUserPrincipal {
     [parameter(Mandatory=$true,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
     [String]$Id,
+       
+    [parameter(Mandatory=$false,ParameterSetName="Standard")]
+    [ValidateNotNullOrEmpty()]
+    [String]$Tenant = $Global:vRAConnection.Tenant,      
     
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
@@ -90,7 +97,11 @@ function Set-vRAUserPrincipal {
     )    
 
     begin {
-    
+        # --- Test for vRA API version
+        if ($Global:vRAConnection.APIVersion -lt 7){
+
+            throw "$($MyInvocation.MyCommand) is not supported with vRA API version $($Global:vRAConnection.APIVersion)"
+        }    
     }
     
     process {
@@ -99,7 +110,7 @@ function Set-vRAUserPrincipal {
             
             foreach ($PrincipalId in $Id) {
                 
-                $URI = "/identity/api/tenants/$($Global:vRAConnection.Tenant)/principals/$($PrincipalId)"
+                $URI = "/identity/api/tenants/$($Tenant)/principals/$($PrincipalId)"
                 $PrincipalObject = Invoke-vRARestMethod -Method GET -URI $URI
                 
                 if ($PSBoundParameters.ContainsKey("FirstName")) {
@@ -156,14 +167,14 @@ function Set-vRAUserPrincipal {
                 
                 if ($PSCmdlet.ShouldProcess($PrincipalId)){
 
-                    $URI = "/identity/api/tenants/$($PrincipalObject.TenantName)/principals/$($PrincipalId)"  
+                    $URI = "/identity/api/tenants/$($Tenant)/principals/$($PrincipalId)"  
 
                     Write-Verbose -Message "Preparing PUT to $($URI)"     
 
                     # --- Run vRA REST Request           
                     Invoke-vRARestMethod -Method PUT -URI $URI -Body $Body | Out-Null
                     
-                    Get-vRAUserPrincipal -Id $PrincipalId
+                    Get-vRAUserPrincipal -Tenant $Tenant -Id $PrincipalId
                     
                 }                                
                 

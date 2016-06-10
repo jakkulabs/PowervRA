@@ -1,4 +1,4 @@
-﻿function Get-vRAResourceMetrics {
+﻿function Get-vRAResourceMetric {
 <#
     .SYNOPSIS
     Retrieve metrics for a deployed resource
@@ -22,16 +22,16 @@
     System.Management.Automation.PSObject.
 
     .EXAMPLE
-    Get-vRAResourceMetrics
+    Get-vRAResourceMetric
 
     .EXAMPLE
-    Get-vRAConsumerCatalogItem -Name vm01 | Get-vRAResourceMetrics
+    Get-vRAConsumerCatalogItem -Name vm01 | Get-vRAResourceMetric
 
     .EXAMPLE
-    Get-vRAResourceMetrics -Id "448fcd09-b8c0-482c-abbc-b3ab818c2e31"
+    Get-vRAResourceMetric -Id "448fcd09-b8c0-482c-abbc-b3ab818c2e31"
 
     .EXAMPLE
-    Get-vRAResourceMetrics -Name vm01
+    Get-vRAResourceMetric -Name vm01
     
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
@@ -48,9 +48,14 @@
 
     [parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
-    [String[]]$Limit = "100"
+    [String]$Limit = "100"
 
     )
+# --- Test for vRA API version
+if ($Global:vRAConnection.APIVersion -lt 7){
+
+    throw "$($MyInvocation.MyCommand) is not supported with vRA API version $($Global:vRAConnection.APIVersion)"
+}
                 
     try {
 

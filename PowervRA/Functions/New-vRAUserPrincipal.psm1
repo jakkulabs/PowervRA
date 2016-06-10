@@ -7,7 +7,7 @@ function New-vRAUserPrincipal {
     Create a vRA Principal (user)
 
     .PARAMETER Tenant
-    The tenant
+    The tenant of the user
     
     .PARAMETER PrincipalId
     Principal id in user@company.com format
@@ -67,15 +67,15 @@ function New-vRAUserPrincipal {
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low",DefaultParameterSetName="Password")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
-
-    [parameter(Mandatory=$false,ParameterSetName="Credential")]
-    [parameter(Mandatory=$false,ParameterSetName="Password")]    
-    [ValidateNotNullOrEmpty()]
-    [String]$Tenant = $Global:vRAConnection.Tenant,
     
     [parameter(Mandatory=$true,ParameterSetName="Password")]
     [ValidateNotNullOrEmpty()]
     [String]$PrincipalId,
+    
+    [parameter(Mandatory=$false,ParameterSetName="Credential")]
+    [parameter(Mandatory=$false,ParameterSetName="Password")]    
+    [ValidateNotNullOrEmpty()]
+    [String]$Tenant = $Global:vRAConnection.Tenant,    
     
     [parameter(Mandatory=$true,ParameterSetName="Credential")]
     [parameter(Mandatory=$true,ParameterSetName="Password")] 
@@ -112,7 +112,11 @@ function New-vRAUserPrincipal {
     )    
 
     begin {
-    
+        # --- Test for vRA API version
+        if ($Global:vRAConnection.APIVersion -lt 7){
+
+            throw "$($MyInvocation.MyCommand) is not supported with vRA API version $($Global:vRAConnection.APIVersion)"
+        }    
     }
     
     process {
@@ -164,7 +168,7 @@ function New-vRAUserPrincipal {
                 # --- Run vRA REST Request           
                 Invoke-vRARestMethod -Method POST -URI $URI -Body $Body | Out-Null
                 
-                Get-vRAUserPrincipal -Id $PrincipalId
+                Get-vRAUserPrincipal -Tenant $Tenant -Id $PrincipalId
                 
             }
 
@@ -179,4 +183,5 @@ function New-vRAUserPrincipal {
     end {
         
     }
+    
 }

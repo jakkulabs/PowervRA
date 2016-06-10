@@ -39,11 +39,9 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
-
     New-vRAEntitlement -Name "TestEntitlement" -Description "a test" -BusinessGroup "Test01" -Principals "user@vsphere.local" -EntitledCatalogItems "centos7","centos6" -EntitledServices "Default service" -Verbose
 
     .EXAMPLE
-
     $JSON = @"
                     {
                       "description": "",
@@ -121,7 +119,11 @@
     )    
 
     begin {
-    
+        # --- Test for vRA API version
+        if ($Global:vRAConnection.APIVersion -lt 7){
+
+            throw "$($MyInvocation.MyCommand) is not supported with vRA API version $($Global:vRAConnection.APIVersion)"
+        }    
     }
     
     process {

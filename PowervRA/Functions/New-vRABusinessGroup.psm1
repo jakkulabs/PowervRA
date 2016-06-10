@@ -40,7 +40,7 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    New-vRATenantBusinessGroup -TenantId Tenant01 -Name BusinessGroup01 -Description "Business Group 01" -BusinessGroupManager "busgroupmgr01@vrademo.local","busgroupmgr02@vrademo.local" -SupportUser "supportusers@vrademo.local" `
+    New-vRABusinessGroup -TenantId Tenant01 -Name BusinessGroup01 -Description "Business Group 01" -BusinessGroupManager "busgroupmgr01@vrademo.local","busgroupmgr02@vrademo.local" -SupportUser "supportusers@vrademo.local" `
      -User "basicusers@vrademo.local" -MachinePrefixId "87e99513-cbea-4589-8678-c84c5907bdf2" -SendManagerEmailsTo "busgroupmgr01@vrademo.local"
     
     .EXAMPLE
@@ -147,7 +147,11 @@
     )    
 
     begin {
-    
+        # --- Test for vRA API version
+        if ($Global:vRAConnection.APIVersion -lt 7){
+
+            throw "$($MyInvocation.MyCommand) is not supported with vRA API version $($Global:vRAConnection.APIVersion)"
+        }    
     }
     
     process {

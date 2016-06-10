@@ -7,7 +7,7 @@ function New-vRAGroupPrincipal {
     Create a vRA Principal (user)
 
     .PARAMETER Tenant
-    The tenant
+    The tenant of the group
     
     .PARAMETER Name
     Group name
@@ -109,7 +109,7 @@ function New-vRAGroupPrincipal {
                 # --- Run vRA REST Request           
                 Invoke-vRARestMethod -Method POST -URI $URI -Body $Body | Out-Null
                 
-                Get-vRAGroupPrincipal -Id "$($Name)@$($Tenant)"
+                Get-vRAGroupPrincipal -Tenant $Tenant -Id "$($Name)@$($Tenant)"
                 
             }
 
@@ -124,4 +124,5 @@ function New-vRAGroupPrincipal {
     end {
         
     }
+        
 }

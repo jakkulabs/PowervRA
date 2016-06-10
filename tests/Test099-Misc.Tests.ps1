@@ -51,7 +51,7 @@ Describe -Name 'Misc Tests' -Fixture {
 
     It -Name "Return Metrics for a named Resource $($JSON.Misc.MetricsVM)" -Test {
         
-        $MetricsA = Get-vRAResourceMetrics -Name $JSON.Misc.MetricsVM
+        $MetricsA = Get-vRAResourceMetric -Name $JSON.Misc.MetricsVM
         
         $MetricsA | Should Not Be $null
         
