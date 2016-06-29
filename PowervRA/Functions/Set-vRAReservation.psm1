@@ -48,7 +48,7 @@
     .PARAMETER MachineAlertPercentageLevel
     The threshold for machine alerts
 
-    .PARAMETER AlertFrequencyReminder
+    .PARAMETER AlertReminderFrequency
     Alert frequency in days
 
     .INPUTS
@@ -133,7 +133,7 @@
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [Int]$AlertFrequencyReminder
+    [Int]$AlertReminderFrequency
 
     )
  
@@ -223,7 +223,7 @@
 
             if ($PSBoundParameters.ContainsKey("AlertReminderFrequency")){
 
-                Write-Verbose "Updating Alert Policy Reminder Frequency: $($Reservation.alertPolicy.frequencyReminder) >> $($AlertFrequencyReminder)"
+                Write-Verbose "Updating Alert Policy Reminder Frequency: $($Reservation.alertPolicy.frequencyReminder) >> $($AlertReminderFrequency)"
 
                 $Reservation.alertPolicy.frequencyReminder = $AlertReminderFrequency
 
