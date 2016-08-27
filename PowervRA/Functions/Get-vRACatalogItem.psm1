@@ -17,7 +17,7 @@
     Show catalog items that are not assigned to a service
 
     .PARAMETER Limit
-    The number of entries returned per page from the API. This has a default value of 100.
+    The number of entries returned per page from the API. This has a default value of 100
 
     .PARAMETER Page
     The index of the page to display.
@@ -61,14 +61,14 @@
         [Parameter(Mandatory=$false,ValueFromPipeline=$false,ParameterSetName="Standard")]
         [Switch]$ListAvailable, 
 
-        [Parameter(Mandatory=$false,ValueFromPipeline=$false)]
+        [Parameter(Mandatory=$false,ValueFromPipeline=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
         [Int]$Page = 1,
 
-        [Parameter(Mandatory=$false,ValueFromPipeline=$false)]
+        [Parameter(Mandatory=$false,ValueFromPipeline=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
         [Int]$Limit = 100
-    
+
     )      
 
     try {
@@ -82,7 +82,9 @@
             
                     $URI = "/catalog-service/api/catalogItems/$($CatalogItemId)"
 
-                    $CatalogItem = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
+                    $EncodedURI = [uri]::EscapeUriString($URI)
+
+                    $CatalogItem = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
 
                     [PSCustomObject] @{
 
@@ -97,12 +99,12 @@
                         LastUpdatedDate = $CatalogItem.lastUpdatedDate                        
                         Requestable = $CatalogItem.requestable
                         IsNoteworthy = $CatalogItem.isNoteworthy
-                        Organization = $CatalogItem.organization                     
+                        Organization = $CatalogItem.organization
+                        CatalogItemType = $CatalogItem.catalogItemTypeRef.label                                            
+                        OutputResourceType = $CatalogItem.outputResourceTypeRef.label
                         Callbacks = $CatalogItem.callbacks
-                        CatalogItemTypeRef = $CatalogItem.catalogItemTypeRef
                         Forms = $CatalogItem.forms
                         IconId = $CatalogItem.iconId
-                        OutputResourceTypeRef = $CatalogItem.outputResourceTypeRef
                         ProviderBinding = $CatalogItem.providerBinding
 
                     }
@@ -117,13 +119,11 @@
         
                 foreach ($CatalogItemName in $Name) { 
             
-                    $URI = "/catalog-service/api/catalogItems?`$filter=name%20eq%20'$($CatalogItemName)'"            
-            
-                    Write-Verbose -Message "Preparing GET to $($URI)"                
+                    $URI = "/catalog-service/api/catalogItems?`$filter=name eq '$($CatalogItemName)'"            
 
-                    $Response = Invoke-vRARestMethod -Method GET -URI "$($URI)"
+                    $EncodedURI = [uri]::EscapeUriString($URI)
 
-                    Write-Verbose -Message "SUCCESS"
+                    $Response = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
 
                     if ($Response.content.Length -eq 0) {
 
@@ -146,12 +146,12 @@
                         LastUpdatedDate = $CatalogItem.lastUpdatedDate                        
                         Requestable = $CatalogItem.requestable
                         IsNoteworthy = $CatalogItem.isNoteworthy
-                        Organization = $CatalogItem.organization                     
+                        Organization = $CatalogItem.organization
+                        CatalogItemType = $CatalogItem.catalogItemTypeRef.label                                            
+                        OutputResourceType = $CatalogItem.outputResourceTypeRef.label
                         Callbacks = $CatalogItem.callbacks
-                        CatalogItemTypeRef = $CatalogItem.catalogItemTypeRef
                         Forms = $CatalogItem.forms
                         IconId = $CatalogItem.iconId
-                        OutputResourceTypeRef = $CatalogItem.outputResourceTypeRef
                         ProviderBinding = $CatalogItem.providerBinding
 
                     }
@@ -164,15 +164,17 @@
             # --- No parameters passed so return all catalog items
             'Standard' {
 
-                $URI = "/catalog-service/api/catalogItems?limit=$($Limit)&`page=$($Page)&`$orderby=name%20asc"
+                $URI = "/catalog-service/api/catalogItems?limit=$($Limit)&`page=$($Page)&`$orderby=name asc"
 
                 if ($PSBoundParameters.ContainsKey("ListAvailable")) {
 
-                    $URI = "/catalog-service/api/catalogItems/available?limit=$($Limit)&`page=$($Page)&`$orderby=name%20asc"
+                    $URI = "/catalog-service/api/catalogItems/available?limit=$($Limit)&`page=$($Page)&`$orderby=name asc"
 
                 }
 
-                $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
+                $EncodedURI = [uri]::EscapeUriString($URI)
+
+                $Response = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
 
                 foreach ($CatalogItem in $Response.content) {
 
@@ -189,12 +191,12 @@
                         LastUpdatedDate = $CatalogItem.lastUpdatedDate                        
                         Requestable = $CatalogItem.requestable
                         IsNoteworthy = $CatalogItem.isNoteworthy
-                        Organization = $CatalogItem.organization                     
+                        Organization = $CatalogItem.organization
+                        CatalogItemType = $CatalogItem.catalogItemTypeRef.label                                            
+                        OutputResourceType = $CatalogItem.outputResourceTypeRef.label
                         Callbacks = $CatalogItem.callbacks
-                        CatalogItemTypeRef = $CatalogItem.catalogItemTypeRef
                         Forms = $CatalogItem.forms
                         IconId = $CatalogItem.iconId
-                        OutputResourceTypeRef = $CatalogItem.outputResourceTypeRef
                         ProviderBinding = $CatalogItem.providerBinding
 
                     }
