@@ -1,65 +1,65 @@
-﻿function Get-vRAEntitledCatalogItem {
+﻿function Get-vRACatalogItem {
 <#
     .SYNOPSIS
-    Get a catalog item that the user is entitled to see
+    Get a catalog item that the user is allowed to review.
     
     .DESCRIPTION
-    Get catalog items that are entitled to. Consumer Entitled CatalogItem(s) are basically catalog items:
-    - in an active state.
-    - the current user has the right to consume.
-    - the current user is entitled to consume.
-    - associated to a service.
+    API for catalog items that a system administrator can interact with. It allows the user to interact 
+    with catalog items that the user is permitted to review, even if they were not published or entitled to them.
+
+    .PARAMETER Id
+    The id of the catalog item
     
     .PARAMETER Name
     The name of the catalog item
 
-    .PARAMETER Service
-    Return catalog items in a specific service
+    .PARAMETER ListAvailable
+    Show catalog items that are not assigned to a service
 
     .PARAMETER Limit
     The number of entries returned per page from the API. This has a default value of 100
 
     .PARAMETER Page
-    The index of the page to display
+    The index of the page to display.
 
     .INPUTS
     System.String
     System.Int
+    Switch
 
     .OUTPUTS
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    Get-vRAEntitledCatalogItem
+    Get-vRACatalogItem
     
     .EXAMPLE
-    Get-vRAEntitledCatalogItem -Limit 9999
-
-    .EXAMPLE 
-    Get-vRAEntitledCatalogItem -Service "Default Service"
+    Get-vRACatalogItem -Limit 9999
 
     .EXAMPLE
-    Get-vRAEntitledCatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e    
+    Get-vRACatalogItem -ListAvailable
 
     .EXAMPLE
-    Get-vRAEntitledCatalogItem -Name Centos_Template
+    Get-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e
+
+    .EXAMPLE
+    Get-vRACatalogItem -Name Centos_Template
     
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
-
-        [Parameter(Mandatory=$true,ValueFromPipeline=$false,ParameterSetName="ByID")]
+    
+        [Parameter(Mandatory=$true,ValueFromPipeline=$false,ParameterSetName="ById")]
         [ValidateNotNullOrEmpty()]
-        [String[]]$Id,
+        [String[]]$Id,         
 
         [Parameter(Mandatory=$true,ValueFromPipeline=$false,ParameterSetName="ByName")]
         [ValidateNotNullOrEmpty()]
-        [String[]]$Name, 
+        [String[]]$Name,
 
         [Parameter(Mandatory=$false,ValueFromPipeline=$false,ParameterSetName="Standard")]
-        [ValidateNotNullOrEmpty()]
-        [String]$Service, 
+        [Switch]$ListAvailable, 
 
         [Parameter(Mandatory=$false,ValueFromPipeline=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
@@ -67,9 +67,9 @@
 
         [Parameter(Mandatory=$false,ValueFromPipeline=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
-        [Int]$Limit = 100 
+        [Int]$Limit = 100
 
-    )
+    )      
 
     try {
 
@@ -78,15 +78,13 @@
             # --- Get catalog item by id
             'ById' {
 
-                foreach ($EntitledCatalogItemId in $Id) {
-
-                    $URI = "/catalog-service/api/consumer/entitledCatalogItems/$($EntitledCatalogItemId)"
+                foreach ($CatalogItemId in $Id) {
+            
+                    $URI = "/catalog-service/api/catalogItems/$($CatalogItemId)"
 
                     $EncodedURI = [uri]::EscapeUriString($URI)
 
-                    $Response = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
-
-                    $CatalogItem = $Response.catalogItem
+                    $CatalogItem = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
 
                     [PSCustomObject] @{
 
@@ -95,34 +93,33 @@
                         Description = $CatalogItem.description
                         Service = $CatalogItem.serviceRef.label
                         Status = $CatalogItem.status
-                        Quota = $CatalogItemquota
+                        Quota = $CatalogItem.quota
                         Version = $CatalogItem.version
                         DateCreated = $CatalogItem.dateCreated
-                        LastUpdatedDate = $CatalogItem.lastUpdatedDate
+                        LastUpdatedDate = $CatalogItem.lastUpdatedDate                        
                         Requestable = $CatalogItem.requestable
                         IsNoteworthy = $CatalogItem.isNoteworthy
                         Organization = $CatalogItem.organization
-                        CatalogItemType = $CatalogItem.catalogitemTypeRef.label
+                        CatalogItemType = $CatalogItem.catalogItemTypeRef.label                                            
                         OutputResourceType = $CatalogItem.outputResourceTypeRef.label
-                        Callbacks = $CatalogItem.callbacks                        
+                        Callbacks = $CatalogItem.callbacks
                         Forms = $CatalogItem.forms
                         IconId = $CatalogItem.iconId
                         ProviderBinding = $CatalogItem.providerBinding
-                        EntitledOrganizations = $Response.entitledOrganizations 
 
                     }
 
                 }
 
                 break
-
-            }
+             
+            }       
             # --- Get catalog item by name
             'ByName' {
 
-                foreach ($EntitledCatalogItemName in $Name) { 
+                foreach ($CatalogItemName in $Name) { 
 
-                    $URI = "/catalog-service/api/consumer/entitledCatalogItems?`$filter=name eq '$($EntitledCatalogItemName)'"            
+                    $URI = "/catalog-service/api/catalogItems?`$filter=name eq '$($CatalogItemName)'"            
 
                     $EncodedURI = [uri]::EscapeUriString($URI)
 
@@ -130,11 +127,11 @@
 
                     if ($Response.content.Length -eq 0) {
 
-                        throw "Could not find catalog item with name: $($EntitledCatalogItemName)"
+                        throw "Could not find catalog item with name: $($CatalogItemName)"
 
                     }
 
-                    $CatalogItem = $Response.content.catalogItem
+                    $CatalogItem = $Response.content
 
                     [PSCustomObject] @{
 
@@ -143,20 +140,19 @@
                         Description = $CatalogItem.description
                         Service = $CatalogItem.serviceRef.label
                         Status = $CatalogItem.status
-                        Quota = $CatalogItemquota
+                        Quota = $CatalogItem.quota
                         Version = $CatalogItem.version
                         DateCreated = $CatalogItem.dateCreated
-                        LastUpdatedDate = $CatalogItem.lastUpdatedDate
+                        LastUpdatedDate = $CatalogItem.lastUpdatedDate                        
                         Requestable = $CatalogItem.requestable
                         IsNoteworthy = $CatalogItem.isNoteworthy
                         Organization = $CatalogItem.organization
-                        CatalogItemType = $CatalogItem.catalogitemTypeRef.label
+                        CatalogItemType = $CatalogItem.catalogItemTypeRef.label                                            
                         OutputResourceType = $CatalogItem.outputResourceTypeRef.label
-                        Callbacks = $CatalogItem.callbacks                        
+                        Callbacks = $CatalogItem.callbacks
                         Forms = $CatalogItem.forms
                         IconId = $CatalogItem.iconId
                         ProviderBinding = $CatalogItem.providerBinding
-                        EntitledOrganizations = $Response.content.entitledOrganizations
 
                     }
 
@@ -168,13 +164,11 @@
             # --- No parameters passed so return all catalog items
             'Standard' {
 
-                $URI = "/catalog-service/api/consumer/entitledCatalogItems?limit=$($Limit)&`page=$($Page)&`$orderby=name asc"
+                $URI = "/catalog-service/api/catalogItems?limit=$($Limit)&page=$($Page)&`$orderby=name asc"
 
-                if ($PSBoundParameters.ContainsKey("Service")) {
+                if ($PSBoundParameters.ContainsKey("ListAvailable")) {
 
-                    $ServiceId = (Get-vRAService -Name $Service).Id
-
-                    $URI = "$($URI)&serviceId=$($ServiceId)"
+                    $URI = "/catalog-service/api/catalogItems/available?limit=$($Limit)&page=$($Page)&`$orderby=name asc"
 
                 }
 
@@ -182,9 +176,7 @@
 
                 $Response = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
 
-                foreach ($Item in $Response.content) {
-
-                    $CatalogItem = $Item.catalogItem
+                foreach ($CatalogItem in $Response.content) {
 
                     [PSCustomObject] @{
 
@@ -193,20 +185,19 @@
                         Description = $CatalogItem.description
                         Service = $CatalogItem.serviceRef.label
                         Status = $CatalogItem.status
-                        Quota = $CatalogItemquota
+                        Quota = $CatalogItem.quota
                         Version = $CatalogItem.version
                         DateCreated = $CatalogItem.dateCreated
-                        LastUpdatedDate = $CatalogItem.lastUpdatedDate
+                        LastUpdatedDate = $CatalogItem.lastUpdatedDate                        
                         Requestable = $CatalogItem.requestable
                         IsNoteworthy = $CatalogItem.isNoteworthy
                         Organization = $CatalogItem.organization
-                        CatalogItemType = $CatalogItem.catalogitemTypeRef.label
+                        CatalogItemType = $CatalogItem.catalogItemTypeRef.label                                            
                         OutputResourceType = $CatalogItem.outputResourceTypeRef.label
-                        Callbacks = $CatalogItem.callbacks                        
+                        Callbacks = $CatalogItem.callbacks
                         Forms = $CatalogItem.forms
                         IconId = $CatalogItem.iconId
                         ProviderBinding = $CatalogItem.providerBinding
-                        EntitledOrganizations = $CatalogItem.entitledOrganizations
 
                     }
 
@@ -215,6 +206,7 @@
                 Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
 
                 break
+
             }
 
         }
@@ -224,6 +216,6 @@
 
         throw
 
-    }
+     }
 
 }
