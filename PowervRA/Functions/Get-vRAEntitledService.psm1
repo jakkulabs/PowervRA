@@ -1,8 +1,8 @@
 ﻿function Get-vRAEntitledService {
 <#
     .SYNOPSIS
-    Retrieve vRA services that the user is has access to
-
+    Retrieve vRA services that the user is entitled to see
+    
     .DESCRIPTION
     A service represents a customer-facing/user friendly set of activities. In the context of this Service Catalog, 
     these activities are the catalog items and resource actions. 
@@ -28,13 +28,13 @@
     System.Management.Automation.PSObject.
 
     .EXAMPLE
-    Get-vRAService
+    Get-vRAEntitledService
     
     .EXAMPLE
-    Get-vRAService -Id 332d38d5-c8db-4519-87a7-7ef9f358091a
+    Get-vRAEntitledService -Id 332d38d5-c8db-4519-87a7-7ef9f358091a
     
     .EXAMPLE
-    Get-vRAService -Name "Default Service"
+    Get-vRAEntitledService -Name "Default Service"
     
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
@@ -68,7 +68,7 @@
 
                 foreach ($ServiceId in $Id) { 
 
-                    $URI = "/catalog-service/api/services/$($ServiceId)"
+                    $URI = "/catalog-service/api/consumer/services/$($ServiceId)"
 
                     $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
@@ -101,7 +101,7 @@
 
                 foreach ($ServiceName in $Name) {
 
-                    $URI = "/catalog-service/api/services?`$filter=name eq '$($ServiceName)'"
+                    $URI = "/catalog-service/api/consumer/services?`$filter=name eq '$($ServiceName)'"
 
                     $EncodedURI = [uri]::EscapeUriString($URI)
 
@@ -141,7 +141,7 @@
             # --- No parameters passed so return all services
             'Standard' {
 
-                $URI = "/catalog-service/api/services?limit=$($Limit)&page=$($Page)&`$orderby=name asc"
+                $URI = "/catalog-service/api/consumer/services?limit=$($Limit)&page=$($Page)&`$orderby=name asc"
 
                 $EncodedURI = [uri]::EscapeUriString($URI)
 
