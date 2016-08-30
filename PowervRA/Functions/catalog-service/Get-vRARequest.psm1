@@ -101,7 +101,7 @@
 
                     $Request = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
 
-                    if ($Request.Length -eq 0) {
+                    if ($Request.Count -eq 0) {
 
                         throw "Could not find request $($Id)"
 
@@ -160,7 +160,7 @@
 
                     $Response = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
 
-                    if ($Response.content.Length -eq 0) {
+                    if ($Response.content.Count -eq 0) {
 
                         throw "Could not find request number $($RequestN)"
 

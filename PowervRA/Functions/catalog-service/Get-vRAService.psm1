@@ -107,7 +107,7 @@
 
                     $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
-                    if ($Response.content.Length -eq 0) {
+                    if ($Response.content.Count -eq 0) {
 
                         throw "Could not find service with name: $($ServiceName)"
 
