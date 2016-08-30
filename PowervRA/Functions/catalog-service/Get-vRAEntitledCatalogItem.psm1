@@ -128,7 +128,7 @@
 
                     $Response = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
 
-                    if ($Response.content.Length -eq 0) {
+                    if ($Response.content.Count -eq 0) {
 
                         throw "Could not find catalog item with name: $($EntitledCatalogItemName)"
 
