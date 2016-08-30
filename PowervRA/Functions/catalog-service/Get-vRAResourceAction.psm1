@@ -28,7 +28,6 @@ function Get-vRAResourceAction {
 
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true)]
         [ValidateNotNullOrEmpty()]
-        [Alias('Id')]
         [String]$ResourceId
 
     )
