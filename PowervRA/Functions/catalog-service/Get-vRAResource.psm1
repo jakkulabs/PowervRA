@@ -114,7 +114,7 @@
 
                     [PSCustomObject] @{
 
-                        Id = $Resource.resourceId
+                        ResourceId = $Resource.resourceId
                         Name = $Resource.name
                         Description = $Resource.description
                         Status = $Resource.status
@@ -163,7 +163,7 @@
 
                     [PSCustomObject] @{
 
-                        Id = $Resource.resourceId
+                        ResourceId = $Resource.resourceId
                         Name = $Resource.name
                         Description = $Resource.description
                         Status = $Resource.status
@@ -239,7 +239,7 @@
 
                       [PSCustomObject] @{
 
-                        Id = $Resource.resourceId
+                        ResourceId = $Resource.resourceId
                         Name = $Resource.name
                         Description = $Resource.description
                         Status = $Resource.status
