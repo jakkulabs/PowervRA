@@ -68,7 +68,11 @@
     [String]$Limit = "100"
     )
 # --- Test for vRA API version
-if ($Global:vRAConnection.APIVersion -lt 7){
+if (-not $Global:vRAConnection){
+
+    throw "vRA Connection variable does not exist. Please run Connect-vRAServer first to create it"
+}
+elseif ($Global:vRAConnection.APIVersion -lt 7){
 
     throw "$($MyInvocation.MyCommand) is not supported with vRA API version $($Global:vRAConnection.APIVersion)"
 }
