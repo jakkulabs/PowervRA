@@ -97,15 +97,7 @@
 
                     $URI = "/catalog-service/api/consumer/requests/$($RequestId)"
 
-                    $EncodedURI = [uri]::EscapeUriString($URI)
-
-                    $Request = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
-
-                    if ($Request.Count -eq 0) {
-
-                        throw "Could not find request $($Id)"
-
-                    }
+                    $Request = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
                     [PSCustomObject] @{
 
@@ -156,9 +148,9 @@
 
                     $URI = "/catalog-service/api/consumer/requests?`$filter=requestNumber eq '$($RequestN)'"
 
-                    $EncodedURI = [uri]::EscapeUriString($URI)
+                    $EscapedURI = [uri]::EscapeUriString($URI)
 
-                    $Response = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
+                    $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
                     if ($Response.content.Count -eq 0) {
 
@@ -226,10 +218,10 @@
 
                 }
 
-                $EncodedURI = [uri]::EscapeUriString($URI)
+                $EscapedURI = [uri]::EscapeUriString($URI)
 
                 # --- Make the first request to determine the size of the request
-                $Response = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
+                $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
                 foreach ($Request in $Response.content) {
 

@@ -82,9 +82,7 @@
 
                     $URI = "/catalog-service/api/consumer/entitledCatalogItems/$($EntitledCatalogItemId)"
 
-                    $EncodedURI = [uri]::EscapeUriString($URI)
-
-                    $Response = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
+                    $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
                     $CatalogItem = $Response.catalogItem
 
@@ -124,9 +122,9 @@
 
                     $URI = "/catalog-service/api/consumer/entitledCatalogItems?`$filter=name eq '$($EntitledCatalogItemName)'"            
 
-                    $EncodedURI = [uri]::EscapeUriString($URI)
+                    $EscapedURI = [uri]::EscapeUriString($URI)
 
-                    $Response = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
+                    $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
                     if ($Response.content.Count -eq 0) {
 
@@ -178,9 +176,9 @@
 
                 }
 
-                $EncodedURI = [uri]::EscapeUriString($URI)
+                $EscapedURI = [uri]::EscapeUriString($URI)
 
-                $Response = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
+                $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
                 foreach ($Item in $Response.content) {
 

@@ -70,25 +70,25 @@
 
                     $URI = "/catalog-service/api/consumer/services/$($ServiceId)"
 
-                    $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
+                    $Service = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
                     [PSCustomObject] @{
 
-                        Id = $Response.id
-                        Name = $Response.name
-                        Description = $Response.description
-                        Status = $Response.status
-                        StatusName = $Response.statusName
-                        Version = $Response.version
-                        Organization = $Response.organization
-                        Hours = $Response.hours
-                        Owner = $Response.owner
-                        SupportTeam = $Response.supportTeam
-                        ChangeWindow = $Response.changeWindow
-                        NewDuration = $Response.newDuration
-                        LastUpdatedDate = $Response.lastUpdatedDate
-                        LastUpdatedBy = $Response.lastUpdatedBy
-                        IconId = $Response.iconId
+                        Id = $Service.id
+                        Name = $Service.name
+                        Description = $Service.description
+                        Status = $Service.status
+                        StatusName = $Service.statusName
+                        Version = $Service.version
+                        Organization = $Service.organization
+                        Hours = $Service.hours
+                        Owner = $Service.owner
+                        SupportTeam = $Service.supportTeam
+                        ChangeWindow = $Service.changeWindow
+                        NewDuration = $Service.newDuration
+                        LastUpdatedDate = $Service.lastUpdatedDate
+                        LastUpdatedBy = $Service.lastUpdatedBy
+                        IconId = $Service.iconId
 
                     }
 
@@ -103,9 +103,9 @@
 
                     $URI = "/catalog-service/api/consumer/services?`$filter=name eq '$($ServiceName)'"
 
-                    $EncodedURI = [uri]::EscapeUriString($URI)
+                    $EscapedURI = [uri]::EscapeUriString($URI)
 
-                    $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
+                    $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
                     if ($Response.content.Count -eq 0) {
 
@@ -113,23 +113,25 @@
 
                     }
 
+                    $Service = $Response.content
+
                     [PSCustomObject] @{
 
-                        Id = $Response.content.id
-                        Name = $Response.content.name
-                        Description = $Response.content.description
-                        Status = $Response.content.status
-                        StatusName = $Response.content.statusName
-                        Version = $Response.content.version
-                        Organization = $Response.content.organization
-                        Hours = $Response.content.hours
-                        Owner = $Response.content.owner
-                        SupportTeam = $Response.content.supportTeam
-                        ChangeWindow = $Response.content.changeWindow
-                        NewDuration = $Response.content.newDuration
-                        LastUpdatedDate = $Response.content.lastUpdatedDate
-                        LastUpdatedBy = $Response.content.lastUpdatedBy
-                        IconId = $Response.content.iconId
+                        Id = $Service.id
+                        Name = $Service.name
+                        Description = $Service.description
+                        Status = $Service.status
+                        StatusName = $Service.statusName
+                        Version = $Service.version
+                        Organization = $Service.organization
+                        Hours = $Service.hours
+                        Owner = $Service.owner
+                        SupportTeam = $Service.supportTeam
+                        ChangeWindow = $Service.changeWindow
+                        NewDuration = $Service.newDuration
+                        LastUpdatedDate = $Service.lastUpdatedDate
+                        LastUpdatedBy = $Service.lastUpdatedBy
+                        IconId = $Service.iconId
 
                     }
 
@@ -143,9 +145,9 @@
 
                 $URI = "/catalog-service/api/consumer/services?limit=$($Limit)&page=$($Page)&`$orderby=name asc"
 
-                $EncodedURI = [uri]::EscapeUriString($URI)
+                $EscapedURI = [uri]::EscapeUriString($URI)
 
-                $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
+                $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
                 foreach ($Service in $Response.content) {
 
@@ -183,6 +185,7 @@
     catch [Exception]{
 
         throw
+
     }
 
 }

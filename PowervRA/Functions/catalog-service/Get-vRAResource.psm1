@@ -108,9 +108,9 @@
             
                     $URI = "/catalog-service/api/consumer/resourceViews/$($ResourceId)?withExtendedData=true&withOperations=true"
 
-                    $EncodedURI = [uri]::EscapeUriString($URI)
+                    $EscapedURI = [uri]::EscapeUriString($URI)
 
-                    $Resource = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
+                    $Resource = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
                     [PSCustomObject] @{
 
@@ -149,9 +149,9 @@
             
                     $URI = "/catalog-service/api/consumer/resourceViews?`$filter=resourceType eq 'composition.resource.type.deployment' and name eq '$($ResourceName)'&withExtendedData=true&withOperations=true"
 
-                    $EncodedURI = [uri]::EscapeUriString($URI)
+                    $EscapedURI = [uri]::EscapeUriString($URI)
 
-                    $Response = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
+                    $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
                     if ($Response.content.Count -eq 0) {
 
@@ -231,9 +231,9 @@
 
                 }
 
-                $EncodedURI = [uri]::EscapeUriString($URI)
+                $EscapedURI = [uri]::EscapeUriString($URI)
 
-                $Response = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
+                $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
                 foreach ($Resource in $Response.content) {
 

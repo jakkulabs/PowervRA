@@ -66,9 +66,9 @@
 
                 $URI = "/catalog-service/api/consumer/entitledCatalogItems?&`$filter=name eq '$($Name)'"               
 
-                $EncodedURI = [uri]::EscapeUriString($URI)
+                $EscapedURI = [uri]::EscapeUriString($URI)
 
-                $Response = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
+                $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
                 if ($Response.content.Count -eq 0) {
 
