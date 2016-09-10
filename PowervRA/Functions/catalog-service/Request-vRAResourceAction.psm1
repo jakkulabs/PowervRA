@@ -51,14 +51,15 @@ function Request-vRAResourceAction {
 
     Param (
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory=$true, ParameterSetName="ByResourceId")]
+        [Parameter(Mandatory=$true, ParameterSetName="ByResourceName")]
         [ValidateNotNullOrEmpty()]
         [Alias('Id')]
         [String]$ActionId,
 
         [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true, ParameterSetName="ByResourceId")]
         [ValidateNotNullOrEmpty()]
-        [String]$ResourceId,         
+        [String]$ResourceId,
 
         [Parameter(Mandatory=$true, ParameterSetName="ByResourceName")]
         [ValidateNotNullOrEmpty()]
