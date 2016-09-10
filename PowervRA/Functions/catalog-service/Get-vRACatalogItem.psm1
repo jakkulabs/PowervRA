@@ -52,7 +52,7 @@
     
         [Parameter(Mandatory=$true,ValueFromPipeline=$false,ParameterSetName="ById")]
         [ValidateNotNullOrEmpty()]
-        [String[]]$Id,         
+        [String[]]$Id,
 
         [Parameter(Mandatory=$true,ValueFromPipeline=$false,ParameterSetName="ByName")]
         [ValidateNotNullOrEmpty()]
@@ -82,9 +82,7 @@
             
                     $URI = "/catalog-service/api/catalogItems/$($CatalogItemId)"
 
-                    $EncodedURI = [uri]::EscapeUriString($URI)
-
-                    $CatalogItem = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
+                    $CatalogItem = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
                     [PSCustomObject] @{
 
@@ -112,8 +110,8 @@
                 }
 
                 break
-             
-            }       
+
+            }
             # --- Get catalog item by name
             'ByName' {
 
@@ -121,9 +119,9 @@
 
                     $URI = "/catalog-service/api/catalogItems?`$filter=name eq '$($CatalogItemName)'"            
 
-                    $EncodedURI = [uri]::EscapeUriString($URI)
+                    $EscapedURI = [uri]::EscapeUriString($URI)
 
-                    $Response = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
+                    $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
                     if ($Response.content.Count -eq 0) {
 
@@ -172,9 +170,9 @@
 
                 }
 
-                $EncodedURI = [uri]::EscapeUriString($URI)
+                $EscapedURI = [uri]::EscapeUriString($URI)
 
-                $Response = Invoke-vRARestMethod -Method GET -URI $EncodedURI -Verbose:$VerbosePreference
+                $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
                 foreach ($CatalogItem in $Response.content) {
 
