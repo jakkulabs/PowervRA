@@ -20,6 +20,7 @@
 
     .INPUTS
     System.String
+    System.Int
 
     .OUTPUTS
     System.Management.Automation.PSObject.
