@@ -15,6 +15,9 @@
     .PARAMETER Body
     REST Body in JSON format
 
+    .PARAMETER Headers
+    Optionally supply custom headers
+
     .INPUTS
     System.String
     Switch
@@ -54,7 +57,11 @@
 
     [parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
-    [String]$Body
+    [String]$Body,  
+    
+    [parameter(Mandatory=$false)]
+    [ValidateNotNullOrEmpty()]
+    [System.Collections.IDictionary]$Headers
     )   
 
 # --- Test for existing connection to vRA
@@ -85,11 +92,15 @@ if (-not ($Global:vRAConnection.SignedCertificates)){
 
     # --- Create Invoke-RestMethod Parameters
     $FullURI = "$($Global:vRAConnection.Server)$($URI)"
-    $Headers = @{
 
-        "Accept"="application/json";
-        "Content-Type" = "application/json";
-        "Authorization" = "Bearer $($Global:vRAConnection.Token)";
+    if (!$PSBoundParameters.ContainsKey("Headers")){
+
+        $Headers = @{
+
+            "Accept"="application/json";
+            "Content-Type" = "application/json";
+            "Authorization" = "Bearer $($Global:vRAConnection.Token)";
+        }
     }
     
     try { 
