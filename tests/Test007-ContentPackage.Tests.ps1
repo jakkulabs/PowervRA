@@ -38,6 +38,12 @@ Describe -Name 'Content Package Tests' -Fixture {
         }
         $ContentPackageD | Should Be $null
     }
+
+    It -Name "Import named Content Package $($JSON.ContentPackage.Name)" -Test {
+
+        $ImportStatus = Import-vRAContentPackage -File $JSON.ContentPackage.FileName -Confirm:$false
+        $ImportStatus.operationResults.Messages | Should Be $JSON.ContentPackage.ImportStatusMessage
+    }
 }
 
 # --- Cleanup
