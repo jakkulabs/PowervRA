@@ -31,7 +31,7 @@ function Get-vRAResourceAction {
         [String]$ResourceId
 
     )
-                
+
     try {
 
         # --- Set the uri
