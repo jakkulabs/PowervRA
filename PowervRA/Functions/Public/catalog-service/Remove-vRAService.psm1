@@ -29,23 +29,23 @@
 
     Param (
         
-    [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
-    [ValidateNotNullOrEmpty()]
-    [String[]]$Id
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
+        [ValidateNotNullOrEmpty()]
+        [String[]]$Id
           
     )    
 
-    begin {
+    Begin {
     
     }
     
-    process {
+    Process {
 
         foreach ($ServiceId in $Id) {
 
             $URI = "/catalog-service/api/services/$($ServiceId)"
             
-            $Service = Invoke-vRARestMethod -Method GET -URI $URI
+            $Service = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
             Write-Verbose -Message "Removing service $($Service.name)"
 
@@ -53,24 +53,28 @@
 
             # --- Remove the service
             try {
-                if ($PSCmdlet.ShouldProcess($Service.Name)){
+                if ($PSCmdlet.ShouldProcess($Service.name)){
                 
                     # --- Build the URI string for the service         
             
-                    $URI = "/catalog-service/api/services/$($Id)"
+                    $URI = "/catalog-service/api/services/$($ServiceId)"
                 
-                    Write-Verbose -Message "Preparing PUT to $($URI)"                
-           
-                    $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body ($Service | ConvertTo-Json -Compress)
+                    Invoke-vRARestMethod -Method PUT -URI $URI -Body ($Service | ConvertTo-Json -Compress) -Verbose:$VerbosePreference | Out-Null
                 
                 }
-                        
+
             }
             catch [Exception] {
             
                 throw
             
             }
+
         }
-    }    
+
+    }
+    End {
+
+    }
+
 }
