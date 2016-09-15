@@ -53,6 +53,8 @@
     
     )
     
+    Write-Warning -Message "This command is deprecated and will be removed in a future release. Please use Get-vRAEntitledCatalogItem instead."
+
     try {
 
         switch ($PsCmdlet.ParameterSetName) {

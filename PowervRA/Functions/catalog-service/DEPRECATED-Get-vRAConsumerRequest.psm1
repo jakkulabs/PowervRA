@@ -60,6 +60,8 @@
        
     )    
 
+    Write-Warning -Message "This command is deprecated and will be removed in a future release. Please use Get-vRARequest instead."
+
     try {
 
         # --- Build base URI

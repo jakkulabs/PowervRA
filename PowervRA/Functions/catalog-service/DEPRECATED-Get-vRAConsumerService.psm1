@@ -49,7 +49,9 @@
     [ValidateNotNullOrEmpty()]
     [String]$Limit = "100"
     )
-                
+
+    Write-Warning -Message "This command is deprecated and will be removed in a future release. Please use Get-vRAEntitledService instead."
+
     try {
 
         switch ($PsCmdlet.ParameterSetName) {
