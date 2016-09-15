@@ -5,7 +5,7 @@
 Finds catalog principals
 
 ## SYNTAX
- Get-vRACatalogPrincipal -Id <String[]> [-Limit <String>] [<CommonParameters>]    
+ Get-vRACatalogPrincipal -Id <String[]> [-Limit <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -55,11 +55,9 @@ PS C:\>Get-vRACatalogPrincipal -Id group@vsphere.local
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRACatalogPrincipal -Id user@vsphere.local
-
 
 
 

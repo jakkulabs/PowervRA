@@ -5,7 +5,7 @@
 Retrieve vRA services
 
 ## SYNTAX
- Get-vRAConsumerService [-Limit <String>] [<CommonParameters>] Get-vRAConsumerService [-Id <String[]>] [-Limit <String>] [<CommonParameters>] Get-vRAConsumerService [-Name <String[]>] [-Limit <String>] [<CommonParameters>]    
+ Get-vRAConsumerService [-Limit <String>] [<CommonParameters>]  Get-vRAConsumerService [-Id <String[]>] [-Limit <String>] [<CommonParameters>]  Get-vRAConsumerService [-Name <String[]>] [-Limit <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -62,11 +62,9 @@ PS C:\>Get-vRAConsumerService
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAConsumerService -Id 332d38d5-c8db-4519-87a7-7ef9f358091a
-
 
 
 

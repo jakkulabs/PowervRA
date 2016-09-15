@@ -5,7 +5,7 @@
 Create a vRA Tenant
 
 ## SYNTAX
- New-vRATenant -Name <String> [-Description <String>] -URLName <String> [-ContactEmail <String>] -ID <String> [-WhatIf]  [-Confirm] [<CommonParameters>] New-vRATenant -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ New-vRATenant -Name <String> [-Description <String>] -URLName <String> [-ContactEmail <String>] -ID <String> [-WhatIf]  [-Confirm] [<CommonParameters>]  New-vRATenant -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -104,11 +104,9 @@ admin.user@tenant01.local -ID Tenant01
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>$JSON = @"
-
 
 {
   "name" : "Tenant02",

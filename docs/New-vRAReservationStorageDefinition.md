@@ -5,7 +5,7 @@
 Creates a new storage definition for a reservation
 
 ## SYNTAX
- New-vRAReservationStorageDefinition -Type <String> -ComputeResourceId <String> -Path <String> -ReservedSizeGB <Int32>  [-Priority <Int32>] [<CommonParameters>]    
+ New-vRAReservationStorageDefinition -Type <String> -ComputeResourceId <String> -Path <String> -ReservedSizeGB <Int32>  [-Priority <Int32>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -71,7 +71,6 @@ System.Management.Automation.PSObject
 -------------------------- EXAMPLE 1 --------------------------
 
 PS C:\>$StorageDefinitionArray = @()
-
 
 $Storage1 = New-vRAReservationStorageDefinition -Type vSphere -ComputeResourceId 75ae3400-beb5-4b0b-895a-0484413c93b1 
 -Path "Datastore01" -ReservedSizeGB 10 -Priority 0 

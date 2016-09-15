@@ -5,7 +5,7 @@
 Connect to a vRA Server
 
 ## SYNTAX
- Connect-vRAServer -Server <String> [-Tenant <String>] -Username <String> -Password <String> [-IgnoreCertRequirements]  [<CommonParameters>] Connect-vRAServer -Server <String> [-Tenant <String>] -Credential <PSCredential> [-IgnoreCertRequirements]  [<CommonParameters>]    
+ Connect-vRAServer -Server <String> [-Tenant <String>] -Username <String> -Password <String> [-IgnoreCertRequirements]  [<CommonParameters>]  Connect-vRAServer -Server <String> [-Tenant <String>] -Credential <PSCredential> [-IgnoreCertRequirements]  [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -84,7 +84,6 @@ System.Management.Automation.PSObject.
 
 PS C:\>Connect-vRAServer -Server vraappliance01.domain.local -Tenant Tenant01 -Username TenantAdmin01 -Password 
 P@ssword -IgnoreCertRequirements
-
 
 
 

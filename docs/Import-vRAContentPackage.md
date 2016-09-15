@@ -1,22 +1,22 @@
-# Remove-vRATenant
+# Import-vRAContentPackage
 
 ## SYNOPSIS
     
-Remove a vRA Tenant
+Imports a vRA Content Package
 
 ## SYNTAX
- Remove-vRATenant [-Id] <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]     
+ Import-vRAContentPackage [-File] <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
-Remove a vRA Tenant
+Imports a vRA Content Package
 
 ## PARAMETERS
 
 
-### Id
+### File
 
-Tenant ID
+The content package file
 
 * Required: true
 * Position: 1
@@ -41,17 +41,17 @@ Tenant ID
 
 ## INPUTS
 
-System.String.
+System.String
 
 ## OUTPUTS
 
-None
+System.Management.Automation.PSObject
 
 ## EXAMPLES
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-PS C:\>Remove-vRATenant -Id Tenant02
+PS C:\>Import-vRAContentPackage -File C:\Packages\ContentPackage100.zip
 
 
 
@@ -60,6 +60,6 @@ PS C:\>Remove-vRATenant -Id Tenant02
 
 -------------------------- EXAMPLE 2 --------------------------
 
-PS C:\>Get-vRATenant -Id Tenant02 | Remove-vRATenant -Confirm:$false
+PS C:\>Get-ChildItem -Path C:\Packages\ContentPackage100.zip| Import-vRAContentPackage -Confirm:$false
 ```
 

@@ -5,7 +5,7 @@
 Retrieve vRA Tenant Directory Status
 
 ## SYNTAX
- Get-vRATenantDirectoryStatus [-Id] <String> [[-Domain] <String[]>] [<CommonParameters>]    
+ Get-vRATenantDirectoryStatus [-Id] <String> [[-Domain] <String[]>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -45,7 +45,6 @@ System.Management.Automation.PSObject.
 -------------------------- EXAMPLE 1 --------------------------
 
 PS C:\>Get-vRATenantDirectoryStatus -Id Tenant01 -Domain vrademo.local
-
 
 
 

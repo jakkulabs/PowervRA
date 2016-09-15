@@ -5,7 +5,7 @@
 Get a consumer resource operation
 
 ## SYNTAX
- Get-vRAConsumerResourceOperation -Id <String[]> [<CommonParameters>]    
+ Get-vRAConsumerResourceOperation -Id <String[]> [<CommonParameters>]     
 
 ## DESCRIPTION
 

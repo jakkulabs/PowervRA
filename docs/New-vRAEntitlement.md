@@ -5,7 +5,7 @@
 Create a new entitlement
 
 ## SYNTAX
- New-vRAEntitlement -Name <String> [-Description <String>] -BusinessGroup <String> [-Principals <String[]>]  [-EntitledCatalogItems <String[]>] [-EntitledResourceOperations <String[]>] [-EntitledServices <String[]>] [-WhatIf]  [-Confirm] [<CommonParameters>] New-vRAEntitlement -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ New-vRAEntitlement -Name <String> [-Description <String>] -BusinessGroup <String> [-Principals <String[]>]  [-EntitledCatalogItems <String[]>] [-EntitledResourceOperations <String[]>] [-EntitledServices <String[]>] [-WhatIf]  [-Confirm] [<CommonParameters>]  New-vRAEntitlement -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -124,11 +124,9 @@ PS C:\>New-vRAEntitlement -Name "TestEntitlement" -Description "a test" -Busines
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>$JSON = @"
-
 
 {
                   "description": "",
