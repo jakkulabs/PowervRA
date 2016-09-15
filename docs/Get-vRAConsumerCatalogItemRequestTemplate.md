@@ -5,7 +5,7 @@
 Get the request template of a catalog item that the user is entitled to see
 
 ## SYNTAX
- Get-vRAConsumerCatalogItemRequestTemplate [-Limit <String>] [<CommonParameters>] Get-vRAConsumerCatalogItemRequestTemplate -Id <String> [-Limit <String>] [<CommonParameters>] Get-vRAConsumerCatalogItemRequestTemplate -Name <String> [-Limit <String>] [<CommonParameters>]    
+ Get-vRAConsumerCatalogItemRequestTemplate [-Limit <String>] [<CommonParameters>]  Get-vRAConsumerCatalogItemRequestTemplate -Id <String> [-Limit <String>] [<CommonParameters>]  Get-vRAConsumerCatalogItemRequestTemplate -Name <String> [-Limit <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -60,11 +60,9 @@ PS C:\>Get-vRAConsumerCatalogItemRequestTemplate -Id dab4e578-57c5-4a30-b3b7-2a5
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAConsumerCatalogItemRequestTemplate -Name Centos_Template
-
 
 
 
@@ -80,11 +78,9 @@ PS C:\>Get-vRAConsumerEntitledCatalogItem | Get-vRAConsumerCatalogItemRequestTem
 
 
 
-
 -------------------------- EXAMPLE 4 --------------------------
 
 PS C:\>Get-vRAConsumerEntitledCatalogItem -Name Centos_Template | Get-vRAConsumerCatalogItemRequestTemplate
-
 
 
 

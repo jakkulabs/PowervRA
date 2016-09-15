@@ -5,7 +5,7 @@
 Set vRA reservation network properties
 
 ## SYNTAX
- Set-vRAReservationNetwork [-Id] <String> [-NetworkPath] <String> [[-NetworkProfile] <String>] [-WhatIf] [-Confirm]  [<CommonParameters>]    
+ Set-vRAReservationNetwork [-Id] <String> [-NetworkPath] <String> [[-NetworkProfile] <String>] [-WhatIf] [-Confirm]  [<CommonParameters>]     
 
 ## DESCRIPTION
 

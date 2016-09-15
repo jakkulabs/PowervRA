@@ -5,7 +5,7 @@
 Remove a reservation
 
 ## SYNTAX
- Remove-vRAReservation -Id <String[]> [-WhatIf] [-Confirm] [<CommonParameters>] Remove-vRAReservation -Name <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Remove-vRAReservation -Id <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]  Remove-vRAReservation -Name <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -63,11 +63,9 @@ PS C:\>Remove-vRAReservation -Name Reservation1
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Remove-vRAReservation -Id 75ae3400-beb5-4b0b-895a-0484413c93b1
-
 
 
 

@@ -5,7 +5,7 @@
 Remove a vRA local user principal
 
 ## SYNTAX
- Remove-vRAUserPrincipal [-Id] <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Remove-vRAUserPrincipal [-Id] <String[]> [[-Tenant] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -22,6 +22,15 @@ The principal id of the user
 * Position: 1
 * Default value: 
 * Accept pipeline input: true (ByValue, ByPropertyName)
+
+### Tenant
+
+The tenant of the user
+
+* Required: false
+* Position: 2
+* Default value: $Global:vRAConnection.Tenant
+* Accept pipeline input: false
 
 ### WhatIf
 
@@ -52,7 +61,6 @@ None
 -------------------------- EXAMPLE 1 --------------------------
 
 PS C:\>Remove-vRAUserPrincipal -PrincipalId user@vsphere.local
-
 
 
 

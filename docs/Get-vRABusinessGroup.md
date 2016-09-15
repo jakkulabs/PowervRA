@@ -5,7 +5,7 @@
 Retrieve vRA Business Groups
 
 ## SYNTAX
- Get-vRABusinessGroup [[-TenantId] <String>] [[-Name] <String[]>] [[-Limit] <String>] [<CommonParameters>]    
+ Get-vRABusinessGroup [[-TenantId] <String>] [[-Name] <String[]>] [[-Limit] <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -54,7 +54,6 @@ System.Management.Automation.PSObject.
 -------------------------- EXAMPLE 1 --------------------------
 
 PS C:\>Get-vRABusinessGroup
-
 
 
 

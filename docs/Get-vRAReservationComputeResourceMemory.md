@@ -5,7 +5,7 @@
 Get available memory for a compute resource
 
 ## SYNTAX
- Get-vRAReservationComputeResourceMemory [-Type] <String> [-ComputeResourceId] <String> [<CommonParameters>]    
+ Get-vRAReservationComputeResourceMemory [-Type] <String> [-ComputeResourceId] <String> [<CommonParameters>]     
 
 ## DESCRIPTION
 

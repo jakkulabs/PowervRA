@@ -5,7 +5,7 @@
 Remove a vRA Tenant
 
 ## SYNTAX
- Remove-vRATenant [-Id] <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Remove-vRATenant [-Id] <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -52,7 +52,6 @@ None
 -------------------------- EXAMPLE 1 --------------------------
 
 PS C:\>Remove-vRATenant -Id Tenant02
-
 
 
 

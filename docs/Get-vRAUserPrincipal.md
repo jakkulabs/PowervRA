@@ -2,10 +2,10 @@
 
 ## SYNOPSIS
     
-Finds regular users.
+Finds regular users
 
 ## SYNTAX
- Get-vRAUserPrincipal [-LocalUsersOnly] [-Limit <String>] [<CommonParameters>] Get-vRAUserPrincipal -Id <String[]> [-Limit <String>] [<CommonParameters>]    
+ Get-vRAUserPrincipal [-Tenant <String>] [-LocalUsersOnly] [-Limit <String>] [<CommonParameters>]  Get-vRAUserPrincipal -Id <String[]> [-Tenant <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -21,6 +21,15 @@ The Id of the user
 * Required: true
 * Position: named
 * Default value: 
+* Accept pipeline input: false
+
+### Tenant
+
+The tenant of the user
+
+* Required: false
+* Position: named
+* Default value: $Global:vRAConnection.Tenant
 * Accept pipeline input: false
 
 ### LocalUsersOnly
@@ -60,11 +69,9 @@ PS C:\>Get-vRAUserPrincipal
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAUserPrincipal -LocalUsersOnly
-
 
 
 
@@ -80,9 +87,17 @@ PS C:\>Get-vRAUserPrincipal -Id user@vsphere.local
 
 
 
-
 -------------------------- EXAMPLE 4 --------------------------
 
 PS C:\>Get-vRAUserPrincipal -UserName user@vsphere.local
+
+
+
+
+
+
+-------------------------- EXAMPLE 5 --------------------------
+
+PS C:\>Get-vRAUserPrincipal -PrincipalId user@vsphere.local
 ```
 

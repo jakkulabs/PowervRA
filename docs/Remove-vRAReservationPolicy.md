@@ -5,7 +5,7 @@
 Remove a vRA Reservation Policy
 
 ## SYNTAX
- Remove-vRAReservationPolicy -Id <String[]> [-WhatIf] [-Confirm] [<CommonParameters>] Remove-vRAReservationPolicy -Name <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Remove-vRAReservationPolicy -Id <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]  Remove-vRAReservationPolicy -Name <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -67,11 +67,9 @@ PS C:\>Remove-vRAReservationPolicy -Id "34ae1d6c-9972-4736-acdb-7ee109ad1dbd"
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Remove-vRAReservationPolicy -Name "ReservationPolicy01"
-
 
 
 

@@ -5,7 +5,7 @@
 Get a resource type
 
 ## SYNTAX
- Get-vRAResourceType [-Limit <String>] [<CommonParameters>] Get-vRAResourceType [-Id <String[]>] [-Limit <String>] [<CommonParameters>] Get-vRAResourceType [-Name <String[]>] [-Limit <String>] [<CommonParameters>]    
+ Get-vRAResourceType [-Limit <String>] [<CommonParameters>]  Get-vRAResourceType [-Id <String[]>] [-Limit <String>] [<CommonParameters>]  Get-vRAResourceType [-Name <String[]>] [-Limit <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -61,11 +61,9 @@ PS C:\>Get-vRAResourceType
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAResourceType -Id "Infrastructure.Machine"
-
 
 
 

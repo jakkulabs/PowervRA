@@ -5,7 +5,7 @@
 Update a vRA Storage Reservation Policy
 
 ## SYNTAX
- Set-vRAStorageReservationPolicy -Id <String> [-NewName <String>] [-Description <String>] [-WhatIf] [-Confirm]  [<CommonParameters>] Set-vRAStorageReservationPolicy -Name <String> [-NewName <String>] [-Description <String>] [-WhatIf] [-Confirm]  [<CommonParameters>] Set-vRAStorageReservationPolicy -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Set-vRAStorageReservationPolicy -Id <String> [-NewName <String>] [-Description <String>] [-WhatIf] [-Confirm]  [<CommonParameters>]  Set-vRAStorageReservationPolicy -Name <String> [-NewName <String>] [-Description <String>] [-WhatIf] [-Confirm]  [<CommonParameters>]  Set-vRAStorageReservationPolicy -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -95,7 +95,6 @@ PS C:\>Set-vRAStorageReservationPolicy -Id "34ae1d6c-9972-4736-acdb-7ee109ad1dbd
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Set-vRAStorageReservationPolicy -Name StorageReservationPolicy01 -NewName "NewName" -Description "This is the 
@@ -106,11 +105,9 @@ New Name"
 
 
 
-
 -------------------------- EXAMPLE 3 --------------------------
 
 PS C:\>$JSON = @"
-
 
 {
   "id": "34ae1d6c-9972-4736-acdb-7ee109ad1dbd",

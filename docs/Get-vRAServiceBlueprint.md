@@ -5,7 +5,7 @@
 Retrieve vRA ASD Blueprints
 
 ## SYNTAX
- Get-vRAServiceBlueprint [-Limit <String>] [<CommonParameters>] Get-vRAServiceBlueprint -Id <String[]> [-Limit <String>] [<CommonParameters>] Get-vRAServiceBlueprint -Name <String[]> [-Limit <String>] [<CommonParameters>]    
+ Get-vRAServiceBlueprint [-Limit <String>] [<CommonParameters>]  Get-vRAServiceBlueprint -Id <String[]> [-Limit <String>] [<CommonParameters>]  Get-vRAServiceBlueprint -Name <String[]> [-Limit <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -60,11 +60,9 @@ PS C:\>Get-vRAServiceBlueprint
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAServiceBlueprint -Id "309100fd-b8ce-4e8c-ac8c-a667b8ace54f"
-
 
 
 

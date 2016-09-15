@@ -5,7 +5,7 @@
 Get a reservation
 
 ## SYNTAX
- Get-vRAReservation [-Limit <Int32>] [-Page <Int32>] [<CommonParameters>] Get-vRAReservation -Id <String[]> [<CommonParameters>] Get-vRAReservation -Name <String[]> [<CommonParameters>]    
+ Get-vRAReservation [-Limit <Int32>] [-Page <Int32>] [<CommonParameters>]  Get-vRAReservation -Id <String[]> [<CommonParameters>]  Get-vRAReservation -Name <String[]> [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -71,11 +71,9 @@ PS C:\>Get-vRAReservation -Id 75ae3400-beb5-4b0b-895a-0484413c93b1
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAReservation -Name Reservation1
-
 
 
 

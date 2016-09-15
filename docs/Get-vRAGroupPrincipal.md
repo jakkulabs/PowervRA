@@ -5,7 +5,7 @@
 Finds groups.
 
 ## SYNTAX
- Get-vRAGroupPrincipal [-Limit <String>] [<CommonParameters>] Get-vRAGroupPrincipal -Id <String[]> [-Limit <String>] [<CommonParameters>]    
+ Get-vRAGroupPrincipal [-Tenant <String>] [-Limit <String>] [<CommonParameters>]  Get-vRAGroupPrincipal -Id <String[]> [-Tenant <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -21,6 +21,15 @@ The Id of the group
 * Required: true
 * Position: named
 * Default value: 
+* Accept pipeline input: false
+
+### Tenant
+
+The tenant of the group
+
+* Required: false
+* Position: named
+* Default value: $Global:vRAConnection.Tenant
 * Accept pipeline input: false
 
 ### Limit
@@ -51,7 +60,6 @@ PS C:\>Get-vRAGroupPrincipal
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAGroupPrincipal -Id group@vsphere.local
@@ -61,9 +69,8 @@ PS C:\>Get-vRAGroupPrincipal -Id group@vsphere.local
 
 
 
-
 -------------------------- EXAMPLE 3 --------------------------
 
-PS C:\>Get-vRAGroupPrincipal -GroupName group@vsphere.local
+PS C:\>Get-vRAGroupPrincipal -PrincipalId group@vsphere.local
 ```
 

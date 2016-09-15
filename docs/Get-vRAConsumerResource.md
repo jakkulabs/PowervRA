@@ -5,7 +5,7 @@
 Get a provisioned resource
 
 ## SYNTAX
- Get-vRAConsumerResource [-WithExtendedData] [-WithOperations] [-Limit <String>] [<CommonParameters>] Get-vRAConsumerResource [-Id <String[]>] [-Limit <String>] [<CommonParameters>] Get-vRAConsumerResource [-Name <String[]>] [-Limit <String>] [<CommonParameters>]    
+ Get-vRAConsumerResource [-WithExtendedData] [-WithOperations] [-Limit <String>] [<CommonParameters>]  Get-vRAConsumerResource [-Id <String[]>] [-Limit <String>] [<CommonParameters>]  Get-vRAConsumerResource [-Name <String[]>] [-Limit <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -78,11 +78,9 @@ PS C:\>Get-vRAConsumerResource
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAConsumerResource -WithExtendedData
-
 
 
 
@@ -98,11 +96,9 @@ PS C:\>Get-vRAConsumerResource -WithOperations
 
 
 
-
 -------------------------- EXAMPLE 4 --------------------------
 
 PS C:\>Get-vRAConsumerResource -Id "6195fd70-7243-4dc9-b4f3-4b2300e15ef8"
-
 
 
 

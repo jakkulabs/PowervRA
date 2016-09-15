@@ -5,7 +5,7 @@
 Get a catalog item that the user is allowed to review.
 
 ## SYNTAX
- Get-vRACatalogItem [-Limit <String>] [<CommonParameters>] Get-vRACatalogItem -Id <String[]> [-Limit <String>] [<CommonParameters>] Get-vRACatalogItem -Name <String[]> [-Limit <String>] [<CommonParameters>]    
+ Get-vRACatalogItem [-Limit <String>] [<CommonParameters>]  Get-vRACatalogItem -Id <String[]> [-Limit <String>] [<CommonParameters>]  Get-vRACatalogItem -Name <String[]> [-Limit <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -61,7 +61,6 @@ PS C:\>Get-vRACatalogItem
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRACatalogItem -Limit 9999
@@ -71,11 +70,9 @@ PS C:\>Get-vRACatalogItem -Limit 9999
 
 
 
-
 -------------------------- EXAMPLE 3 --------------------------
 
 PS C:\>Get-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e
-
 
 
 

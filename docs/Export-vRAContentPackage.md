@@ -5,7 +5,7 @@
 Export a vRA Content Package
 
 ## SYNTAX
- Export-vRAContentPackage -Id <String> -File <String> [<CommonParameters>] Export-vRAContentPackage -Name <String> -File <String> [<CommonParameters>]    
+ Export-vRAContentPackage -Id <String> -File <String> [<CommonParameters>]  Export-vRAContentPackage -Name <String> -File <String> [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -54,7 +54,6 @@ System.IO.FileInfo
 -------------------------- EXAMPLE 1 --------------------------
 
 PS C:\>Export-vRAContentPackage -Id "b2d72c5d-775b-400c-8d79-b2483e321bae" -File C:\Packages\ContentPackage01.zip
-
 
 
 

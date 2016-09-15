@@ -5,7 +5,7 @@
 Update a vRA Business Group
 
 ## SYNTAX
- Set-vRABusinessGroup -TenantId <String> -ID <String> [-Name <String>] [-Description <String>] [-MachinePrefixId  <String>] [-SendManagerEmailsTo <String>] [-WhatIf] [-Confirm] [<CommonParameters>] Set-vRABusinessGroup -TenantId <String> -ID <String> -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Set-vRABusinessGroup -TenantId <String> -ID <String> [-Name <String>] [-Description <String>] [-MachinePrefixId  <String>] [-SendManagerEmailsTo <String>] [-WhatIf] [-Confirm] [<CommonParameters>]  Set-vRABusinessGroup -TenantId <String> -ID <String> -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -114,11 +114,9 @@ PS C:\>Set-vRABusinessGroup -TenantId Tenant01 -Id "f8e0d99e-c567-4031-99cb-d841
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>$JSON = @"
-
 
 {
     "id": "f8e0d99e-c567-4031-99cb-d8410c841ed7",

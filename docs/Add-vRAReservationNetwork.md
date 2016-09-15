@@ -5,7 +5,7 @@
 Add a network to an existing vRA reservation
 
 ## SYNTAX
- Add-vRAReservationNetwork [-Id] <String> [-NetworkPath] <String> [[-NetworkProfile] <String>] [-WhatIf] [-Confirm]  [<CommonParameters>]    
+ Add-vRAReservationNetwork [-Id] <String> [-NetworkPath] <String> [[-NetworkProfile] <String>] [-WhatIf] [-Confirm]  [<CommonParameters>]     
 
 ## DESCRIPTION
 

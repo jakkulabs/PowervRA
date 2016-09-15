@@ -5,7 +5,7 @@
 Retrieve vRA Tenants
 
 ## SYNTAX
- Get-vRATenant [[-Id] <String[]>] [[-Limit] <String>] [<CommonParameters>]    
+ Get-vRATenant [[-Id] <String[]>] [[-Limit] <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -45,7 +45,6 @@ System.Management.Automation.PSObject.
 -------------------------- EXAMPLE 1 --------------------------
 
 PS C:\>Get-vRATenant
-
 
 
 
