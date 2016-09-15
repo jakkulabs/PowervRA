@@ -5,7 +5,7 @@
 Creates a new network definition for a reservation.
 
 ## SYNTAX
- New-vRAReservationNetworkDefinition -Type <String> -ComputeResourceId <String> -NetworkPath <String> [-NetworkProfile  <String>] [<CommonParameters>]    
+ New-vRAReservationNetworkDefinition -Type <String> -ComputeResourceId <String> -NetworkPath <String> [-NetworkProfile  <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -64,7 +64,6 @@ System.Management.Automation.PSObject
 -------------------------- EXAMPLE 1 --------------------------
 
 PS C:\>$NetworkDefinitionArray = @()
-
 
 $Network1 = New-vRAReservationNetworkDefinition -Type vSphere -ComputeResourceId 75ae3400-beb5-4b0b-895a-0484413c93b1 
 -Path "VM Network" -Profile "Test"

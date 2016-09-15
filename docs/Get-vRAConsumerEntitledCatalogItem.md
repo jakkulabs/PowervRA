@@ -5,7 +5,7 @@
 Get the a catalog item that the user is entitled to see
 
 ## SYNTAX
- Get-vRAConsumerEntitledCatalogItem [-Limit <String>] [<CommonParameters>] Get-vRAConsumerEntitledCatalogItem -Id <String[]> [-Limit <String>] [<CommonParameters>] Get-vRAConsumerEntitledCatalogItem -Name <String[]> [-Limit <String>] [<CommonParameters>]    
+ Get-vRAConsumerEntitledCatalogItem [-Limit <String>] [<CommonParameters>]  Get-vRAConsumerEntitledCatalogItem -Id <String[]> [-Limit <String>] [<CommonParameters>]  Get-vRAConsumerEntitledCatalogItem -Name <String[]> [-Limit <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -63,7 +63,6 @@ PS C:\>Get-vRAConsumerEntitledCatalogItem
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAConsumerEntitledCatalogItem -Limit 9999
@@ -73,11 +72,9 @@ PS C:\>Get-vRAConsumerEntitledCatalogItem -Limit 9999
 
 
 
-
 -------------------------- EXAMPLE 3 --------------------------
 
 PS C:\>Get-vRAConsumerEntitledCatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e
-
 
 
 

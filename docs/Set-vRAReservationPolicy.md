@@ -5,7 +5,7 @@
 Update a vRA Reservation Policy
 
 ## SYNTAX
- Set-vRAReservationPolicy -Id <String> [-NewName <String>] [-Description <String>] [-WhatIf] [-Confirm]  [<CommonParameters>] Set-vRAReservationPolicy -Name <String> [-NewName <String>] [-Description <String>] [-WhatIf] [-Confirm]  [<CommonParameters>] Set-vRAReservationPolicy -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Set-vRAReservationPolicy -Id <String> [-NewName <String>] [-Description <String>] [-WhatIf] [-Confirm]  [<CommonParameters>]  Set-vRAReservationPolicy -Name <String> [-NewName <String>] [-Description <String>] [-WhatIf] [-Confirm]  [<CommonParameters>]  Set-vRAReservationPolicy -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -95,7 +95,6 @@ the New Name"
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Set-vRAReservationPolicy -Name ReservationPolicy01 -NewName "NewName" -Description "This is the New Name"
@@ -105,11 +104,9 @@ PS C:\>Set-vRAReservationPolicy -Name ReservationPolicy01 -NewName "NewName" -De
 
 
 
-
 -------------------------- EXAMPLE 3 --------------------------
 
 PS C:\>$JSON = @"
-
 
 {
   "id": "34ae1d6c-9972-4736-acdb-7ee109ad1dbd",

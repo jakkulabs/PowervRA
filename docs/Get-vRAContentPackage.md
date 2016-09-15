@@ -5,7 +5,7 @@
 Retrieve vRA Content Packages
 
 ## SYNTAX
- Get-vRAContentPackage [-Limit <String>] [<CommonParameters>] Get-vRAContentPackage -Id <String[]> [-Limit <String>] [<CommonParameters>] Get-vRAContentPackage -Name <String[]> [-Limit <String>] [<CommonParameters>]    
+ Get-vRAContentPackage [-Limit <String>] [<CommonParameters>]  Get-vRAContentPackage -Id <String[]> [-Limit <String>] [<CommonParameters>]  Get-vRAContentPackage -Name <String[]> [-Limit <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -60,11 +60,9 @@ PS C:\>Get-vRAContentPackage
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAContentPackage -Id "b2d72c5d-775b-400c-8d79-b2483e321bae"
-
 
 
 

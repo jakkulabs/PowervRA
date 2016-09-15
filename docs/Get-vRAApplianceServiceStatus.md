@@ -5,7 +5,7 @@
 Get information about vRA services
 
 ## SYNTAX
- Get-vRAApplianceServiceStatus [[-Name] <String[]>] [[-Limit] <String>] [<CommonParameters>]    
+ Get-vRAApplianceServiceStatus [[-Name] <String[]>] [[-Limit] <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -51,11 +51,9 @@ PS C:\>Get-vRAApplianceServiceStatus
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAApplianceServiceStatus -Limit 9999
-
 
 
 

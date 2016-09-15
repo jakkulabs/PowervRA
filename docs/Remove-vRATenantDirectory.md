@@ -5,7 +5,7 @@
 Remove a vRA Tenant Directory
 
 ## SYNTAX
- Remove-vRATenantDirectory [-Id] <String> [-Domain] <String> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Remove-vRATenantDirectory [-Id] <String> [-Domain] <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -67,11 +67,9 @@ PS C:\>Remove-vRATenantDirectory -Id Tenant01 -Domain vrademo.local
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>$Id = "Tenant01"
-
 
 Get-vRATenantDirectory -Id $Id | Remove-vRATenantDirectory -Id $Id -Confirm:$false
 ```

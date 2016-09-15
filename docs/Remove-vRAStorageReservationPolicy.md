@@ -5,7 +5,7 @@
 Remove a vRA Storage Reservation Policy
 
 ## SYNTAX
- Remove-vRAStorageReservationPolicy -Id <String[]> [-WhatIf] [-Confirm] [<CommonParameters>] Remove-vRAStorageReservationPolicy -Name <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Remove-vRAStorageReservationPolicy -Id <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]  Remove-vRAStorageReservationPolicy -Name <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -67,11 +67,9 @@ PS C:\>Remove-vRAStorageReservationPolicy -Id "34ae1d6c-9972-4736-acdb-7ee109ad1
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Remove-vRAStorageReservationPolicy -Name "StorageReservationPolicy01"
-
 
 
 

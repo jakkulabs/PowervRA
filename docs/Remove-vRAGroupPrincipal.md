@@ -5,7 +5,7 @@
 Remove a vRA custom group
 
 ## SYNTAX
- Remove-vRAGroupPrincipal [-Id] <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Remove-vRAGroupPrincipal -Id <String[]> [-Tenant <String>] [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -19,9 +19,18 @@ Remove a vRA custom group
 The principal id of the custom group
 
 * Required: true
-* Position: 1
+* Position: named
 * Default value: 
 * Accept pipeline input: true (ByValue, ByPropertyName)
+
+### Tenant
+
+The tenant of the group
+
+* Required: false
+* Position: named
+* Default value: $Global:vRAConnection.Tenant
+* Accept pipeline input: false
 
 ### WhatIf
 
@@ -52,7 +61,6 @@ None
 -------------------------- EXAMPLE 1 --------------------------
 
 PS C:\>Remove-vRAGroupPrincipal -PrincipalId Group@Tenant
-
 
 
 

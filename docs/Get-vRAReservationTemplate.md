@@ -5,7 +5,7 @@
 Get a reservation json template
 
 ## SYNTAX
- Get-vRAReservationTemplate [-Id] <String> [[-OutFile] <String>] [<CommonParameters>]    
+ Get-vRAReservationTemplate [-Id] <String> [[-OutFile] <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -51,11 +51,9 @@ PS C:\>Get-vRAReservationTemplate -Id 75ae3400-beb5-4b0b-895a-0484413c93b1 -OutF
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAReservation -Name Reservation1 | Get-vRAReservationTemplate -OutFile C:\Reservation.json
-
 
 
 

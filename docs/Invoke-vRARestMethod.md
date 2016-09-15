@@ -5,7 +5,7 @@
 Wrapper for Invoke-RestMethod with vRA specifics
 
 ## SYNTAX
- Invoke-vRARestMethod [-Method] <String> [-URI] <String> [[-Body] <String>] [<CommonParameters>]    
+ Invoke-vRARestMethod [-Method] <String> [-URI] <String> [[-Body] <String>] [[-Headers] <IDictionary>]  [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -41,6 +41,15 @@ REST Body in JSON format
 * Default value: 
 * Accept pipeline input: false
 
+### Headers
+
+Optionally supply custom headers
+
+* Required: false
+* Position: 4
+* Default value: 
+* Accept pipeline input: false
+
 ## INPUTS
 
 System.String
@@ -61,11 +70,9 @@ PS C:\>Invoke-vRARestMethod -Method GET -URI '/identity/api/tenants'
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>$JSON = @"
-
 
 {
       "name" : "Tenant02",

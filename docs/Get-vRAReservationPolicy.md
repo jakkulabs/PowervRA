@@ -5,7 +5,7 @@
 Retrieve vRA Reservation Policies
 
 ## SYNTAX
- Get-vRAReservationPolicy [-Limit <String>] [<CommonParameters>] Get-vRAReservationPolicy -Id <String[]> [-Limit <String>] [<CommonParameters>] Get-vRAReservationPolicy -Name <String[]> [-Limit <String>] [<CommonParameters>]    
+ Get-vRAReservationPolicy [-Limit <String>] [<CommonParameters>]  Get-vRAReservationPolicy -Id <String[]> [-Limit <String>] [<CommonParameters>]  Get-vRAReservationPolicy -Name <String[]> [-Limit <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -60,11 +60,9 @@ PS C:\>Get-vRAReservationPolicy
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAReservationPolicy -Id "068afd10-560f-4360-aa52-786a28573fdc"
-
 
 
 

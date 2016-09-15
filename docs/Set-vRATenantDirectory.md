@@ -5,7 +5,7 @@
 Update a vRA Tenant Directory
 
 ## SYNTAX
- Set-vRATenantDirectory -ID <String> [-Name <String>] [-Description <String>] [-Alias <String>] [-Type <String>]  -Domain <String> [-UserNameDN <String>] [-Password <String>] [-URL <String>] [-GroupBaseSearchDN <String>]  [-UserBaseSearchDN <String>] [-Subdomains <String>] [-GroupBaseSearchDNs <String[]>] [-UserBaseSearchDNs <String[]>]  [-DomainAdminUsername <String>] [-DomainAdminPassword <String>] [-Certificate <String>] [-TrustAll]  [-UseGlobalCatalog] [-WhatIf] [-Confirm] [<CommonParameters>] Set-vRATenantDirectory -ID <String> -Domain <String> -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Set-vRATenantDirectory -ID <String> [-Name <String>] [-Description <String>] [-Alias <String>] [-Type <String>]  -Domain <String> [-UserNameDN <String>] [-Password <String>] [-URL <String>] [-GroupBaseSearchDN <String>]  [-UserBaseSearchDN <String>] [-Subdomains <String>] [-GroupBaseSearchDNs <String[]>] [-UserBaseSearchDNs <String[]>]  [-DomainAdminUsername <String>] [-DomainAdminPassword <String>] [-Certificate <String>] [-TrustAll]  [-UseGlobalCatalog] [-WhatIf] [-Confirm] [<CommonParameters>]  Set-vRATenantDirectory -ID <String> -Domain <String> -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -230,11 +230,9 @@ PS C:\>Set-vRATenantDirectory -ID Tenant01 -Domain vrademo.local -GroupBaseSearc
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>$JSON = @"
-
 
 {
   "name" : "Tenant01",

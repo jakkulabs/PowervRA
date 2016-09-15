@@ -5,7 +5,7 @@
 Update a vRA local user principal
 
 ## SYNTAX
- Set-vRAUserPrincipal -Id <String> [-FirstName <String>] [-LastName <String>] [-EmailAddress <String>] [-Description <String>] [-Password <String>] [-DisableAccount] [-EnableAccount] [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Set-vRAUserPrincipal -Id <String> [-Tenant <String>] [-FirstName <String>] [-LastName <String>] [-EmailAddress  <String>] [-Description <String>] [-Password <String>] [-DisableAccount] [-EnableAccount] [-WhatIf] [-Confirm]  [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -21,6 +21,15 @@ The principal id of the user
 * Required: true
 * Position: named
 * Default value: 
+* Accept pipeline input: false
+
+### Tenant
+
+The tenant of the user
+
+* Required: false
+* Position: named
+* Default value: $Global:vRAConnection.Tenant
 * Accept pipeline input: false
 
 ### FirstName
@@ -115,8 +124,8 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-PS C:\>Set-vRAUserPrincipal -Id user@vsphere.local -FirstName FirstName-Updated -LastName LastName-Updated -EmailAddress userupdated@vsphere.local -Description Description-Updated
-
+PS C:\>Set-vRAUserPrincipal -Id user@vsphere.local -FirstName FirstName-Updated -LastName LastName-Updated 
+-EmailAddress userupdated@vsphere.local -Description Description-Updated
 
 
 
@@ -132,11 +141,9 @@ PS C:\>Set-vRAUserPrincipal -Id user@vsphere.local -EnableAccount
 
 
 
-
 -------------------------- EXAMPLE 3 --------------------------
 
 PS C:\>Set-vRAUserPrincipal -Id user@vsphere.local -DisableAccount
-
 
 
 

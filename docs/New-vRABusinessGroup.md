@@ -5,7 +5,7 @@
 Create a vRA Business Group
 
 ## SYNTAX
- New-vRABusinessGroup -TenantId <String> -Name <String> [-Description <String>] [-BusinessGroupManager <String[]>]  [-SupportUser <String[]>] [-User <String[]>] [-MachinePrefixId <String>] -SendManagerEmailsTo <String> [-WhatIf]  [-Confirm] [<CommonParameters>] New-vRABusinessGroup -TenantId <String> -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ New-vRABusinessGroup -TenantId <String> -Name <String> [-Description <String>] [-BusinessGroupManager <String[]>]  [-SupportUser <String[]>] [-User <String[]>] [-MachinePrefixId <String>] -SendManagerEmailsTo <String> [-WhatIf]  [-Confirm] [<CommonParameters>]  New-vRABusinessGroup -TenantId <String> -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -123,10 +123,9 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-PS C:\>New-vRATenantBusinessGroup -TenantId Tenant01 -Name BusinessGroup01 -Description "Business Group 01" 
+PS C:\>New-vRABusinessGroup -TenantId Tenant01 -Name BusinessGroup01 -Description "Business Group 01" 
 -BusinessGroupManager "busgroupmgr01@vrademo.local","busgroupmgr02@vrademo.local" -SupportUser 
 "supportusers@vrademo.local" `
-
 
 -User "basicusers@vrademo.local" -MachinePrefixId "87e99513-cbea-4589-8678-c84c5907bdf2" -SendManagerEmailsTo 
 "busgroupmgr01@vrademo.local"
@@ -137,7 +136,6 @@ PS C:\>New-vRATenantBusinessGroup -TenantId Tenant01 -Name BusinessGroup01 -Desc
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>$JSON = @"
-
 
 {
   "name": "BusinessGroup01",

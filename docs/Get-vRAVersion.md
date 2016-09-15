@@ -5,7 +5,7 @@
 Retrieve vRA version information
 
 ## SYNTAX
- Get-vRAVersion [<CommonParameters>]    
+ Get-vRAVersion [<CommonParameters>]     
 
 ## DESCRIPTION
 

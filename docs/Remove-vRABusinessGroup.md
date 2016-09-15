@@ -5,7 +5,7 @@
 Remove a vRA Business Group
 
 ## SYNTAX
- Remove-vRABusinessGroup -TenantId <String> -Id <String[]> [-WhatIf] [-Confirm] [<CommonParameters>] Remove-vRABusinessGroup -TenantId <String> -Name <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Remove-vRABusinessGroup -TenantId <String> -Id <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]  Remove-vRABusinessGroup -TenantId <String> -Name <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -76,11 +76,9 @@ PS C:\>Remove-vRABusinessGroup -TenantId Tenant01 -Id "f8e0d99e-c567-4031-99cb-d
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Remove-vRABusinessGroup -TenantId Tenant01 -Name "BusinessGroup01","BusinessGroup02"
-
 
 
 
