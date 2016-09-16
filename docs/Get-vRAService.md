@@ -5,7 +5,7 @@
 Retrieve vRA services
 
 ## SYNTAX
- Get-vRAService [-Limit <String>] [<CommonParameters>] Get-vRAService [-Id <String[]>] [-Limit <String>] [<CommonParameters>] Get-vRAService [-Name <String[]>] [-Limit <String>] [<CommonParameters>]    
+ Get-vRAService [-Limit <String>] [<CommonParameters>]  Get-vRAService [-Id <String[]>] [-Limit <String>] [<CommonParameters>]  Get-vRAService [-Name <String[]>] [-Limit <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -62,11 +62,9 @@ PS C:\>Get-vRAService
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAService -Id 332d38d5-c8db-4519-87a7-7ef9f358091a
-
 
 
 

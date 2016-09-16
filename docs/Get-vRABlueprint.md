@@ -5,7 +5,7 @@
 Retrieve vRA Blueprints
 
 ## SYNTAX
- Get-vRABlueprint [-Limit <String>] [<CommonParameters>] Get-vRABlueprint -Id <String[]> [-Limit <String>] [<CommonParameters>] Get-vRABlueprint -Name <String[]> [-Limit <String>] [<CommonParameters>]    
+ Get-vRABlueprint [-Limit <String>] [<CommonParameters>]  Get-vRABlueprint -Id <String[]> [-Limit <String>] [<CommonParameters>]  Get-vRABlueprint -Name <String[]> [-Limit <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -60,11 +60,9 @@ PS C:\>Get-vRABlueprint
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRABlueprint -Id "309100fd-b8ce-4e8c-ac8c-a667b8ace54f"
-
 
 
 

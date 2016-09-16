@@ -5,7 +5,7 @@
 Remove a vRA Content Package
 
 ## SYNTAX
- Remove-vRAContentPackage -Id <String[]> [-WhatIf] [-Confirm] [<CommonParameters>] Remove-vRAContentPackage -Name <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Remove-vRAContentPackage -Id <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]  Remove-vRAContentPackage -Name <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -67,11 +67,9 @@ PS C:\>Remove-vRAContentPackage -Id "f8e0d99e-c567-4031-99cb-d8410c841ed7"
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Remove-vRAContentPackage -Name "ContentPackage01","ContentPackage02"
-
 
 
 

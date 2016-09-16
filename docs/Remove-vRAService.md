@@ -5,7 +5,7 @@
 Remove a vRA Service
 
 ## SYNTAX
- Remove-vRAService [-Id] <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Remove-vRAService [-Id] <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -58,11 +58,9 @@ PS C:\>Remove-vRAService -Id "d00d3631-997c-40f7-90e8-7ccbc153c20c"
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAService -Id "d00d3631-997c-40f7-90e8-7ccbc153c20c" | Remove-vRAService
-
 
 
 

@@ -5,7 +5,7 @@
 Update a vRA catalog item
 
 ## SYNTAX
- Set-vRACatalogItem -Id <String> [-Quota <Int32>] [-Service <String>] [-NewAndNoteworthy <Boolean>] [-WhatIf]  [-Confirm] [<CommonParameters>] Set-vRACatalogItem -Id <String> [-Status <String>] [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Set-vRACatalogItem -Id <String> [-Quota <Int32>] [-Service <String>] [-NewAndNoteworthy <Boolean>] [-WhatIf]  [-Confirm] [<CommonParameters>]  Set-vRACatalogItem -Id <String> [-Status <String>] [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -96,11 +96,9 @@ PS C:\>Set-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e -Status PUBLI
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Set-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e -Quota 1
-
 
 
 
@@ -116,11 +114,9 @@ PS C:\>Set-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e -Service "Def
 
 
 
-
 -------------------------- EXAMPLE 4 --------------------------
 
 PS C:\>Set-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e -NewAndNoteworthy $false
-
 
 TODO:
 - Investigate / fix authorization error

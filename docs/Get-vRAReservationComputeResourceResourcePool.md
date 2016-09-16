@@ -5,7 +5,7 @@
 Get available resource pools for a compute resource
 
 ## SYNTAX
- Get-vRAReservationComputeResourceResourcePool -Type <String> -ComputeResourceId <String> [<CommonParameters>] Get-vRAReservationComputeResourceResourcePool -Type <String> -ComputeResourceId <String> -Name <String[]>  [<CommonParameters>]    
+ Get-vRAReservationComputeResourceResourcePool -Type <String> -ComputeResourceId <String> [<CommonParameters>]  Get-vRAReservationComputeResourceResourcePool -Type <String> -ComputeResourceId <String> -Name <String[]>  [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -54,7 +54,6 @@ System.Management.Automation.PSObject
 
 PS C:\>Get-vRAReservationComputeResourceResourcePool -Type vSphere -ComputeResourceId 
 0c0a6d46-4c37-4b82-b427-c47d026bf71d -Name ResourcePool1
-
 
 
 

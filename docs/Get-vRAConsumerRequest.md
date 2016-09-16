@@ -5,7 +5,7 @@
 Get information about vRA requests
 
 ## SYNTAX
- Get-vRAConsumerRequest [-Limit <String>] [-Page <Int32>] [<CommonParameters>] Get-vRAConsumerRequest -Id <String[]> [<CommonParameters>] Get-vRAConsumerRequest -RequestNumber <String[]> [<CommonParameters>]    
+ Get-vRAConsumerRequest [-Limit <String>] [-Page <Int32>] [<CommonParameters>]  Get-vRAConsumerRequest -Id <String[]> [<CommonParameters>]  Get-vRAConsumerRequest -RequestNumber <String[]> [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -70,7 +70,6 @@ PS C:\>Get-vRAConsumerRequest
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAConsumerRequest -Limit 9999
@@ -80,11 +79,9 @@ PS C:\>Get-vRAConsumerRequest -Limit 9999
 
 
 
-
 -------------------------- EXAMPLE 3 --------------------------
 
 PS C:\>Get-vRAConsumerRequest -Id 697db588-b706-4836-ae38-35e0c7221e3b
-
 
 
 

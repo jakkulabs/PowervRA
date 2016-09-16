@@ -5,7 +5,7 @@
 Get a resource operation
 
 ## SYNTAX
- Get-vRAResourceOperation [-Limit <String>] [<CommonParameters>] Get-vRAResourceOperation -Id <String[]> [-Limit <String>] [<CommonParameters>] Get-vRAResourceOperation -ExternalId <String[]> [-Limit <String>] [<CommonParameters>] Get-vRAResourceOperation -Name <String[]> [-Limit <String>] [<CommonParameters>]    
+ Get-vRAResourceOperation [-Limit <String>] [<CommonParameters>]  Get-vRAResourceOperation -Id <String[]> [-Limit <String>] [<CommonParameters>]  Get-vRAResourceOperation -ExternalId <String[]> [-Limit <String>] [<CommonParameters>]  Get-vRAResourceOperation -Name <String[]> [-Limit <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -71,7 +71,6 @@ PS C:\>Get-vRAResourceOperation
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAResourceOperation -Id "a4d57b16-9706-471b-9960-d0855fe544bb"
@@ -81,11 +80,9 @@ PS C:\>Get-vRAResourceOperation -Id "a4d57b16-9706-471b-9960-d0855fe544bb"
 
 
 
-
 -------------------------- EXAMPLE 3 --------------------------
 
 PS C:\>Get-vRAResourceOperation -Name "Power On"
-
 
 
 

@@ -5,7 +5,7 @@
 Retrieve vRA Tenant Directories
 
 ## SYNTAX
- Get-vRATenantDirectory [-Id] <String[]> [[-Limit] <String>] [<CommonParameters>]    
+ Get-vRATenantDirectory [-Id] <String[]> [[-Limit] <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -45,7 +45,6 @@ System.Management.Automation.PSObject.
 -------------------------- EXAMPLE 1 --------------------------
 
 PS C:\>Get-vRATenantDirectory -Id Tenant01
-
 
 
 

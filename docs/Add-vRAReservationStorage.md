@@ -5,7 +5,7 @@
 Add storage to an existing vRA reservation
 
 ## SYNTAX
- Add-vRAReservationStorage [-Id] <String> [-Path] <String> [-ReservedSizeGB] <Int32> [[-Priority] <Int32>] [-WhatIf]  [-Confirm] [<CommonParameters>]    
+ Add-vRAReservationStorage [-Id] <String> [-Path] <String> [-ReservedSizeGB] <Int32> [[-Priority] <Int32>] [-WhatIf]  [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 

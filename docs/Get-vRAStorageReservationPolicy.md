@@ -5,7 +5,7 @@
 Retrieve vRA Storage Reservation Policies
 
 ## SYNTAX
- Get-vRAStorageReservationPolicy [-Limit <String>] [<CommonParameters>] Get-vRAStorageReservationPolicy -Id <String[]> [-Limit <String>] [<CommonParameters>] Get-vRAStorageReservationPolicy -Name <String[]> [-Limit <String>] [<CommonParameters>]    
+ Get-vRAStorageReservationPolicy [-Limit <String>] [<CommonParameters>]  Get-vRAStorageReservationPolicy -Id <String[]> [-Limit <String>] [<CommonParameters>]  Get-vRAStorageReservationPolicy -Name <String[]> [-Limit <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -60,11 +60,9 @@ PS C:\>Get-vRAStorageReservationPolicy
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAStorageReservationPolicy -Id "068afd10-560f-4360-aa52-786a28573fdc"
-
 
 
 

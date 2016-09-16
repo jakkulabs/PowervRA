@@ -5,19 +5,14 @@
 Retrieve metrics for a deployed resource
 
 ## SYNTAX
-
-
- Get-vRAResourceMetric [-Limit <String[]>] [<CommonParameters>]
-
- Get-vRAResourceMetric [-Id <String[]>] [-Limit <String[]>] [<CommonParameters>]
-
- Get-vRAResourceMetric [-Name <String[]>] [-Limit <String[]>] [<CommonParameters>]
+ Get-vRAResourceMetric [-Limit <String>] [<CommonParameters>]  Get-vRAResourceMetric [-Id <String[]>] [-Limit <String>] [<CommonParameters>]  Get-vRAResourceMetric [-Name <String[]>] [-Limit <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
 Retrieve metrics for a deployed resource
 
 ## PARAMETERS
+
 
 ### Id
 
@@ -65,7 +60,6 @@ PS C:\>Get-vRAResourceMetric
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAConsumerCatalogItem -Name vm01 | Get-vRAResourceMetric
@@ -75,11 +69,9 @@ PS C:\>Get-vRAConsumerCatalogItem -Name vm01 | Get-vRAResourceMetric
 
 
 
-
 -------------------------- EXAMPLE 3 --------------------------
 
 PS C:\>Get-vRAResourceMetric -Id "448fcd09-b8c0-482c-abbc-b3ab818c2e31"
-
 
 
 

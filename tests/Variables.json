@@ -104,7 +104,8 @@
     "Name": "ContentPackage100",
     "Description": "Content Package 100 ",
     "BlueprintName": "centos",
-    "FileName": "C:\\Packages\\ContentPackage100.zip"
+    "FileName": "C:\\Packages\\ContentPackage100.zip",
+    "ImportStatusMessage": "Found matching content, import will overwrite this content."
   },
   "Reservation":
   {

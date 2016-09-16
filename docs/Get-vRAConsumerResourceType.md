@@ -5,7 +5,7 @@
 Get a consumer resource type
 
 ## SYNTAX
- Get-vRAConsumerResourceType [-Limit <String>] [<CommonParameters>] Get-vRAConsumerResourceType [-Id <String[]>] [-Limit <String>] [<CommonParameters>] Get-vRAConsumerResourceType [-Name <String[]>] [-Limit <String>] [<CommonParameters>]    
+ Get-vRAConsumerResourceType [-Limit <String>] [<CommonParameters>]  Get-vRAConsumerResourceType [-Id <String[]>] [-Limit <String>] [<CommonParameters>]  Get-vRAConsumerResourceType [-Name <String[]>] [-Limit <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -61,11 +61,9 @@ PS C:\>Get-vRAConsumerResourceType
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAConsumerResourceType -Id "Infrastructure.Machine"
-
 
 
 

@@ -5,7 +5,7 @@
 Create a vRA custom group
 
 ## SYNTAX
- New-vRAGroupPrincipal [-Tenant <String>] -Name <String> [-Description <String>] [-WhatIf] [-Confirm] [<CommonParameters>] New-vRAGroupPrincipal -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ New-vRAGroupPrincipal [-Tenant <String>] -Name <String> [-Description <String>] [-WhatIf] [-Confirm]  [<CommonParameters>]  New-vRAGroupPrincipal -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -16,7 +16,7 @@ Create a vRA Principal (user)
 
 ### Tenant
 
-The tenant
+The tenant of the group
 
 * Required: false
 * Position: named
@@ -85,11 +85,9 @@ PS C:\>New-vRAGroupPrincipal -Name TestGroup01 -Description "Test Group 01"
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>$JSON = @"
-
 
 {
         "@type": "Group",

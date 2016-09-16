@@ -5,7 +5,7 @@
 Retrieve vRA entitlements
 
 ## SYNTAX
- Get-vRAEntitlement [-Limit <String>] [<CommonParameters>] Get-vRAEntitlement [-Id <String[]>] [-Limit <String>] [<CommonParameters>] Get-vRAEntitlement [-Name <String[]>] [-Limit <String>] [<CommonParameters>]    
+ Get-vRAEntitlement [-Limit <String>] [<CommonParameters>]  Get-vRAEntitlement [-Id <String[]>] [-Limit <String>] [<CommonParameters>]  Get-vRAEntitlement [-Name <String[]>] [-Limit <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -60,11 +60,9 @@ PS C:\>Get-vRAEntitlement
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAEntitlement -Id 332d38d5-c8db-4519-87a7-7ef9f358091a
-
 
 
 

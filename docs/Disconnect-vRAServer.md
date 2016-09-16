@@ -5,7 +5,7 @@
 Disconnect from a vRA server
 
 ## SYNTAX
- Disconnect-vRAServer [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Disconnect-vRAServer [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -34,7 +34,6 @@ Disconnect from a vRA server by removing the authorization token and the global 
 -------------------------- EXAMPLE 1 --------------------------
 
 PS C:\>Disconnect-vRAServer
-
 
 
 

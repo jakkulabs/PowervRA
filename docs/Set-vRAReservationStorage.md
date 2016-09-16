@@ -5,7 +5,7 @@
 Set vRA reservation storage properties
 
 ## SYNTAX
- Set-vRAReservationStorage [-Id] <String> [-Path] <String> [[-ReservedSizeGB] <Int32>] [[-Priority] <Int32>] [-Enabled]  [-WhatIf] [-Confirm] [<CommonParameters>]    
+ Set-vRAReservationStorage [-Id] <String> [-Path] <String> [[-ReservedSizeGB] <Int32>] [[-Priority] <Int32>] [-Enabled]  [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 

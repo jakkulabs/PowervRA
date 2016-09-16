@@ -5,7 +5,7 @@
 Get supported reservation types
 
 ## SYNTAX
- Get-vRAReservationType [-Limit <Int32>] [-Page <Int32>] [<CommonParameters>] Get-vRAReservationType -Id <String[]> [<CommonParameters>] Get-vRAReservationType -Name <String[]> [<CommonParameters>]    
+ Get-vRAReservationType [-Limit <Int32>] [-Page <Int32>] [<CommonParameters>]  Get-vRAReservationType -Id <String[]> [<CommonParameters>]  Get-vRAReservationType -Name <String[]> [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -70,11 +70,9 @@ PS C:\>Get-vRAReservationType -Id "Infrastructure.Reservation.Cloud.vCloud"
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAReservationType -Name "vCloud Director"
-
 
 
 

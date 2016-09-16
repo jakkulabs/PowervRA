@@ -5,7 +5,7 @@
 Retrieve vRA Tenant Role
 
 ## SYNTAX
- Get-vRATenantRole [-TenantId] <String> [-PrincipalId] <String[]> [[-Limit] <String>] [<CommonParameters>]    
+ Get-vRATenantRole [-TenantId] <String> [-PrincipalId] <String[]> [[-Limit] <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 

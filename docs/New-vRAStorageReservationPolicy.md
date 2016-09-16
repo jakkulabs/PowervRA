@@ -5,7 +5,7 @@
 Create a vRA Storage Reservation Policy
 
 ## SYNTAX
- New-vRAStorageReservationPolicy -Name <String> [-Description <String>] [-WhatIf] [-Confirm] [<CommonParameters>] New-vRAStorageReservationPolicy -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ New-vRAStorageReservationPolicy -Name <String> [-Description <String>] [-WhatIf] [-Confirm] [<CommonParameters>]  New-vRAStorageReservationPolicy -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -77,11 +77,9 @@ Policy 01"
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>$JSON = @"
-
 
 {
   "name": "StorageReservationPolicy01",

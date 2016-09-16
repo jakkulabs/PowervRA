@@ -5,7 +5,7 @@
 Create a vRA Reservation Policy
 
 ## SYNTAX
- New-vRAReservationPolicy -Name <String> [-Description <String>] [-WhatIf] [-Confirm] [<CommonParameters>] New-vRAReservationPolicy -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ New-vRAReservationPolicy -Name <String> [-Description <String>] [-WhatIf] [-Confirm] [<CommonParameters>]  New-vRAReservationPolicy -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -76,11 +76,9 @@ PS C:\>New-vRAReservationPolicy -Name ReservationPolicy01 -Description "This is 
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>$JSON = @"
-
 
 {
   "name": "ReservationPolicy01",

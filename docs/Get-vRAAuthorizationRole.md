@@ -5,7 +5,7 @@
 Retrieve vRA Authorization Role
 
 ## SYNTAX
- Get-vRAAuthorizationRole [[-Id] <String[]>] [[-Limit] <String>] [<CommonParameters>]    
+ Get-vRAAuthorizationRole [[-Id] <String[]>] [[-Limit] <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -45,7 +45,6 @@ System.Management.Automation.PSObject.
 -------------------------- EXAMPLE 1 --------------------------
 
 PS C:\>Get-vRAAuthorizationRole
-
 
 
 

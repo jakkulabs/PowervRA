@@ -5,7 +5,7 @@
 Get a compute resource for a reservation type
 
 ## SYNTAX
- Get-vRAReservationComputeResource -Type <String> [<CommonParameters>] Get-vRAReservationComputeResource -Type <String> -Id <String[]> [<CommonParameters>] Get-vRAReservationComputeResource -Type <String> -Name <String[]> [<CommonParameters>]    
+ Get-vRAReservationComputeResource -Type <String> [<CommonParameters>]  Get-vRAReservationComputeResource -Type <String> -Id <String[]> [<CommonParameters>]  Get-vRAReservationComputeResource -Type <String> -Name <String[]> [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -60,11 +60,9 @@ PS C:\>Get-vRAReservationComputeResource -Type vSphere -Id 75ae3400-beb5-4b0b-89
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>Get-vRAReservationComputeResource -Type vSphere -Name "Cluster01"
-
 
 
 

@@ -5,7 +5,7 @@
 Get available storage for a compute resource
 
 ## SYNTAX
- Get-vRAReservationComputeResourceStorage -Type <String> -ComputeResourceId <String> [<CommonParameters>] Get-vRAReservationComputeResourceStorage -Type <String> -ComputeResourceId <String> -Name <String[]>  [<CommonParameters>]    
+ Get-vRAReservationComputeResourceStorage -Type <String> -ComputeResourceId <String> [<CommonParameters>]  Get-vRAReservationComputeResourceStorage -Type <String> -ComputeResourceId <String> -Name <String[]>  [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -54,7 +54,6 @@ System.Management.Automation.PSObject
 
 PS C:\>Get-vRAReservationComputeResourceStorage -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d 
 -Name DataStore01
-
 
 
 

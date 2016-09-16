@@ -5,7 +5,7 @@
 Create a vRA Content Package
 
 ## SYNTAX
- New-vRAContentPackage -Name <String> [-Description <String>] -BlueprintId <String[]> [-WhatIf] [-Confirm]  [<CommonParameters>] New-vRAContentPackage -Name <String> [-Description <String>] -BlueprintName <String[]> [-WhatIf] [-Confirm]  [<CommonParameters>] New-vRAContentPackage [-Description <String>] -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]    
+ New-vRAContentPackage -Name <String> [-Description <String>] -BlueprintId <String[]> [-WhatIf] [-Confirm]  [<CommonParameters>]  New-vRAContentPackage -Name <String> [-Description <String>] -BlueprintName <String[]> [-WhatIf] [-Confirm]  [<CommonParameters>]  New-vRAContentPackage [-Description <String>] -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -95,7 +95,6 @@ PS C:\>New-vRAContentPackage -Name ContentPackage01 -Description "This is Conten
 
 
 
-
 -------------------------- EXAMPLE 2 --------------------------
 
 PS C:\>New-vRAContentPackage -Name ContentPackage01 -Description "This is Content Package 01" -BlueprintName 
@@ -106,11 +105,9 @@ PS C:\>New-vRAContentPackage -Name ContentPackage01 -Description "This is Conten
 
 
 
-
 -------------------------- EXAMPLE 3 --------------------------
 
 PS C:\>$JSON = @"
-
 
 {
     "name":"ContentPackage01",
