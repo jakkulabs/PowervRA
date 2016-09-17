@@ -39,11 +39,11 @@
 
     Param (
 
-        [Parameter(Mandatory=$false, ParameterSetName="ById")]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName="ById")]
         [ValidateNotNullOrEmpty()]
         [String[]]$Id,
         
-        [Parameter(Mandatory=$false, ParameterSetName="ByName")]
+        [Parameter(Mandatory=$true, ParameterSetName="ByName")]
         [ValidateNotNullOrEmpty()]
         [String[]]$Name,
 
@@ -57,139 +57,151 @@
 
     )
 
-    try {
+    Begin {
 
-        switch ($PsCmdlet.ParameterSetName) {
+    }
 
-            # --- Get Entitlement by id
-            'ById'{
-        
-                foreach ($EntitlementId in $Id ) { 
+    Process {
+
+        try {
+
+            switch ($PsCmdlet.ParameterSetName) {
+
+                # --- Get Entitlement by id
+                'ById'{
             
-                    $URI = "/catalog-service/api/entitlements/$($EntitlementId)"
+                    foreach ($EntitlementId in $Id ) { 
+                
+                        $URI = "/catalog-service/api/entitlements/$($EntitlementId)"
 
-                    $Entitlement = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
+                        $Entitlement = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
-                    [PSCustomObject] @{
+                        [PSCustomObject] @{
 
-                        Id = $Entitlement.id
-                        Name = $Entitlement.name
-                        Description = $Entitlement.description
-                        Status = $Entitlement.status
-                        EntitledCatalogItems = $Entitlement.entitledCatalogItems
-                        EntitledResourceOperations = $Entitlement.entitledResourceOperations
-                        EntitledServices = $Entitlement.entitledServices
-                        ExpiryDate = $Entitlement.expiryDate
-                        LastUpdatedBy = $Entitlement.lastUpdatedBy
-                        LastUpdatedDate = $Entitlement.lastUpdatedDate
-                        Organization = $Entitlement.organization
-                        Principals = $Entitlement.principals
-                        PriorityOrder = $Entitlement.priorityOrder
-                        StatusName = $Entitlement.statusName
-                        LocalScopeForActions = $Entitlement.localScopeForActions
-                        Version = $Entitlement.version
+                            Id = $Entitlement.id
+                            Name = $Entitlement.name
+                            Description = $Entitlement.description
+                            Status = $Entitlement.status
+                            EntitledCatalogItems = $Entitlement.entitledCatalogItems
+                            EntitledResourceOperations = $Entitlement.entitledResourceOperations
+                            EntitledServices = $Entitlement.entitledServices
+                            ExpiryDate = $Entitlement.expiryDate
+                            LastUpdatedBy = $Entitlement.lastUpdatedBy
+                            LastUpdatedDate = $Entitlement.lastUpdatedDate
+                            Organization = $Entitlement.organization
+                            Principals = $Entitlement.principals
+                            PriorityOrder = $Entitlement.priorityOrder
+                            StatusName = $Entitlement.statusName
+                            LocalScopeForActions = $Entitlement.localScopeForActions
+                            Version = $Entitlement.version
+
+                        }
 
                     }
 
+                    break
+
                 }
 
-                break
+                # --- Get entitlement by name
+                'ByName' {
 
-            }
+                    foreach ($EntitlementName in $Name) {
 
-            # --- Get entitlement by name
-            'ByName' {
+                        $URI = "/catalog-service/api/entitlements?`$filter=name eq '$($Name)'"
 
-                foreach ($EntitlementName in $Name) {
+                        $EscapedURI = [uri]::EscapeUriString($URI)
 
-                    $URI = "/catalog-service/api/entitlements?`$filter=name eq '$($Name)'"
+                        $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
+
+                        if ($Response.content.Count -eq 0) {
+
+                            throw "Could not find entitlement item with name: $($Name)"
+
+                        }
+
+                        $Entitlement = $Response.Content
+
+                        [PSCustomObject] @{
+
+                            Id = $Entitlement.id
+                            Name = $Entitlement.name
+                            Description = $Entitlement.description
+                            Status = $Entitlement.status
+                            EntitledCatalogItems = $Entitlement.entitledCatalogItems
+                            EntitledResourceOperations = $Entitlement.entitledResourceOperations
+                            EntitledServices = $Entitlement.entitledServices
+                            ExpiryDate = $Entitlement.expiryDate
+                            LastUpdatedBy = $Entitlement.lastUpdatedBy
+                            LastUpdatedDate = $Entitlement.lastUpdatedDate
+                            Organization = $Entitlement.organization
+                            Principals = $Entitlement.principals
+                            PriorityOrder = $Entitlement.priorityOrder
+                            StatusName = $Entitlement.statusName
+                            LocalScopeForActions = $Entitlement.localScopeForActions
+                            Version = $Entitlement.version
+
+                        }
+
+                    }
+
+                    break
+
+                }
+
+                # --- No parameters passed so return all entitlements
+                'Standard' {
+
+                    $URI = "/catalog-service/api/entitlements?limit=$($Limit)&page=$($Page)&`$orderby=name asc"
 
                     $EscapedURI = [uri]::EscapeUriString($URI)
 
                     $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
-                    if ($Response.content.Count -eq 0) {
+                    foreach ($Entitlement in $Response.content) {
 
-                        throw "Could not find entitlement item with name: $($Name)"
+                        [PSCustomObject] @{
 
-                    }
+                            Id = $Entitlement.id
+                            Name = $Entitlement.name
+                            Description = $Entitlement.description
+                            Status = $Entitlement.status
+                            EntitledCatalogItems = $Entitlement.entitledCatalogItems
+                            EntitledResourceOperations = $Entitlement.entitledResourceOperations
+                            EntitledServices = $Entitlement.entitledServices
+                            ExpiryDate = $Entitlement.expiryDate
+                            LastUpdatedBy = $Entitlement.lastUpdatedBy
+                            LastUpdatedDate = $Entitlement.lastUpdatedDate
+                            Organization = $Entitlement.organization
+                            Principals = $Entitlement.principals
+                            PriorityOrder = $Entitlement.priorityOrder
+                            StatusName = $Entitlement.statusName
+                            LocalScopeForActions = $Entitlement.localScopeForActions
+                            Version = $Entitlement.version
 
-                    $Entitlement = $Response.Content
-
-                    [PSCustomObject] @{
-
-                        Id = $Entitlement.id
-                        Name = $Entitlement.name
-                        Description = $Entitlement.description
-                        Status = $Entitlement.status
-                        EntitledCatalogItems = $Entitlement.entitledCatalogItems
-                        EntitledResourceOperations = $Entitlement.entitledResourceOperations
-                        EntitledServices = $Entitlement.entitledServices
-                        ExpiryDate = $Entitlement.expiryDate
-                        LastUpdatedBy = $Entitlement.lastUpdatedBy
-                        LastUpdatedDate = $Entitlement.lastUpdatedDate
-                        Organization = $Entitlement.organization
-                        Principals = $Entitlement.principals
-                        PriorityOrder = $Entitlement.priorityOrder
-                        StatusName = $Entitlement.statusName
-                        LocalScopeForActions = $Entitlement.localScopeForActions
-                        Version = $Entitlement.version
+                        }
 
                     }
+
+                    Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
+
+                    break
 
                 }
-
-                break
-
-            }
-
-            # --- No parameters passed so return all entitlements
-            'Standard' {
-
-                $URI = "/catalog-service/api/entitlements?limit=$($Limit)&page=$($Page)&`$orderby=name asc"
-
-                $EscapedURI = [uri]::EscapeUriString($URI)
-
-                $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
-
-                foreach ($Entitlement in $Response.content) {
-
-                    [PSCustomObject] @{
-
-                        Id = $Entitlement.id
-                        Name = $Entitlement.name
-                        Description = $Entitlement.description
-                        Status = $Entitlement.status
-                        EntitledCatalogItems = $Entitlement.entitledCatalogItems
-                        EntitledResourceOperations = $Entitlement.entitledResourceOperations
-                        EntitledServices = $Entitlement.entitledServices
-                        ExpiryDate = $Entitlement.expiryDate
-                        LastUpdatedBy = $Entitlement.lastUpdatedBy
-                        LastUpdatedDate = $Entitlement.lastUpdatedDate
-                        Organization = $Entitlement.organization
-                        Principals = $Entitlement.principals
-                        PriorityOrder = $Entitlement.priorityOrder
-                        StatusName = $Entitlement.statusName
-                        LocalScopeForActions = $Entitlement.localScopeForActions
-                        Version = $Entitlement.version
-
-                    }
-
-                }
-
-                Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
-
-                break
 
             }
 
         }
+        catch [Exception]{
+
+            throw
+
+        }
 
     }
-    catch [Exception]{
 
-        throw
-
+    End {
+        
     }
 
 }

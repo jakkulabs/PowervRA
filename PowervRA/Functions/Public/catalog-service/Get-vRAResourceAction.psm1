@@ -26,50 +26,67 @@ function Get-vRAResourceAction {
 
     Param (
 
-        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
         [ValidateNotNullOrEmpty()]
-        [String]$ResourceId
+        [String[]]$ResourceId
 
     )
 
-    try {
+    Begin {
 
-        # --- Set the uri
-        $URI = "/catalog-service/api/consumer/resources/$($ResourceId)/actions"
+    }
 
-        # --- Get all available resource actions
+    Process {
 
-        $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
+        try {
 
-        if ($Response.content.Count -lt 1){
+            foreach ($Id in $ResourceId) {
 
-            throw "No resource Actions available for the resource. Check the users entitlements."
+                # --- Set the uri
+                $URI = "/catalog-service/api/consumer/resources/$($Id)/actions"
 
-        }
+                # --- Get all available resource actions
 
-        foreach ($Action in $Response.content) {
+                $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
-            [PSCustomObject] @{
+                if ($Response.content.Count -lt 1){
 
-                Id = $Action.id
-                Name = $Action.name
-                Description = $Action.description
-                Type = $Action.type
-                ExtensionId = $Action.extensionId
-                ProviderTypeId = $Action.providerTypeId
-                BindingId = $Action.bindingId
-                IconId = $Action.iconId
-                HasForm = $Action.hasForm
-                FormScale = $Action.formScale
+                    throw "No resource Actions available for the resource. Check the users entitlements."
+
+                }
+
+                foreach ($Action in $Response.content) {
+
+                    [PSCustomObject] @{
+
+                        Id = $Action.id
+                        Name = $Action.name
+                        Description = $Action.description
+                        Type = $Action.type
+                        ExtensionId = $Action.extensionId
+                        ProviderTypeId = $Action.providerTypeId
+                        BindingId = $Action.bindingId
+                        IconId = $Action.iconId
+                        HasForm = $Action.hasForm
+                        FormScale = $Action.formScale
+
+                    }
+
+                }
 
             }
 
         }
+        catch [Exception]{
+
+            throw
+
+        }
 
     }
-    catch [Exception]{
+    
+    End {
 
-        throw
     }
 
 }

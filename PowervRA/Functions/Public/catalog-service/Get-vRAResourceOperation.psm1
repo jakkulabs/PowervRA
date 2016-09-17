@@ -43,158 +43,170 @@
 
     Param (
 
-        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="ById")]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName="ById")]
         [ValidateNotNullOrEmpty()]
         [String[]]$Id,
         
-        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="ByExternalId")]
+        [Parameter(Mandatory=$true,ParameterSetName="ByExternalId")]
         [ValidateNotNullOrEmpty()]
         [String[]]$ExternalId,
 
-        [Parameter(Mandatory=$false, ParameterSetName="Standard")]
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
         [Int]$Page = 1,
 
-        [Parameter(Mandatory=$false, ParameterSetName="Standard")]
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
         [Int]$Limit = 100
 
     )
-                
-    try {
 
-        switch ($PsCmdlet.ParameterSetName) {
+    Begin {
 
-            # --- Get resource operation by id
-            'ById'{
+    } 
 
-                foreach ($ResourceOperation in $Id ) { 
+    Process {
 
-                    $URI = "/catalog-service/api/resourceOperations/$($ResourceOperation)"
+        try {
 
-                    $EscapedURI = [uri]::EscapeUriString($URI)
+            switch ($PsCmdlet.ParameterSetName) {
 
-                    $ResourceOperation = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
+                # --- Get resource operation by id
+                'ById'{
 
-                    [PSCustomObject] @{
+                    foreach ($ResourceOperation in $Id ) { 
 
-                        Id = $ResourceOperation.id
-                        Name = $ResourceOperation.name
-                        ExternalId = $ResourceOperation.externalId
-                        Description = $ResourceOperation.description
-                        IconId = $ResourceOperation.iconId
-                        TargetCriteria = $ResourceOperation.targetCriteria
-                        TargetResourceTypeRef = $ResourceOperation.targetResourceTypeRef
-                        Status = $ResourceOperation.status
-                        Entitleable = $ResourceOperation.entitleable
-                        organization = $ResourceOperation.organization
-                        RequestSchema =$ResourceOperation.requestSchema
-                        Forms = $ResourceOperation.forms
-                        Callbacks = $ResourceOperation.callbacks
-                        LifecycleAction = $ResourceOperation.lifecycleACtion
-                        BindingId = $ResourceOperation.bindingId
-                        ProviderTypeRef =$ResourceOperation.providerTypeRef
+                        $URI = "/catalog-service/api/resourceOperations/$($ResourceOperation)"
+
+                        $EscapedURI = [uri]::EscapeUriString($URI)
+
+                        $ResourceOperation = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
+
+                        [PSCustomObject] @{
+
+                            Id = $ResourceOperation.id
+                            Name = $ResourceOperation.name
+                            ExternalId = $ResourceOperation.externalId
+                            Description = $ResourceOperation.description
+                            IconId = $ResourceOperation.iconId
+                            TargetCriteria = $ResourceOperation.targetCriteria
+                            TargetResourceTypeRef = $ResourceOperation.targetResourceTypeRef
+                            Status = $ResourceOperation.status
+                            Entitleable = $ResourceOperation.entitleable
+                            organization = $ResourceOperation.organization
+                            RequestSchema =$ResourceOperation.requestSchema
+                            Forms = $ResourceOperation.forms
+                            Callbacks = $ResourceOperation.callbacks
+                            LifecycleAction = $ResourceOperation.lifecycleACtion
+                            BindingId = $ResourceOperation.bindingId
+                            ProviderTypeRef =$ResourceOperation.providerTypeRef
+
+                        }
 
                     }
 
+                    break
+
                 }
 
-                break
+                # --- Get resource operation by external id
+                'ByExternalId' {
 
-            }
+                    foreach ($ResourceOperation in $ExternalId) {           
 
-            # --- Get resource operation by external id
-            'ByExternalId' {
+                        $URI = "/catalog-service/api/resourceOperations?`$filter=externalId eq '$($ResourceOperation)'"
 
-                foreach ($ResourceOperation in $ExternalId) {           
+                        $EscapedURI = [uri]::EscapeUriString($URI)
 
-                    $URI = "/catalog-service/api/resourceOperations?`$filter=externalId eq '$($ResourceOperation)'"
+                        $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
+
+                        if ($Response.content.Count -eq 0) {
+
+                            throw "Could not find resource operation item with name: $Name"
+
+                        }
+
+                        $ResourceOperation = $Response.content
+
+                        [PSCustomObject] @{
+
+                            Id = $ResourceOperation.id
+                            Name = $ResourceOperation.name
+                            ExternalId = $ResourceOperation.externalId
+                            Description = $ResourceOperation.description
+                            IconId = $ResourceOperation.iconId
+                            TargetCriteria = $ResourceOperation.targetCriteria
+                            TargetResourceTypeRef = $ResourceOperation.targetResourceTypeRef
+                            Status = $ResourceOperation.status
+                            Entitleable = $ResourceOperation.entitleable
+                            organization = $ResourceOperation.organization
+                            RequestSchema =$ResourceOperation.requestSchema
+                            Forms = $ResourceOperation.forms
+                            Callbacks = $ResourceOperation.callbacks
+                            LifecycleAction = $ResourceOperation.lifecycleACtion
+                            BindingId = $ResourceOperation.bindingId
+                            ProviderTypeRef =$ResourceOperation.providerTypeRef
+
+                        }
+
+                    }
+
+                    break
+
+                }
+                    
+                # --- No parameters passed so return all resource operations
+                'Standard' {
+                
+                    $URI = "/catalog-service/api/resourceOperations?limit=$($Limit)&page=$($Page)&`$orderby=name asc"
 
                     $EscapedURI = [uri]::EscapeUriString($URI)
 
                     $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
-                    if ($Response.content.Count -eq 0) {
+                    foreach ($ResourceOperation in $Response.content) {
 
-                        throw "Could not find resource operation item with name: $Name"
+                        [PSCustomObject] @{
 
-                    }
+                            Id = $ResourceOperation.id
+                            Name = $ResourceOperation.name
+                            ExternalId = $ResourceOperation.externalId
+                            Description = $ResourceOperation.description
+                            IconId = $ResourceOperation.iconId
+                            TargetCriteria = $ResourceOperation.targetCriteria
+                            TargetResourceTypeRef = $ResourceOperation.targetResourceTypeRef
+                            Status = $ResourceOperation.status
+                            Entitleable = $ResourceOperation.entitleable
+                            organization = $ResourceOperation.organization
+                            RequestSchema =$ResourceOperation.requestSchema
+                            Forms = $ResourceOperation.forms
+                            Callbacks = $ResourceOperation.callbacks
+                            LifecycleAction = $ResourceOperation.lifecycleACtion
+                            BindingId = $ResourceOperation.bindingId
+                            ProviderTypeRef =$ResourceOperation.providerTypeRef
 
-                    $ResourceOperation = $Response.content
-
-                    [PSCustomObject] @{
-
-                        Id = $ResourceOperation.id
-                        Name = $ResourceOperation.name
-                        ExternalId = $ResourceOperation.externalId
-                        Description = $ResourceOperation.description
-                        IconId = $ResourceOperation.iconId
-                        TargetCriteria = $ResourceOperation.targetCriteria
-                        TargetResourceTypeRef = $ResourceOperation.targetResourceTypeRef
-                        Status = $ResourceOperation.status
-                        Entitleable = $ResourceOperation.entitleable
-                        organization = $ResourceOperation.organization
-                        RequestSchema =$ResourceOperation.requestSchema
-                        Forms = $ResourceOperation.forms
-                        Callbacks = $ResourceOperation.callbacks
-                        LifecycleAction = $ResourceOperation.lifecycleACtion
-                        BindingId = $ResourceOperation.bindingId
-                        ProviderTypeRef =$ResourceOperation.providerTypeRef
+                        }
 
                     }
+
+                    Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
+
+                    break
 
                 }
-
-                break
-
-            }
-                
-            # --- No parameters passed so return all resource operations
-            'Standard' {
-            
-                $URI = "/catalog-service/api/resourceOperations?limit=$($Limit)&page=$($Page)&`$orderby=name asc"
-
-                $EscapedURI = [uri]::EscapeUriString($URI)
-
-                $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
-
-                foreach ($ResourceOperation in $Response.content) {
-
-                    [PSCustomObject] @{
-
-                        Id = $ResourceOperation.id
-                        Name = $ResourceOperation.name
-                        ExternalId = $ResourceOperation.externalId
-                        Description = $ResourceOperation.description
-                        IconId = $ResourceOperation.iconId
-                        TargetCriteria = $ResourceOperation.targetCriteria
-                        TargetResourceTypeRef = $ResourceOperation.targetResourceTypeRef
-                        Status = $ResourceOperation.status
-                        Entitleable = $ResourceOperation.entitleable
-                        organization = $ResourceOperation.organization
-                        RequestSchema =$ResourceOperation.requestSchema
-                        Forms = $ResourceOperation.forms
-                        Callbacks = $ResourceOperation.callbacks
-                        LifecycleAction = $ResourceOperation.lifecycleACtion
-                        BindingId = $ResourceOperation.bindingId
-                        ProviderTypeRef =$ResourceOperation.providerTypeRef
-
-                    }
-
-                }
-
-                Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
-
-                break
 
             }
 
         }
+        catch [Exception]{
+
+            throw
+
+        }
 
     }
-    catch [Exception]{
 
-        throw
+    End {
 
     }
 

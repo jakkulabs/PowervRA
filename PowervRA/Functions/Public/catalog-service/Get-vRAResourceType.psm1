@@ -40,161 +40,171 @@
 
     Param (
 
-        [Parameter(Mandatory=$true, ParameterSetName="ById")]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName="ById")]
         [ValidateNotNullOrEmpty()]
         [String[]]$Id,
         
-        [Parameter(Mandatory=$true, ParameterSetName="ByName")]
+        [Parameter(Mandatory=$true,ParameterSetName="ByName")]
         [ValidateNotNullOrEmpty()]
         [String[]]$Name,         
 
-        [Parameter(Mandatory=$false, ParameterSetName="Standard")]
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
         [Int]$Page = 1,
 
-        [Parameter(Mandatory=$false, ParameterSetName="Standard")]
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
         [Int]$Limit = 100
 
     )
 
-# --- Test for vRA API version
-if ($Global:vRAConnection.APIVersion -lt 7){
+    Begin {
 
-    throw "$($MyInvocation.MyCommand) is not supported with vRA API version $($Global:vRAConnection.APIVersion)"
-}
+        # --- Test for vRA API version
+        xRequires -Version 7 -Context $MyInvocation
 
-    try {
+    }
 
-        switch ($PsCmdlet.ParameterSetName) {
+    Process {
 
-            # --- Get Resource Type by id
-            'ById' {
-            
-                foreach ($ResourceTypeId in $Id) { 
+        try {
 
-                    $URI = "/catalog-service/api/resourceTypes?`$filter=id eq '$($ResourceTypeId)'"
+            switch ($PsCmdlet.ParameterSetName) {
 
-                    $EscapedURI = [uri]::EscapeUriString($URI)
+                # --- Get Resource Type by id
+                'ById' {
+                
+                    foreach ($ResourceTypeId in $Id) { 
 
-                    $ResourceType = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
+                        $URI = "/catalog-service/api/resourceTypes?`$filter=id eq '$($ResourceTypeId)'"
 
-                    if ($Response.content.Count -eq 0){
+                        $EscapedURI = [uri]::EscapeUriString($URI)
 
-                        throw "Could not find Resource Type with Id: $($ResourceTypeId)"
+                        $ResourceType = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
+
+                        if ($Response.content.Count -eq 0){
+
+                            throw "Could not find Resource Type with Id: $($ResourceTypeId)"
+
+                        }
+
+                        [PSCustomObject] @{
+
+                            Id = $ResourceType.id
+                            Callbacks = $ResourceType.callbacks
+                            CostFeatures =  $ResourceType.costFeatures
+                            Description = $ResourceType.description
+                            Forms = $ResourceType.forms
+                            ListView = $ResourceType.listView
+                            Name = $ResourceType.name
+                            PluralizedName = $ResourceType.pluralizedName
+                            Primary = $ResourceType.primary
+                            ProviderTypeId = $ResourceType.providerTYpeId
+                            Schema = $ResourceType.schema
+                            ListDescendantTypesSeparately = $ResourceType.listDescendantTypesSeparately
+                            ShowChildrenOutsideParent = $ResourceType.ShowChildrenOutsideParent
+                            Status = $ResourceType.status
+
+                        }
 
                     }
 
-                    [PSCustomObject] @{
-
-                        Id = $ResourceType.id
-                        Callbacks = $ResourceType.callbacks
-                        CostFeatures =  $ResourceType.costFeatures
-                        Description = $ResourceType.description
-                        Forms = $ResourceType.forms
-                        ListView = $ResourceType.listView
-                        Name = $ResourceType.name
-                        PluralizedName = $ResourceType.pluralizedName
-                        Primary = $ResourceType.primary
-                        ProviderTypeId = $ResourceType.providerTYpeId
-                        Schema = $ResourceType.schema
-                        ListDescendantTypesSeparately = $ResourceType.listDescendantTypesSeparately
-                        ShowChildrenOutsideParent = $ResourceType.ShowChildrenOutsideParent
-                        Status = $ResourceType.status
-
-                    }
+                    break
 
                 }
+                # --- Get Resource Type by name
+                'ByName' {
 
-                break
-            }
-            # --- Get Resource Type by name
-            'ByName' {
+                    foreach ($ResourceTypeName in $Name) {
 
-                foreach ($ResourceTypeName in $Name) {
+                        $URI = "/catalog-service/api/resourceTypes?`$filter=name eq '$($ResourceTypeName)'"
 
-                    $URI = "/catalog-service/api/resourceTypes?`$filter=name eq '$($ResourceTypeName)'"
+                        $EscapedURI = [uri]::EscapeUriString($URI)
+
+                        $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
+
+                        if ($Response.content.Count -eq 0) {
+
+                            throw "Could not find resource type item with name: $($ResourceTypeName)"
+
+                        }
+
+                        $ResourceType = $Response.content
+
+                        [PSCustomObject] @{
+
+                            Id = $ResourceType.id
+                            Callbacks = $ResourceType.callbacks
+                            CostFeatures =  $ResourceType.costFeatures
+                            Description = $ResourceType.description
+                            Forms = $ResourceType.forms
+                            ListView = $ResourceType.listView
+                            Name = $ResourceType.name
+                            PluralizedName = $ResourceType.pluralizedName
+                            Primary = $ResourceType.primary
+                            ProviderTypeId = $ResourceType.providerTYpeId
+                            Schema = $ResourceType.schema
+                            ListDescendantTypesSeparately = $ResourceType.listDescendantTypesSeparately
+                            ShowChildrenOutsideParent = $ResourceType.ShowChildrenOutsideParent
+                            Status = $ResourceType.status
+
+                        }
+
+                    }
+
+                    break
+
+                }
+                # --- No parameters passed so return all resource types
+                'Standard' {
+                
+                    $URI = "/catalog-service/api/resourceTypes?limit=$($Limit)&page=$($Page)&`$orderby=name asc"
 
                     $EscapedURI = [uri]::EscapeUriString($URI)
 
                     $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
-                    if ($Response.content.Count -eq 0) {
+                    foreach ($ResourceType in $Response.content) {
 
-                        throw "Could not find resource type item with name: $($ResourceTypeName)"
+                        [PSCustomObject] @{
 
-                    }
+                            Id = $ResourceType.id
+                            Callbacks = $ResourceType.callbacks
+                            CostFeatures =  $ResourceType.costFeatures
+                            Description = $ResourceType.description
+                            Forms = $ResourceType.forms
+                            ListView = $ResourceType.listView
+                            Name = $ResourceType.name
+                            PluralizedName = $ResourceType.pluralizedName
+                            Primary = $ResourceType.primary
+                            ProviderTypeId = $ResourceType.providerTYpeId
+                            Schema = $ResourceType.schema
+                            ListDescendantTypesSeparately = $ResourceType.listDescendantTypesSeparately
+                            ShowChildrenOutsideParent = $ResourceType.ShowChildrenOutsideParent
+                            Status = $ResourceType.status
 
-                    $ResourceType = $Response.content
-
-                    [PSCustomObject] @{
-
-                        Id = $ResourceType.id
-                        Callbacks = $ResourceType.callbacks
-                        CostFeatures =  $ResourceType.costFeatures
-                        Description = $ResourceType.description
-                        Forms = $ResourceType.forms
-                        ListView = $ResourceType.listView
-                        Name = $ResourceType.name
-                        PluralizedName = $ResourceType.pluralizedName
-                        Primary = $ResourceType.primary
-                        ProviderTypeId = $ResourceType.providerTYpeId
-                        Schema = $ResourceType.schema
-                        ListDescendantTypesSeparately = $ResourceType.listDescendantTypesSeparately
-                        ShowChildrenOutsideParent = $ResourceType.ShowChildrenOutsideParent
-                        Status = $ResourceType.status
+                        }
 
                     }
+
+                    Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
+
+                    break
 
                 }
-
-                break
-
-            }
-            # --- No parameters passed so return all resource types
-            'Standard' {
-            
-                $URI = "/catalog-service/api/resourceTypes?limit=$($Limit)&page=$($Page)&`$orderby=name asc"
-
-                $EscapedURI = [uri]::EscapeUriString($URI)
-
-                $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
-
-                foreach ($ResourceType in $Response.content) {
-
-                    [PSCustomObject] @{
-
-                        Id = $ResourceType.id
-                        Callbacks = $ResourceType.callbacks
-                        CostFeatures =  $ResourceType.costFeatures
-                        Description = $ResourceType.description
-                        Forms = $ResourceType.forms
-                        ListView = $ResourceType.listView
-                        Name = $ResourceType.name
-                        PluralizedName = $ResourceType.pluralizedName
-                        Primary = $ResourceType.primary
-                        ProviderTypeId = $ResourceType.providerTYpeId
-                        Schema = $ResourceType.schema
-                        ListDescendantTypesSeparately = $ResourceType.listDescendantTypesSeparately
-                        ShowChildrenOutsideParent = $ResourceType.ShowChildrenOutsideParent
-                        Status = $ResourceType.status
-
-                    }
-
-                }
-
-                Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
-
-                break
 
             }
 
         }
+        catch [Exception]{
+
+            throw
+
+        }
 
     }
-    catch [Exception]{
 
-        throw
+    End {
 
     }
 

@@ -116,12 +116,12 @@
 
     )    
 
-    begin {
+    Begin {
         # --- Test for vRA API version
         xRequires -Version 7 -Context $MyInvocation
     }
     
-    process {
+    Process {
 
         try {
     
@@ -305,7 +305,8 @@
         }
 
     }
-    end {
+    
+    End {
 
     }
 

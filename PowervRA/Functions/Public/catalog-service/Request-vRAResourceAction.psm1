@@ -51,31 +51,31 @@ function Request-vRAResourceAction {
 
     Param (
 
-        [Parameter(Mandatory=$true, ParameterSetName="ByResourceId")]
-        [Parameter(Mandatory=$true, ParameterSetName="ByResourceName")]
+        [Parameter(Mandatory=$true,ParameterSetName="ByResourceId")]
+        [Parameter(Mandatory=$true,ParameterSetName="ByResourceName")]
         [ValidateNotNullOrEmpty()]
         [Alias('Id')]
         [String]$ActionId,
 
-        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true, ParameterSetName="ByResourceId")]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName="ByResourceId")]
         [ValidateNotNullOrEmpty()]
         [String]$ResourceId,
 
-        [Parameter(Mandatory=$true, ParameterSetName="ByResourceName")]
+        [Parameter(Mandatory=$true,ParameterSetName="ByResourceName")]
         [ValidateNotNullOrEmpty()]
         [String]$ResourceName,
 
-        [Parameter(Mandatory=$true, ValueFromPipeline=$true, ParameterSetName="JSON")]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true, ParameterSetName="JSON")]
         [ValidateNotNullOrEmpty()]
         [String]$JSON
 
     )
 
-    begin {
+    Begin {
 
     }
 
-    process {
+    Process {
                 
          try {
 
@@ -129,6 +129,10 @@ function Request-vRAResourceAction {
             throw
 
         }
+
+    }
+
+    End {
 
     }
 

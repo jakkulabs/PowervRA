@@ -50,170 +50,182 @@
 
     Param (
     
-        [Parameter(Mandatory=$true,ValueFromPipeline=$false,ParameterSetName="ById")]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName="ById")]
         [ValidateNotNullOrEmpty()]
         [String[]]$Id,
 
-        [Parameter(Mandatory=$true,ValueFromPipeline=$false,ParameterSetName="ByName")]
+        [Parameter(Mandatory=$true,ParameterSetName="ByName")]
         [ValidateNotNullOrEmpty()]
         [String[]]$Name,
 
-        [Parameter(Mandatory=$false,ValueFromPipeline=$false,ParameterSetName="Standard")]
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [Switch]$ListAvailable, 
 
-        [Parameter(Mandatory=$false,ValueFromPipeline=$false,ParameterSetName="Standard")]
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
         [Int]$Page = 1,
 
-        [Parameter(Mandatory=$false,ValueFromPipeline=$false,ParameterSetName="Standard")]
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
         [Int]$Limit = 100
 
-    )      
+    )
 
-    try {
+    Begin {
 
-        switch ($PsCmdlet.ParameterSetName) {
+    }
 
-            # --- Get catalog item by id
-            'ById' {
+    Process {
 
-                foreach ($CatalogItemId in $Id) {
-            
-                    $URI = "/catalog-service/api/catalogItems/$($CatalogItemId)"
+        try {
 
-                    $CatalogItem = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
+            switch ($PsCmdlet.ParameterSetName) {
 
-                    [PSCustomObject] @{
+                # --- Get catalog item by id
+                'ById' {
 
-                        Id = $CatalogItem.id
-                        Name = $CatalogItem.name
-                        Description = $CatalogItem.description
-                        Service = $CatalogItem.serviceRef.label
-                        Status = $CatalogItem.status
-                        Quota = $CatalogItem.quota
-                        Version = $CatalogItem.version
-                        DateCreated = $CatalogItem.dateCreated
-                        LastUpdatedDate = $CatalogItem.lastUpdatedDate                        
-                        Requestable = $CatalogItem.requestable
-                        IsNoteworthy = $CatalogItem.isNoteworthy
-                        Organization = $CatalogItem.organization
-                        CatalogItemType = $CatalogItem.catalogItemTypeRef.label                                            
-                        OutputResourceType = $CatalogItem.outputResourceTypeRef.label
-                        Callbacks = $CatalogItem.callbacks
-                        Forms = $CatalogItem.forms
-                        IconId = $CatalogItem.iconId
-                        ProviderBinding = $CatalogItem.providerBinding
+                    foreach ($CatalogItemId in $Id) {
+                
+                        $URI = "/catalog-service/api/catalogItems/$($CatalogItemId)"
+
+                        $CatalogItem = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
+
+                        [PSCustomObject] @{
+
+                            Id = $CatalogItem.id
+                            Name = $CatalogItem.name
+                            Description = $CatalogItem.description
+                            Service = $CatalogItem.serviceRef.label
+                            Status = $CatalogItem.status
+                            Quota = $CatalogItem.quota
+                            Version = $CatalogItem.version
+                            DateCreated = $CatalogItem.dateCreated
+                            LastUpdatedDate = $CatalogItem.lastUpdatedDate                        
+                            Requestable = $CatalogItem.requestable
+                            IsNoteworthy = $CatalogItem.isNoteworthy
+                            Organization = $CatalogItem.organization
+                            CatalogItemType = $CatalogItem.catalogItemTypeRef.label                                            
+                            OutputResourceType = $CatalogItem.outputResourceTypeRef.label
+                            Callbacks = $CatalogItem.callbacks
+                            Forms = $CatalogItem.forms
+                            IconId = $CatalogItem.iconId
+                            ProviderBinding = $CatalogItem.providerBinding
+
+                        }
 
                     }
 
+                    break
+
                 }
+                # --- Get catalog item by name
+                'ByName' {
 
-                break
+                    foreach ($CatalogItemName in $Name) { 
 
-            }
-            # --- Get catalog item by name
-            'ByName' {
+                        $URI = "/catalog-service/api/catalogItems?`$filter=name eq '$($CatalogItemName)'"            
 
-                foreach ($CatalogItemName in $Name) { 
+                        $EscapedURI = [uri]::EscapeUriString($URI)
 
-                    $URI = "/catalog-service/api/catalogItems?`$filter=name eq '$($CatalogItemName)'"            
+                        $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
+
+                        if ($Response.content.Count -eq 0) {
+
+                            throw "Could not find catalog item with name: $($CatalogItemName)"
+
+                        }
+
+                        $CatalogItem = $Response.content
+
+                        [PSCustomObject] @{
+
+                            Id = $CatalogItem.id
+                            Name = $CatalogItem.name
+                            Description = $CatalogItem.description
+                            Service = $CatalogItem.serviceRef.label
+                            Status = $CatalogItem.status
+                            Quota = $CatalogItem.quota
+                            Version = $CatalogItem.version
+                            DateCreated = $CatalogItem.dateCreated
+                            LastUpdatedDate = $CatalogItem.lastUpdatedDate                        
+                            Requestable = $CatalogItem.requestable
+                            IsNoteworthy = $CatalogItem.isNoteworthy
+                            Organization = $CatalogItem.organization
+                            CatalogItemType = $CatalogItem.catalogItemTypeRef.label                                            
+                            OutputResourceType = $CatalogItem.outputResourceTypeRef.label
+                            Callbacks = $CatalogItem.callbacks
+                            Forms = $CatalogItem.forms
+                            IconId = $CatalogItem.iconId
+                            ProviderBinding = $CatalogItem.providerBinding
+
+                        }
+
+                    }
+
+                    break
+
+                }
+                # --- No parameters passed so return all catalog items
+                'Standard' {
+
+                    $URI = "/catalog-service/api/catalogItems?limit=$($Limit)&page=$($Page)&`$orderby=name asc"
+
+                    if ($PSBoundParameters.ContainsKey("ListAvailable")) {
+
+                        $URI = "/catalog-service/api/catalogItems/available?limit=$($Limit)&page=$($Page)&`$orderby=name asc"
+
+                    }
 
                     $EscapedURI = [uri]::EscapeUriString($URI)
 
                     $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
-                    if ($Response.content.Count -eq 0) {
+                    foreach ($CatalogItem in $Response.content) {
 
-                        throw "Could not find catalog item with name: $($CatalogItemName)"
+                        [PSCustomObject] @{
 
-                    }
+                            Id = $CatalogItem.id
+                            Name = $CatalogItem.name
+                            Description = $CatalogItem.description
+                            Service = $CatalogItem.serviceRef.label
+                            Status = $CatalogItem.status
+                            Quota = $CatalogItem.quota
+                            Version = $CatalogItem.version
+                            DateCreated = $CatalogItem.dateCreated
+                            LastUpdatedDate = $CatalogItem.lastUpdatedDate                        
+                            Requestable = $CatalogItem.requestable
+                            IsNoteworthy = $CatalogItem.isNoteworthy
+                            Organization = $CatalogItem.organization
+                            CatalogItemType = $CatalogItem.catalogItemTypeRef.label                                            
+                            OutputResourceType = $CatalogItem.outputResourceTypeRef.label
+                            Callbacks = $CatalogItem.callbacks
+                            Forms = $CatalogItem.forms
+                            IconId = $CatalogItem.iconId
+                            ProviderBinding = $CatalogItem.providerBinding
 
-                    $CatalogItem = $Response.content
-
-                    [PSCustomObject] @{
-
-                        Id = $CatalogItem.id
-                        Name = $CatalogItem.name
-                        Description = $CatalogItem.description
-                        Service = $CatalogItem.serviceRef.label
-                        Status = $CatalogItem.status
-                        Quota = $CatalogItem.quota
-                        Version = $CatalogItem.version
-                        DateCreated = $CatalogItem.dateCreated
-                        LastUpdatedDate = $CatalogItem.lastUpdatedDate                        
-                        Requestable = $CatalogItem.requestable
-                        IsNoteworthy = $CatalogItem.isNoteworthy
-                        Organization = $CatalogItem.organization
-                        CatalogItemType = $CatalogItem.catalogItemTypeRef.label                                            
-                        OutputResourceType = $CatalogItem.outputResourceTypeRef.label
-                        Callbacks = $CatalogItem.callbacks
-                        Forms = $CatalogItem.forms
-                        IconId = $CatalogItem.iconId
-                        ProviderBinding = $CatalogItem.providerBinding
+                        }
 
                     }
 
-                }
+                    Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
 
-                break
-
-            }
-            # --- No parameters passed so return all catalog items
-            'Standard' {
-
-                $URI = "/catalog-service/api/catalogItems?limit=$($Limit)&page=$($Page)&`$orderby=name asc"
-
-                if ($PSBoundParameters.ContainsKey("ListAvailable")) {
-
-                    $URI = "/catalog-service/api/catalogItems/available?limit=$($Limit)&page=$($Page)&`$orderby=name asc"
+                    break
 
                 }
-
-                $EscapedURI = [uri]::EscapeUriString($URI)
-
-                $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
-
-                foreach ($CatalogItem in $Response.content) {
-
-                    [PSCustomObject] @{
-
-                        Id = $CatalogItem.id
-                        Name = $CatalogItem.name
-                        Description = $CatalogItem.description
-                        Service = $CatalogItem.serviceRef.label
-                        Status = $CatalogItem.status
-                        Quota = $CatalogItem.quota
-                        Version = $CatalogItem.version
-                        DateCreated = $CatalogItem.dateCreated
-                        LastUpdatedDate = $CatalogItem.lastUpdatedDate                        
-                        Requestable = $CatalogItem.requestable
-                        IsNoteworthy = $CatalogItem.isNoteworthy
-                        Organization = $CatalogItem.organization
-                        CatalogItemType = $CatalogItem.catalogItemTypeRef.label                                            
-                        OutputResourceType = $CatalogItem.outputResourceTypeRef.label
-                        Callbacks = $CatalogItem.callbacks
-                        Forms = $CatalogItem.forms
-                        IconId = $CatalogItem.iconId
-                        ProviderBinding = $CatalogItem.providerBinding
-
-                    }
-
-                }
-
-                Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
-
-                break
 
             }
 
         }
+        catch [Exception]{
+
+            throw
+
+        }
 
     }
-    catch [Exception]{
 
-        throw
+    End {
 
-     }
+    }
 
 }

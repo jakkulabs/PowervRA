@@ -24,9 +24,6 @@ function Get-vRAResourceActionRequestTemplate {
     .EXAMPLE
     Get-vRAResourceActionRequestTemplate -ActionId "fae08c75-3506-40f6-9c9b-35966fe9125c" -ResourceId 20402e93-fb1d-4bd9-8a51-b809fbb946fd
 
-    .EXAMPLE
-    Get-vRAResource -Name vm21 | Get-vRAResourceActionRequestTemplate -Id fae08c75-3506-40f6-9c9b-35966fe9125c
-    
 #>
 [CmdletBinding(DefaultParameterSetName="ByResourceId")][OutputType('System.String')]
 
@@ -34,39 +31,59 @@ function Get-vRAResourceActionRequestTemplate {
 
         [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
-        [Alias('Id')]
         [String]$ActionId,
     
-        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true, ParameterSetName="ByResourceId")]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName="ByResourceId")]
         [ValidateNotNullOrEmpty()]
-        [String]$ResourceId,
+        [String[]]$ResourceId,
 
-        [Parameter(Mandatory=$true, ParameterSetName="ByResourceName")]
+        [Parameter(Mandatory=$true,ParameterSetName="ByResourceName")]
         [ValidateNotNullOrEmpty()]
-        [String]$ResourceName
+        [String[]]$ResourceName
            
     )
     
-    Begin {}
+    Begin {
+
+    }
  
     Process {
 
         try {
 
-            if ($PSBoundParameters.ContainsKey("ResourceName")) {
 
-                # --- Get the resource id
-                Write-verbose -Message "Retrieving Id for resource $($Name)"
-                $Resource = Get-vRAResource -Name $ResourceName
-                $ResourceId = $Resource.ResourceId
+            switch ($PSCmdlet.ParameterSetName) {
+
+                'ByResourceId' {
+
+                    foreach ($Id in $ResourceId) {
+
+                        _requestResourceActionTemplate -ResourceId $Id -ActionId $ActionId
+
+                    }
+
+                    break
+
+                }
+
+                'ByResourceName' {
+
+                    foreach ($Name in $ResourceName) {
+
+                        # --- Get the resource id
+                        Write-verbose -Message "Retrieving Id for resource $($Name)"
+                        $Resource = Get-vRAResource -Name $ResourceName
+                        $ResourceId = $Resource.ResourceId
+
+                        _requestResourceActionTemplate -ResourceId $ResourceId -ActionId $ActionId
+
+                    }
+
+                    break
+
+                }
 
             }
-
-            $URI = "/catalog-service/api/consumer/resources/$($ResourceId)/actions/$($ActionId)/requests/template"
-
-            $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
-
-            $Response | ConvertTo-Json -Depth 100
 
         }
         catch [Exception]{
@@ -77,6 +94,24 @@ function Get-vRAResourceActionRequestTemplate {
 
     }
 
-    End {}
+    End {
+        
+    }
+
+}
+
+function _requestResourceActionTemplate($ResourceId, $ActionId) {
+<#
+
+    Private function to invoke the resource action request template
+    request
+
+#>
+
+    $URI = "/catalog-service/api/consumer/resources/$($ResourceId)/actions/$($ActionId)/requests/template"
+
+    $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
+
+    $Response | ConvertTo-Json -Depth 100
 
 }

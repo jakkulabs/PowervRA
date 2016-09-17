@@ -59,23 +59,23 @@
 
     Param (
 
-        [Parameter(Mandatory=$true,ValueFromPipeline=$false, ParameterSetName="Standard")]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$false,ValueFromPipelineByPropertyName=$true,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
         [String]$Id,
         
-        [Parameter(Mandatory=$false, ParameterSetName="Standard")]
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
         [String]$RequestedFor,      
 
-        [Parameter(Mandatory=$false, ParameterSetName="Standard")]
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
         [String]$Description,
         
-        [Parameter(Mandatory=$false, ParameterSetName="Standard")]
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
         [String]$Reasons,
 
-        [Parameter(Mandatory=$true,ValueFromPipeline=$true, ParameterSetName="JSON")]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="JSON")]
         [ValidateNotNullOrEmpty()]
         [String]$JSON,  
         
@@ -84,12 +84,12 @@
     
     )    
 
-    begin {
+    Begin {
         # --- Test for vRA API version
         xRequires -Version 7 -Context $MyInvocation
     }
     
-    process {
+    Process {
     
         try {
 
@@ -187,6 +187,10 @@
             throw
 
         }    
+
+    }
+
+    End {
 
     }
 

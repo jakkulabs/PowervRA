@@ -59,133 +59,145 @@
 
     )
 
-    try {
+    Begin {
 
-        switch ($PsCmdlet.ParameterSetName) {
+    }
 
-            # --- Get Service by id
-            'ById' {
+    Process {
 
-                foreach ($ServiceId in $Id) { 
+        try {
 
-                    $URI = "/catalog-service/api/consumer/services/$($ServiceId)"
+            switch ($PsCmdlet.ParameterSetName) {
 
-                    $Service = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
+                # --- Get Service by id
+                'ById' {
 
-                    [PSCustomObject] @{
+                    foreach ($ServiceId in $Id) { 
 
-                        Id = $Service.id
-                        Name = $Service.name
-                        Description = $Service.description
-                        Status = $Service.status
-                        StatusName = $Service.statusName
-                        Version = $Service.version
-                        Organization = $Service.organization
-                        Hours = $Service.hours
-                        Owner = $Service.owner
-                        SupportTeam = $Service.supportTeam
-                        ChangeWindow = $Service.changeWindow
-                        NewDuration = $Service.newDuration
-                        LastUpdatedDate = $Service.lastUpdatedDate
-                        LastUpdatedBy = $Service.lastUpdatedBy
-                        IconId = $Service.iconId
+                        $URI = "/catalog-service/api/consumer/services/$($ServiceId)"
+
+                        $Service = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
+
+                        [PSCustomObject] @{
+
+                            Id = $Service.id
+                            Name = $Service.name
+                            Description = $Service.description
+                            Status = $Service.status
+                            StatusName = $Service.statusName
+                            Version = $Service.version
+                            Organization = $Service.organization
+                            Hours = $Service.hours
+                            Owner = $Service.owner
+                            SupportTeam = $Service.supportTeam
+                            ChangeWindow = $Service.changeWindow
+                            NewDuration = $Service.newDuration
+                            LastUpdatedDate = $Service.lastUpdatedDate
+                            LastUpdatedBy = $Service.lastUpdatedBy
+                            IconId = $Service.iconId
+
+                        }
 
                     }
 
+                    break
                 }
+                # --- Get Service by name
+                'ByName' {
 
-                break
-            }
-            # --- Get Service by name
-            'ByName' {
+                    foreach ($ServiceName in $Name) {
 
-                foreach ($ServiceName in $Name) {
+                        $URI = "/catalog-service/api/consumer/services?`$filter=name eq '$($ServiceName)'"
 
-                    $URI = "/catalog-service/api/consumer/services?`$filter=name eq '$($ServiceName)'"
+                        $EscapedURI = [uri]::EscapeUriString($URI)
+
+                        $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
+
+                        if ($Response.content.Count -eq 0) {
+
+                            throw "Could not find service with name: $($ServiceName)"
+
+                        }
+
+                        $Service = $Response.content
+
+                        [PSCustomObject] @{
+
+                            Id = $Service.id
+                            Name = $Service.name
+                            Description = $Service.description
+                            Status = $Service.status
+                            StatusName = $Service.statusName
+                            Version = $Service.version
+                            Organization = $Service.organization
+                            Hours = $Service.hours
+                            Owner = $Service.owner
+                            SupportTeam = $Service.supportTeam
+                            ChangeWindow = $Service.changeWindow
+                            NewDuration = $Service.newDuration
+                            LastUpdatedDate = $Service.lastUpdatedDate
+                            LastUpdatedBy = $Service.lastUpdatedBy
+                            IconId = $Service.iconId
+
+                        }
+
+                    }
+
+                    break
+
+                }
+                # --- No parameters passed so return all services
+                'Standard' {
+
+                    $URI = "/catalog-service/api/consumer/services?limit=$($Limit)&page=$($Page)&`$orderby=name asc"
 
                     $EscapedURI = [uri]::EscapeUriString($URI)
 
                     $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
-                    if ($Response.content.Count -eq 0) {
+                    foreach ($Service in $Response.content) {
 
-                        throw "Could not find service with name: $($ServiceName)"
+                        [PSCustomObject] @{
 
-                    }
+                            Id = $Service.id
+                            Name = $Service.name
+                            Description = $Service.description
+                            Status = $Service.status
+                            StatusName = $Service.statusName
+                            Version = $Service.version
+                            Organization = $Service.organization
+                            Hours = $Service.hours
+                            Owner = $Service.owner
+                            SupportTeam = $Service.supportTeam
+                            ChangeWindow = $Service.changeWindow
+                            NewDuration = $Service.newDuration
+                            LastUpdatedDate = $Service.lastUpdatedDate
+                            LastUpdatedBy = $Service.lastUpdatedBy
+                            IconId = $Service.iconId
 
-                    $Service = $Response.content
-
-                    [PSCustomObject] @{
-
-                        Id = $Service.id
-                        Name = $Service.name
-                        Description = $Service.description
-                        Status = $Service.status
-                        StatusName = $Service.statusName
-                        Version = $Service.version
-                        Organization = $Service.organization
-                        Hours = $Service.hours
-                        Owner = $Service.owner
-                        SupportTeam = $Service.supportTeam
-                        ChangeWindow = $Service.changeWindow
-                        NewDuration = $Service.newDuration
-                        LastUpdatedDate = $Service.lastUpdatedDate
-                        LastUpdatedBy = $Service.lastUpdatedBy
-                        IconId = $Service.iconId
+                        }
 
                     }
+
+                    Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
+
+                    break
 
                 }
-
-                break
-
-            }
-            # --- No parameters passed so return all services
-            'Standard' {
-
-                $URI = "/catalog-service/api/consumer/services?limit=$($Limit)&page=$($Page)&`$orderby=name asc"
-
-                $EscapedURI = [uri]::EscapeUriString($URI)
-
-                $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
-
-                foreach ($Service in $Response.content) {
-
-                    [PSCustomObject] @{
-
-                        Id = $Service.id
-                        Name = $Service.name
-                        Description = $Service.description
-                        Status = $Service.status
-                        StatusName = $Service.statusName
-                        Version = $Service.version
-                        Organization = $Service.organization
-                        Hours = $Service.hours
-                        Owner = $Service.owner
-                        SupportTeam = $Service.supportTeam
-                        ChangeWindow = $Service.changeWindow
-                        NewDuration = $Service.newDuration
-                        LastUpdatedDate = $Service.lastUpdatedDate
-                        LastUpdatedBy = $Service.lastUpdatedBy
-                        IconId = $Service.iconId
-
-                    }
-
-                }
-
-                Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
-
-                break
 
             }
 
         }
+        catch [Exception]{
+
+            throw
+
+        }
 
     }
-    catch [Exception]{
 
-        throw
-
+    End {
+        
     }
 
 }

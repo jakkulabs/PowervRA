@@ -33,87 +33,99 @@
 
     Param (
 
-        [Parameter(Mandatory=$true, ParameterSetName="Standard")]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
         [Alias("Principal")]
         [String[]]$Id
 
     )
 
-    try {
+    Begin {
 
-        foreach ($PrincipalId in $Id){
+    }
 
-            # -- Test for user first
-            try {
+    Process {
 
-                Write-Verbose -Message "Searching for USER $($PrincipalId)"  
+        try {
 
-                $User = Get-vRAUserPrincipal -Id $PrincipalId
+            foreach ($PrincipalId in $Id){
 
-                Write-Verbose "User found!"
-
-                $CatalogPrincipal = [pscustomobject] @{
-
-                    tenantName = $($Global:vRAConnection.Tenant)
-                    ref = $($User.Principalid)
-                    type = "USER"
-                    value = $($User.Name)
-
-                }
-
-            }
-            catch {
-
-                Write-Verbose -Message "User $($PrincipalId) not found.."
-
-            }
-
-            # --- Test for group if the user was not found
-            if (!$CatalogPrincipal) {
-
+                # -- Test for user first
                 try {
 
-                    Write-Verbose -Message "Searching for GROUP $($PrincipalId)"  
+                    Write-Verbose -Message "Searching for USER $($PrincipalId)"  
 
-                    $Group = Get-vRAGroupPrincipal -Id $PrincipalId
+                    $User = Get-vRAUserPrincipal -Id $PrincipalId
 
-                    Write-Verbose -Message "Group found!"  
+                    Write-Verbose "User found!"
 
                     $CatalogPrincipal = [pscustomobject] @{
 
                         tenantName = $($Global:vRAConnection.Tenant)
-                        ref =  $($Group.Principalid)
-                        type = "GROUP"
-                        value = $($Grop.Name)
+                        ref = $($User.Principalid)
+                        type = "USER"
+                        value = $($User.Name)
 
                     }
 
                 }
                 catch {
 
-                    Write-Verbose -Message "Group $($Id) not found.."
+                    Write-Verbose -Message "User $($PrincipalId) not found.."
 
                 }
+
+                # --- Test for group if the user was not found
+                if (!$CatalogPrincipal) {
+
+                    try {
+
+                        Write-Verbose -Message "Searching for GROUP $($PrincipalId)"  
+
+                        $Group = Get-vRAGroupPrincipal -Id $PrincipalId
+
+                        Write-Verbose -Message "Group found!"  
+
+                        $CatalogPrincipal = [pscustomobject] @{
+
+                            tenantName = $($Global:vRAConnection.Tenant)
+                            ref =  $($Group.Principalid)
+                            type = "GROUP"
+                            value = $($Grop.Name)
+
+                        }
+
+                    }
+                    catch {
+
+                        Write-Verbose -Message "Group $($Id) not found.."
+
+                    }
+
+                }
+
+                # --- Test to see if either search returned anything
+                if (!$CatalogPrincipal) {
+
+                    throw "$PrincipalId not found"
+
+                    }
+
+                # --- Return the catalogPrincipal
+                $CatalogPrincipal
 
             }
 
-            # --- Test to see if either search returned anything
-            if (!$CatalogPrincipal) {
+        }
+        catch [Exception]{
 
-                throw "$PrincipalId not found"
-
-                }
-
-            # --- Return the catalogPrincipal
-            $CatalogPrincipal
+            throw
 
         }
 
     }
-    catch [Exception]{
 
-        throw
+    End {
 
     }
 

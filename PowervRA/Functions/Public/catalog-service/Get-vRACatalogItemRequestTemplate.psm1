@@ -38,22 +38,20 @@
 
     Param (
  
-        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName,ParameterSetName="ById")]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName="ById")]
         [ValidateNotNullOrEmpty()]
         [String]$Id,        
             
-        [Parameter(Mandatory=$true,ValueFromPipeline=$false,ParameterSetName="ByName")]
+        [Parameter(Mandatory=$true,ParameterSetName="ByName")]
         [ValidateNotNullOrEmpty()]
         [String]$Name
     
     )
     
     Begin {
+        
         # --- Test for vRA API version
-        if ($Global:vRAConnection.APIVersion -lt 7){
-
-            throw "$($MyInvocation.MyCommand) is not supported with vRA API version $($Global:vRAConnection.APIVersion)"
-        }
+        xRequires -Version 7 -Context $MyInvocation
 
     }
  
@@ -98,6 +96,10 @@
             throw
 
         }
+
+    }
+
+    End {
 
     }
 

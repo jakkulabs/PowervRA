@@ -54,228 +54,238 @@
 
     Param (
 
-        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName,ParameterSetName="ById")]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName="ById")]
         [ValidateNotNullOrEmpty()]
         [String[]]$Id,
         
-        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName,ParameterSetName="ByRequestNumber")]
+        [Parameter(Mandatory=$true,ParameterSetName="ByRequestNumber")]
         [ValidateNotNullOrEmpty()]
         [String[]]$RequestNumber,
 
-        [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName,ParameterSetName="RequestedFor")]
+        [Parameter(Mandatory=$false,ParameterSetName="RequestedFor")]
         [ValidateNotNullOrEmpty()]
         [String]$RequestedFor,
 
-        [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName,ParameterSetName="RequestedBy")]
+        [Parameter(Mandatory=$false,ParameterSetName="RequestedBy")]
         [ValidateNotNullOrEmpty()]
         [String]$RequestedBy,
 
-        [Parameter(Mandatory=$false,ValueFromPipeline=$false,ParameterSetName="Standard")]
-        [Parameter(Mandatory=$false,ValueFromPipeline=$false,ParameterSetName="RequestedFor")]
-        [Parameter(Mandatory=$false,ValueFromPipeline=$false,ParameterSetName="RequestedBy")]      
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [Parameter(Mandatory=$false,ParameterSetName="RequestedFor")]
+        [Parameter(Mandatory=$false,ParameterSetName="RequestedBy")]      
         [ValidateNotNullOrEmpty()]
         [Int]$Limit = 100,
     
-        [Parameter(Mandatory=$false,ValueFromPipeline=$false,ParameterSetName="Standard")]
-        [Parameter(Mandatory=$false,ValueFromPipeline=$false,ParameterSetName="RequestedFor")]
-        [Parameter(Mandatory=$false,ValueFromPipeline=$false,ParameterSetName="RequestedBy")]        
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [Parameter(Mandatory=$false,ParameterSetName="RequestedFor")]
+        [Parameter(Mandatory=$false,ParameterSetName="RequestedBy")]        
         [ValidateNotNullOrEmpty()]
         [int]$Page = 1
 
     )
 
-    try {
+    Begin {
 
-        # --- Build base URI
+    }
 
-        switch ($PsCmdlet.ParameterSetName) {
+    Process {
 
-            # --- If the id parameter is passed returned detailed information about the request
-            'ById' { 
+        try {
 
-                foreach ($RequestId in $Id) {
+            switch ($PsCmdlet.ParameterSetName) {
 
-                    $URI = "/catalog-service/api/consumer/requests/$($RequestId)"
+                # --- If the id parameter is passed returned detailed information about the request
+                'ById' { 
 
-                    $Request = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
+                    foreach ($RequestId in $Id) {
 
-                    [PSCustomObject] @{
+                        $URI = "/catalog-service/api/consumer/requests/$($RequestId)"
 
-                        Id = $Request.id
-                        RequestNumber = $Request.RequestNumber
-                        State = $Request.state
-                        Description = $Request.description
-                        CatalogItem = $Request.catalogItemRef.label
-                        RequestedItemName = $Request.requestedItemName
-                        RequestedItemDescription = $Request.requestedItemDescription                                                
-                        Reasons = $Request.reasons
-                        RequestedFor = $Request.requestedFor
-                        RequestedBy = $Request.requestedBy
-                        DateCreated = $Request.dateCreated
-                        LastUpdated = $Request.lastUpdated
-                        DateSubmitted = $Request.dateSubmitted
-                        DateApproved = $Request.dateApproved
-                        DateCompleted = $Request.dateCompleted
-                        WaitingStatus = $Request.waitingStatus
-                        ExecutionStatus = $Request.executionStatus
-                        ApprovalStatus = $Request.approvalStatus
-                        Phase = $Request.phase
-                        IconId = $Request.iconId
-                        Version = $Request.version
-                        Organization = $Request.organization
-                        RequestorEntitlementId = $Request.requestorEntitlementId
-                        PreApprovalId = $Request.preApprovalId
-                        PostApprovalId = $Request.postApprovalId
-                        Quote = $Request.quote
-                        RequestCompletion = $Request.requestCompletion
-                        RequestData = $Request.requestData
-                        RetriesRemaining = $Request.retriesRemaining
-                        Components = $Request.components
-                        StateName = $Request.stateName
-                        CatalogItemProviderBinding = $Request.catalogItemProviderBinding
+                        $Request = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
+
+                        [PSCustomObject] @{
+
+                            Id = $Request.id
+                            RequestNumber = $Request.RequestNumber
+                            State = $Request.state
+                            Description = $Request.description
+                            CatalogItem = $Request.catalogItemRef.label
+                            RequestedItemName = $Request.requestedItemName
+                            RequestedItemDescription = $Request.requestedItemDescription                                                
+                            Reasons = $Request.reasons
+                            RequestedFor = $Request.requestedFor
+                            RequestedBy = $Request.requestedBy
+                            DateCreated = $Request.dateCreated
+                            LastUpdated = $Request.lastUpdated
+                            DateSubmitted = $Request.dateSubmitted
+                            DateApproved = $Request.dateApproved
+                            DateCompleted = $Request.dateCompleted
+                            WaitingStatus = $Request.waitingStatus
+                            ExecutionStatus = $Request.executionStatus
+                            ApprovalStatus = $Request.approvalStatus
+                            Phase = $Request.phase
+                            IconId = $Request.iconId
+                            Version = $Request.version
+                            Organization = $Request.organization
+                            RequestorEntitlementId = $Request.requestorEntitlementId
+                            PreApprovalId = $Request.preApprovalId
+                            PostApprovalId = $Request.postApprovalId
+                            Quote = $Request.quote
+                            RequestCompletion = $Request.requestCompletion
+                            RequestData = $Request.requestData
+                            RetriesRemaining = $Request.retriesRemaining
+                            Components = $Request.components
+                            StateName = $Request.stateName
+                            CatalogItemProviderBinding = $Request.catalogItemProviderBinding
+
+                        }
 
                     }
 
+                    break
+
                 }
+                # --- If the requestnumber parameter is passed returned detailed information about the request
+                'ByRequestNumber' {
 
-                break
+                    foreach ($RequestN in $RequestNumber) {
 
-            }
-            # --- If the requestnumber parameter is passed returned detailed information about the request
-            'ByRequestNumber' {
+                        $URI = "/catalog-service/api/consumer/requests?`$filter=requestNumber eq '$($RequestN)'"
 
-                foreach ($RequestN in $RequestNumber) {
+                        $EscapedURI = [uri]::EscapeUriString($URI)
 
-                    $URI = "/catalog-service/api/consumer/requests?`$filter=requestNumber eq '$($RequestN)'"
+                        $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
+
+                        if ($Response.content.Count -eq 0) {
+
+                            throw "Could not find request number $($RequestN)"
+
+                        }
+
+                        $Request = $Response.content
+
+                        [PSCustomObject] @{
+
+                            Id = $Request.id
+                            RequestNumber = $Request.RequestNumber
+                            State = $Request.state
+                            Description = $Request.description
+                            CatalogItem = $Request.catalogItemRef.label
+                            RequestedItemName = $Request.requestedItemName
+                            RequestedItemDescription = $Request.requestedItemDescription                                                
+                            Reasons = $Request.reasons
+                            RequestedFor = $Request.requestedFor
+                            RequestedBy = $Request.requestedBy
+                            DateCreated = $Request.dateCreated
+                            LastUpdated = $Request.lastUpdated
+                            DateSubmitted = $Request.dateSubmitted
+                            DateApproved = $Request.dateApproved
+                            DateCompleted = $Request.dateCompleted
+                            WaitingStatus = $Request.waitingStatus
+                            ExecutionStatus = $Request.executionStatus
+                            ApprovalStatus = $Request.approvalStatus
+                            Phase = $Request.phase
+                            IconId = $Request.iconId
+                            Version = $Request.version
+                            Organization = $Request.organization
+                            RequestorEntitlementId = $Request.requestorEntitlementId
+                            PreApprovalId = $Request.preApprovalId
+                            PostApprovalId = $Request.postApprovalId
+                            Quote = $Request.quote
+                            RequestCompletion = $Request.requestCompletion
+                            RequestData = $Request.requestData
+                            RetriesRemaining = $Request.retriesRemaining
+                            Components = $Request.components
+                            StateName = $Request.stateName
+                            CatalogItemProviderBinding = $Request.catalogItemProviderBinding
+
+                        }
+
+                    }
+
+                    break
+
+                }
+                {('Standard') -or ('RequestedFor') -or ('RequestedBy')} {
+
+                    $URI = "/catalog-service/api/consumer/requests?limit=$($Limit)&page=$($Page)&`$orderby=dateSubmitted desc"
+
+                    if ($PSBoundParameters.ContainsKey("RequestedFor")) {
+
+                        $URI = "$($URI)&`$filter=requestedFor eq '$($RequestedFor)'"
+
+                    }
+
+                    if ($PSBoundParameters.ContainsKey("RequestedBy")) {
+
+                        $URI = "$($URI)&`$filter=requestedBy eq '$($RequestedBy)'"
+
+                    }
 
                     $EscapedURI = [uri]::EscapeUriString($URI)
 
+                    # --- Make the first request to determine the size of the request
                     $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
-                    if ($Response.content.Count -eq 0) {
+                    foreach ($Request in $Response.content) {
 
-                        throw "Could not find request number $($RequestN)"
+                        [PSCustomObject] @{
 
-                    }
+                            Id = $Request.id
+                            RequestNumber = $Request.RequestNumber
+                            State = $Request.state
+                            Description = $Request.description
+                            CatalogItem = $Request.catalogItemRef.label
+                            RequestedItemName = $Request.requestedItemName
+                            RequestedItemDescription = $Request.requestedItemDescription                                                
+                            Reasons = $Request.reasons
+                            RequestedFor = $Request.requestedFor
+                            RequestedBy = $Request.requestedBy
+                            DateCreated = $Request.dateCreated
+                            LastUpdated = $Request.lastUpdated
+                            DateSubmitted = $Request.dateSubmitted
+                            DateApproved = $Request.dateApproved
+                            DateCompleted = $Request.dateCompleted
+                            WaitingStatus = $Request.waitingStatus
+                            ExecutionStatus = $Request.executionStatus
+                            ApprovalStatus = $Request.approvalStatus
+                            Phase = $Request.phase
+                            IconId = $Request.iconId
+                            Version = $Request.version
+                            Organization = $Request.organization
+                            RequestorEntitlementId = $Request.requestorEntitlementId
+                            PreApprovalId = $Request.preApprovalId
+                            PostApprovalId = $Request.postApprovalId
+                            Quote = $Request.quote
+                            RequestCompletion = $Request.requestCompletion
+                            RequestData = $Request.requestData
+                            RetriesRemaining = $Request.retriesRemaining
+                            Components = $Request.components
+                            StateName = $Request.stateName
+                            CatalogItemProviderBinding = $Request.catalogItemProviderBinding
 
-                    $Request = $Response.content
-
-                    [PSCustomObject] @{
-
-                        Id = $Request.id
-                        RequestNumber = $Request.RequestNumber
-                        State = $Request.state
-                        Description = $Request.description
-                        CatalogItem = $Request.catalogItemRef.label
-                        RequestedItemName = $Request.requestedItemName
-                        RequestedItemDescription = $Request.requestedItemDescription                                                
-                        Reasons = $Request.reasons
-                        RequestedFor = $Request.requestedFor
-                        RequestedBy = $Request.requestedBy
-                        DateCreated = $Request.dateCreated
-                        LastUpdated = $Request.lastUpdated
-                        DateSubmitted = $Request.dateSubmitted
-                        DateApproved = $Request.dateApproved
-                        DateCompleted = $Request.dateCompleted
-                        WaitingStatus = $Request.waitingStatus
-                        ExecutionStatus = $Request.executionStatus
-                        ApprovalStatus = $Request.approvalStatus
-                        Phase = $Request.phase
-                        IconId = $Request.iconId
-                        Version = $Request.version
-                        Organization = $Request.organization
-                        RequestorEntitlementId = $Request.requestorEntitlementId
-                        PreApprovalId = $Request.preApprovalId
-                        PostApprovalId = $Request.postApprovalId
-                        Quote = $Request.quote
-                        RequestCompletion = $Request.requestCompletion
-                        RequestData = $Request.requestData
-                        RetriesRemaining = $Request.retriesRemaining
-                        Components = $Request.components
-                        StateName = $Request.stateName
-                        CatalogItemProviderBinding = $Request.catalogItemProviderBinding
+                        }
 
                     }
 
-                }
+                    Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
 
-                break
-
-            }
-            {('Standard') -or ('RequestedFor') -or ('RequestedBy')} {
-
-                $URI = "/catalog-service/api/consumer/requests?limit=$($Limit)&page=$($Page)&`$orderby=dateSubmitted desc"
-
-                if ($PSBoundParameters.ContainsKey("RequestedFor")) {
-
-                    $URI = "$($URI)&`$filter=requestedFor eq '$($RequestedFor)'"
+                    break
 
                 }
-
-                if ($PSBoundParameters.ContainsKey("RequestedBy")) {
-
-                    $URI = "$($URI)&`$filter=requestedBy eq '$($RequestedBy)'"
-
-                }
-
-                $EscapedURI = [uri]::EscapeUriString($URI)
-
-                # --- Make the first request to determine the size of the request
-                $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
-
-                foreach ($Request in $Response.content) {
-
-                    [PSCustomObject] @{
-
-                        Id = $Request.id
-                        RequestNumber = $Request.RequestNumber
-                        State = $Request.state
-                        Description = $Request.description
-                        CatalogItem = $Request.catalogItemRef.label
-                        RequestedItemName = $Request.requestedItemName
-                        RequestedItemDescription = $Request.requestedItemDescription                                                
-                        Reasons = $Request.reasons
-                        RequestedFor = $Request.requestedFor
-                        RequestedBy = $Request.requestedBy
-                        DateCreated = $Request.dateCreated
-                        LastUpdated = $Request.lastUpdated
-                        DateSubmitted = $Request.dateSubmitted
-                        DateApproved = $Request.dateApproved
-                        DateCompleted = $Request.dateCompleted
-                        WaitingStatus = $Request.waitingStatus
-                        ExecutionStatus = $Request.executionStatus
-                        ApprovalStatus = $Request.approvalStatus
-                        Phase = $Request.phase
-                        IconId = $Request.iconId
-                        Version = $Request.version
-                        Organization = $Request.organization
-                        RequestorEntitlementId = $Request.requestorEntitlementId
-                        PreApprovalId = $Request.preApprovalId
-                        PostApprovalId = $Request.postApprovalId
-                        Quote = $Request.quote
-                        RequestCompletion = $Request.requestCompletion
-                        RequestData = $Request.requestData
-                        RetriesRemaining = $Request.retriesRemaining
-                        Components = $Request.components
-                        StateName = $Request.stateName
-                        CatalogItemProviderBinding = $Request.catalogItemProviderBinding
-
-                    }
-
-                }
-
-                Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
-
-                break
 
             }
 
         }
+        catch [Exception]{
+
+            throw
+
+        }
 
     }
-    catch [Exception]{
 
-        throw
+    End {
 
     }
 

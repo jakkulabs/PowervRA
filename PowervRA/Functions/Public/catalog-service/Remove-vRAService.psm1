@@ -53,6 +53,7 @@
 
             # --- Remove the service
             try {
+
                 if ($PSCmdlet.ShouldProcess($Service.name)){
                 
                     # --- Build the URI string for the service         
@@ -73,6 +74,7 @@
         }
 
     }
+
     End {
 
     }
