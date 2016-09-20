@@ -26,6 +26,13 @@
 
     .EXAMPLE
     Export-vRAContentPackage -Name "ContentPackage01" -File C:\Packages\ContentPackage01.zip
+
+    .EXAMPLE
+    Get-vRAContentPackage | Export-vRAContentPackage
+
+    .EXAMPLE
+    Get-vRAContentPackage -Name "ContentPackage01" | Export-vRAContentPackage -File C:\Packages\ContentPackage01.zip
+
 #>
 [CmdletBinding(DefaultParameterSetName="ById")][OutputType('System.IO.FileInfo')]
 
