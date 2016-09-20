@@ -61,7 +61,12 @@
     
     [parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
-    [System.Collections.IDictionary]$Headers
+    [System.Collections.IDictionary]$Headers,
+
+    [parameter(Mandatory=$false)]
+    [ValidateNotNullOrEmpty()]
+    [String]$OutFile
+    
     )   
 
 # --- Test for existing connection to vRA
@@ -107,6 +112,11 @@ if (-not ($Global:vRAConnection.SignedCertificates)){
         if ($PSBoundParameters.ContainsKey("Body")) {
             
             $Response = Invoke-RestMethod -Method $Method -Headers $Headers -Uri $FullURI -Body $Body
+        }
+        elseif ($PSBoundParameters.ContainsKey("OutFile")) {
+
+            $Response = Invoke-RestMethod -Method $Method -Headers $Headers -Uri $FullURI -OutFile $OutFile
+
         }
         else {
 
