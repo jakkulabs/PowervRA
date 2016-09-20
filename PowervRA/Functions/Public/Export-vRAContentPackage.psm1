@@ -64,7 +64,6 @@
 
         try {    
 
-
             if ($PsCmdlet.ParameterSetName -eq "ByName") {
 
                 $ContentPackage = Get-vRAContentPackage -Name $Name
@@ -94,7 +93,7 @@
 
             # --- Output the result
             Get-ChildItem -Path $File
-          
+
         }
         catch [Exception]{
 
