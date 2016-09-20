@@ -1,41 +1,34 @@
-﻿function Import-vRAContentPackage {
+﻿function Test-vRAContentPackage {
 <#
     .SYNOPSIS
-    Imports a vRA Content Package    
+    Validates a vRA Content Package    
 
     .DESCRIPTION
-    Imports a vRA Content Package  
+    Validates a vRA Content Package  
 
     .PARAMETER File
     The content package file
 
-    .PARAMETER DontValidatePackage
-    Skip Package Validation. Not recommended by the API documentation
-
     .INPUTS
     System.String
-    System.Switch
 
     .OUTPUTS
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    Import-vRAContentPackage -File C:\Packages\ContentPackage100.zip
+    Test-vRAContentPackage -File C:\Packages\ContentPackage100.zip
 
     .EXAMPLE
-    Get-ChildItem -Path C:\Packages\ContentPackage100.zip| Import-vRAContentPackage -Confirm:$false
+    Get-ChildItem -Path C:\Packages\ContentPackage100.zip| Test-vRAContentPackage
 
 #>
-[CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelinebyPropertyName=$true)]
     [ValidateNotNullOrEmpty()]
-    [String[]]$File,
-
-    [parameter(Mandatory=$false)]
-    [Switch]$DontValidatePackage
+    [String[]]$File
 
     )
 
@@ -51,37 +44,6 @@
         foreach ($FilePath in $File){
 
             try {
-                # --- Validate the Content Package
-                if (!$PSBoundParameters.ContainsKey('DontValidatePackage')){
-
-                    $Test = Test-vRAContentPackage -File $FilePath
-
-                    switch ($Test.operationStatus) {
-
-                        'FAILED' {
-
-                            $Test.operationResults
-                            throw "Content Package failed validation test. You should remedy the issue with the Content Package before importing - A failed import may potentially leave the system in an inconsistent state"
-                        }
-                        'WARNING' {
-
-                            $Test.operationResults
-                            Write-Warning "Content Package $FilePath contains a warning. Please check the Operation Results for details"
-                        }
-                        'SUCCESS' {
-
-                            Write-Verbose "Content Package $FileInfo has been successfully validated"
-                        }
-                        Default {
-
-                            throw "Unable to validate Content Package $FilePath"
-                        }
-                    }
-                }
-                else {
-
-                    Write-Verbose "Skipping Content Package validation"
-                }
 
                 # --- Resolve the file path
                 $FileInfo = [System.IO.FileInfo](Resolve-Path $FilePath).Path
@@ -100,7 +62,7 @@
                     "--$($Boundary)--$($LF)"
                 ) -join $LF
 
-                $URI = "/content-management-service/api/packages/"
+                $URI = "/content-management-service/api/packages/validate"
 
                 # --- Set custom headers for the request
                 $Headers = @{
@@ -125,6 +87,7 @@
             catch [Exception]{
 
                 throw
+
             }
         }
     }

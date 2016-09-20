@@ -39,6 +39,12 @@ Describe -Name 'Content Package Tests' -Fixture {
         $ContentPackageD | Should Be $null
     }
 
+    It -Name "Test named Content Package $($JSON.ContentPackage.Name)" -Test {
+
+        $TestStatus = Test-vRAContentPackage -File $JSON.ContentPackage.FileName
+        $TestStatus.operationStatus | Should Be $JSON.ContentPackage.TestStatusMessage
+    }
+
     It -Name "Import named Content Package $($JSON.ContentPackage.Name)" -Test {
 
         $ImportStatus = Import-vRAContentPackage -File $JSON.ContentPackage.FileName -Confirm:$false
