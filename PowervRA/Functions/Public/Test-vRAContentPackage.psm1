@@ -75,12 +75,8 @@
 
                 if ($PSCmdlet.ShouldProcess($FileInfo.FullName)){
 
-                    # --- Run vRA REST Request
-                    Write-Verbose -Message "POST : $($URI)"
-
                     Invoke-vRARestMethod -Method POST -Uri $URI -Body $Form -Headers $Headers -Verbose:$VerbosePreference
 
-                    Write-Verbose -Message "SUCCESS"
                 }
 
             }
