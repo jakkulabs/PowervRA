@@ -179,10 +179,8 @@
                 # --- Build the URI string for the service         
             
                 $URI = "/catalog-service/api/services/$($Id)"
-                
-                Write-Verbose -Message "Preparing PUT to $($URI)"                
-           
-                $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body ($Service | ConvertTo-Json -Compress)
+                           
+                $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body ($Service | ConvertTo-Json -Compress) -Verbose:$VerbosePreference
 
                 Get-vRAService -Id $Id
                 
