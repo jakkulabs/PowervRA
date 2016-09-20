@@ -31,80 +31,76 @@
 
     Param (
 
-    [parameter(Mandatory=$true,ValueFromPipeline=$false,ParameterSetName="ById")]
-    [ValidateNotNullOrEmpty()]
-    [String]$Id,         
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName="ById")]
+        [ValidateNotNullOrEmpty()]
+        [String]$Id,         
 
-    [parameter(Mandatory=$true,ValueFromPipeline=$false,ParameterSetName="ByName")]
-    [ValidateNotNullOrEmpty()]
-    [String]$Name,
-    
-    [parameter(Mandatory=$true,ValueFromPipeline=$false)]
-    [ValidateNotNullOrEmpty()]
-    [String]$File 
+        [Parameter(Mandatory=$true,ParameterSetName="ByName")]
+        [ValidateNotNullOrEmpty()]
+        [String]$Name,
+        
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [String]$File
+
     )
 
-# --- Test for vRA API version
-xRequires -Version 7 -Context $MyInvocation
+    Begin {
 
-# --- Work with Untrusted Certificates
-if (-not ($Global:vRAConnection.SignedCertificates)){
+        # --- Test for vRA API version
+        xRequires -Version 7 -Context $MyInvocation
 
-    if ( -not ("TrustAllCertsPolicy" -as [type])) {
+        $Headers = @{
 
-    Add-Type @"
-    using System.Net;
-    using System.Security.Cryptography.X509Certificates;
-    public class TrustAllCertsPolicy : ICertificatePolicy {
-        public bool CheckValidationResult(
-            ServicePoint srvPoint, X509Certificate certificate,
-            WebRequest request, int certificateProblem) {
-            return true;
-        }
+            "Authorization" = "Bearer $($Global:vRAConnection.Token)";
+            "Accept"="application/zip";
+            "Content-Type" = "Application/zip";
+
+        }        
+
     }
-"@
-    }
-    [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
-}
 
-    try {    
-  
-        switch ($PsCmdlet.ParameterSetName) 
-        { 
-            "ById"  {           
-                
-                # --- Create Invoke-RestMethod Parameters
-                $URI = "/content-management-service/api/packages/$($Id)"          
-                 
-                break
-            }
+    Process {
 
-            "ByName"  {                
+        try {    
+
+
+            if ($PsCmdlet.ParameterSetName -eq "ByName") {
 
                 $ContentPackage = Get-vRAContentPackage -Name $Name
 
-                # --- Create Invoke-RestMethod Parameters
-                $URI = "/content-management-service/api/packages/$($ContentPackage.Id)"  
-                
-                break
+                $Id = $ContentPackage.Id
+
             }
+            else {
+
+                $ContentPackage = Get-vRAContentPackage -Id $Id
+
+            }
+
+            $FileName = "$($ContentPackage.Name).zip"
+
+            if (!$PSBoundParameters.ContainsKey("File")) {
+
+                $File =  "$($(Get-Location).Path)\$($Filename)"
+
+            }
+
+            # --- Run vRA REST Request
+            $URI = "/content-management-service/api/packages/$($Id)"
+
+            #$Response = Invoke-RestMethod -Method GET -Headers $Headers -URI $FullURI -OutFile $
+            Invoke-vRARestMethod -Method GET -Headers $Headers -URI $URI -OutFile $File -Verbose:$VerbosePreference
+
+            # --- Output the result
+            Get-ChildItem -Path $File
+          
+        }
+        catch [Exception]{
+
+            throw
         }
 
-        $FullURI = "$($Global:vRAConnection.Server)$($URI)"
-        $Headers = @{
-
-            "Accept"="application/zip";
-            "Authorization" = "Bearer $($Global:vRAConnection.Token)";
-        }
-
-        # --- Run vRA REST Request
-        $Response = Invoke-RestMethod -Method GET -Headers $Headers -URI $FullURI -OutFile $File
-        
-        # --- Output the result
-        Get-ChildItem -Path $File  
     }
-    catch [Exception]{
 
-        throw
-    }
 }
