@@ -18,6 +18,9 @@
     .PARAMETER Headers
     Optionally supply custom headers
 
+    .PARAMETER OutFile
+    Save the results to a file
+
     .INPUTS
     System.String
     Switch

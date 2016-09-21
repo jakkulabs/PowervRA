@@ -12,8 +12,9 @@
     .PARAMETER Name
     Specify the Name of a Content Package
 
-    .PARAMETER File
-    Specify the Filename to export to
+    .PARAMETER Path
+    The resulting path. If this parameter is not passed the action will be exported to
+    the current working directory.
 
     .INPUTS
     System.String
@@ -38,7 +39,7 @@
 
     Param (
 
-        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName="ById")]
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName="ById")]
         [ValidateNotNullOrEmpty()]
         [String]$Id,         
 
@@ -48,7 +49,7 @@
         
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-        [String]$File
+        [String]$Path
 
     )
 
@@ -86,27 +87,40 @@
 
             $FileName = "$($ContentPackage.Name).zip"
 
-            if (!$PSBoundParameters.ContainsKey("File")) {
+            if (!$PSBoundParameters.ContainsKey("Path")) {
 
-                $File =  "$($(Get-Location).Path)\$($Filename)"
+                Write-Verbose -Message "Path parameter not passed, exporting to current directory."
+                $FullPath = "$($(Get-Location).Path)\$($Filename)"
 
+            }
+            else {
+
+                Write-Verbose -Message "Path parameter passed."
+                
+                if ($Path.EndsWith("\")) {
+
+                    Write-Verbose -Message "Ends with"
+
+                    $Path = $Path.TrimEnd("\")
+
+                }
+                
+                $FullPath = "$($Path)\$($FileName)"
             }
 
             # --- Run vRA REST Request
             $URI = "/content-management-service/api/packages/$($Id)"
 
             #$Response = Invoke-RestMethod -Method GET -Headers $Headers -URI $FullURI -OutFile $
-            Invoke-vRARestMethod -Method GET -Headers $Headers -URI $URI -OutFile $File -Verbose:$VerbosePreference
+            Invoke-vRARestMethod -Method GET -Headers $Headers -URI $URI -OutFile $FullPath -Verbose:$VerbosePreference
 
             # --- Output the result
-            Get-ChildItem -Path $File
+            Get-ChildItem -Path $FullPath
 
         }
         catch [Exception]{
 
             throw
         }
-
     }
-
 }
