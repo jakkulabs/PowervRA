@@ -23,16 +23,16 @@
     System.IO.FileInfo
     
     .EXAMPLE
-    Export-vRAContentPackage -Id "b2d72c5d-775b-400c-8d79-b2483e321bae" -File C:\Packages\ContentPackage01.zip
+    Export-vRAContentPackage -Id "b2d72c5d-775b-400c-8d79-b2483e321bae" -Path C:\Packages\ContentPackage01.zip
 
     .EXAMPLE
-    Export-vRAContentPackage -Name "ContentPackage01" -File C:\Packages\ContentPackage01.zip
+    Export-vRAContentPackage -Name "ContentPackage01" -Path C:\Packages\ContentPackage01.zip
 
     .EXAMPLE
     Get-vRAContentPackage | Export-vRAContentPackage
 
     .EXAMPLE
-    Get-vRAContentPackage -Name "ContentPackage01" | Export-vRAContentPackage -File C:\Packages\ContentPackage01.zip
+    Get-vRAContentPackage -Name "ContentPackage01" | Export-vRAContentPackage -Path C:\Packages\ContentPackage01.zip
 
 #>
 [CmdletBinding(DefaultParameterSetName="ById")][OutputType('System.IO.FileInfo')]
@@ -41,11 +41,11 @@
 
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName="ById")]
         [ValidateNotNullOrEmpty()]
-        [String]$Id,         
+        [String[]]$Id,         
 
         [Parameter(Mandatory=$true,ParameterSetName="ByName")]
         [ValidateNotNullOrEmpty()]
-        [String]$Name,
+        [String[]]$Name,
         
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
@@ -64,59 +64,69 @@
             "Accept"="application/zip";
             "Content-Type" = "Application/zip";
 
-        }        
+        }
 
-    }
+        function internalWorkings ($InternalContentPackage, $InternalId, $InternalPath, $InternalHeaders) {
+            
+            $FileName = "$($InternalContentPackage.Name).zip"
 
-    Process {
-
-        try {    
-
-            if ($PsCmdlet.ParameterSetName -eq "ByName") {
-
-                $ContentPackage = Get-vRAContentPackage -Name $Name
-
-                $Id = $ContentPackage.Id
-
-            }
-            else {
-
-                $ContentPackage = Get-vRAContentPackage -Id $Id
-
-            }
-
-            $FileName = "$($ContentPackage.Name).zip"
-
-            if (!$PSBoundParameters.ContainsKey("Path")) {
+            if (!$InternalPath) {
 
                 Write-Verbose -Message "Path parameter not passed, exporting to current directory."
-                $FullPath = "$($(Get-Location).Path)\$($Filename)"
+                $FullPath = "$($(Get-Location).Path)\$($FileName)"
 
             }
             else {
 
                 Write-Verbose -Message "Path parameter passed."
                 
-                if ($Path.EndsWith("\")) {
+                if ($InternalPath.EndsWith("\")) {
 
                     Write-Verbose -Message "Ends with"
 
-                    $Path = $Path.TrimEnd("\")
+                    $InternalPath = $InternalPath.TrimEnd("\")
 
                 }
                 
-                $FullPath = "$($Path)\$($FileName)"
+                $FullPath = "$($InternalPath)\$($FileName)"
             }
 
             # --- Run vRA REST Request
-            $URI = "/content-management-service/api/packages/$($Id)"
+            $URI = "/content-management-service/api/packages/$($InternalId)"
 
-            #$Response = Invoke-RestMethod -Method GET -Headers $Headers -URI $FullURI -OutFile $
-            Invoke-vRARestMethod -Method GET -Headers $Headers -URI $URI -OutFile $FullPath -Verbose:$VerbosePreference
+            Invoke-vRARestMethod -Method GET -Headers $InternalHeaders -URI $URI -OutFile $FullPath -Verbose:$VerbosePreference
 
             # --- Output the result
             Get-ChildItem -Path $FullPath
+        }
+    }
 
+    Process {
+
+        try {    
+
+            switch ($PsCmdlet.ParameterSetName) {
+            
+                'ByName' {
+
+                    foreach ($ContentPackageName in $Name) {
+
+                        $ContentPackage = Get-vRAContentPackage -Name $ContentPackageName
+                        $Id = $ContentPackage.Id
+
+                        internalWorkings -InternalContentPackage $ContentPackage -InternalId $Id -InternalPath $Path -InternalHeaders $Headers                    
+                    }
+                }
+                'ById' {
+
+                    foreach ($ContentPackageId in $Id){
+
+                        $ContentPackage = Get-vRAContentPackage -Id $ContentPackageId
+
+                        internalWorkings -InternalContentPackage $ContentPackage -InternalId $ContentPackageId -InternalPath $Path -InternalHeaders $Headers 
+                    }
+                }
+            }
         }
         catch [Exception]{
 

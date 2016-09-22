@@ -21,7 +21,7 @@ Describe -Name 'Content Package Tests' -Fixture {
 
     It -Name "Export named Content Package $($JSON.ContentPackage.Name)" -Test {
 
-        $ContentPackageC = Export-vRAContentPackage -Name $JSON.ContentPackage.Name -File $JSON.ContentPackage.FileName
+        $ContentPackageC = Export-vRAContentPackage -Name $JSON.ContentPackage.Name -Path $JSON.ContentPackage.Path
         $ContentPackageC.FullName | Should Be $JSON.ContentPackage.FileName
     }
 
