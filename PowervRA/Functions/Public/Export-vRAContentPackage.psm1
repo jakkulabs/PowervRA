@@ -58,15 +58,15 @@
         # --- Test for vRA API version
         xRequires -Version 7 -Context $MyInvocation
 
-        $Headers = @{
+        function internalWorkings ($InternalContentPackage, $InternalId, $InternalPath) {
+            
+            $Headers = @{
 
-            "Authorization" = "Bearer $($Global:vRAConnection.Token)";
-            "Accept"="application/zip";
-            "Content-Type" = "Application/zip";
+                "Authorization" = "Bearer $($Global:vRAConnection.Token)";
+                "Accept"="application/zip";
+                "Content-Type" = "Application/zip";
 
-        }
-
-        function internalWorkings ($InternalContentPackage, $InternalId, $InternalPath, $InternalHeaders) {
+            }
             
             $FileName = "$($InternalContentPackage.Name).zip"
 
@@ -94,7 +94,7 @@
             # --- Run vRA REST Request
             $URI = "/content-management-service/api/packages/$($InternalId)"
 
-            Invoke-vRARestMethod -Method GET -Headers $InternalHeaders -URI $URI -OutFile $FullPath -Verbose:$VerbosePreference
+            Invoke-vRARestMethod -Method GET -Headers $Headers -URI $URI -OutFile $FullPath -Verbose:$VerbosePreference
 
             # --- Output the result
             Get-ChildItem -Path $FullPath
@@ -114,7 +114,7 @@
                         $ContentPackage = Get-vRAContentPackage -Name $ContentPackageName
                         $Id = $ContentPackage.Id
 
-                        internalWorkings -InternalContentPackage $ContentPackage -InternalId $Id -InternalPath $Path -InternalHeaders $Headers                    
+                        internalWorkings -InternalContentPackage $ContentPackage -InternalId $Id -InternalPath $Path                   
                     }
                 }
                 'ById' {
@@ -123,7 +123,7 @@
 
                         $ContentPackage = Get-vRAContentPackage -Id $ContentPackageId
 
-                        internalWorkings -InternalContentPackage $ContentPackage -InternalId $ContentPackageId -InternalPath $Path -InternalHeaders $Headers 
+                        internalWorkings -InternalContentPackage $ContentPackage -InternalId $ContentPackageId -InternalPath $Path
                     }
                 }
             }
