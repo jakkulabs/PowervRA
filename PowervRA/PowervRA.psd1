@@ -149,7 +149,8 @@ NestedModules = @('Functions\Public\Add-vRAPrincipalToTenantRole.psm1',
                'Functions\Public\Set-vRAStorageReservationPolicy.psm1', 
                'Functions\Public\Set-vRATenant.psm1', 
                'Functions\Public\Set-vRATenantDirectory.psm1', 
-               'Functions\Public\Set-vRAUserPrincipal.psm1')
+               'Functions\Public\Set-vRAUserPrincipal.psm1',
+               'Functions\Public\Test-vRAContentPackage.psm1')
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = 'Add-vRAPrincipalToTenantRole', 'Add-vRAReservationNetwork', 
@@ -193,7 +194,7 @@ FunctionsToExport = 'Add-vRAPrincipalToTenantRole', 'Add-vRAReservationNetwork',
                'Set-vRAReservation', 'Set-vRAReservationNetwork', 
                'Set-vRAReservationPolicy', 'Set-vRAReservationStorage', 
                'Set-vRAService', 'Set-vRAStorageReservationPolicy', 'Set-vRATenant', 
-               'Set-vRATenantDirectory', 'Set-vRAUserPrincipal'
+               'Set-vRATenantDirectory', 'Set-vRAUserPrincipal', 'Test-vRAContentPackage'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = '*'
