@@ -5,7 +5,7 @@
 Set vRA reservation storage properties
 
 ## SYNTAX
- Set-vRAReservationStorage [-Id] <String> [-Path] <String> [[-ReservedSizeGB] <Int32>] [[-Priority] <Int32>] [-Enabled]  [-WhatIf] [-Confirm] [<CommonParameters>]     
+ Set-vRAReservationStorage [-Id] <String> [-Path] <String> [[-ReservedSizeGB] <Int32>] [[-Priority] <Int32>] [-Enabled] [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -88,7 +88,6 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-PS C:\>Get-vRAReservation -Name "Reservation01" | Set-vRAReservationStorage -Path "Datastore01"  -ReservedSizeGB 20 
--Priority 10
+PS C:\>Get-vRAReservation -Name "Reservation01" | Set-vRAReservationStorage -Path "Datastore01"  -ReservedSizeGB 20 -Priority 10
 ```
 
