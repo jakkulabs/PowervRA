@@ -9,8 +9,12 @@
     .PARAMETER File
     The content package file
 
+    .PARAMETER DontValidatePackage
+    Skip Package Validation. Not recommended by the API documentation
+
     .INPUTS
     System.String
+    System.Switch
 
     .OUTPUTS
     System.Management.Automation.PSObject
@@ -28,7 +32,10 @@
 
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelinebyPropertyName=$true)]
     [ValidateNotNullOrEmpty()]
-    [String[]]$File
+    [String[]]$File,
+
+    [parameter(Mandatory=$false)]
+    [Switch]$DontValidatePackage
 
     )
 
@@ -44,6 +51,37 @@
         foreach ($FilePath in $File){
 
             try {
+                # --- Validate the Content Package
+                if (!$PSBoundParameters.ContainsKey('DontValidatePackage')){
+
+                    $Test = Test-vRAContentPackage -File $FilePath
+
+                    switch ($Test.operationStatus) {
+
+                        'FAILED' {
+
+                            $Test.operationResults
+                            throw "Content Package failed validation test. You should remedy the issue with the Content Package before importing - A failed import may potentially leave the system in an inconsistent state"
+                        }
+                        'WARNING' {
+
+                            $Test.operationResults
+                            Write-Warning "Content Package $FilePath contains a warning. Please check the Operation Results for details"
+                        }
+                        'SUCCESS' {
+
+                            Write-Verbose "Content Package $FileInfo has been successfully validated"
+                        }
+                        Default {
+
+                            throw "Unable to validate Content Package $FilePath"
+                        }
+                    }
+                }
+                else {
+
+                    Write-Verbose "Skipping Content Package validation"
+                }
 
                 # --- Resolve the file path
                 $FileInfo = [System.IO.FileInfo](Resolve-Path $FilePath).Path
@@ -87,7 +125,6 @@
             catch [Exception]{
 
                 throw
-
             }
         }
     }

@@ -5,7 +5,7 @@
 Add a vRA Principal to a Tenant Role
 
 ## SYNTAX
- Add-vRAPrincipalToTenantRole [-TenantId] <String> [-PrincipalId] <String[]> [-RoleId] <String> [-WhatIf] [-Confirm]  [<CommonParameters>]     
+ Add-vRAPrincipalToTenantRole [-TenantId] <String> [-PrincipalId] <String[]> [-RoleId] <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -78,7 +78,6 @@ PS C:\>Add-vRAPrincipalToTenantRole -TenantId Tenant01 -PrincipalId Tenantadmin@
 
 -------------------------- EXAMPLE 2 --------------------------
 
-PS C:\>Get-vRAUserPrincipal -UserName Tenantadmin@vrademo.local | Add-vRAPrincipalToTenantRole -TenantId Tenant01 
--RoleId CSP_TENANT_ADMIN
+PS C:\>Get-vRAUserPrincipal -UserName Tenantadmin@vrademo.local | Add-vRAPrincipalToTenantRole -TenantId Tenant01 -RoleId CSP_TENANT_ADMIN
 ```
 

@@ -5,7 +5,7 @@
 Wrapper for Invoke-RestMethod with vRA specifics
 
 ## SYNTAX
- Invoke-vRARestMethod [-Method] <String> [-URI] <String> [[-Body] <String>] [[-Headers] <IDictionary>]  [<CommonParameters>]     
+ Invoke-vRARestMethod [-Method] <String> [-URI] <String> [[-Body] <String>] [[-Headers] <IDictionary>] [[-OutFile] <String>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -47,6 +47,15 @@ Optionally supply custom headers
 
 * Required: false
 * Position: 4
+* Default value: 
+* Accept pipeline input: false
+
+### OutFile
+
+Save the results to a file
+
+* Required: false
+* Position: 5
 * Default value: 
 * Accept pipeline input: false
 
