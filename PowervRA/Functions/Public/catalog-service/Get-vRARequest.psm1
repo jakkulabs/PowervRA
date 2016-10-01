@@ -18,6 +18,33 @@
     .PARAMETER RequestedBy
     Show requests that were submitted by a certain user
 
+    .PARAMETER State
+    Show request that match a certain state
+
+    Supported states are:
+
+        UNSUBMITTED,
+        SUBMITTED,
+        DELETED,
+        PENDING_PRE_APPROVAL,
+        PRE_APPROVAL_SEND_ERROR,
+        PRE_APPROVED,
+        PRE_REJECTED,
+        PROVIDER_DELETION_ERROR,
+        IN_PROGRESS,
+        PROVIDER_SEND_ERROR,
+        PROVIDER_COMPLETED,
+        PROVIDER_FAILED,
+        PENDING_POST_APPROVAL,
+        POST_APPROVAL_SEND_ERROR,
+        POST_APPROVED,
+        POST_REJECTION_RECEIVED,
+        ROLLBACK_ERROR,
+        POST_REJECTED,
+        SUCCESSFUL,
+        PARTIALLY_SUCCESSFUL,
+        FAILED
+
     .PARAMETER Limit
     The number of entries returned per page from the API. This has a default value of 100.
 
@@ -70,15 +97,43 @@
         [ValidateNotNullOrEmpty()]
         [String]$RequestedBy,
 
+        [Parameter(Mandatory=$false,ParameterSetName="State")]
+        [ValidateSet(
+            "UNSUBMITTED",
+            "SUBMITTED",
+            "DELETED",
+            "PENDING_PRE_APPROVAL",
+            "PRE_APPROVAL_SEND_ERROR",
+            "PRE_APPROVED",
+            "PRE_REJECTED",
+            "PROVIDER_DELETION_ERROR",
+            "IN_PROGRESS",
+            "PROVIDER_SEND_ERROR",
+            "PROVIDER_COMPLETED",
+            "PROVIDER_FAILED",
+            "PENDING_POST_APPROVAL",
+            "POST_APPROVAL_SEND_ERROR",
+            "POST_APPROVED",
+            "POST_REJECTION_RECEIVED",
+            "ROLLBACK_ERROR",
+            "POST_REJECTED",
+            "SUCCESSFUL",
+            "PARTIALLY_SUCCESSFUL",
+            "FAILED"
+        )]
+        [String]$State,
+
         [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [Parameter(Mandatory=$false,ParameterSetName="RequestedFor")]
-        [Parameter(Mandatory=$false,ParameterSetName="RequestedBy")]      
+        [Parameter(Mandatory=$false,ParameterSetName="RequestedBy")] 
+        [Parameter(Mandatory=$false,ParameterSetName="State")]       
         [ValidateNotNullOrEmpty()]
         [Int]$Limit = 100,
     
         [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [Parameter(Mandatory=$false,ParameterSetName="RequestedFor")]
-        [Parameter(Mandatory=$false,ParameterSetName="RequestedBy")]        
+        [Parameter(Mandatory=$false,ParameterSetName="RequestedBy")]
+        [Parameter(Mandatory=$false,ParameterSetName="State")]      
         [ValidateNotNullOrEmpty()]
         [int]$Page = 1
 
@@ -206,7 +261,7 @@
                     break
 
                 }
-                {('Standard') -or ('RequestedFor') -or ('RequestedBy')} {
+                {('Standard') -or ('RequestedFor') -or ('RequestedBy') -or ('State')} {
 
                     $URI = "/catalog-service/api/consumer/requests?limit=$($Limit)&page=$($Page)&`$orderby=dateSubmitted desc"
 
@@ -219,6 +274,12 @@
                     if ($PSBoundParameters.ContainsKey("RequestedBy")) {
 
                         $URI = "$($URI)&`$filter=requestedBy eq '$($RequestedBy)'"
+
+                    }
+
+                    if ($PSBoundParameters.ContainsKey("State")) {
+
+                        $URI = "$($URI)&`$filter=state eq '$($State)'"
 
                     }
 
