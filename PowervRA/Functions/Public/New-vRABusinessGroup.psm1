@@ -109,9 +109,9 @@
 
     Param (
 
-    [parameter(Mandatory=$true)]
+    [parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
-    [String]$TenantId,
+    [String]$TenantId = $Global:vRAConnection.Tenant,
     
     [parameter(Mandatory=$true,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
