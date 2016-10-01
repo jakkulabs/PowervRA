@@ -12,6 +12,14 @@
     .PARAMETER Name
     The Name of the resource
 
+    .PARAMETER Type
+    Show resources that match a certain type.
+
+    Supported types ar:
+
+        Deployment,
+        Machine
+
     .PARAMETER WithExtendedData
     Populate the resources extended data by calling their provider
 
