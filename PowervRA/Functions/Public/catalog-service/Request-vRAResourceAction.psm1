@@ -20,14 +20,14 @@ function Request-vRAResourceAction {
     System.String
 
     .EXAMPLE
-    $ResourceActionId = (Get-vRAConsumerResource -Name vm01 | Get-vRAConsumerResourceAction "Reboot").id
-    Request-vRAConsumerResourceAction -Id $ResourceActionId -ResourceName vm01
+    $ResourceActionId = (Get-vRAResource -Name vm01 | Get-vRAResourceAction "Reboot").id
+    Request-vRAResourceAction -Id $ResourceActionId -ResourceName vm01
 
     .EXAMPLE
-    Request-vRAConsumerResourceAction -Id 6a301f8c-d868-4908-8348-80ad0eb35b00 -ResourceId 20402e93-fb1d-4bd9-8a51-b809fbb946fd
+    Request-vRAResourceAction -Id 6a301f8c-d868-4908-8348-80ad0eb35b00 -ResourceId 20402e93-fb1d-4bd9-8a51-b809fbb946fd
 
     .EXAMPLE
-    Request-vRAConsumerResourceAction -Id 6a301f8c-d868-4908-8348-80ad0eb35b00 -ResourceName vm01
+    Request-vRAResourceAction -Id 6a301f8c-d868-4908-8348-80ad0eb35b00 -ResourceName vm01
 
     .EXAMPLE
 
@@ -44,7 +44,7 @@ function Request-vRAResourceAction {
         }        
     "@
 
-    $JSON | Request-vRAConsumerResourceAction
+    $JSON | Request-vRAResourceAction
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low",DefaultParameterSetName="ByResourceId")][OutputType('System.Management.Automation.PSObject')]

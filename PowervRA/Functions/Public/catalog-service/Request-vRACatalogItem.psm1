@@ -36,23 +36,23 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    $Template = Get-vRAConsumerEntitledCatalogItem -Id "dab4e578-57c5-4a30-b3b7-2a5cefa52e9e" | Get-vRAConsumerCatalogItemRequestTemplate
+    $Template = Get-vRAEntitledCatalogItem -Id "dab4e578-57c5-4a30-b3b7-2a5cefa52e9e" | Get-vRACatalogItemRequestTemplate
 
-    $Resource = Request-vRAConsumerCatalogItem -JSON $Template -Wait -Verbose
+    $Resource = Request-vRACatalogItem -JSON $Template -Wait -Verbose
     
     .EXAMPLE
-    $Template = Get-vRAConsumerEntitledCatalogItem -Id "dab4e578-57c5-4a30-b3b7-2a5cefa52e9e" | Get-vRAConsumerCatalogItemRequestTemplate
+    $Template = Get-vRAEntitledCatalogItem -Id "dab4e578-57c5-4a30-b3b7-2a5cefa52e9e" | Get-vRACatalogItemRequestTemplate
 
-    $RequestId = Request-vRAConsumerCatalogItem -JSON $Template -Verbose
-
-    .EXAMPLE
-    Request-vRAConsumerCatalogItem -Id "dab4e578-57c5-4a30-b3b7-2a5cefa52e9e"
+    $RequestId = Request-vRACatalogItem -JSON $Template -Verbose
 
     .EXAMPLE
-    Request-vRAConsumerCatalogItem -Id "dab4e578-57c5-4a30-b3b7-2a5cefa52e9e" -Wait
+    Request-vRACatalogItem -Id "dab4e578-57c5-4a30-b3b7-2a5cefa52e9e"
 
     .EXAMPLE
-    Request-vRAConsumerCatalogItem -Id "dab4e578-57c5-4a30-b3b7-2a5cefa52e9e" -Description "Test" -Reasons "Test Reason"
+    Request-vRACatalogItem -Id "dab4e578-57c5-4a30-b3b7-2a5cefa52e9e" -Wait
+
+    .EXAMPLE
+    Request-vRACatalogItem -Id "dab4e578-57c5-4a30-b3b7-2a5cefa52e9e" -Description "Test" -Reasons "Test Reason"
       
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
