@@ -9,8 +9,8 @@ Properties {
 }
 
 Task Default -depends Build
-Task Build -depends Analyze, UpdateFunctions, UpdateDocumentation
-Task Release -depends Test, Build, BumpVersion
+Task Build -depends Analyze, UpdateFunctions, UpdateDocumentation, 
+Task Release -depends Build, BumpVersion
 
 Task UpdateFunctions {
 
