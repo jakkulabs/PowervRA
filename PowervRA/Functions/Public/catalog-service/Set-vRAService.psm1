@@ -180,7 +180,7 @@
             
                 $URI = "/catalog-service/api/services/$($Id)"
                            
-                $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body ($Service | ConvertTo-Json -Compress) -Verbose:$VerbosePreference
+                Invoke-vRARestMethod -Method PUT -URI $URI -Body ($Service | ConvertTo-Json -Compress) -Verbose:$VerbosePreference | Out-Null
 
                 Get-vRAService -Id $Id
                 

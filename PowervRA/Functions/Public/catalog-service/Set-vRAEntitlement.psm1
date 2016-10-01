@@ -239,7 +239,7 @@
                 $URI = "/catalog-service/api/entitlements/$($Id)"
                 
                 # --- Run vRA REST Request
-                $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body $Body -Verbose:$VerbosePreference
+                Invoke-vRARestMethod -Method PUT -URI $URI -Body $Body -Verbose:$VerbosePreference | Out-Null
 
                 # --- Output the Successful Result
                 Get-vRAEntitlement -Id $Id
