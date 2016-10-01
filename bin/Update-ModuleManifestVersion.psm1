@@ -74,14 +74,43 @@ Update-ModuleManifestVersion -Path .\ModuleManifest.psd1 -Patch
     Write-Verbose -Message "Resolved path: $($ResolvedPath)"
 
     # --- Get the current version of the module
-    $ModuleManifest = Invoke-Expression -Command (Get-Content -Path $ResolvedPath | Out-String)
+    $ModuleManifest = Import-PowerShellDataFile -Path $ResolvedPath
+
     $CurrentModuleVersion = $ModuleManifest.ModuleVersion
+
+    $ModuleManifest.Remove("ModuleVersion")
 
     Write-Verbose -Message "Current module version is $($CurrentModuleVersion)"
 
     [Int]$MajorVersion = $CurrentModuleVersion.Split(".")[0]
     [Int]$MinorVersion = $CurrentModuleVersion.Split(".")[1]
     [Int]$PatchVersion = $CurrentModuleVersion.Split(".")[2]
+
+    $ModuleManifest.ScriptsToProcess = $ModuleManifest.ScriptsToProcess | ForEach-Object {$_}
+    $ModuleManifest.FunctionsToExport = $ModuleManifest.FunctionsToExport | ForEach-Object {$_}
+    $ModuleManifest.NestedModules = $ModuleManifest.NestedModules | ForEach-Object {$_}
+    $ModuleManifest.RequiredModules = $ModuleManifest.RequiredModules | ForEach-Object {$_}
+    $ModuleManifest.ModuleList = $ModuleManifest.ModuleList | ForEach-Object {$_}
+    
+    if ($ModuleManifest.ContainsKey("PrivateData") -and $ModuleManifest.PrivateData.ContainsKey("PSData"))
+    {
+        foreach ($node in $ModuleManifest.PrivateData["PSData"].GetEnumerator())
+        {
+            $key = $node.Key
+            if ($node.Value.GetType().Name -eq "Object[]")
+            {
+                $value = $node.Value | ForEach-Object {$_}
+            }
+            else 
+            {
+                $value = $node.Value    
+            }
+            
+            $ModuleManifest[$key] = $value
+        }
+        $ModuleManifest.Remove("PrivateData")
+    }
+
 
     switch ($PSCmdlet.ParameterSetName) {
 
@@ -128,8 +157,8 @@ Update-ModuleManifestVersion -Path .\ModuleManifest.psd1 -Patch
 
             try {
 
-                Update-ModuleManifest -Path $ResolvedPath -ModuleVersion $ModuleVersion
-
+                # --- Fix taken from: https://github.com/RamblingCookieMonster/BuildHelpers/blob/master/BuildHelpers/Public/Step-ModuleVersion.ps1
+                New-ModuleManifest -Path $ResolvedPath -ModuleVersion $ModuleVersion @ModuleManifest
                 Write-Verbose -Message "Module version updated to $($ModuleVersion)"
 
             }

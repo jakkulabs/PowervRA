@@ -41,12 +41,14 @@ function Update-MKDocsYML {
 
         }
         
-        $Functions = $ModuleObject.ExportedCommands.Keys | % {"    - $($_) : $($_).md"}        
+        $Functions = $ModuleObject.ExportedCommands.Keys | % {"    - $($_) : $($_).md"}
+        
+        $ModuleName = ($ModuleObject | Where-Object {$_.ModuleType -eq "Manifest"}).Name
 
         $Template = @"
 ---
 
-site_name: $($ModuleObject.Name)
+site_name: $($ModuleName)
 pages:
 - 'Home' : 'index.md'
 - 'Functions': 
