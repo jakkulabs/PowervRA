@@ -5,7 +5,7 @@
 Get available networks for a compute resource
 
 ## SYNTAX
- Get-vRAReservationComputeResourceNetwork -Type <String> -ComputeResourceId <String> [<CommonParameters>]  Get-vRAReservationComputeResourceNetwork -Type <String> -ComputeResourceId <String> -Name <String[]>  [<CommonParameters>]     
+ Get-vRAReservationComputeResourceNetwork -Type <String> -ComputeResourceId <String> [<CommonParameters>]  Get-vRAReservationComputeResourceNetwork -Type <String> -ComputeResourceId <String> -Name <String[]> [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -52,8 +52,7 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-PS C:\>Get-vRAReservationComputeResourceNetwork -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d 
--Name VMNetwork
+PS C:\>Get-vRAReservationComputeResourceNetwork -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d -Name VMNetwork
 
 
 

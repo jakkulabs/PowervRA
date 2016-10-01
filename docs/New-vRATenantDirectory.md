@@ -5,7 +5,7 @@
 Create a vRA Tenant Directory
 
 ## SYNTAX
- New-vRATenantDirectory -ID <String> -Name <String> [-Description <String>] [-Alias <String>] -Type <String> -Domain  <String> -UserNameDN <String> -Password <String> -URL <String> -GroupBaseSearchDN <String> [-UserBaseSearchDN  <String>] [-Subdomains <String>] -GroupBaseSearchDNs <String[]> [-UserBaseSearchDNs <String[]>] [-DomainAdminUsername  <String>] [-DomainAdminPassword <String>] [-Certificate <String>] [-TrustAll] [-UseGlobalCatalog] [-WhatIf] [-Confirm]  [<CommonParameters>]  New-vRATenantDirectory -ID <String> -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
+ New-vRATenantDirectory -ID <String> -Name <String> [-Description <String>] [-Alias <String>] -Type <String> -Domain <String> -UserNameDN <String> -Password <String> -URL <String> -GroupBaseSearchDN <String>  [-UserBaseSearchDN <String>] [-Subdomains <String>] -GroupBaseSearchDNs <String[]> [-UserBaseSearchDNs <String[]>] [-DomainAdminUsername <String>] [-DomainAdminPassword <String>] [-Certificate <String>] [-TrustAll]  [-UseGlobalCatalog] [-WhatIf] [-Confirm] [<CommonParameters>]  New-vRATenantDirectory -ID <String> -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -222,13 +222,10 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-PS C:\>New-vRATenantDirectory -ID Tenant01 -Name Tenant01 -Description "This is the Tenant01 Directory" -Type AD 
--Domain "vrademo.local" -UserNameDN "CN=vrasvc,OU=Service Accounts,OU=HQ,DC=vrademo,DC=local" `
+PS C:\>New-vRATenantDirectory -ID Tenant01 -Name Tenant01 -Description "This is the Tenant01 Directory" -Type AD -Domain "vrademo.local" -UserNameDN "CN=vrasvc,OU=Service Accounts,OU=HQ,DC=vrademo,DC=local" `
 
--Password "P@ssw0rd" -URL "ldap://dc01.vrademo.local:389" -GroupBaseSearchDN 
-"OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -UserBaseSearchDN "OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" `
- -GroupBaseSearchDNs "OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -UserBaseSearchDNs 
-"OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -TrustAll
+-Password "P@ssw0rd" -URL "ldap://dc01.vrademo.local:389" -GroupBaseSearchDN "OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -UserBaseSearchDN "OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" `
+ -GroupBaseSearchDNs "OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -UserBaseSearchDNs "OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -TrustAll
 
 
 

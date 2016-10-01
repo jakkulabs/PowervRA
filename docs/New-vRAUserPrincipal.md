@@ -5,7 +5,7 @@
 Create a vRA local user principal
 
 ## SYNTAX
- New-vRAUserPrincipal -PrincipalId <String> [-Tenant <String>] -FirstName <String> -LastName <String> -EmailAddress  <String> [-Description <String>] -Password <String> [-WhatIf] [-Confirm] [<CommonParameters>]  New-vRAUserPrincipal [-Tenant <String>] -FirstName <String> -LastName <String> -EmailAddress <String> [-Description  <String>] -Credential <PSCredential> [-WhatIf] [-Confirm] [<CommonParameters>]  New-vRAUserPrincipal -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
+ New-vRAUserPrincipal -PrincipalId <String> [-Tenant <String>] -FirstName <String> -LastName <String> -EmailAddress <String> [-Description <String>] -Password <String> [-WhatIf] [-Confirm] [<CommonParameters>]  New-vRAUserPrincipal [-Tenant <String>] -FirstName <String> -LastName <String> -EmailAddress <String> [-Description <String>] -Credential <PSCredential> [-WhatIf] [-Confirm] [<CommonParameters>]  New-vRAUserPrincipal -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -123,8 +123,7 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-PS C:\>New-vRAUserPrincipal -Tenant vsphere.local -FirstName "Test" -LastName "User" -EmailAddress "user@company.com" 
--Description "a description" -Password "password" -PrincipalId "user@vsphere.local"
+PS C:\>New-vRAUserPrincipal -Tenant vsphere.local -FirstName "Test" -LastName "User" -EmailAddress "user@company.com" -Description "a description" -Password "password" -PrincipalId "user@vsphere.local"
 
 
 

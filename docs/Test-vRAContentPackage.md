@@ -1,15 +1,15 @@
-# Import-vRAContentPackage
+# Test-vRAContentPackage
 
 ## SYNOPSIS
     
-Imports a vRA Content Package
+Validates a vRA Content Package
 
 ## SYNTAX
- Import-vRAContentPackage [-File] <String[]> [-DontValidatePackage] [-WhatIf] [-Confirm] [<CommonParameters>]     
+ Test-vRAContentPackage [-File] <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
-Imports a vRA Content Package
+Validates a vRA Content Package
 
 ## PARAMETERS
 
@@ -22,15 +22,6 @@ The content package file
 * Position: 1
 * Default value: 
 * Accept pipeline input: true (ByValue, ByPropertyName)
-
-### DontValidatePackage
-
-Skip Package Validation. Not recommended by the API documentation
-
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
 
 ### WhatIf
 
@@ -51,7 +42,6 @@ Skip Package Validation. Not recommended by the API documentation
 ## INPUTS
 
 System.String
-System.Switch
 
 ## OUTPUTS
 
@@ -61,7 +51,7 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-PS C:\>Import-vRAContentPackage -File C:\Packages\ContentPackage100.zip
+PS C:\>Test-vRAContentPackage -File C:\Packages\ContentPackage100.zip
 
 
 
@@ -70,6 +60,6 @@ PS C:\>Import-vRAContentPackage -File C:\Packages\ContentPackage100.zip
 
 -------------------------- EXAMPLE 2 --------------------------
 
-PS C:\>Get-ChildItem -Path C:\Packages\ContentPackage100.zip| Import-vRAContentPackage -Confirm:$false
+PS C:\>Get-ChildItem -Path C:\Packages\ContentPackage100.zip| Test-vRAContentPackage
 ```
 

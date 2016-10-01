@@ -5,7 +5,7 @@
 Create a vRA custom group
 
 ## SYNTAX
- New-vRAGroupPrincipal [-Tenant <String>] -Name <String> [-Description <String>] [-WhatIf] [-Confirm]  [<CommonParameters>]  New-vRAGroupPrincipal -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
+ New-vRAGroupPrincipal [-Tenant <String>] -Name <String> [-Description <String>] [-WhatIf] [-Confirm] [<CommonParameters>]  New-vRAGroupPrincipal -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 

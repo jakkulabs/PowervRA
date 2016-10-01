@@ -5,7 +5,7 @@
 Create a new reservation
 
 ## SYNTAX
- New-vRAReservation -Type <String> -Name <String> [-Tenant <String>] -BusinessGroup <String> [-ReservationPolicy  <String>] [-Priority <Int32>] -ComputeResourceId <String> [-Quota <Int32>] -MemoryGB <Int32> -Storage <PSObject[]>  [-Network <PSObject[]>] [-ResourcePool <String>] [-EnableAlerts] [-EmailBusinessGroupManager] [-AlertRecipients  <String[]>] [-StorageAlertPercentageLevel <Int32>] [-MemoryAlertPercentageLevel <Int32>] [-CPUAlertPercentageLevel  <Int32>] [-MachineAlertPercentageLevel <Int32>] [-AlertReminderFrequency <Int32>] [-WhatIf] [-Confirm]  [<CommonParameters>]  New-vRAReservation -JSON <String> [-NewName <String>] [-WhatIf] [-Confirm] [<CommonParameters>]     
+ New-vRAReservation -Type <String> -Name <String> [-Tenant <String>] -BusinessGroup <String> [-ReservationPolicy <String>] [-Priority <Int32>] -ComputeResourceId <String> [-Quota <Int32>] -MemoryGB <Int32> -Storage  <PSObject[]> [-Network <PSObject[]>] [-ResourcePool <String>] [-EnableAlerts] [-EmailBusinessGroupManager] [-AlertRecipients <String[]>] [-StorageAlertPercentageLevel <Int32>] [-MemoryAlertPercentageLevel <Int32>]  [-CPUAlertPercentageLevel <Int32>] [-MachineAlertPercentageLevel <Int32>] [-AlertReminderFrequency <Int32>] [-WhatIf] [-Confirm] [<CommonParameters>]  New-vRAReservation -JSON <String> [-NewName <String>] [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -249,14 +249,12 @@ $ComputeResource = Get-vRAReservationComputeResource -Type vSphere -Name "Cluste
 
 # --- Get the network definition
 $NetworkDefinitionArray = @()
-$Network1 = New-vRAReservationNetworkDefinition -Type vSphere -ComputeResourceId $ComputeResource.Id -NetworkPath "VM 
-Network" -NetworkProfile "Test-Profile"
+$Network1 = New-vRAReservationNetworkDefinition -Type vSphere -ComputeResourceId $ComputeResource.Id -NetworkPath "VM Network" -NetworkProfile "Test-Profile"
 $NetworkDefinitionArray += $Network1
 
 # --- Get the storage definition
 $StorageDefinitionArray = @()
-$Storage1 = New-vRAReservationStorageDefinition -Type vSphere -ComputeResourceId $ComputeResource.Id -Path 
-"Datastore1" -ReservedSizeGB 10 -Priority 0 
+$Storage1 = New-vRAReservationStorageDefinition -Type vSphere -ComputeResourceId $ComputeResource.Id -Path "Datastore1" -ReservedSizeGB 10 -Priority 0 
 $StorageDefinitionArray += $Storage1
 
 # --- Set the parameters and create the reservation
