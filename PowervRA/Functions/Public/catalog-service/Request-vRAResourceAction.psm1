@@ -73,6 +73,8 @@ function Request-vRAResourceAction {
 
     Begin {
 
+        xRequires -Version 7 -Context $MyInvocation
+
     }
 
     Process {

@@ -45,6 +45,8 @@ function Get-vRAResourceActionRequestTemplate {
     
     Begin {
 
+        xRequires -Version 7 -Context $MyInvocation
+
     }
  
     Process {
