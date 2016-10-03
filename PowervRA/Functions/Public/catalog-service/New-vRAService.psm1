@@ -69,33 +69,33 @@
 
     Param (
         
-    [parameter(Mandatory=$true,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [String]$Name,
-    
-    [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [String]$Description,            
+        [Parameter(Mandatory=$true,ParameterSetName="Standard")]
+        [ValidateNotNullOrEmpty()]
+        [String]$Name,
+        
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [ValidateNotNullOrEmpty()]
+        [String]$Description,            
 
-    [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [String]$Owner,
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [ValidateNotNullOrEmpty()]
+        [String]$Owner,
 
-    [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [String]$SupportTeam,
-    
-    [parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="JSON")]
-    [ValidateNotNullOrEmpty()]
-    [String]$JSON      
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [ValidateNotNullOrEmpty()]
+        [String]$SupportTeam,
+        
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="JSON")]
+        [ValidateNotNullOrEmpty()]
+        [String]$JSON      
      
     )    
 
-    begin {
+    Begin {
     
     }
     
-    process {
+    Process {
 
             if ($PSBoundParameters.ContainsKey("JSON")) {
 
@@ -103,11 +103,8 @@
         
                 $Body = $JSON
                 $Name = $Data.name
-
-                }
+            }
             else {
-
-                Write-Verbose -Message "Preparing request body"
 
                 $Body = @"
                     {
@@ -118,7 +115,7 @@
                         "version": 1,
                         "organization": {
                             "tenantRef": "$($Global:vRAConnection.Tenant)",
-                            "tenantLabel": "$($Global:vRAConnection.Tenant)",
+                            "tenantLabel": null,
                             "subtenantRef": null,
                             "subtenantLabel": null
                         },   
@@ -126,7 +123,7 @@
                         "iconId": "cafe_default_icon_genericService"
                     }
 "@
-            
+
                 # --- If certain parameters are specified, ConvertFrom-Json, update, then ConvertTo-Json
                 if ($PSBoundParameters.ContainsKey("Owner") -or $PSBoundParameters.ContainsKey("SupportTeam")){
 
@@ -158,7 +155,6 @@
 
                 }
                         
-
             }
        
         # --- Create new service
@@ -168,15 +164,13 @@
                 # --- Build the URI string for the service         
             
                 $URI = "/catalog-service/api/services"
-                
-                Write-Verbose -Message "Preparing POST to $($URI)"                
-           
-                $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body
+                           
+                $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference
 
                 Get-vRAService -Name "$($Name)"
-                
+
             }
-                        
+
         }
         catch [Exception] {
             
@@ -184,6 +178,10 @@
             
         }
     
-    }    
+    }
+
+    End {
+
+    }
 
 }

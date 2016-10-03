@@ -30,6 +30,8 @@
     [String[]]$Id          
 
     )
+
+    Write-Warning -Message "This command is deprecated and will be removed in a future release. Please use Get-vRAResourceOperation instead."
                 
     try {
 

@@ -1,11 +1,11 @@
-﻿function Get-vRACatalogItem {
+﻿function Get-vRAConsumerCatalogItem {
 <#
     .SYNOPSIS
-    Get a catalog item that the user is allowed to review.
+    Get a consumer catalog item that the user is allowed to review.
     
     .DESCRIPTION
-    API for catalog items that a system administrator can interact with. It allows the user to interact 
-    with catalog items that the user is permitted to review, even if they were not published or entitled to them.
+    Consumer REST API for Catalog Items. This API does not take entitlements into account but only global user permissions.
+    However, if a request is submitted for a catalogitem without the appropriate entitlement it will be rejected.
 
     .PARAMETER Id
     The id of the catalog item
@@ -23,16 +23,16 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    Get-vRACatalogItem
+    Get-vRAConsumerCatalogItem
     
     .EXAMPLE
-    Get-vRACatalogItem -Limit 9999
+    Get-vRAConsumerCatalogItem -Limit 9999
 
     .EXAMPLE
-    Get-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e
+    Get-vRAConsumerCatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e
 
     .EXAMPLE
-    Get-vRACatalogItem -Name Centos_Template
+    Get-vRAConsumerCatalogItem -Name Centos_Template
     
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
@@ -53,6 +53,8 @@
     
     )      
 
+    Write-Warning -Message "This command is deprecated and will be removed in a future release. Please use Get-vRACatalogItem instead."
+
     try {
 
         switch ($PsCmdlet.ParameterSetName) {
@@ -62,7 +64,7 @@
 
                 foreach ($CatalogItemId in $Id) {
             
-                    $URI = "/catalog-service/api/catalogItems/$($CatalogItemId)"
+                    $URI = "/catalog-service/api/consumer/catalogItems/$($CatalogItemId)"
 
                     Write-Verbose -Message "Preparing GET to $($URI)"
             
@@ -103,7 +105,7 @@
         
                 foreach ($CatalogItemName in $Name) { 
             
-                    $URI = "/catalog-service/api/catalogItems?`$filter=name%20eq%20'$($CatalogItemName)'"            
+                    $URI = "/catalog-service/api/consumer/catalogItems?`$filter=name%20eq%20'$($CatalogItemName)'"            
             
                     Write-Verbose -Message "Preparing GET to $($URI)"                
 
@@ -149,7 +151,7 @@
             # --- No parameters passed so return all catalog items
             'Standard' {
             
-                $URI = "/catalog-service/api/catalogItems?limit=$($Limit)&`$orderby=name%20asc"        
+                $URI = "/catalog-service/api/consumer/catalogItems?limit=$($Limit)&`$orderby=name%20asc"        
                 
                 Write-Verbose -Message "Preparing GET to $($URI)"   
 
