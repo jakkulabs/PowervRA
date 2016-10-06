@@ -253,17 +253,6 @@
 
                     $BusinessGroupId = (Get-vRABusinessGroup -TenantId $Tenant -Name $BusinessGroup).id
 
-                    if ($PSBoundParameters.ContainsKey("ReservationPolicy")){
-
-                        $ReservationPolicyId = (Get-vRAReservationPolicy -Name $ReservationPolicy).id               
-
-                    }
-                    else {
-
-                        $ReservationPolicyId = "null"
-
-                    }
-
                     # --- Enable alerts
                     # --- Convert boolean to a string value for the payload
                     if ($EnableAlerts) {
@@ -291,15 +280,10 @@
                     }
 
 
-
-
-
-
                     Write-Verbose -Message "Reservation name is $($Name)"
                     Write-Verbose -Message "ReservationTypeId for $($Type) is $($ReservationTypeId)"
                     Write-Verbose -Message "Tenant is $($Tenant)"
                     Write-Verbose -Message "BusinessGroupId for $($BusinessGroup) is $($BusinessGroupId)"
-                    Write-Verbose -Message "ReservationPolicyId for $($ReservationPolicy) is $($ReservationPolicyId)"
                     Write-Verbose -Message "Priority is $($Priority)"
                     Write-Verbose -Message "Alerts enabled: $($EnableAlertsAsString)"
                     Write-Verbose -Message "Email business group manager: $($EmailBusinessGroupManagerAsString)"
@@ -312,7 +296,7 @@
                           "subTenantId": "$($BusinessGroupId)",
                           "enabled": true,
                           "priority": $($Priority),
-                          "reservationPolicyId": "$($ReservationPolicyId)",
+                          "reservationPolicyId": null,
                           "alertPolicy": {
                             "enabled": $($EnableAlertsAsString),
                             "frequencyReminder": $($AlertReminderFrequency),
@@ -328,6 +312,14 @@
 
                     # --- Convert the body to an object and begin adding extensionData
                     $ReservationObject = $Template | ConvertFrom-Json
+
+                    if ($PSBoundParameters.ContainsKey("ReservationPolicy")){
+
+                        $ReservationPolicyId = (Get-vRAReservationPolicy -Name $ReservationPolicy).id
+                        $ReservationObject.reservationPolicyId = $ReservationPolicyId      
+                        Write-Verbose -Message "ReservationPolicyId for $($ReservationPolicy) is $($ReservationPolicyId)"
+
+                    }
 
                     if ($EnableAlerts -eq "TRUE" -and $PSBoundParameters.ContainsKey("AlertRecipients")) {
 
@@ -786,7 +778,7 @@
                     }
 
 
-                    $Body = $ReservationObject | ConvertTo-Json -Depth 500
+                    $Body = $ReservationObject | ConvertTo-Json -Depth 100
 
                 }
 
