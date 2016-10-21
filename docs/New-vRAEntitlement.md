@@ -5,7 +5,7 @@
 Create a new entitlement
 
 ## SYNTAX
- New-vRAEntitlement -Name <String> [-Description <String>] -BusinessGroup <String> [-Principals <String[]>] [-EntitledCatalogItems <String[]>] [-EntitledResourceOperations <String[]>] [-EntitledServices <String[]>] [-WhatIf]  [-Confirm] [<CommonParameters>]  New-vRAEntitlement -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
+ New-vRAEntitlement -Name <String> [-Description <String>] -BusinessGroup <String> [-Principals <String[]>] [-EntitledCatalogItems <String[]>] [-EntitledResourceOperations <String[]>] [-EntitledServices  <String[]>] [-WhatIf] [-Confirm] [<CommonParameters>]  New-vRAEntitlement -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -116,7 +116,8 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-PS C:\>New-vRAEntitlement -Name "TestEntitlement" -Description "a test" -BusinessGroup "Test01" -Principals "user@vsphere.local" -EntitledCatalogItems "centos7","centos6" -EntitledServices "Default service" -Verbose
+PS C:\>New-vRAEntitlement -Name "TestEntitlement" -Description "a test" -BusinessGroup "Test01" -Principals "user@vsphere.local" -EntitledCatalogItems "centos7","centos6" -EntitledServices "Default service" 
+-Verbose
 
 
 
@@ -158,7 +159,6 @@ PS C:\>$JSON = @"
                   "version": null
                 }
 "@
-
 
 $JSON | New-vRAEntitlement -Verbose
 ```

@@ -5,7 +5,7 @@
 Create a new reservation
 
 ## SYNTAX
- New-vRAReservation -Type <String> -Name <String> [-Tenant <String>] -BusinessGroup <String> [-ReservationPolicy <String>] [-Priority <Int32>] -ComputeResourceId <String> [-Quota <Int32>] -MemoryGB <Int32> -Storage  <PSObject[]> [-Network <PSObject[]>] [-ResourcePool <String>] [-EnableAlerts] [-EmailBusinessGroupManager] [-AlertRecipients <String[]>] [-StorageAlertPercentageLevel <Int32>] [-MemoryAlertPercentageLevel <Int32>]  [-CPUAlertPercentageLevel <Int32>] [-MachineAlertPercentageLevel <Int32>] [-AlertReminderFrequency <Int32>] [-WhatIf] [-Confirm] [<CommonParameters>]  New-vRAReservation -JSON <String> [-NewName <String>] [-WhatIf] [-Confirm] [<CommonParameters>]     
+ New-vRAReservation -Type <String> -Name <String> [-Tenant <String>] -BusinessGroup <String> [-ReservationPolicy <String>] [-Priority <Int32>] -ComputeResourceId <String> [-Quota <Int32>] -MemoryGB <Int32>  -Storage <PSObject[]> [-Network <PSObject[]>] [-ResourcePool <String>] [-EnableAlerts] [-EmailBusinessGroupManager] [-AlertRecipients <String[]>] [-StorageAlertPercentageLevel <Int32>]  [-MemoryAlertPercentageLevel <Int32>] [-CPUAlertPercentageLevel <Int32>] [-MachineAlertPercentageLevel <Int32>] [-AlertReminderFrequency <Int32>] [-WhatIf] [-Confirm] [<CommonParameters>]  New-vRAReservation -JSON <String> [-NewName <String>] [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 

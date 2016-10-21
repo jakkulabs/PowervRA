@@ -5,7 +5,7 @@
 Update an existing entitlement
 
 ## SYNTAX
- Set-vRAEntitlement -Id <String> [-Name <String>] [-Description <String>] [-Principals <String[]>] [-EntitledCatalogItems <String[]>] [-EntitledResourceOperations <String[]>] [-EntitledServices <String[]>] [-Status <String>]  [-WhatIf] [-Confirm] [<CommonParameters>]     
+ Set-vRAEntitlement [-Id] <String> [[-Name] <String>] [[-Description] <String>] [[-Principals] <String[]>] [[-EntitledCatalogItems] <String[]>] [[-EntitledResourceOperations] <String[]>] [[-EntitledServices]  <String[]>] [[-Status] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -19,16 +19,16 @@ Update an existing entitlement
 The id of the entitlement
 
 * Required: true
-* Position: named
+* Position: 1
 * Default value: 
-* Accept pipeline input: true (ByPropertyName)
+* Accept pipeline input: true (ByValue, ByPropertyName)
 
 ### Name
 
 The name of the entitlement
 
 * Required: false
-* Position: named
+* Position: 2
 * Default value: 
 * Accept pipeline input: false
 
@@ -37,7 +37,7 @@ The name of the entitlement
 A description of the entitlement
 
 * Required: false
-* Position: named
+* Position: 3
 * Default value: 
 * Accept pipeline input: false
 
@@ -46,7 +46,7 @@ A description of the entitlement
 Users or groups that will be associated with the entitlement
 
 * Required: false
-* Position: named
+* Position: 4
 * Default value: 
 * Accept pipeline input: false
 
@@ -55,7 +55,7 @@ Users or groups that will be associated with the entitlement
 One or more entitled catalog item
 
 * Required: false
-* Position: named
+* Position: 5
 * Default value: 
 * Accept pipeline input: false
 
@@ -64,7 +64,7 @@ One or more entitled catalog item
 The externalId of one or more entitled resource operation (e.g. Infrastructure.Machine.Action.PowerOn)
 
 * Required: false
-* Position: named
+* Position: 6
 * Default value: 
 * Accept pipeline input: false
 
@@ -73,7 +73,7 @@ The externalId of one or more entitled resource operation (e.g. Infrastructure.M
 One or more entitled service
 
 * Required: false
-* Position: named
+* Position: 7
 * Default value: 
 * Accept pipeline input: false
 
@@ -82,7 +82,7 @@ One or more entitled service
 The status of the entitlement. Accepted values are ACTIVE and INACTIVE
 
 * Required: false
-* Position: named
+* Position: 8
 * Default value: 
 * Accept pipeline input: false
 
@@ -123,8 +123,8 @@ PS C:\>Set-vRAEntitlement -Id "e5cd1c84-3b76-4ae9-9f2e-35114da6cfd2" -Name "Upda
 
 -------------------------- EXAMPLE 2 --------------------------
 
-PS C:\>Set-vRAEntitlement -Id "e5cd1c84-3b76-4ae9-9f2e-35114da6cfd2" -Name "Updated Name" -Description "Updated Description" -Principals "user@vsphere.local" -EntitledCatalogItems "Centos" -EntitledServices "A service" 
--EntitledResourceOperations "Infrastructure.Machine.Action.PowerOff" -Status ACTIVE
+PS C:\>Set-vRAEntitlement -Id "e5cd1c84-3b76-4ae9-9f2e-35114da6cfd2" -Name "Updated Name" -Description "Updated Description" -Principals "user@vsphere.local" -EntitledCatalogItems "Centos" -EntitledServices "A 
+service" -EntitledResourceOperations "Infrastructure.Machine.Action.PowerOff" -Status ACTIVE
 
 
 

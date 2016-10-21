@@ -1,23 +1,24 @@
-# Get-vRAResourceType
+# Get-vRAEntitledService
 
 ## SYNOPSIS
     
-Get a resource type
+Retrieve vRA services that the user is has access to
 
 ## SYNTAX
- Get-vRAResourceType [-Page <Int32>] [-Limit <Int32>] [<CommonParameters>]  Get-vRAResourceType -Id <String[]> [<CommonParameters>]  Get-vRAResourceType -Name <String[]> [<CommonParameters>]     
+ Get-vRAEntitledService [-Page <Int32>] [-Limit <Int32>] [<CommonParameters>]  Get-vRAEntitledService -Id <String[]> [<CommonParameters>]  Get-vRAEntitledService -Name <String[]> [<CommonParameters>]     
 
 ## DESCRIPTION
 
-A Resource type is a type assigned to resources. The types are defined by the provider types. 
-It allows similar resources to be grouped together.
+A service represents a customer-facing/user friendly set of activities. In the context of this Service Catalog, 
+these activities are the catalog items and resource actions. 
+A service must be owned by a specific organization and all the activities it contains should belongs to the same organization.
 
 ## PARAMETERS
 
 
 ### Id
 
-The id of the resource type
+The id of the service
 
 * Required: true
 * Position: named
@@ -26,7 +27,7 @@ The id of the resource type
 
 ### Name
 
-The Name of the resource type
+The Name of the service
 
 * Required: true
 * Position: named
@@ -64,7 +65,7 @@ System.Management.Automation.PSObject.
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-PS C:\>Get-vRAResourceType
+PS C:\>Get-vRAService
 
 
 
@@ -73,7 +74,7 @@ PS C:\>Get-vRAResourceType
 
 -------------------------- EXAMPLE 2 --------------------------
 
-PS C:\>Get-vRAResourceType -Id "Infrastructure.Machine"
+PS C:\>Get-vRAService -Id 332d38d5-c8db-4519-87a7-7ef9f358091a
 
 
 
@@ -82,6 +83,6 @@ PS C:\>Get-vRAResourceType -Id "Infrastructure.Machine"
 
 -------------------------- EXAMPLE 3 --------------------------
 
-PS C:\>Get-vRAResourceType -Name "Machine"
+PS C:\>Get-vRAService -Name "Default Service"
 ```
 

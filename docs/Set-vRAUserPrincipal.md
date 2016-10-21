@@ -5,7 +5,7 @@
 Update a vRA local user principal
 
 ## SYNTAX
- Set-vRAUserPrincipal -Id <String> [-Tenant <String>] [-FirstName <String>] [-LastName <String>] [-EmailAddress <String>] [-Description <String>] [-Password <String>] [-DisableAccount] [-EnableAccount] [-WhatIf] [-Confirm]  [<CommonParameters>]     
+ Set-vRAUserPrincipal -Id <String> [-Tenant <String>] [-FirstName <String>] [-LastName <String>] [-EmailAddress <String>] [-Description <String>] [-Password <String>] [-DisableAccount] [-EnableAccount]  [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 

@@ -5,7 +5,7 @@
 Create a vRA Business Group
 
 ## SYNTAX
- New-vRABusinessGroup -TenantId <String> -Name <String> [-Description <String>] [-BusinessGroupManager <String[]>] [-SupportUser <String[]>] [-User <String[]>] [-MachinePrefixId <String>] -SendManagerEmailsTo <String>  [-WhatIf] [-Confirm] [<CommonParameters>]  New-vRABusinessGroup -TenantId <String> -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
+ New-vRABusinessGroup [-TenantId <String>] -Name <String> [-Description <String>] [-BusinessGroupManager <String[]>] [-SupportUser <String[]>] [-User <String[]>] [-MachinePrefixId <String>] -SendManagerEmailsTo  <String> [-WhatIf] [-Confirm] [<CommonParameters>]  New-vRABusinessGroup [-TenantId <String>] -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -18,9 +18,9 @@ Create a vRA Business Group
 
 Tenant ID
 
-* Required: true
+* Required: false
 * Position: named
-* Default value: 
+* Default value: $Global:vRAConnection.Tenant
 * Accept pipeline input: false
 
 ### Name
