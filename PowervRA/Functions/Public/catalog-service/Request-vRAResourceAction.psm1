@@ -7,7 +7,7 @@ function Request-vRAResourceAction {
     A resourceAction is a specific type of ResourceOperation that is performed by submitting a request. 
     Unlike ResourceExtensions, resource actions can be invoked via the Service Catalog service and subject to approvals.
     
-    .PARAMETER Id
+    .PARAMETER ActionId
     The Id for the resource action
     
     .PARAMETER ResourceId
@@ -112,7 +112,7 @@ function Request-vRAResourceAction {
                 # --- Get the request template
                 Write-Verbose -Message "Retrieving request template"
 
-                $JSON = Get-vRAResourceActionRequestTemplate -Id $ActionId -ResourceId $ResourceId
+                $JSON = Get-vRAResourceActionRequestTemplate -ActionId $ActionId -ResourceId $ResourceId
 
             }
 
