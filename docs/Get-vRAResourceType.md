@@ -5,7 +5,7 @@
 Get a resource type
 
 ## SYNTAX
- Get-vRAResourceType [-Limit <String>] [<CommonParameters>]  Get-vRAResourceType [-Id <String[]>] [-Limit <String>] [<CommonParameters>]  Get-vRAResourceType [-Name <String[]>] [-Limit <String>] [<CommonParameters>]     
+ Get-vRAResourceType [-Page <Int32>] [-Limit <Int32>] [<CommonParameters>]  Get-vRAResourceType -Id <String[]> [<CommonParameters>]  Get-vRAResourceType -Name <String[]> [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -19,18 +19,27 @@ It allows similar resources to be grouped together.
 
 The id of the resource type
 
-* Required: false
+* Required: true
 * Position: named
 * Default value: 
-* Accept pipeline input: false
+* Accept pipeline input: true (ByValue, ByPropertyName)
 
 ### Name
 
 The Name of the resource type
 
-* Required: false
+* Required: true
 * Position: named
 * Default value: 
+* Accept pipeline input: false
+
+### Page
+
+The index of the page to display.
+
+* Required: false
+* Position: named
+* Default value: 1
 * Accept pipeline input: false
 
 ### Limit
@@ -45,6 +54,7 @@ The number of entries returned per page from the API. This has a default value o
 ## INPUTS
 
 System.String
+System.Int
 
 ## OUTPUTS
 

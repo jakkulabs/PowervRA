@@ -78,7 +78,6 @@ PS C:\>Remove-vRAStorageReservationPolicy -Name "StorageReservationPolicy01"
 
 -------------------------- EXAMPLE 3 --------------------------
 
-PS C:\>Get-vRAStorageReservationPolicy -Name "StorageReservationPolicy01" | Remove-vRAStorageReservationPolicy 
--Confirm:$false
+PS C:\>Get-vRAStorageReservationPolicy -Name "StorageReservationPolicy01" | Remove-vRAStorageReservationPolicy -Confirm:$false
 ```
 

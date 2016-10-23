@@ -67,7 +67,8 @@ Update-ModuleManifestVersion -Path .\ModuleManifest.psd1 -Patch
     $PublicFunctions = Get-ChildItem -Path "$($ModuleManifest.DirectoryName)\Functions\Public" -Filter "*.psm1" -Recurse | Sort-Object
     $PrivateFunctions = Get-ChildItem -Path "$($ModuleManifest.DirectoryName)\Functions\Private" -Filter "*.ps1" -Recurse | Sort-Object
 
-    $FunctionsToExport  = $PublicFunctions | Select-Object -ExpandProperty BaseName | Sort-Object
+    $FunctionsToExportRaw  = $PublicFunctions | Select-Object -ExpandProperty BaseName | Sort-Object
+    $FunctionsToExport = $FunctionsToExportRaw | % {if ($_.StartsWith("DEPRECATED-")) { $_.SubString("DEPRECATED-".length)}else{$_} }
     $NestedModules = $PublicFunctions | % {$_.FullName.Substring($_.FullName.LastIndexOf($ModuleRoot)+$ModuleRoot.Length).Trim("\")}
     $ScriptsToProcess = $PrivateFunctions | % {$_.FullName.Substring($_.FullName.LastIndexOf($ModuleRoot)+$ModuleRoot.Length).Trim("\")}
 

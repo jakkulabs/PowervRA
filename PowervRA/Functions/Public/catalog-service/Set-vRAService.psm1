@@ -57,41 +57,41 @@
     Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Description "updated from posh" -Owner "user@vsphere.local" -SupportTeam "support@vsphere.local" -Status INACTIVE
     
 #>
-[CmdletBinding(SupportsShouldProcess,ConfirmImpact="High",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
         
-    [parameter(Mandatory=$true,ValueFromPipelineByPropertyName)]
-    [ValidateNotNullOrEmpty()]
-    [String]$Id,
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
+        [ValidateNotNullOrEmpty()]
+        [String]$Id,
 
-    [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [String]$Name,
-    
-    [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [String]$Description,            
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [String]$Name,
+        
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [String]$Description,            
 
-    [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [ValidateSet("ACTIVE","RETIRED")]
-    [String]$Status,
-    
-    [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [String]$Owner,
+        [Parameter(Mandatory=$false)]
+        [ValidateSet("ACTIVE","RETIRED")]
+        [String]$Status,
+        
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [String]$Owner,
 
-    [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [String]$SupportTeam              
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [String]$SupportTeam              
         
     )    
 
-    begin {
+    Begin {
     
     }
     
-    process {
+    Process {
 
         # --- Check for existing service        
         try {
@@ -179,10 +179,8 @@
                 # --- Build the URI string for the service         
             
                 $URI = "/catalog-service/api/services/$($Id)"
-                
-                Write-Verbose -Message "Preparing PUT to $($URI)"                
-           
-                $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body ($Service | ConvertTo-Json -Compress)
+                           
+                Invoke-vRARestMethod -Method PUT -URI $URI -Body ($Service | ConvertTo-Json -Compress) -Verbose:$VerbosePreference | Out-Null
 
                 Get-vRAService -Id $Id
                 
@@ -195,6 +193,10 @@
             
         }
     
-    }    
+    }
+
+    End {
+        
+    }
 
 }

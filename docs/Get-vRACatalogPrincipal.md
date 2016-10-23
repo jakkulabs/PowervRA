@@ -5,7 +5,7 @@
 Finds catalog principals
 
 ## SYNTAX
- Get-vRACatalogPrincipal -Id <String[]> [-Limit <String>] [<CommonParameters>]     
+ Get-vRACatalogPrincipal -Id <String[]> [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -25,16 +25,7 @@ The Id of the group
 * Required: true
 * Position: named
 * Default value: 
-* Accept pipeline input: false
-
-### Limit
-
-The number of entries returned per page from the API. This has a default value of 100.
-
-* Required: false
-* Position: named
-* Default value: 100
-* Accept pipeline input: false
+* Accept pipeline input: true (ByValue, ByPropertyName)
 
 ## INPUTS
 

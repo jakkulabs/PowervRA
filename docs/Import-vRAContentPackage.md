@@ -5,7 +5,7 @@
 Imports a vRA Content Package
 
 ## SYNTAX
- Import-vRAContentPackage [-File] <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]     
+ Import-vRAContentPackage [-File] <String[]> [-DontValidatePackage] [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -22,6 +22,15 @@ The content package file
 * Position: 1
 * Default value: 
 * Accept pipeline input: true (ByValue, ByPropertyName)
+
+### DontValidatePackage
+
+Skip Package Validation. Not recommended by the API documentation
+
+* Required: false
+* Position: named
+* Default value: False
+* Accept pipeline input: false
 
 ### WhatIf
 
@@ -42,6 +51,7 @@ The content package file
 ## INPUTS
 
 System.String
+System.Switch
 
 ## OUTPUTS
 

@@ -75,55 +75,53 @@
                     }
 "@
 
-
     $JSON | New-vRAEntitlement -Verbose
 
-
- 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
-    [parameter(Mandatory=$true,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [String]$Name,
+        [Parameter(Mandatory=$true,ParameterSetName="Standard")]
+        [ValidateNotNullOrEmpty()]
+        [String]$Name,
 
-    [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [String]$Description,
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [ValidateNotNullOrEmpty()]
+        [String]$Description,
 
-    [parameter(Mandatory=$true,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [String]$BusinessGroup,
+        [Parameter(Mandatory=$true,ParameterSetName="Standard")]
+        [ValidateNotNullOrEmpty()]
+        [String]$BusinessGroup,
 
-    [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [String[]]$Principals,
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [ValidateNotNullOrEmpty()]
+        [String[]]$Principals,
 
-    [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [String[]]$EntitledCatalogItems,
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [ValidateNotNullOrEmpty()]
+        [String[]]$EntitledCatalogItems,
 
-    [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [String[]]$EntitledResourceOperations,
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [ValidateNotNullOrEmpty()]
+        [String[]]$EntitledResourceOperations,
 
-    [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [String[]]$EntitledServices,
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [ValidateNotNullOrEmpty()]
+        [String[]]$EntitledServices,
 
-    [parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="JSON")]
-    [ValidateNotNullOrEmpty()]
-    [String]$JSON
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="JSON")]
+        [ValidateNotNullOrEmpty()]
+        [String]$JSON
+
     )    
 
-    begin {
+    Begin {
         # --- Test for vRA API version
         xRequires -Version 7 -Context $MyInvocation
     }
     
-    process {
+    Process {
 
         try {
     
@@ -140,10 +138,7 @@
                 # --- Get business group information for the request
                 Write-Verbose -Message "Requesting business group information for $($BusinessGroup)"
 
-                # --- Ensure the correct tenant name is used in Get-vRABusinessGroup
-                $TenantName = (Get-vRATenant $Global:vRAConnection.Tenant).Id
-
-                $BusinessGroupObject = Get-vRABusinessGroup -TenantId $TenantName -Name $BusinessGroup
+                $BusinessGroupObject = Get-vRABusinessGroup -Name $BusinessGroup
 
                 # --- Prepare payload        
                 $Body = @"
@@ -172,9 +167,7 @@
                     }
 "@
 
-
             }
-
 
             # --- If certain parameters are specified, ConvertFrom-Json, update, then ConvertTo-Json
             if ($PSBoundParameters.ContainsKey("Principals") -or $PSBoundParameters.ContainsKey("EntitledCatalogItems")  -or $PSBoundParameters.ContainsKey("EntitledResourceOperations")  -or $PSBoundParameters.ContainsKey("EntitledServices")){
@@ -194,7 +187,6 @@
 
                         $Object.principals += $CatalogPrincipal
 
-
                     }
 
                 }
@@ -206,7 +198,7 @@
                         Write-Verbose "Adding entitled catalog item: $($CatalogItem)"
 
                         # --- Build catalog item ref object
-                        $CatalogItemRef = [pscustomobject] @{
+                        $CatalogItemRef = [PSCustomObject] @{
 
                             id = $((Get-vRAEntitledCatalogItem -Name $CatalogItem).Id)
                             label = $null
@@ -214,7 +206,7 @@
                         }
                         
                         # --- Build entitled catalog item object and insert catalogItemRef
-                        $EntitledCatalogItem = [pscustomobject] @{
+                        $EntitledCatalogItem = [PSCustomObject] @{
 
                             approvalPolicyId = $null
                             active = $null
@@ -235,7 +227,7 @@
                         Write-Verbose -Message "Adding service: $($Service)"
 
                         # --- Build service ref object
-                        $ServiceRef = [pscustomobject] @{
+                        $ServiceRef = [PSCustomObject] @{
 
                             id = $((Get-vRAService -Name $Service).Id)
                             label = $null
@@ -243,7 +235,7 @@
                         }
                         
                         # --- Build entitled service object and insert serviceRef
-                        $EntitledService = [pscustomobject] @{
+                        $EntitledService = [PSCustomObject] @{
 
                             approvalPolicyId = $null
                             active = $null
@@ -265,14 +257,14 @@
 
                         $Operation = Get-vRAResourceOperation -ExternalId $ResourceOperation
 
-                        $ResourceOperationRef = [pscustomobject] @{
+                        $ResourceOperationRef = [PSCustomObject] @{
 
                             id = $Operation.Id
                             label = $null
 
                         }
 
-                        $EntitledResourceOperation = [pscustomobject] @{
+                        $EntitledResourceOperation = [PSCustomObject] @{
 
                             approvalPolicyId =  $null
                             resourceOperationType = "ACTION"
@@ -298,13 +290,9 @@
             if ($PSCmdlet.ShouldProcess($Name)){
 
                 $URI = "/catalog-service/api/entitlements/"
-                
-                Write-Verbose -Message "Preparing POST to $($URI)"  
 
                 # --- Run vRA REST Request
-                $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body
-
-                Write-Verbose -Message "Success"
+                Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference | Out-Null
 
                 # --- Output the Successful Result
                 Get-vRAEntitlement -Name $Name
@@ -315,8 +303,11 @@
 
             throw
         }
+
     }
-    end {
-        
+    
+    End {
+
     }
+
 }

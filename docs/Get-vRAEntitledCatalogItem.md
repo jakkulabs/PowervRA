@@ -2,14 +2,14 @@
 
 ## SYNOPSIS
     
-Get the a catalog item that the user is entitled to see
+Get a catalog item that the user is entitled to see
 
 ## SYNTAX
- Get-vRAEntitledCatalogItem [-Limit <String>] [<CommonParameters>]  Get-vRAEntitledCatalogItem -Id <String[]> [-Limit <String>] [<CommonParameters>]  Get-vRAEntitledCatalogItem -Name <String[]> [-Limit <String>] [<CommonParameters>]     
+ Get-vRAEntitledCatalogItem [-Service <String>] [-Page <Int32>] [-Limit <Int32>] [<CommonParameters>]  Get-vRAEntitledCatalogItem -Id <String[]> [<CommonParameters>]  Get-vRAEntitledCatalogItem -Name <String[]> [<CommonParameters>]     
 
 ## DESCRIPTION
 
-API for administrators to interact with catalog items that they are entitled to. Consumer Entitled CatalogItem(s) are basically catalog items:
+Get catalog items that are entitled to. Consumer Entitled CatalogItem(s) are basically catalog items:
 - in an active state.
 - the current user has the right to consume.
 - the current user is entitled to consume.
@@ -24,7 +24,7 @@ API for administrators to interact with catalog items that they are entitled to.
 * Required: true
 * Position: named
 * Default value: 
-* Accept pipeline input: false
+* Accept pipeline input: true (ByValue, ByPropertyName)
 
 ### Name
 
@@ -35,9 +35,27 @@ The name of the catalog item
 * Default value: 
 * Accept pipeline input: false
 
+### Service
+
+Return catalog items in a specific service
+
+* Required: false
+* Position: named
+* Default value: 
+* Accept pipeline input: false
+
+### Page
+
+The index of the page to display
+
+* Required: false
+* Position: named
+* Default value: 1
+* Accept pipeline input: false
+
 ### Limit
 
-The number of entries returned per page from the API. This has a default value of 100.
+The number of entries returned per page from the API. This has a default value of 100
 
 * Required: false
 * Position: named
@@ -47,6 +65,7 @@ The number of entries returned per page from the API. This has a default value o
 ## INPUTS
 
 System.String
+System.Int
 
 ## OUTPUTS
 
@@ -74,7 +93,7 @@ PS C:\>Get-vRAEntitledCatalogItem -Limit 9999
 
 -------------------------- EXAMPLE 3 --------------------------
 
-PS C:\>Get-vRAEntitledCatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e
+PS C:\>Get-vRAEntitledCatalogItem -Service "Default Service"
 
 
 
@@ -82,6 +101,15 @@ PS C:\>Get-vRAEntitledCatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e
 
 
 -------------------------- EXAMPLE 4 --------------------------
+
+PS C:\>Get-vRAEntitledCatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e
+
+
+
+
+
+
+-------------------------- EXAMPLE 5 --------------------------
 
 PS C:\>Get-vRAEntitledCatalogItem -Name Centos_Template
 ```

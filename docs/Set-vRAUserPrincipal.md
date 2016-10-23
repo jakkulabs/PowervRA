@@ -5,7 +5,7 @@
 Update a vRA local user principal
 
 ## SYNTAX
- Set-vRAUserPrincipal -Id <String> [-Tenant <String>] [-FirstName <String>] [-LastName <String>] [-EmailAddress  <String>] [-Description <String>] [-Password <String>] [-DisableAccount] [-EnableAccount] [-WhatIf] [-Confirm]  [<CommonParameters>]     
+ Set-vRAUserPrincipal -Id <String> [-Tenant <String>] [-FirstName <String>] [-LastName <String>] [-EmailAddress <String>] [-Description <String>] [-Password <String>] [-DisableAccount] [-EnableAccount]  [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -124,8 +124,7 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-PS C:\>Set-vRAUserPrincipal -Id user@vsphere.local -FirstName FirstName-Updated -LastName LastName-Updated 
--EmailAddress userupdated@vsphere.local -Description Description-Updated
+PS C:\>Set-vRAUserPrincipal -Id user@vsphere.local -FirstName FirstName-Updated -LastName LastName-Updated -EmailAddress userupdated@vsphere.local -Description Description-Updated
 
 
 

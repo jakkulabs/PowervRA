@@ -12,8 +12,9 @@
     .PARAMETER Name
     Specify the Name of a Content Package
 
-    .PARAMETER File
-    Specify the Filename to export to
+    .PARAMETER Path
+    The resulting path. If this parameter is not passed the action will be exported to
+    the current working directory.
 
     .INPUTS
     System.String
@@ -22,89 +23,114 @@
     System.IO.FileInfo
     
     .EXAMPLE
-    Export-vRAContentPackage -Id "b2d72c5d-775b-400c-8d79-b2483e321bae" -File C:\Packages\ContentPackage01.zip
+    Export-vRAContentPackage -Id "b2d72c5d-775b-400c-8d79-b2483e321bae" -Path C:\Packages\ContentPackage01.zip
 
     .EXAMPLE
-    Export-vRAContentPackage -Name "ContentPackage01" -File C:\Packages\ContentPackage01.zip
+    Export-vRAContentPackage -Name "ContentPackage01" -Path C:\Packages\ContentPackage01.zip
+
+    .EXAMPLE
+    Get-vRAContentPackage | Export-vRAContentPackage
+
+    .EXAMPLE
+    Get-vRAContentPackage -Name "ContentPackage01" | Export-vRAContentPackage -Path C:\Packages\ContentPackage01.zip
+
 #>
 [CmdletBinding(DefaultParameterSetName="ById")][OutputType('System.IO.FileInfo')]
 
     Param (
 
-    [parameter(Mandatory=$true,ValueFromPipeline=$false,ParameterSetName="ById")]
-    [ValidateNotNullOrEmpty()]
-    [String]$Id,         
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName="ById")]
+        [ValidateNotNullOrEmpty()]
+        [String[]]$Id,         
 
-    [parameter(Mandatory=$true,ValueFromPipeline=$false,ParameterSetName="ByName")]
-    [ValidateNotNullOrEmpty()]
-    [String]$Name,
-    
-    [parameter(Mandatory=$true,ValueFromPipeline=$false)]
-    [ValidateNotNullOrEmpty()]
-    [String]$File 
+        [Parameter(Mandatory=$true,ParameterSetName="ByName")]
+        [ValidateNotNullOrEmpty()]
+        [String[]]$Name,
+        
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [String]$Path
+
     )
 
-# --- Test for vRA API version
-xRequires -Version 7 -Context $MyInvocation
+    Begin {
 
-# --- Work with Untrusted Certificates
-if (-not ($Global:vRAConnection.SignedCertificates)){
+        # --- Test for vRA API version
+        xRequires -Version 7 -Context $MyInvocation
 
-    if ( -not ("TrustAllCertsPolicy" -as [type])) {
+        function internalWorkings ($InternalContentPackage, $InternalId, $InternalPath) {
+            
+            $Headers = @{
 
-    Add-Type @"
-    using System.Net;
-    using System.Security.Cryptography.X509Certificates;
-    public class TrustAllCertsPolicy : ICertificatePolicy {
-        public bool CheckValidationResult(
-            ServicePoint srvPoint, X509Certificate certificate,
-            WebRequest request, int certificateProblem) {
-            return true;
-        }
-    }
-"@
-    }
-    [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
-}
+                "Authorization" = "Bearer $($Global:vRAConnection.Token)";
+                "Accept"="application/zip";
+                "Content-Type" = "Application/zip";
 
-    try {    
-  
-        switch ($PsCmdlet.ParameterSetName) 
-        { 
-            "ById"  {           
+            }
+            
+            $FileName = "$($InternalContentPackage.Name).zip"
+
+            if (!$InternalPath) {
+
+                Write-Verbose -Message "Path parameter not passed, exporting to current directory."
+                $FullPath = "$($(Get-Location).Path)\$($FileName)"
+
+            }
+            else {
+
+                Write-Verbose -Message "Path parameter passed."
                 
-                # --- Create Invoke-RestMethod Parameters
-                $URI = "/content-management-service/api/packages/$($Id)"          
-                 
-                break
+                if ($InternalPath.EndsWith("\")) {
+
+                    Write-Verbose -Message "Ends with"
+
+                    $InternalPath = $InternalPath.TrimEnd("\")
+
+                }
+                
+                $FullPath = "$($InternalPath)\$($FileName)"
             }
 
-            "ByName"  {                
+            # --- Run vRA REST Request
+            $URI = "/content-management-service/api/packages/$($InternalId)"
 
-                $ContentPackage = Get-vRAContentPackage -Name $Name
+            Invoke-vRARestMethod -Method GET -Headers $Headers -URI $URI -OutFile $FullPath -Verbose:$VerbosePreference
 
-                # --- Create Invoke-RestMethod Parameters
-                $URI = "/content-management-service/api/packages/$($ContentPackage.Id)"  
-                
-                break
+            # --- Output the result
+            Get-ChildItem -Path $FullPath
+        }
+    }
+
+    Process {
+
+        try {    
+
+            switch ($PsCmdlet.ParameterSetName) {
+            
+                'ByName' {
+
+                    foreach ($ContentPackageName in $Name) {
+
+                        $ContentPackage = Get-vRAContentPackage -Name $ContentPackageName
+                        $Id = $ContentPackage.Id
+
+                        internalWorkings -InternalContentPackage $ContentPackage -InternalId $Id -InternalPath $Path                   
+                    }
+                }
+                'ById' {
+
+                    foreach ($ContentPackageId in $Id){
+
+                        $ContentPackage = Get-vRAContentPackage -Id $ContentPackageId
+
+                        internalWorkings -InternalContentPackage $ContentPackage -InternalId $ContentPackageId -InternalPath $Path
+                    }
+                }
             }
         }
+        catch [Exception]{
 
-        $FullURI = "$($Global:vRAConnection.Server)$($URI)"
-        $Headers = @{
-
-            "Accept"="application/zip";
-            "Authorization" = "Bearer $($Global:vRAConnection.Token)";
+            throw
         }
-
-        # --- Run vRA REST Request
-        $Response = Invoke-RestMethod -Method GET -Headers $Headers -URI $FullURI -OutFile $File
-        
-        # --- Output the result
-        Get-ChildItem -Path $File  
-    }
-    catch [Exception]{
-
-        throw
     }
 }

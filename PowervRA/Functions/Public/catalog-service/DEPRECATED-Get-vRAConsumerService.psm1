@@ -1,4 +1,4 @@
-﻿function Get-vRAService {
+﻿function Get-vRAConsumerService {
 <#
     .SYNOPSIS
     Retrieve vRA services
@@ -24,13 +24,13 @@
     System.Management.Automation.PSObject.
 
     .EXAMPLE
-    Get-vRAService
+    Get-vRAConsumerService
     
     .EXAMPLE
-    Get-vRAService -Id 332d38d5-c8db-4519-87a7-7ef9f358091a
+    Get-vRAConsumerService -Id 332d38d5-c8db-4519-87a7-7ef9f358091a
     
     .EXAMPLE
-    Get-vRAService -Name "Default Service"
+    Get-vRAConsumerService -Name "Default Service"
     
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
@@ -49,7 +49,9 @@
     [ValidateNotNullOrEmpty()]
     [String]$Limit = "100"
     )
-                
+
+    Write-Warning -Message "This command is deprecated and will be removed in a future release. Please use Get-vRAEntitledService instead."
+
     try {
 
         switch ($PsCmdlet.ParameterSetName) {
@@ -59,7 +61,7 @@
             
                 foreach ($ServiceId in $Id) { 
             
-                    $URI = "/catalog-service/api/services/$($ServiceId)"
+                    $URI = "/catalog-service/api/consumer/services/$($ServiceId)"
 
                     Write-Verbose -Message "Preparing GET to $($URI)"
 
@@ -96,7 +98,7 @@
 
                 foreach ($ServiceName in $Name) {
             
-                    $URI = "/catalog-service/api/services?`$filter=name%20eq%20'$($ServiceName)'"
+                    $URI = "/catalog-service/api/consumer/services?`$filter=name%20eq%20'$($ServiceName)'"
 
                     Write-Verbose -Message "Preparing GET to $($URI)"
 
@@ -138,7 +140,7 @@
             # --- No parameters passed so return all services
             'Standard' {
             
-                $URI = "/catalog-service/api/services?limit=$($Limit)&`$orderby=name%20asc"
+                $URI = "/catalog-service/api/consumer/services?limit=$($Limit)&`$orderby=name%20asc"
 
                 Write-Verbose -Message "Preparing GET to $($URI)"
 

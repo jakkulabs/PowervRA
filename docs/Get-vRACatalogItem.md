@@ -5,7 +5,7 @@
 Get a catalog item that the user is allowed to review.
 
 ## SYNTAX
- Get-vRACatalogItem [-Limit <String>] [<CommonParameters>]  Get-vRACatalogItem -Id <String[]> [-Limit <String>] [<CommonParameters>]  Get-vRACatalogItem -Name <String[]> [-Limit <String>] [<CommonParameters>]     
+ Get-vRACatalogItem [-ListAvailable] [-Page <Int32>] [-Limit <Int32>] [<CommonParameters>]  Get-vRACatalogItem -Id <String[]> [<CommonParameters>]  Get-vRACatalogItem -Name <String[]> [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -22,7 +22,7 @@ The id of the catalog item
 * Required: true
 * Position: named
 * Default value: 
-* Accept pipeline input: false
+* Accept pipeline input: true (ByValue, ByPropertyName)
 
 ### Name
 
@@ -33,9 +33,27 @@ The name of the catalog item
 * Default value: 
 * Accept pipeline input: false
 
+### ListAvailable
+
+Show catalog items that are not assigned to a service
+
+* Required: false
+* Position: named
+* Default value: False
+* Accept pipeline input: false
+
+### Page
+
+The index of the page to display.
+
+* Required: false
+* Position: named
+* Default value: 1
+* Accept pipeline input: false
+
 ### Limit
 
-The number of entries returned per page from the API. This has a default value of 100.
+The number of entries returned per page from the API. This has a default value of 100
 
 * Required: false
 * Position: named
@@ -45,6 +63,8 @@ The number of entries returned per page from the API. This has a default value o
 ## INPUTS
 
 System.String
+System.Int
+Switch
 
 ## OUTPUTS
 
@@ -72,7 +92,7 @@ PS C:\>Get-vRACatalogItem -Limit 9999
 
 -------------------------- EXAMPLE 3 --------------------------
 
-PS C:\>Get-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e
+PS C:\>Get-vRACatalogItem -ListAvailable
 
 
 
@@ -80,6 +100,15 @@ PS C:\>Get-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e
 
 
 -------------------------- EXAMPLE 4 --------------------------
+
+PS C:\>Get-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e
+
+
+
+
+
+
+-------------------------- EXAMPLE 5 --------------------------
 
 PS C:\>Get-vRACatalogItem -Name Centos_Template
 ```

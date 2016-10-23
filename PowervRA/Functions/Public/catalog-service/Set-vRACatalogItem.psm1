@@ -49,34 +49,34 @@
 
     Param (
         
-    [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
-    [ValidateNotNullOrEmpty()]
-    [String]$Id,     
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
+        [ValidateNotNullOrEmpty()]
+        [String]$Id,
 
-    [parameter(Mandatory=$false,ParameterSetName="SetStatus")]
-    [ValidateSet("PUBLISHED","RETIRED","STAGING")]
-    [String]$Status,
-    
-    [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [Int]$Quota,
+        [Parameter(Mandatory=$false,ParameterSetName="SetStatus")]
+        [ValidateSet("PUBLISHED","RETIRED","STAGING")]
+        [String]$Status,
+        
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [ValidateNotNullOrEmpty()]
+        [Int]$Quota,
 
-    [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [String]$Service,
-    
-    [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [ValidateNotNullOrEmpty()]
-    [Bool]$NewAndNoteworthy 
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [ValidateNotNullOrEmpty()]
+        [String]$Service,
+        
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [ValidateNotNullOrEmpty()]
+        [Bool]$NewAndNoteworthy 
     
     )    
 
-    begin {
+    Begin {
         # --- Test for vRA API version
         xRequires -Version 7 -Context $MyInvocation
     }
     
-    process {
+    Process {
 
         # --- Check for existing catalog item        
         try {
@@ -119,7 +119,7 @@
 
                     Write-Verbose -Message "Associating catalog item with service $($Service)"
 
-                    $ServiceRef = [pscustomobject] @{
+                    $ServiceRef = [PSCustomObject] @{
 
                         id = $NewService.Id;
                         name = $NewService.Name;
@@ -153,10 +153,8 @@
                 
                 # --- Build the URI string for the catalog item   
                 $URI = "/catalog-service/api/catalogItems/$($Id)"      
-
-                Write-Verbose -Message "Preparing PUT to $($URI)"                           
             
-                $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body ($CatalogItem | ConvertTo-Json -Depth 100)
+                $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body ($CatalogItem | ConvertTo-Json -Depth 100) -Verbose:$VerbosePreference
 
                 Get-vRACatalogItem -Id $($CatalogItem.id)
                 
@@ -169,6 +167,10 @@
             
         }
     
-    }    
+    }  
+
+    End {
+
+    }  
 
 }

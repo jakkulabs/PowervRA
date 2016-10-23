@@ -5,7 +5,7 @@
 Get a resource operation
 
 ## SYNTAX
- Get-vRAResourceOperation [-Limit <String>] [<CommonParameters>]  Get-vRAResourceOperation -Id <String[]> [-Limit <String>] [<CommonParameters>]  Get-vRAResourceOperation -ExternalId <String[]> [-Limit <String>] [<CommonParameters>]  Get-vRAResourceOperation -Name <String[]> [-Limit <String>] [<CommonParameters>]     
+ Get-vRAResourceOperation [-Page <Int32>] [-Limit <Int32>] [<CommonParameters>]  Get-vRAResourceOperation -Id <String[]> [<CommonParameters>]  Get-vRAResourceOperation -ExternalId <String[]> [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -23,7 +23,7 @@ The id of the resource operation
 * Required: true
 * Position: named
 * Default value: 
-* Accept pipeline input: false
+* Accept pipeline input: true (ByValue, ByPropertyName)
 
 ### ExternalId
 
@@ -34,13 +34,13 @@ The external id of the resource operation
 * Default value: 
 * Accept pipeline input: false
 
-### Name
+### Page
 
-The name of the resource operation
+The index of the page to display.
 
-* Required: true
+* Required: false
 * Position: named
-* Default value: 
+* Default value: 1
 * Accept pipeline input: false
 
 ### Limit
@@ -55,6 +55,7 @@ The number of entries returned per page from the API. This has a default value o
 ## INPUTS
 
 System.String
+System.Int
 
 ## OUTPUTS
 
