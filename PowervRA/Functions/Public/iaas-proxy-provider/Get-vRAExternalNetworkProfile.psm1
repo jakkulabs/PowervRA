@@ -24,7 +24,6 @@
 
     .OUTPUTS
     System.Management.Automation.PSObject
-    System.Object[]
 
     .EXAMPLE
     Get-vRAExternalNetworkProfile -Id 597ff2c1-a35f-4a81-bfd3-ca014
@@ -36,7 +35,7 @@
     Get-vRAExternalNetworkProfile
 
 #>
-[CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject', 'System.Object[]')]
+[CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
@@ -74,7 +73,7 @@
 
                         if ($NetworkProfile.profileType -ne "EXTERNAL") {
 
-                            throw "Network profile is not of type EXTERAL"
+                            throw "Network profile type is not EXTERAL"
 
                         }
 

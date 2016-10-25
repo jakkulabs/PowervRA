@@ -74,7 +74,7 @@
 
                         if ($NetworkProfile.profileType -ne "NAT") {
 
-                            throw "Network profile is not of type NAT"
+                            throw "Network profile type is not NAT"
 
                         }
 

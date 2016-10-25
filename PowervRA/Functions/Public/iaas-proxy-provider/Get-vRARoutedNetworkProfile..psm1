@@ -74,7 +74,7 @@
 
                         if ($NetworkProfile.profileType -ne "ROUTED") {
 
-                            throw "Network profile is not of type ROUTED"
+                            throw "Network profile type is not ROUTED"
 
                         }
 

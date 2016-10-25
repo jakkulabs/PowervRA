@@ -28,7 +28,7 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    New-vRANetworkProfileIPRange -Name "External-Range-01" -Description "Example" -StatIPv4Address "10.20.1.2" -EndIPv4Address "10.20.1.5"
+    New-vRANetworkProfileIPRange -Name "External-Range-01" -Description "Example" -StartIPv4Address "10.20.1.2" -EndIPv4Address "10.20.1.5"
 
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
@@ -45,7 +45,7 @@
 
         [Parameter(Mandatory=$true)]
         [ValidateScript({$_ -match [IPAddress]$_ })]  
-        [String]$StatIPv4Address,
+        [String]$StartIPv4Address,
         
         [Parameter(Mandatory=$true)]
         [ValidateScript({$_ -match [IPAddress]$_ })]  
@@ -58,13 +58,12 @@
 
                 name = $Name
                 description = $Description
-                beginIPv4Address = $StatIPv4Address
+                beginIPv4Address = $StartIPv4Address
                 endIPv4Address = $EndIPv4Address
                 state = "UNALLOCATED"
-                networkProfileId = $NetworkProfileId
                 createdDate = $null
                 lastModifiedDate = $null
-                definedAddresses = @()
+                definedAddresses = $null
 
             }
 
