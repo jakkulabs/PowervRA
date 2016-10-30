@@ -21,7 +21,7 @@ Task UpdateFunctions {
     }
     catch [System.Exception] {
 
-        Write-Error -Message "An error occured when updating manifest functions: $_.Message"
+        Write-Error -Message "An error occured when updating manifest functions: $_.Message"-
 
     }
 
