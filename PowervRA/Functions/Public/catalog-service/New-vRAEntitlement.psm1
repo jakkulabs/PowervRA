@@ -118,7 +118,7 @@
 
     Begin {
         # --- Test for vRA API version
-        xRequires -Version 7 -Context $MyInvocation
+        xRequires -Version 7
     }
     
     Process {
