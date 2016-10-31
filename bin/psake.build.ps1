@@ -2,7 +2,7 @@ Properties {
 
     $BaseDirectory = $BaseDirectory
     $BinDirectory = $BinDirectory
-    $ModulePath = $ModulePath
+    $ModuleDirectory = $ModuleDirectory
     $ModuleManifest = $ModuleManifest
     $BuildVersion = $BuildVersion
 
@@ -47,12 +47,12 @@ Task Analyze {
 
     $Exclusions = "PSAvoidUsingUserNameAndPassWordParams"
 
-    $Results = Invoke-ScriptAnalyzer -Path $ModulePath  -ExcludeRule $Exclusions -Severity Error -Recurse -Verbose:$VerbosePreference
+    $Results = Invoke-ScriptAnalyzer -Path $ModuleDirectory -Severity Error -ExcludeRule $Exclusions -Recurse -Verbose:$VerbosePreference
 
     if ($Results) {
 
-        Write-Error -Message "PSScriptAnalyzer has found some errors:"
         $Results | Format-Table
+        Write-Error -Message "Errors were found by PSScriptAnalyzer!"
 
     }
 

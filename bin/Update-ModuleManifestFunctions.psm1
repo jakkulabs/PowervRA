@@ -50,15 +50,17 @@ Update-ModuleManifestVersion -Path .\ModuleManifest.psd1 -Patch
 
     )
 
-    Write-Verbose -Message "Working with manifest file $($Path)"
+    $ResolvedPath = $(Resolve-Path -Path $Path).Path
 
-    if (!(Test-Path -Path $Path)) {
+    Write-Verbose -Message "Working with manifest file $($ResolvedPath)"
 
-        throw "Could not find file: $($Path)"
+    if (!(Test-Path -Path $ResolvedPath)) {
+
+        throw "Could not find file: $($ResolvedPath)"
 
     }
 
-    $ModuleManifest = Get-Item -Path $Path
+    $ModuleManifest = Get-Item -Path $ResolvedPath
 
     Write-Verbose -Message "Searching for functions in $("$($ModuleManifest.DirectoryName)")"
 

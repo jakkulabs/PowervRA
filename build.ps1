@@ -1,5 +1,4 @@
 #Requires -Modules Psake, Pester, PSScriptAnalyzer
-#Requires -RunAsAdministrator
 
 <#
   .SYNOPSIS
@@ -25,18 +24,23 @@ Param (
 
 )
 
+$BaseDirectory = $PSScriptRoot
+$BinDirectory = "$($BaseDirectory)\bin"
+$ModuleDirectory = "$($BaseDirectory)\PowervRA"
+$ModuleManifest = "$($ModuleDirectory)\PowervRA.psd1"
+
 # --- Build Parameters
 $Parameters = @{
 
-    BaseDirectory = $PSScriptRoot
-    BinDirectory = "$($BaseDirectory)\bin"
-    ModulePath = "$($BaseDirectory)\PowervRA"
-    ModuleManifest = "$($ModulePath)\PowervRA.psd1"
+    BaseDirectory = $BaseDirectory
+    BinDirectory = $BinDirectory
+    ModuleDirectory = $ModuleDirectory
+    ModuleManifest = $ModuleManifest
     BuildVersion = $BuildVersion
 
 }
 
-Write-Verbose -Message $Parameters
+Write-Verbose -Message $Parameters.ToString()
 
 $LocalDependencies = @(
 
