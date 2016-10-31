@@ -32,10 +32,7 @@ function Global:xRequires {
     Param (
 
         [Parameter(Mandatory=$true)]
-        [Int]$Version,
-
-        [Parameter(Mandatory=$true)]
-        [PSCustomobject]$Context
+        [Int]$Version
 
     )
         # --- Test for vRA API version
@@ -48,6 +45,6 @@ function Global:xRequires {
 
             $PSCallStack = Get-PSCallStack
 
-            throw "$($PSCallStack[1].FunctionName) is not supported with vRA API version $($Global:vRAConnection.APIVersion)"
+            throw "$($PSCallStack[1].Command) is not supported with vRA API version $($Global:vRAConnection.APIVersion)"
         }
 }
