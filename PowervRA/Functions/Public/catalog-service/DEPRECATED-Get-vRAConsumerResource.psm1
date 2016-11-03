@@ -71,7 +71,7 @@
     Write-Warning -Message "This command is deprecated and will be removed in a future release. Please use Get-vRAResorce instead."
 
     # --- Test for vRA API version
-    xRequires -Version 7 -Context $MyInvocation
+    xRequires -Version 7
                 
     try {
 

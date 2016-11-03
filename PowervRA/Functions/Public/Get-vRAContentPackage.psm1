@@ -46,9 +46,10 @@
     [ValidateNotNullOrEmpty()]
     [String]$Limit = "100" 
     )
-# --- Test for vRA API version
-xRequires -Version 7 -Context $MyInvocation
 
+    # --- Test for vRA API version
+    xRequires -Version 7
+    
     try {                
         switch ($PsCmdlet.ParameterSetName) 
         { 
