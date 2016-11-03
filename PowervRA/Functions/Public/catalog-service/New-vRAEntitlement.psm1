@@ -153,7 +153,7 @@
                       "lastUpdatedDate": null,
                       "name": "$($Name)",
                       "organization": {
-                        "tenantRef": "$($TenantName)",
+                        "tenantRef": "$($Global:vRAConnection.Tenant)",
                         "tenantLabel": null,
                         "subtenantRef": "$($BusinessGroupObject.ID)",
                         "subtenantLabel": "$($BusinessGroupObject.Name)"
