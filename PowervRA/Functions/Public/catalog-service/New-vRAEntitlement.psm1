@@ -118,7 +118,7 @@
 
     Begin {
         # --- Test for vRA API version
-        xRequires -Version 7 -Context $MyInvocation
+        xRequires -Version 7
     }
     
     Process {
@@ -153,7 +153,7 @@
                       "lastUpdatedDate": null,
                       "name": "$($Name)",
                       "organization": {
-                        "tenantRef": "$($TenantName)",
+                        "tenantRef": "$($Global:vRAConnection.Tenant)",
                         "tenantLabel": null,
                         "subtenantRef": "$($BusinessGroupObject.ID)",
                         "subtenantLabel": "$($BusinessGroupObject.Name)"

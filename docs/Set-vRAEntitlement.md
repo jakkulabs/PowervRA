@@ -5,7 +5,7 @@
 Update an existing entitlement
 
 ## SYNTAX
- Set-vRAEntitlement [-Id] <String> [[-Name] <String>] [[-Description] <String>] [[-Principals] <String[]>] [[-EntitledCatalogItems] <String[]>] [[-EntitledResourceOperations] <String[]>] [[-EntitledServices]  <String[]>] [[-Status] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]     
+ Set-vRAEntitlement [-Id] <String> [[-Name] <String>] [[-Description] <String>] [[-Principals] <String[]>] [[-EntitledCatalogItems] <String[]>] [[-EntitledResourceOperations] <String[]>] [[-EntitledServices] <String[]>] [[-Status]  <String>] [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -123,8 +123,8 @@ PS C:\>Set-vRAEntitlement -Id "e5cd1c84-3b76-4ae9-9f2e-35114da6cfd2" -Name "Upda
 
 -------------------------- EXAMPLE 2 --------------------------
 
-PS C:\>Set-vRAEntitlement -Id "e5cd1c84-3b76-4ae9-9f2e-35114da6cfd2" -Name "Updated Name" -Description "Updated Description" -Principals "user@vsphere.local" -EntitledCatalogItems "Centos" -EntitledServices "A 
-service" -EntitledResourceOperations "Infrastructure.Machine.Action.PowerOff" -Status ACTIVE
+PS C:\>Set-vRAEntitlement -Id "e5cd1c84-3b76-4ae9-9f2e-35114da6cfd2" -Name "Updated Name" -Description "Updated Description" -Principals "user@vsphere.local" -EntitledCatalogItems "Centos" -EntitledServices "A service" 
+-EntitledResourceOperations "Infrastructure.Machine.Action.PowerOff" -Status ACTIVE
 
 
 

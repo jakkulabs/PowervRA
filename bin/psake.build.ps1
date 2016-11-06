@@ -2,7 +2,7 @@ Properties {
 
     $BaseDirectory = $BaseDirectory
     $BinDirectory = $BinDirectory
-    $ModulePath = $ModulePath
+    $ModuleDirectory = $ModuleDirectory
     $ModuleManifest = $ModuleManifest
     $BuildVersion = $BuildVersion
 
@@ -21,7 +21,7 @@ Task UpdateFunctions {
     }
     catch [System.Exception] {
 
-        Write-Error -Message "An error occured when updating manifest functions: $_.Message"
+        Write-Error -Message "An error occured when updating manifest functions: $_.Message"-
 
     }
 
@@ -47,12 +47,12 @@ Task Analyze {
 
     $Exclusions = "PSAvoidUsingUserNameAndPassWordParams"
 
-    $Results = Invoke-ScriptAnalyzer -Path $ModulePath  -ExcludeRule $Exclusions -Severity Error -Recurse -Verbose:$VerbosePreference
+    $Results = Invoke-ScriptAnalyzer -Path $ModuleDirectory -Severity Error -ExcludeRule $Exclusions -Recurse -Verbose:$VerbosePreference
 
     if ($Results) {
 
-        Write-Error -Message "PSScriptAnalyzer has found some errors:"
         $Results | Format-Table
+        Write-Error -Message "Errors were found by PSScriptAnalyzer!"
 
     }
 

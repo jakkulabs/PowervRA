@@ -17,6 +17,7 @@ Unlike ResourceExtensions, resource actions can be invoked via the Service Catal
 
 ### ActionId
 
+The Id for the resource action
 
 * Required: true
 * Position: named

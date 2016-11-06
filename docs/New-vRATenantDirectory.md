@@ -5,7 +5,7 @@
 Create a vRA Tenant Directory
 
 ## SYNTAX
- New-vRATenantDirectory -ID <String> -Name <String> [-Description <String>] [-Alias <String>] -Type <String> -Domain <String> -UserNameDN <String> -Password <String> -URL <String> -GroupBaseSearchDN <String>  [-UserBaseSearchDN <String>] [-Subdomains <String>] -GroupBaseSearchDNs <String[]> [-UserBaseSearchDNs <String[]>] [-DomainAdminUsername <String>] [-DomainAdminPassword <String>] [-Certificate <String>]  [-TrustAll] [-UseGlobalCatalog] [-WhatIf] [-Confirm] [<CommonParameters>]  New-vRATenantDirectory -ID <String> -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
+ New-vRATenantDirectory -ID <String> -Name <String> [-Description <String>] [-Alias <String>] -Type <String> -Domain <String> -UserNameDN <String> -Password <String> -URL <String> -GroupBaseSearchDN <String> [-UserBaseSearchDN  <String>] [-Subdomains <String>] -GroupBaseSearchDNs <String[]> [-UserBaseSearchDNs <String[]>] [-DomainAdminUsername <String>] [-DomainAdminPassword <String>] [-Certificate <String>] [-TrustAll] [-UseGlobalCatalog] [-WhatIf]  [-Confirm] [<CommonParameters>]  New-vRATenantDirectory -ID <String> -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
 ## DESCRIPTION
 

@@ -47,7 +47,7 @@ function Request-vRAResourceAction {
     $JSON | Request-vRAResourceAction
 
 #>
-[CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low",DefaultParameterSetName="ByResourceId")][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(SupportsShouldProcess,ConfirmImpact="High",DefaultParameterSetName="ByResourceId")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
@@ -73,7 +73,7 @@ function Request-vRAResourceAction {
 
     Begin {
 
-        xRequires -Version 7 -Context $MyInvocation
+        xRequires -Version 7
 
     }
 

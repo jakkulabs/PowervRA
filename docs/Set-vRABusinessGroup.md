@@ -105,8 +105,8 @@ System.Management.Automation.PSObject
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-PS C:\>Set-vRABusinessGroup -TenantId Tenant01 -Id "f8e0d99e-c567-4031-99cb-d8410c841ed7" -Name BusinessGroup01 -Description "Business Group 01" -MachinePrefixId "87e99513-cbea-4589-8678-c84c5907bdf2" 
--SendManagerEmailsTo "busgroupmgr01@vrademo.local"
+PS C:\>Set-vRABusinessGroup -TenantId Tenant01 -Id "f8e0d99e-c567-4031-99cb-d8410c841ed7" -Name BusinessGroup01 -Description "Business Group 01" -MachinePrefixId "87e99513-cbea-4589-8678-c84c5907bdf2" -SendManagerEmailsTo 
+"busgroupmgr01@vrademo.local"
 
 
 

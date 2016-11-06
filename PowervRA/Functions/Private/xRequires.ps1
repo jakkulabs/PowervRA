@@ -9,9 +9,6 @@ function Global:xRequires {
     .PARAMETER Version
     The API Version that the function supports 
 
-    .PARAMETER Context
-    The functions execution context. This should always be $MyInvocation
-
     .INPUTS
     System.Int
     System.Management.Automation.PSObject.
@@ -24,7 +21,7 @@ function Global:xRequires {
     function Get-Example {
 
         # This function does not support API versions lower than Version 7
-        xRequires -Version 7 -Context $MyInvocation
+        xRequires -Version 7
 
     }
 
@@ -35,10 +32,7 @@ function Global:xRequires {
     Param (
 
         [Parameter(Mandatory=$true)]
-        [Int]$Version,
-
-        [Parameter(Mandatory=$true)]
-        [PSCustomobject]$Context
+        [Int]$Version
 
     )
         # --- Test for vRA API version
@@ -49,6 +43,8 @@ function Global:xRequires {
 
         elseif ($Global:vRAConnection.APIVersion -lt $Version) {
 
-            throw "$($Context.MyCommand) is not supported with vRA API version $($Global:vRAConnection.APIVersion)"
+            $PSCallStack = Get-PSCallStack
+
+            throw "$($PSCallStack[1].Command) is not supported with vRA API version $($Global:vRAConnection.APIVersion)"
         }
 }

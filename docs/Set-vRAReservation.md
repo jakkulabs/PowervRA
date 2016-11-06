@@ -5,7 +5,7 @@
 Set a vRA reservation
 
 ## SYNTAX
- Set-vRAReservation -Id <String> [-Name <String>] [-ReservationPolicy <String>] [-Priority <Int32>] [-Enabled] [-Quota <Int32>] [-MemoryGB <Int32>] [-ResourcePool <String>] [-EnableAlerts]  [-EmailBusinessGroupManager] [-AlertRecipients <String[]>] [-StorageAlertPercentageLevel <Int32>] [-MemoryAlertPercentageLevel <Int32>] [-CPUAlertPercentageLevel <Int32>] [-MachineAlertPercentageLevel <Int32>]  [-AlertReminderFrequency <Int32>] [-WhatIf] [-Confirm] [<CommonParameters>]     
+ Set-vRAReservation -Id <String> [-Name <String>] [-ReservationPolicy <String>] [-Priority <Int32>] [-Enabled] [-Quota <Int32>] [-MemoryGB <Int32>] [-ResourcePool <String>] [-EnableAlerts] [-EmailBusinessGroupManager] [-AlertRecipients  <String[]>] [-StorageAlertPercentageLevel <Int32>] [-MemoryAlertPercentageLevel <Int32>] [-CPUAlertPercentageLevel <Int32>] [-MachineAlertPercentageLevel <Int32>] [-AlertReminderFrequency <Int32>] [-WhatIf] [-Confirm]  [<CommonParameters>]     
 
 ## DESCRIPTION
 
