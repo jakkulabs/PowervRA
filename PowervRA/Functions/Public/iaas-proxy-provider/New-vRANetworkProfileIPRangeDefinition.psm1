@@ -1,4 +1,4 @@
-﻿function New-vRANetworkProfileIPRange {
+﻿function New-vRANetworkProfileIPRangeDefinition {
 <#
     .SYNOPSIS
     Creates a new network profile ip range definition
