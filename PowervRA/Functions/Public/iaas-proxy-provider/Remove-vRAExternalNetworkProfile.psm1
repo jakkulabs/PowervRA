@@ -1,10 +1,10 @@
-﻿function Remove-vRANetworkProfile {
+﻿function Remove-vRAExternalNetworkProfile {
 <#
     .SYNOPSIS
-    Remove a network profile
+    Remove an external network profile
     
     .DESCRIPTION
-    Remove a network profile
+    Remove an external network profile
     
     .PARAMETER Id
     The id of the network profile

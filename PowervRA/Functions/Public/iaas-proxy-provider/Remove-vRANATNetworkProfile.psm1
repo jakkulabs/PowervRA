@@ -1,10 +1,10 @@
-﻿function Remove-vRANetworkProfile {
+﻿function Remove-vRANATNetworkProfile {
 <#
     .SYNOPSIS
-    Remove a network profile
+    Remove a NAT network profile
     
     .DESCRIPTION
-    Remove a network profile
+    Remove a NAT network profile
     
     .PARAMETER Id
     The id of the network profile

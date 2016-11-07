@@ -16,7 +16,7 @@
     The number of entries returned per page from the API. This has a default value of 100.
 
     .PARAMETER Page
-    The page of response to return. All pages are retuend by default
+    The page of response to return. By default this is 1.
 
     .INPUTS
     System.String
@@ -24,7 +24,6 @@
 
     .OUTPUTS
     System.Management.Automation.PSObject
-    System.Object[]
 
     .EXAMPLE
     Get-vRARoutedNetworkProfile -Id 597ff2c1-a35f-4a81-bfd3-ca014
@@ -36,7 +35,7 @@
     Get-vRARoutedNetworkProfile
 
 #>
-[CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject', 'System.Object[]')]
+[CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 

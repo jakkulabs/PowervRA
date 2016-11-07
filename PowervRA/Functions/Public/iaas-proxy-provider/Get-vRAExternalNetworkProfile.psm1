@@ -16,7 +16,7 @@
     The number of entries returned per page from the API. This has a default value of 100.
 
     .PARAMETER Page
-    The page of response to return. All pages are retuend by default
+    The page of response to return. By default this is 1.
 
     .INPUTS
     System.String

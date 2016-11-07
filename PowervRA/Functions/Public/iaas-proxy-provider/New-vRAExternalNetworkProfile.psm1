@@ -1,19 +1,16 @@
 function New-vRAExternalNetworkProfile {
 <#
     .SYNOPSIS
-    Create a vRA network profile
+    Create a vRA external network profile
     
     .DESCRIPTION
-    Create a vRA network profiles
+    Create a vRA external network profiles
     
     .PARAMETER Name
     The network profile Name
     
     .PARAMETER Description
     The network profile Description
-
-    .PARAMETER Hidden
-    Creates a hidden network profile
 
     .PARAMETER SubnetMask
     The subnet mask of the network profile
@@ -42,27 +39,9 @@ function New-vRAExternalNetworkProfile {
     .PARAMETER SecondaryWinsAddress
     The address of the secondary wins server
 
-    .PARAMETER NatType
-    The nat type. This can be One-to-One or One-to-Many
-
-    .PARAMETER ExternalNetworkProfile
-    The external network profile that will be linked to that Routed or NAT network profile
-
-    .PARAMETER UseExternalNetworkProfileSettings
-
-    .PARAMETER DHCPEnabled
-    Enable DHCP for a NAT network profile. Nat type must be One-to-Many
-
-    .PARAMETER DHCPStartAddress
-    The start address of the dhcp range
-
-    .PARAMETER DHCPEndAddress
-    The end address of the dhcp range
-
     .INPUTS
-    System.String.
-    System.Int.
-    System.Switch
+    System.String
+    PSCustomObject
 
     .OUTPUTS
     System.Management.Automation.PSObject
@@ -71,13 +50,7 @@ function New-vRAExternalNetworkProfile {
     $DefinedRange1 = New-vRANetworkProfileIPRange -Name "External-Range-01" -Description "Example 1" -StatIPv4Address "10.60.1.2" -EndIPv4Address "10.60.1.5"
     $DefinedRange2 = New-vRANetworkProfileIPRange -Name "External-Range-02" -Description "Example 2" -StatIPv4Address "10.60.1.10" -EndIPv4Address "10.60.1.20"
 
-    New-vRANetworkProfile -ProfileType External -Name Network-External -Description "External" -SubnetMask "255.255.255.0" -GatewayAddress "10.60.1.1" -PrimaryDNSAddress "10.60.1.100" -SecondaryDNSAddress "10.60.1.101" -DNSSuffix "corp.local" -DNSSearchSuffix "corp.local" -IPRanges $DefinedRange1,$DefinedRange2
-
-    .EXAMPLE
-    New-vRANetworkProfile -ProfileType NAT -Name Network-NAT -Description "NAT" -SubnetMask "255.255.255.0" -GatewayAddress "10.70.1.1" -PrimaryDNSAddress "10.70.1.100" -SecondaryDNSAddress "10.70.1.101" -DNSSuffix "corp.local" -DNSSearchSuffix "corp.local" -NatType ONETOMANY -ExternalNetworkProfile "Network-External" -DHCPEnabled -DHCPStartAddress "10.70.1.20" -DHCPEndAddress "10.70.1.30"
-
-    .EXAMPLE
-    New-vRANetworkProfile -ProfileType Routed -Name Network-Routed -Description "Routed" -SubnetMask "255.255.255.0" -GatewayAddress "10.80.1.1" -PrimaryDNSAddress "10.80.1.100" -SecondaryDNSAddress "10.80.1.101" -DNSSuffix "corp.local" -DNSSearchSuffix "corp.local" -ExternalNetworkProfile "Network-External" -RangeSubnetMask "255.255.255.0" -BaseIPAddress "10.80.1.2"
+    New-vRAExternalNetworkProfile -Name Network-External -Description "External" -SubnetMask "255.255.255.0" -GatewayAddress "10.60.1.1" -PrimaryDNSAddress "10.60.1.100" -SecondaryDNSAddress "10.60.1.101" -DNSSuffix "corp.local" -DNSSearchSuffix "corp.local" -IPRanges $DefinedRange1,$DefinedRange2
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low")][OutputType('System.Management.Automation.PSObject')]

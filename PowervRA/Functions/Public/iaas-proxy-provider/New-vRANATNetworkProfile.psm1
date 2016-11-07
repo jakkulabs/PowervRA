@@ -1,10 +1,10 @@
 function New-vRANATNetworkProfile {
 <#
     .SYNOPSIS
-    Create a vRA network profile
+    Create a vRA nat network profile
     
     .DESCRIPTION
-    Create a vRA network profiles
+    Create a vRA nat network profiles
     
     .PARAMETER Name
     The network profile Name
@@ -12,8 +12,11 @@ function New-vRANATNetworkProfile {
     .PARAMETER Description
     The network profile Description
 
-    .PARAMETER Hidden
-    Creates a hidden network profile
+    .PARAMETER ExternalNetworkProfile
+    The external network profile that will be linked to that Routed or NAT network profile
+
+    .PARAMETER UseExternalNetworkProfileSettings
+    Use the settings from the selected external network profile
 
     .PARAMETER SubnetMask
     The subnet mask of the network profile
@@ -33,22 +36,17 @@ function New-vRANATNetworkProfile {
     .PARAMETER DNSSearchSuffix
     The DNS search suffix
 
-    .PARAMETER IPRanges
-    An array of ip address ranges
-
     .PARAMETER PrimaryWinsAddress
     The address of the primary wins server
 
     .PARAMETER SecondaryWinsAddress
     The address of the secondary wins server
 
+    .PARAMETER IPRanges
+    An array of ip address ranges
+
     .PARAMETER NatType
     The nat type. This can be One-to-One or One-to-Many
-
-    .PARAMETER ExternalNetworkProfile
-    The external network profile that will be linked to that Routed or NAT network profile
-
-    .PARAMETER UseExternalNetworkProfileSettings
 
     .PARAMETER DHCPEnabled
     Enable DHCP for a NAT network profile. Nat type must be One-to-Many
@@ -59,25 +57,20 @@ function New-vRANATNetworkProfile {
     .PARAMETER DHCPEndAddress
     The end address of the dhcp range
 
+    .PARAMETER DHCPLeaseTime
+    The dhcp lease time in seconds. The default is 0.
+
     .INPUTS
-    System.String.
-    System.Int.
+    System.String
+    System.Int
     System.Switch
+    PSCustomObject
 
     .OUTPUTS
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    $DefinedRange1 = New-vRANetworkProfileIPRange -Name "External-Range-01" -Description "Example 1" -StatIPv4Address "10.60.1.2" -EndIPv4Address "10.60.1.5"
-    $DefinedRange2 = New-vRANetworkProfileIPRange -Name "External-Range-02" -Description "Example 2" -StatIPv4Address "10.60.1.10" -EndIPv4Address "10.60.1.20"
-
-    New-vRANetworkProfile -ProfileType External -Name Network-External -Description "External" -SubnetMask "255.255.255.0" -GatewayAddress "10.60.1.1" -PrimaryDNSAddress "10.60.1.100" -SecondaryDNSAddress "10.60.1.101" -DNSSuffix "corp.local" -DNSSearchSuffix "corp.local" -IPRanges $DefinedRange1,$DefinedRange2
-
-    .EXAMPLE
-    New-vRANetworkProfile -ProfileType NAT -Name Network-NAT -Description "NAT" -SubnetMask "255.255.255.0" -GatewayAddress "10.70.1.1" -PrimaryDNSAddress "10.70.1.100" -SecondaryDNSAddress "10.70.1.101" -DNSSuffix "corp.local" -DNSSearchSuffix "corp.local" -NatType ONETOMANY -ExternalNetworkProfile "Network-External" -DHCPEnabled -DHCPStartAddress "10.70.1.20" -DHCPEndAddress "10.70.1.30"
-
-    .EXAMPLE
-    New-vRANetworkProfile -ProfileType Routed -Name Network-Routed -Description "Routed" -SubnetMask "255.255.255.0" -GatewayAddress "10.80.1.1" -PrimaryDNSAddress "10.80.1.100" -SecondaryDNSAddress "10.80.1.101" -DNSSuffix "corp.local" -DNSSearchSuffix "corp.local" -ExternalNetworkProfile "Network-External" -RangeSubnetMask "255.255.255.0" -BaseIPAddress "10.80.1.2"
+    New-vRANATNetworkProfile -Name Network-NAT -Description "NAT" -SubnetMask "255.255.255.0" -GatewayAddress "10.70.1.1" -PrimaryDNSAddress "10.70.1.100" -SecondaryDNSAddress "10.70.1.101" -DNSSuffix "corp.local" -DNSSearchSuffix "corp.local" -NatType ONETOMANY -ExternalNetworkProfile "Network-External" -DHCPEnabled -DHCPStartAddress "10.70.1.20" -DHCPEndAddress "10.70.1.30"
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
@@ -180,6 +173,7 @@ function New-vRANATNetworkProfile {
             $ExternalNetworkProfileObject = Get-vRAExternalNetworkProfile -Name $ExternalNetworkProfile -Verbose:$VerbosePreference
 
             if ($PSBoundParameters.ContainsKey("UseExternalNetworkProfileSettings")) {
+
                 Write-Verbose -Message "Using External Network Profile Settings"
             
                 if ($ExternalNetworkProfileObject.primaryDNSAddress) {

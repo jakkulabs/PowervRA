@@ -422,7 +422,7 @@ function Set-vRANATNetworkProfile {
                 $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body $NetworkProfileTemplate -Verbose:$VerbosePreference
 
                 # --- Output the Successful Result
-                Get-vRAExternalNetworkProfile -Id $Id
+                Get-vRANATNetworkProfile -Id $Id
                 
             }
 

@@ -6,9 +6,6 @@
     .DESCRIPTION
     Creates a new network profile ip range definition
 
-    .PARAMETER NetworkProfileId
-    The id of the network profile
-
     .PARAMETER Name
     The name of the network profile ip range
 
@@ -16,10 +13,10 @@
     A description of the network profile ip range
 
     .PARAMETER StartIPv4Address
-    The start ipv4 address
+    The start IPv4 address
 
     .PARAMETER EndIPv4Address
-    The end ipv4 address
+    The end IPv4 address
 
     .INPUTS
     System.String.
