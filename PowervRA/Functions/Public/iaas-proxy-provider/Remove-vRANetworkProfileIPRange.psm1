@@ -23,14 +23,14 @@
 
     Param (
 
-    [Alias("Id")]
-    [parameter(Mandatory=$true, ValueFromPipelineByPropertyName)]
-    [ValidateNotNullOrEmpty()]
-    [String]$NetworkProfileId,
+        [Alias("Id")]
+        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName)]
+        [ValidateNotNullOrEmpty()]
+        [String]$NetworkProfileId,
 
-    [parameter(Mandatory=$true)]
-    [ValidateNotNullOrEmpty()]
-    [String[]]$Name   
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
+        [String[]]$Name   
        
     )
     

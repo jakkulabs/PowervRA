@@ -29,13 +29,13 @@
 
     Param (
 
-    [parameter(Mandatory=$true, ValueFromPipelineByPropertyName, ParameterSetName="ById")]
-    [ValidateNotNullOrEmpty()]
-    [String[]]$Id,
+        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName, ParameterSetName="ById")]
+        [ValidateNotNullOrEmpty()]
+        [String[]]$Id,
 
-    [parameter(Mandatory=$true, ParameterSetName="ByName")]
-    [ValidateNotNullOrEmpty()]
-    [String[]]$Name   
+        [Parameter(Mandatory=$true, ParameterSetName="ByName")]
+        [ValidateNotNullOrEmpty()]
+        [String[]]$Name   
        
     )
     
