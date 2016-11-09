@@ -7,22 +7,22 @@
     Remove a routed network profile
     
     .PARAMETER Id
-    The id of the network profile
+    The id of the routed network profile
 
     .PARAMETER Name
-    The name of the network profile
+    The name of the routed network profile
 
     .INPUTS
     System.String
 
     .EXAMPLE
-    Get-vRANetworkProfile -Name NetworkProfile01 | Remove-vRANetworkProfile
+    Get-vRARoutedNetworkProfile -Name NetworkProfile01 | Remove-vRARoutedNetworkProfile
 
     .EXAMPLE
-    Remove-vRANetworkProfile -Name NetworkProfile01
+    Remove-vRARoutedNetworkProfile -Name NetworkProfile01
 
     .EXAMPLE
-    Remove-vRANetworkProfile -Id 597ff2c1-a35f-4a81-bfd3-ca014
+    Remove-vRARoutedNetworkProfile -Id 597ff2c1-a35f-4a81-bfd3-ca014
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High",DefaultParameterSetName="ById")]

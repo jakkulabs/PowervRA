@@ -12,17 +12,17 @@ function New-vRARoutedNetworkProfile {
     .PARAMETER Description
     The network profile Description
 
-    .PARAMETER ExternalNetworkProfile
-    The external network profile that will be linked to that Routed or NAT network profile
-
-    .PARAMETER UseExternalNetworkProfileSettings
-    Use the settings from the selected external network profile
-
     .PARAMETER SubnetMask
     The subnet mask of the network profile
 
     .PARAMETER GatewayAddress
     The gateway address of the network profile
+
+    .PARAMETER ExternalNetworkProfile
+    The external network profile that will be linked to that Routed or NAT network profile
+
+    .PARAMETER UseExternalNetworkProfileSettings
+    Use the settings from the selected external network profile
 
     .PARAMETER PrimaryDNSAddress
     The address of the primary DNS server
@@ -36,14 +36,14 @@ function New-vRARoutedNetworkProfile {
     .PARAMETER DNSSearchSuffix
     The DNS search suffix
 
-    .PARAMETER IPRanges
-    An array of ip address ranges
-
     .PARAMETER PrimaryWinsAddress
     The address of the primary wins server
 
     .PARAMETER SecondaryWinsAddress
     The address of the secondary wins server
+
+    .PARAMETER IPRanges
+    An array of ip address ranges
 
     .PARAMETER RangeSubnetMask
     The subnetMask for the routed range
@@ -60,42 +60,36 @@ function New-vRARoutedNetworkProfile {
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    New-vRANetworkProfile -Name Network-Routed -Description "Routed" -SubnetMask "255.255.255.0" -GatewayAddress "10.80.1.1" -PrimaryDNSAddress "10.80.1.100" -SecondaryDNSAddress "10.80.1.101" -DNSSuffix "corp.local" -DNSSearchSuffix "corp.local" -ExternalNetworkProfile "Network-External" -RangeSubnetMask "255.255.255.0" -BaseIPAddress "10.80.1.2"
+    New-vRARoutedNetworkProfile -Name Network-Routed -Description "Routed" -SubnetMask "255.255.255.0" -GatewayAddress "10.80.1.1" -PrimaryDNSAddress "10.80.1.100" -SecondaryDNSAddress "10.80.1.101" -DNSSuffix "corp.local" -DNSSearchSuffix "corp.local" -ExternalNetworkProfile "Network-External" -RangeSubnetMask "255.255.255.0" -BaseIPAddress "10.80.1.2"
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
-        [Parameter(Mandatory=$true, ParameterSetName="Standard")]
-        [Parameter(Mandatory=$true, ParameterSetName="UseExternalProfileSettings")]
+        [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [String]$Name,
     
-        [Parameter(Mandatory=$false, ParameterSetName="Standard")]
-        [Parameter(Mandatory=$false, ParameterSetName="UseExternalProfileSettings")]
+        [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [String]$Description, 
 
-        [Parameter(Mandatory=$true, ParameterSetName="Standard")]
-        [Parameter(Mandatory=$true, ParameterSetName="UseExternalProfileSettings")]
-        [ValidateNotNullOrEmpty()]
-        [String]$ExternalNetworkProfile,
-
-        [Parameter(Mandatory=$false, ParameterSetName="Standard")]
-        [Parameter(Mandatory=$false, ParameterSetName="UseExternalProfileSettings")]
-        [ValidateNotNullOrEmpty()]
-        [Switch]$UseExternalNetworkProfileSettings,
-
-        [Parameter(Mandatory=$true, ParameterSetName="Standard")]
-        [Parameter(Mandatory=$true, ParameterSetName="UseExternalProfileSettings")]
+        [Parameter(Mandatory=$true)]
         [ValidateScript({$_ -match [IPAddress]$_ })]  
         [String]$SubnetMask,
 
-        [Parameter(Mandatory=$false, ParameterSetName="Standard")]
-        [Parameter(Mandatory=$false, ParameterSetName="UseExternalProfileSettings")]
+        [Parameter(Mandatory=$false)]
         [ValidateScript({$_ -match [IPAddress]$_ })]  
         [String]$GatewayAddress,
+
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
+        [String]$ExternalNetworkProfile,
+
+        [Parameter(Mandatory=$false, ParameterSetName="UseExternalProfileSettings")]
+        [ValidateNotNullOrEmpty()]
+        [Switch]$UseExternalNetworkProfileSettings,
 
         [Parameter(Mandatory=$false, ParameterSetName="Standard")]
         [ValidateScript({$_ -match [IPAddress]$_ })]  
@@ -121,18 +115,15 @@ function New-vRARoutedNetworkProfile {
         [ValidateScript({$_ -match [IPAddress]$_ })]  
         [String]$SecondaryWinsAddress,
 
-        [Parameter(Mandatory=$true, ParameterSetName="Standard")]
-        [Parameter(Mandatory=$true, ParameterSetName="UseExternalProfileSettings")]
+        [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [PSCustomObject[]]$IPRanges,
 
-        [Parameter(Mandatory=$false, ParameterSetName="Standard")]
-        [Parameter(Mandatory=$false, ParameterSetName="UseExternalProfileSettings")]
+        [Parameter(Mandatory=$false)]
         [ValidateScript({$_ -match [IPAddress]$_ })] 
         [String]$RangeSubnetMask,
 
-        [Parameter(Mandatory=$false, ParameterSetName="Routed")]
-        [Parameter(Mandatory=$false, ParameterSetName="UseExternalProfileSettings")]
+        [Parameter(Mandatory=$false)]
         [ValidateScript({$_ -match [IPAddress]$_ })] 
         [String]$BaseIPAddress
 

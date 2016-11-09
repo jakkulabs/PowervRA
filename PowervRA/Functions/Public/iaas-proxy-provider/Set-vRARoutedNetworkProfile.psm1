@@ -6,7 +6,7 @@ function Set-vRAExternalNetworkProfile {
     .DESCRIPTION
     Set a vRA network profiles
     
-    .PARAMTER Id
+    .PARAMETER Id
     The network profile id
     
     .PARAMETER Name
@@ -14,15 +14,6 @@ function Set-vRAExternalNetworkProfile {
     
     .PARAMETER Description
     The network profile description
-
-    .PARAMETER Hidden
-    Creates a hidden network profile
-
-    .PARAMETER SubnetMask
-    The subnet mask of the network profile
-
-    .PARAMETER GatewayAddress
-    The gateway address of the network profile
 
     .PARAMETER PrimaryDNSAddress
     The address of the primary DNS server
@@ -36,59 +27,31 @@ function Set-vRAExternalNetworkProfile {
     .PARAMETER DNSSearchSuffix
     The DNS search suffix
 
-    .PARAMETER IPRanges
-    An array of ip address ranges
-
     .PARAMETER PrimaryWinsAddress
     The address of the primary wins server
 
     .PARAMETER SecondaryWinsAddress
     The address of the secondary wins server
 
-    .PARAMETER NatType
-    The nat type. This can be One-to-One or One-to-Many
-
-    .PARAMETER ExternalNetworkProfile
-    The external network profile that will be linked to that Routed or NAT network profile
-
-    .PARAMETER DHCPEnabled
-    Enable DHCP for a NAT network profile. Nat type must be One-to-Many
-
-    .PARAMETER DHCPStartAddress
-    The start address of the dhcp range
-
-    .PARAMETER DHCPEndAddress
-    The end address of the dhcp range
-
-    .PARAMETER RangeSubnetMask
-    The subnet mask for the routed range
-
-    .PARAMETER BaseIPAddress
-    The base ip address for the routed range
-
     .INPUTS
     System.String.
-    System.Int.
-    System.Switch
+
 
     .OUTPUTS
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    Get-vRANetworkProfile -Name "Network-External" | Set-vRANetworkProfile -Name "Network-External-Updated" -Description "Updated Description" -SubnetMask "255.255.0.0" -GatewayAddress "10.70.2.1" -PrimaryDNSAddress "10.70.1.100" -SecondaryDNSAddress "10.70.1.101" -DNSSuffix "corp1.local" -DNSSearchSuffix "corp1.local" -DHCPStartAddress "10.70.1.21" -DHCPEndAddress "10.70.1.31"
+    Get-vRARoutedNetworkProfile -Name "Network-Routed" | Set-vRARoutedNetworkProfile -Name "Network-Routed-Updated" -Description "Updated Description"
 
     .EXAMPLE
-    $DefinedRange1 = New-vRANetworkProfileIPRange -Name "NAT-Range-01" -Description "Disable DHCP Test" -StatIPv4Address "10.70.2.2" -EndIPv4Address "10.70.2.20"
-    $DefinedRange2 = New-vRANetworkProfileIPRange -Name "NAT-Range-02" -Description "Disable DHCP Test" -StatIPv4Address "10.70.2.21" -EndIPv4Address "10.70.2.30"
-
-    Get-vRANetworkProfile -Name "Network-NAT" | Set-vRANetworkProfile -DHCPEnabled:$false -IPRanges $DefinedRange1,$DefinedRange1
+    Set-vRARoutedNetworkProfile -Id 1ada4023-8a02-4349-90bd-732f25001852 -Description "Updated Description"
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
-        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
         [String]$Id,
 
         [Parameter(Mandatory=$false)]
@@ -98,14 +61,6 @@ function Set-vRAExternalNetworkProfile {
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [String]$Description,
-
-        [Parameter(Mandatory=$false)]
-        [ValidateScript({$_ -match [IPAddress]$_ })]  
-        [String]$SubnetMask,
-
-        [Parameter(Mandatory=$false)]
-        [ValidateScript({$_ -match [IPAddress]$_ })]  
-        [String]$GatewayAddress,
 
         [Parameter(Mandatory=$false)]
         [ValidateScript({$_ -match [IPAddress]$_ })]  
@@ -124,25 +79,12 @@ function Set-vRAExternalNetworkProfile {
         [String]$DNSSearchSuffix,
 
         [Parameter(Mandatory=$false)]
-        [ValidateNotNullOrEmpty()]
-        [PSCustomObject[]]$IPRanges,
-
-        [Parameter(Mandatory=$false)]
         [ValidateScript({$_ -match [IPAddress]$_ })] 
         [String]$PrimaryWinsAddress,
 
         [Parameter(Mandatory=$false)]
         [ValidateScript({$_ -match [IPAddress]$_ })]
-        [String]$SecondaryWinsAddress,
-
-        [Parameter(Mandatory=$false)]
-        [Parameter(Mandatory=$false, ParameterSetName="ExternalNetworkProfile")]
-        [ValidateNotNullOrEmpty()]
-        [String]$ExternalNetworkProfile,
-
-        [parameter(Mandatory=$false, ParameterSetName="ExternalNetworkProfile")]
-        [ValidateNotNullOrEmpty()]
-        [Switch]$UseExternalNetworkProfileSettings
+        [String]$SecondaryWinsAddress
 
     )    
 
@@ -230,26 +172,6 @@ function Set-vRAExternalNetworkProfile {
 
             }
 
-            if ($PSBoundParameters.ContainsKey("GatewayAddress")) {
-
-                Write-Verbose -Message "Updating Gateway Address: $($NetworkProfile.gatewayAddress) >> $GatewayAddress"
-
-                $NetworkProfile.gatewayAddress = $GatewayAddress
-
-            }
-
-            if ($PSBoundParameters.ContainsKey("IPRanges")) {
-
-                foreach ($IPRange in $IPRanges) {
-
-                    Write-Verbose -Message "Adding IP Address Range $($IPRange.name) To Network Profile $($NetworkProfile.Name)"
-
-                    $NetworkProfile.definedRanges += $IPRange
-
-                }
-
-            }
-
             $NetworkProfileTemplate = $NetworkProfile | ConvertTo-Json -Depth 100
 
             if ($PSCmdlet.ShouldProcess($Id)){
@@ -260,7 +182,7 @@ function Set-vRAExternalNetworkProfile {
                 $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body $NetworkProfileTemplate -Verbose:$VerbosePreference
 
                 # --- Output the Successful Result
-                Get-vRARoutedlNetworkProfile -Id $Id
+                Get-vRARoutedlNetworkProfile -Id $Id -Verbose:$VerbosePreference
 
             }
 

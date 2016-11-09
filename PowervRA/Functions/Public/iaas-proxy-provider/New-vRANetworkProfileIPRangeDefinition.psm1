@@ -25,7 +25,7 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    New-vRANetworkProfileIPRange -Name "External-Range-01" -Description "Example" -StartIPv4Address "10.20.1.2" -EndIPv4Address "10.20.1.5"
+    New-vRANetworkProfileIPRangeDefinition -Name "External-Range-01" -Description "Example" -StartIPv4Address "10.20.1.2" -EndIPv4Address "10.20.1.5"
 
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]

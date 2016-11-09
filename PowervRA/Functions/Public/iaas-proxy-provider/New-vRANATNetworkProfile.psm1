@@ -4,7 +4,7 @@ function New-vRANATNetworkProfile {
     Create a vRA nat network profile
     
     .DESCRIPTION
-    Create a vRA nat network profiles
+    Create a vRA nat network profile
     
     .PARAMETER Name
     The network profile Name
@@ -12,17 +12,17 @@ function New-vRANATNetworkProfile {
     .PARAMETER Description
     The network profile Description
 
-    .PARAMETER ExternalNetworkProfile
-    The external network profile that will be linked to that Routed or NAT network profile
-
-    .PARAMETER UseExternalNetworkProfileSettings
-    Use the settings from the selected external network profile
-
     .PARAMETER SubnetMask
     The subnet mask of the network profile
 
     .PARAMETER GatewayAddress
     The gateway address of the network profile
+
+    .PARAMETER ExternalNetworkProfile
+    The external network profile that will be linked to that Routed or NAT network profile
+
+    .PARAMETER UseExternalNetworkProfileSettings
+    Use the settings from the selected external network profile
 
     .PARAMETER PrimaryDNSAddress
     The address of the primary DNS server
@@ -77,34 +77,29 @@ function New-vRANATNetworkProfile {
 
     Param (
 
-        [Parameter(Mandatory=$true, ParameterSetName="Standard")]
-        [Parameter(Mandatory=$true, ParameterSetName="UseExternalProfileSettings")]
+        [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [String]$Name,
     
-        [Parameter(Mandatory=$false, ParameterSetName="Standard")]
-        [Parameter(Mandatory=$false, ParameterSetName="UseExternalProfileSettings")]
+        [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [String]$Description,
 
-        [Parameter(Mandatory=$true, ParameterSetName="Standard")]
-        [Parameter(Mandatory=$true, ParameterSetName="UseExternalProfileSettings")]
+        [Parameter(Mandatory=$true)]
+        [ValidateScript({$_ -match [IPAddress]$_ })]  
+        [String]$SubnetMask,
+
+        [Parameter(Mandatory=$false)]
+        [ValidateScript({$_ -match [IPAddress]$_ })]  
+        [String]$GatewayAddress,
+
+        [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [String]$ExternalNetworkProfile,
 
         [Parameter(Mandatory=$false, ParameterSetName="UseExternalProfileSettings")]
         [ValidateNotNullOrEmpty()]
         [Switch]$UseExternalNetworkProfileSettings,
-
-        [Parameter(Mandatory=$true, ParameterSetName="Standard")]
-        [Parameter(Mandatory=$true, ParameterSetName="UseExternalProfileSettings")]
-        [ValidateScript({$_ -match [IPAddress]$_ })]  
-        [String]$SubnetMask,
-
-        [Parameter(Mandatory=$false, ParameterSetName="Standard")]
-        [Parameter(Mandatory=$false, ParameterSetName="UseExternalProfileSettings")]
-        [ValidateScript({$_ -match [IPAddress]$_ })]  
-        [String]$GatewayAddress,
 
         [Parameter(Mandatory=$false, ParameterSetName="Standard")]
         [ValidateScript({$_ -match [IPAddress]$_ })]  
@@ -130,33 +125,27 @@ function New-vRANATNetworkProfile {
         [ValidateScript({$_ -match [IPAddress]$_ })]  
         [String]$SecondaryWinsAddress,
 
-        [Parameter(Mandatory=$false, ParameterSetName="Standard")]
-        [Parameter(Mandatory=$false, ParameterSetName="UseExternalProfileSettings")]
+        [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [PSCustomObject[]]$IPRanges,
 
-        [Parameter(Mandatory=$true, ParameterSetName="Standard")]
-        [Parameter(Mandatory=$true, ParameterSetName="UseExternalProfileSettings")]
+        [Parameter(Mandatory=$true)]
         [ValidateSet("ONETOONE", "ONETOMANY")]
         [String]$NatType,
 
-        [Parameter(Mandatory=$false, ParameterSetName="Standard")]
-        [Parameter(Mandatory=$false, ParameterSetName="UseExternalProfileSettings")]
+        [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [Switch]$DHCPEnabled,
 
-        [Parameter(Mandatory=$false, ParameterSetName="Standard")]
-        [Parameter(Mandatory=$false, ParameterSetName="UseExternalProfileSettings")]
+        [Parameter(Mandatory=$false)]
         [ValidateScript({$_ -match [IPAddress]$_ })] 
         [String]$DHCPStartAddress,
 
-        [Parameter(Mandatory=$false, ParameterSetName="Standard")]
-        [Parameter(Mandatory=$false, ParameterSetName="UseExternalProfileSettings")]
+        [Parameter(Mandatory=$false)]
         [ValidateScript({$_ -match [IPAddress]$_ })] 
         [String]$DHCPEndAddress,
 
-        [Parameter(Mandatory=$false, ParameterSetName="Standard")]
-        [Parameter(Mandatory=$false, ParameterSetName="UseExternalProfileSettings")]
+        [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [Int]$DHCPLeaseTime = 0
 

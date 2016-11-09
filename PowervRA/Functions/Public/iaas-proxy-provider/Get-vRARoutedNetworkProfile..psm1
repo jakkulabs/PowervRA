@@ -1,16 +1,16 @@
 ﻿function Get-vRARoutedNetworkProfile {
 <#
     .SYNOPSIS
-    Get vRA Routed network profiles
+    Get vRA routed network profiles
     
     .DESCRIPTION
-    Get vRA Routed network profiles
+    Get vRA routed network profile
 
     .PARAMETER Id
-    The id of the Routed network profile
+    The id of the routed network profile
     
     .PARAMETER Name
-    The name of the Routed network profile
+    The name of the routed network profile
 
     .PARAMETER Limit
     The number of entries returned per page from the API. This has a default value of 100.

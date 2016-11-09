@@ -4,7 +4,7 @@ function New-vRAExternalNetworkProfile {
     Create a vRA external network profile
     
     .DESCRIPTION
-    Create a vRA external network profiles
+    Create a vRA external network profile
     
     .PARAMETER Name
     The network profile Name
@@ -47,13 +47,13 @@ function New-vRAExternalNetworkProfile {
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    $DefinedRange1 = New-vRANetworkProfileIPRange -Name "External-Range-01" -Description "Example 1" -StatIPv4Address "10.60.1.2" -EndIPv4Address "10.60.1.5"
-    $DefinedRange2 = New-vRANetworkProfileIPRange -Name "External-Range-02" -Description "Example 2" -StatIPv4Address "10.60.1.10" -EndIPv4Address "10.60.1.20"
+    $DefinedRange1 = New-vRANetworkProfileIPRangeDefinition -Name "External-Range-01" -Description "Example 1" -StartIPv4Address "10.60.1.2" -EndIPv4Address "10.60.1.5"
+    $DefinedRange2 = New-vRANetworkProfileIPRangeDefinition -Name "External-Range-02" -Description "Example 2" -StartIPv4Address "10.60.1.10" -EndIPv4Address "10.60.1.20"
 
     New-vRAExternalNetworkProfile -Name Network-External -Description "External" -SubnetMask "255.255.255.0" -GatewayAddress "10.60.1.1" -PrimaryDNSAddress "10.60.1.100" -SecondaryDNSAddress "10.60.1.101" -DNSSuffix "corp.local" -DNSSearchSuffix "corp.local" -IPRanges $DefinedRange1,$DefinedRange2
 
 #>
-[CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low")][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
@@ -104,6 +104,8 @@ function New-vRAExternalNetworkProfile {
     )    
 
     begin {
+
+        xRequires -Version 7.1
     
     }
     

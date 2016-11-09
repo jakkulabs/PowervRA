@@ -7,22 +7,22 @@
     Remove a NAT network profile
     
     .PARAMETER Id
-    The id of the network profile
+    The id of the NAT network profile
 
     .PARAMETER Name
-    The name of the network profile
+    The name of the NAT network profile
 
     .INPUTS
     System.String
 
     .EXAMPLE
-    Get-vRANetworkProfile -Name NetworkProfile01 | Remove-vRANetworkProfile
+    Get-vRANATNetworkProfile -Name NetworkProfile01 | Remove-vRANATNetworkProfile
 
     .EXAMPLE
-    Remove-vRANetworkProfile -Name NetworkProfile01
+    Remove-vRANATNetworkProfile -Name NetworkProfile01
 
     .EXAMPLE
-    Remove-vRANetworkProfile -Id 597ff2c1-a35f-4a81-bfd3-ca014
+    Remove-vRANATNetworkProfile -Id 597ff2c1-a35f-4a81-bfd3-ca014
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High",DefaultParameterSetName="ById")]
