@@ -45,9 +45,7 @@ Task UpdateDocumentation {
 
 Task Analyze {
 
-    $Exclusions = "PSAvoidUsingUserNameAndPassWordParams"
-
-    $Results = Invoke-ScriptAnalyzer -Path $ModuleDirectory -Severity Error -ExcludeRule $Exclusions -Recurse -Verbose:$VerbosePreference
+    $Results = Invoke-ScriptAnalyzer -Path $ModuleDirectory -Recurse -Verbose:$VerbosePreference
 
     if ($Results) {
 
