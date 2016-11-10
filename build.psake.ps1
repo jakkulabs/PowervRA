@@ -47,7 +47,18 @@ Task UpdateModuleManifest {
 
     try {
 
-        Update-ModuleManifestFunctions -Path $ModuleManifest -Verbose:$VerbosePreference
+        $ModuleManifest = "$($ModuleDirectory)\$($ModuleName).psd1"
+
+        $PublicFunctions = Get-ChildItem -Path "$($ModuleDirectory)\Functions\Public" -Filter "*.psm1" -Recurse | Sort-Object
+        $PrivateFunctions = Get-ChildItem -Path "$($ModuleDirectory)\Functions\Private" -Filter "*.ps1" -Recurse | Sort-Object
+
+        $FunctionsToExportRaw  = $PublicFunctions | Select-Object -ExpandProperty BaseName | Sort-Object
+        $FunctionsToExport = $FunctionsToExportRaw | ForEach-Object {if ($_.StartsWith("DEPRECATED-")) { $_.SubString("DEPRECATED-".length)}else{$_} }
+
+        $NestedModules = $PublicFunctions | ForEach-Object {$_.FullName.Substring($_.FullName.LastIndexOf($ModuleName)+$ModuleName.Length).Trim("\")}
+        $ScriptsToProcess = $PrivateFunctions | ForEach-Object {$_.FullName.Substring($_.FullName.LastIndexOf($ModuleName)+$ModuleName.Length).Trim("\")}
+
+        Update-ModuleManifest -Path $ModuleManifest -NestedModules $NestedModules -FunctionsToExport $FunctionsToExport -CmdletsToExport * -AliasesToExport * -VariablesToExport * -ScriptsToProcess $ScriptsToProcess -Verbose:$VerbosePreference
 
     }
     catch [System.Exception] {
