@@ -18,13 +18,16 @@ Properties {
                       Select-Object -First 1 | Foreach-Object BaseName
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
-    $DocsDirectory = "$PSScriptRoot\docs"
+    $DocsDirectory = "$PSScriptRoot\docs1"
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
     $TestDirectory = "$PSScriptRoot\tests"
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
     $BinDirectory = "$($PSScriptRoot)\bin"
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
+    $DefaultLocale = "en-US"
 
 # ------------------ Script analysis properties ---------------------------
 
