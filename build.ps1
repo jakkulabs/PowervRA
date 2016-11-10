@@ -28,9 +28,7 @@ Param (
 $LocalDependencies = @(
 
     "$($PSScriptRoot)\bin\Update-MKDocsYML.psm1",
-    "$($PSScriptRoot)\bin\Update-ModuleDocumentation.psm1",
-    "$($PSScriptRoot)\bin\Update-ModuleManifestVersion.psm1",
-    "$($PSScriptRoot)\bin\Update-ModuleManifestFunctions.psm1"
+    "$($PSScriptRoot)\bin\Update-ModuleManifestVersion.psm1"
 
 )
 
