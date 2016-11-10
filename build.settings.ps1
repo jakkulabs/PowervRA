@@ -18,7 +18,7 @@ Properties {
                       Select-Object -First 1 | Foreach-Object BaseName
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
-    $DocsDirectory = "$PSScriptRoot\docs1"
+    $DocsDirectory = "$PSScriptRoot\docs"
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
     $TestDirectory = "$PSScriptRoot\tests"

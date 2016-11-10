@@ -47,8 +47,6 @@ Task UpdateModuleManifest {
 
     try {
 
-        $ModuleManifest = "$($ModuleDirectory)\$($ModuleName).psd1"
-
         $PublicFunctions = Get-ChildItem -Path "$($ModuleDirectory)\Functions\Public" -Filter "*.psm1" -Recurse | Sort-Object
         $PrivateFunctions = Get-ChildItem -Path "$($ModuleDirectory)\Functions\Private" -Filter "*.ps1" -Recurse | Sort-Object
 
