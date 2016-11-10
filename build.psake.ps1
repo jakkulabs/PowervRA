@@ -4,7 +4,7 @@
 # --- Define the build tasks
 Task Default -depends Build
 Task Build -depends Analyze, UpdateModuleManifest, UpdateDocumentation
-Task Release -depends Build, BumpVersion
+Task Release -depends Build, Test, BumpVersion
 
 Task Analyze {
 
