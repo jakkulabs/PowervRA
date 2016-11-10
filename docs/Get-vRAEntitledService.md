@@ -2,10 +2,10 @@
 
 ## SYNOPSIS
     
-Retrieve vRA services that the user is has access to
+Retrieve vRA services that the user is entitled to see
 
 ## SYNTAX
- Get-vRAEntitledService [-Page <Int32>] [-Limit <Int32>] [<CommonParameters>]  Get-vRAEntitledService -Id <String[]> [<CommonParameters>]  Get-vRAEntitledService -Name <String[]> [<CommonParameters>]     
+ Get-vRAEntitledService [-Page <Int32>] [-Limit <Int32>] [<CommonParameters>]  Get-vRAEntitledService [-Id <String[]>] [<CommonParameters>]  Get-vRAEntitledService [-Name <String[]>] [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -20,16 +20,16 @@ A service must be owned by a specific organization and all the activities it con
 
 The id of the service
 
-* Required: true
+* Required: false
 * Position: named
 * Default value: 
-* Accept pipeline input: true (ByValue, ByPropertyName)
+* Accept pipeline input: false
 
 ### Name
 
 The Name of the service
 
-* Required: true
+* Required: false
 * Position: named
 * Default value: 
 * Accept pipeline input: false
@@ -65,7 +65,7 @@ System.Management.Automation.PSObject.
 ```
 -------------------------- EXAMPLE 1 --------------------------
 
-PS C:\>Get-vRAService
+PS C:\>Get-vRAEntitledService
 
 
 
@@ -74,7 +74,7 @@ PS C:\>Get-vRAService
 
 -------------------------- EXAMPLE 2 --------------------------
 
-PS C:\>Get-vRAService -Id 332d38d5-c8db-4519-87a7-7ef9f358091a
+PS C:\>Get-vRAEntitledService -Id 332d38d5-c8db-4519-87a7-7ef9f358091a
 
 
 
@@ -83,6 +83,6 @@ PS C:\>Get-vRAService -Id 332d38d5-c8db-4519-87a7-7ef9f358091a
 
 -------------------------- EXAMPLE 3 --------------------------
 
-PS C:\>Get-vRAService -Name "Default Service"
+PS C:\>Get-vRAEntitledService -Name "Default Service"
 ```
 

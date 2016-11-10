@@ -1,4 +1,4 @@
-﻿function Get-vRAEntitledService {
+﻿function Get-vRAService {
 <#
     .SYNOPSIS
     Retrieve vRA services that the user is has access to

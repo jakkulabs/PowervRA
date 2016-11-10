@@ -6,7 +6,6 @@ Task Default -depends Build
 Task Build -depends Analyze, UpdateModuleManifest, UpdateDocumentation
 Task Release -depends Build, BumpVersion
 
-
 Task Analyze {
 
     $Results = Invoke-ScriptAnalyzer -Path $ModuleDirectory -Recurse  -Settings $ScriptAnalyzerSettingsPath -Verbose:$VerbosePreference

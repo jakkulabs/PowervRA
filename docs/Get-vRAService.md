@@ -2,10 +2,10 @@
 
 ## SYNOPSIS
     
-Retrieve vRA services
+Retrieve vRA services that the user is has access to
 
 ## SYNTAX
- Get-vRAService [-Limit <String>] [<CommonParameters>]  Get-vRAService [-Id <String[]>] [-Limit <String>] [<CommonParameters>]  Get-vRAService [-Name <String[]>] [-Limit <String>] [<CommonParameters>]     
+ Get-vRAService [-Page <Int32>] [-Limit <Int32>] [<CommonParameters>]  Get-vRAService -Id <String[]> [<CommonParameters>]  Get-vRAService -Name <String[]> [<CommonParameters>]     
 
 ## DESCRIPTION
 
@@ -20,18 +20,27 @@ A service must be owned by a specific organization and all the activities it con
 
 The id of the service
 
-* Required: false
+* Required: true
 * Position: named
 * Default value: 
-* Accept pipeline input: false
+* Accept pipeline input: true (ByValue, ByPropertyName)
 
 ### Name
 
 The Name of the service
 
-* Required: false
+* Required: true
 * Position: named
 * Default value: 
+* Accept pipeline input: false
+
+### Page
+
+The index of the page to display.
+
+* Required: false
+* Position: named
+* Default value: 1
 * Accept pipeline input: false
 
 ### Limit
@@ -46,6 +55,7 @@ The number of entries returned per page from the API. This has a default value o
 ## INPUTS
 
 System.String
+System.Int
 
 ## OUTPUTS
 
