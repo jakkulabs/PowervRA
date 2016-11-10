@@ -1,4 +1,4 @@
-#Requires -Modules Psake, Pester, PSScriptAnalyzer
+#Requires -Modules Psake, Pester, PSScriptAnalyzer, PlatyPS
 #Requires -Version 5
 
 <#
