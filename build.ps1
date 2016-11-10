@@ -1,4 +1,5 @@
 #Requires -Modules Psake, Pester, PSScriptAnalyzer
+#Requires -Version 5
 
 <#
   .SYNOPSIS
@@ -24,36 +25,18 @@ Param (
 
 )
 
-$BaseDirectory = $PSScriptRoot
-$BinDirectory = "$($BaseDirectory)\bin"
-$ModuleDirectory = "$($BaseDirectory)\PowervRA"
-$ModuleManifest = "$($ModuleDirectory)\PowervRA.psd1"
-
-# --- Build Parameters
-$Parameters = @{
-
-    BaseDirectory = $BaseDirectory
-    BinDirectory = $BinDirectory
-    ModuleDirectory = $ModuleDirectory
-    ModuleManifest = $ModuleManifest
-    BuildVersion = $BuildVersion
-
-}
-
-Write-Verbose -Message $Parameters.ToString()
-
 $LocalDependencies = @(
 
-    "$($BinDirectory)\Update-MKDocsYML.psm1",
-    "$($BinDirectory)\Update-ModuleDocumentation.psm1",
-    "$($BinDirectory)\Update-ModuleManifestVersion.psm1",
-    "$($BinDirectory)\Update-ModuleManifestFunctions.psm1"
+    "$($PSScriptRoot)\bin\Update-MKDocsYML.psm1",
+    "$($PSScriptRoot)\bin\Update-ModuleDocumentation.psm1",
+    "$($PSScriptRoot)\bin\Update-ModuleManifestVersion.psm1",
+    "$($PSScriptRoot)\bin\Update-ModuleManifestFunctions.psm1"
 
 )
 
 $LocalDependencies | % {Import-Module -Name $_ -Force}
 
 # --- Start Build
-Invoke-psake -buildFile "$($PSScriptRoot)\bin\psake.build.ps1" -taskList $Task -parameters $Parameters -nologo -Verbose:$VerbosePreference
+Invoke-psake -buildFile "$($PSScriptRoot)\build.psake.ps1" -taskList $Task -parameters $Parameters -nologo -Verbose:$VerbosePreference
 
 exit ( [int]( -not $psake.build_success ) )

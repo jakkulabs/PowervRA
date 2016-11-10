@@ -1,0 +1,4 @@
+@{
+    ExcludeRules=@("PSAvoidUsingUserNameAndPassWordParams")
+    Severity='Error'
+}
