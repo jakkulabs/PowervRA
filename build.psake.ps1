@@ -6,7 +6,6 @@ Task Default -depends Build
 Task Build -depends Analyze, UpdateModuleManifest, UpdateDocumentation
 Task Release -depends Build, BumpVersion
 
-
 Task Analyze {
 
     $Results = Invoke-ScriptAnalyzer -Path $ModuleDirectory -Recurse  -Settings $ScriptAnalyzerSettingsPath -Verbose:$VerbosePreference
@@ -61,17 +60,29 @@ Task UpdateModuleManifest {
 
 Task UpdateDocumentation {
 
-    try {
+    $ModuleInfo = Import-Module $ModuleDirectory\$ModuleName.psd1 -Global -Force -PassThru
 
-	    Update-ModuleDocumentation -Module $ModuleManifest -DocumentsRoot "$($PSScriptRoot)\docs" -Template "$($BinDirectory)\DocumentTemplates\md-function-template.ps1" -Verbose:$VerbosePreference
-	    Update-MKDocsYML -Module $ModuleManifest -Path "$($PSScriptRoot)\mkdocs.yml" -Verbose:$VerbosePreference
-
+    if ($ModuleInfo.ExportedCommands.Count -eq 0) {
+        "No commands have been exported. Skipping $($psake.context.currentTaskName) task."
+        return
     }
-    catch [System.Exception] {
 
-        Write-Error -Message "An error occured when updating module documentation: $_.Message"
-
+    if (!(Test-Path -LiteralPath $DocsDirectory)) {
+        New-Item $DocsDirectory -ItemType Directory | Out-Null
     }
+
+    if (Get-ChildItem -LiteralPath $DocsDirectory -Filter *.md -Recurse) {
+        Get-ChildItem -LiteralPath $DocsDirectory -Directory | ForEach-Object {
+            Update-MarkdownHelp -Path $_.FullName -Verbose:$VerbosePreference | Out-Null
+        }
+    }
+
+    # --- ErrorAction set to SilentlyContinue so this command will not overwrite an existing MD file.
+    New-MarkdownHelp -Module $ModuleName -Locale $DefaultLocale -OutputFolder $DocsDirectory `
+                    -ErrorAction SilentlyContinue -Verbose:$VerbosePreference | Out-Null
+
+    # --- Update mkdocs.yml
+    Update-MKDocsYML -Module $ModuleManifest -Path "$($PSScriptRoot)\mkdocs.yml" -Verbose:$VerbosePreference
 
 }
 
