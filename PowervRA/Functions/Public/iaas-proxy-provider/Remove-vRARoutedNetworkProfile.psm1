@@ -19,82 +19,37 @@
     Get-vRARoutedNetworkProfile -Name NetworkProfile01 | Remove-vRARoutedNetworkProfile
 
     .EXAMPLE
-    Remove-vRARoutedNetworkProfile -Name NetworkProfile01
-
-    .EXAMPLE
     Remove-vRARoutedNetworkProfile -Id 597ff2c1-a35f-4a81-bfd3-ca014
 
 #>
-[CmdletBinding(SupportsShouldProcess,ConfirmImpact="High",DefaultParameterSetName="ById")]
+[CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")]
 
     Param (
 
-        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName, ParameterSetName="ById")]
+        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
         [ValidateNotNullOrEmpty()]
-        [String[]]$Id,
-
-        [Parameter(Mandatory=$true, ParameterSetName="ByName")]
-        [ValidateNotNullOrEmpty()]
-        [String[]]$Name   
+        [String[]]$Id
        
     )
     
-    begin {}
+    Begin {}
     
-    process {    
+    Process {    
 
         try {
 
-            switch ($PSCmdlet.ParameterSetName) {
+            foreach ($NetworkProfileId in $Id) {
 
-                'ById' {
+                if ($PSCmdlet.ShouldProcess($NetworkProfileId)){
 
-                    foreach ($NetworkProfileId in $Id) {
+                    $URI = "/iaas-proxy-provider/api/network/profiles/$($NetworkProfileId)"
 
-                        if ($PSCmdlet.ShouldProcess($NetworkProfileId)){
-
-                            $URI = "/iaas-proxy-provider/api/network/profiles/$($NetworkProfileId)"
-            
-                            Write-Verbose -Message "Preparing DELETE to $($URI)"
-
-                            $Response = Invoke-vRARestMethod -Method DELETE -URI "$($URI)"
-
-                            Write-Verbose -Message "SUCCESS"
-
-                        }
-
-                    }
-
-                    break
+                    Invoke-vRARestMethod -Method DELETE -URI "$($URI)" -Verbose:$VerbosePreference | Out-Null
 
                 }
 
-                'ByName' {
-
-                    foreach ($NetworkProfileName in $Name) {
-
-                        if ($PSCmdlet.ShouldProcess($NetworkProfileName)){
-
-                            $Id = (Get-vRANetworkProfile -Name $NetworkProfileName).id
-
-                            $URI = "/iaas-proxy-provider/api/network/profiles/$($Id)"
-            
-                            Write-Verbose -Message "Preparing DELETE to $($URI)"
-
-                            $Response = Invoke-vRARestMethod -Method DELETE -URI "$($URI)"
-
-                            Write-Verbose -Message "SUCCESS"
-
-                        }
-
-                    }
-
-                    break
-
-                }
-  
             }
-    
+
         }
         catch [Exception]{
         
@@ -102,6 +57,6 @@
 
         }
         
-    }   
-     
+    }     
+
 }
