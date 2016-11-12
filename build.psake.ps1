@@ -50,13 +50,48 @@ Task UpdateModuleManifest {
         $PublicFunctions = Get-ChildItem -Path "$($ModuleDirectory)\Functions\Public" -Filter "*.psm1" -Recurse | Sort-Object
         $PrivateFunctions = Get-ChildItem -Path "$($ModuleDirectory)\Functions\Private" -Filter "*.ps1" -Recurse | Sort-Object
 
+        $ModuleManifest = Import-PowerShellDataFile -Path $ModuleManifestPath -Verbose:$VerbosePreference
+
+        # --- Scripts To Process
+        Write-Verbose -Message "Processing ScriptsToProcess"
+        $ModuleManifest.ScriptsToProcess = $PrivateFunctions | ForEach-Object {$_.FullName.Substring($_.FullName.LastIndexOf($ModuleName)+$ModuleName.Length).Trim("\")}
+
+        # --- Functions To Export
+        Write-Verbose -Message "Processing FunctionsToExport"
         $FunctionsToExportRaw  = $PublicFunctions | Select-Object -ExpandProperty BaseName | Sort-Object
-        $FunctionsToExport = $FunctionsToExportRaw | ForEach-Object {if ($_.StartsWith("DEPRECATED-")) { $_.SubString("DEPRECATED-".length)}else{$_} }
+        $ModuleManifest.FunctionsToExport = $FunctionsToExportRaw | ForEach-Object {if ($_.StartsWith("DEPRECATED-")) { $_.SubString("DEPRECATED-".length)}else{$_} }
+        
+        # --- Nested Modules   
+        Write-Verbose -Message "Processing NestedModules"
+        $ModuleManifest.NestedModules = $PublicFunctions | ForEach-Object {$_.FullName.Substring($_.FullName.LastIndexOf($ModuleName)+$ModuleName.Length).Trim("\")}
 
-        $NestedModules = $PublicFunctions | ForEach-Object {$_.FullName.Substring($_.FullName.LastIndexOf($ModuleName)+$ModuleName.Length).Trim("\")}
-        $ScriptsToProcess = $PrivateFunctions | ForEach-Object {$_.FullName.Substring($_.FullName.LastIndexOf($ModuleName)+$ModuleName.Length).Trim("\")}
+        # --- Private Data  
+        Write-Verbose -Message "Processing PrivateData"
+        if ($ModuleManifest.ContainsKey("PrivateData") -and $ModuleManifest.PrivateData.ContainsKey("PSData")) {
 
-        Update-ModuleManifest -Path $ModuleManifest -NestedModules $NestedModules -FunctionsToExport $FunctionsToExport -CmdletsToExport * -AliasesToExport * -VariablesToExport * -ScriptsToProcess $ScriptsToProcess -Verbose:$VerbosePreference
+            foreach ($node in $ModuleManifest.PrivateData["PSData"].GetEnumerator()) {
+
+                $key = $node.Key
+
+                if ($node.Value.GetType().Name -eq "Object[]") {
+
+                    $value = $node.Value | ForEach-Object {$_}
+
+                }
+                else {
+
+                    $value = $node.Value    
+
+                }
+                
+                $ModuleManifest[$key] = $value
+            }
+
+            $ModuleManifest.Remove("PrivateData")
+
+        }
+
+        New-ModuleManifest -Path $ModuleManifestPath @ModuleManifest -Verbose:$VerbosePreference
 
     }
     catch [System.Exception] {
@@ -69,7 +104,7 @@ Task UpdateModuleManifest {
 
 Task UpdateDocumentation {
 
-    $ModuleInfo = Import-Module $ModuleDirectory\$ModuleName.psd1 -Global -Force -PassThru
+    $ModuleInfo = Import-Module $ModuleManifestPath -Global -Force -PassThru
 
     # --- Create or update existing MD documentation
     if ($ModuleInfo.ExportedCommands.Count -eq 0) {
@@ -120,18 +155,70 @@ $($Functions -join "`r`n")
 
 Task BumpVersion {
 
-    switch ($BuildVersion) {
+    # --- Get the current version of the module
+    $ModuleManifest = Import-PowerShellDataFile -Path $ModuleManifestPath -Verbose:$VerbosePreference
+
+    $CurrentModuleVersion = $ModuleManifest.ModuleVersion
+
+    $ModuleManifest.Remove("ModuleVersion")
+
+    Write-Verbose -Message "Current module version is $($CurrentModuleVersion)"
+
+    [Int]$MajorVersion = $CurrentModuleVersion.Split(".")[0]
+    [Int]$MinorVersion = $CurrentModuleVersion.Split(".")[1]
+    [Int]$PatchVersion = $CurrentModuleVersion.Split(".")[2]
+
+    $ModuleManifest.ScriptsToProcess = $ModuleManifest.ScriptsToProcess | ForEach-Object {$_}
+    $ModuleManifest.FunctionsToExport = $ModuleManifest.FunctionsToExport | ForEach-Object {$_}
+    $ModuleManifest.NestedModules = $ModuleManifest.NestedModules | ForEach-Object {$_}
+    $ModuleManifest.RequiredModules = $ModuleManifest.RequiredModules | ForEach-Object {$_}
+    $ModuleManifest.ModuleList = $ModuleManifest.ModuleList | ForEach-Object {$_}
+    
+    if ($ModuleManifest.ContainsKey("PrivateData") -and $ModuleManifest.PrivateData.ContainsKey("PSData")) {
+
+        foreach ($node in $ModuleManifest.PrivateData["PSData"].GetEnumerator()) {
+
+            $key = $node.Key
+
+            if ($node.Value.GetType().Name -eq "Object[]") {
+
+                $value = $node.Value | ForEach-Object {$_}
+
+            }
+            else {
+
+                $value = $node.Value
+
+            }
+            
+            $ModuleManifest[$key] = $value
+
+        }
+
+        $ModuleManifest.Remove("PrivateData")
+    }
+
+
+    switch ($BumpVersion) {
 
         'Major' {
 
-            Update-ModuleManifestVersion -Path $ModuleManifest -Major -Confirm:$false
+            Write-Verbose -Message "Bumping module major release number"
+
+            $MajorVersion++
+            $MinorVersion = 0
+            $PatchVersion = 0
 
             break
+
         }
 
         'Minor' {
 
-            Update-ModuleManifestVersion -Path $ModuleManifest -Minor -Confirm:$false
+            Write-Verbose -Message "Bumping module minor release number"
+
+            $MinorVersion++
+            $PatchVersion = 0
 
             break
 
@@ -139,11 +226,23 @@ Task BumpVersion {
 
         'Patch' {
 
-            Update-ModuleManifestVersion -Path $ModuleManifest -Patch -Confirm:$false
+            Write-Verbose -Message "Bumping module patch release number"
+
+            $PatchVersion++
 
             break
-
         }
+
+    }
+
+    # --- Build the new version string
+    $ModuleVersion = "$($MajorVersion).$($MinorVersion).$($PatchVersion)"
+
+    if ($ModuleVersion -gt $CurrentModuleVersion) {
+
+        # --- Fix taken from: https://github.com/RamblingCookieMonster/BuildHelpers/blob/master/BuildHelpers/Public/Step-ModuleVersion.ps1
+        New-ModuleManifest -Path $ModuleManifestPath -ModuleVersion $ModuleVersion @ModuleManifest -Verbose:$VerbosePreference
+        Write-Verbose -Message "Module version updated to $($ModuleVersion)"
 
     }
 
