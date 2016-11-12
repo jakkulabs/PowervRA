@@ -73,7 +73,7 @@ function Request-vRAResourceAction {
 
     Begin {
 
-        xRequires -Version 7
+        xRequires -Version 7.0
 
     }
 

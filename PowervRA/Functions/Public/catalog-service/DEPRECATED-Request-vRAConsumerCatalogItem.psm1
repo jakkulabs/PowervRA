@@ -89,7 +89,7 @@
         Write-Warning -Message "This command is deprecated and will be removed in a future release. Please use Request-vRACatalogItem instead."
 
         # --- Test for vRA API version
-        xRequires -Version 7
+        xRequires -Version 7.0
     }
     
     process {

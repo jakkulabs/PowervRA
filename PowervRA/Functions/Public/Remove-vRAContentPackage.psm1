@@ -42,7 +42,7 @@
 
     begin {
         # --- Test for vRA API version
-        xRequires -Version 7
+        xRequires -Version 7.0
     }
     
     process {    
