@@ -126,6 +126,9 @@ Task UpdateDocumentation {
     New-MarkdownHelp -Module $ModuleName -Locale $DefaultLocale -OutputFolder $DocsDirectory `
                     -ErrorAction SilentlyContinue -Verbose:$VerbosePreference | Out-Null
 
+    # --- Ensure that index.md is present and up to date
+    Copy-Item -Path "$($PSScriptRoot)\README.md" -Destination "$($DocsDirectory)\index.md" -Force -Verbose:$VerbosePreference | Out-Null
+
     # --- Update mkdocs.yml with new functions
     $Mkdocs = "$($PSScriptRoot)\mkdocs.yml"
 
