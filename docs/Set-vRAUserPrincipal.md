@@ -1,156 +1,219 @@
 # Set-vRAUserPrincipal
 
 ## SYNOPSIS
-    
 Update a vRA local user principal
 
 ## SYNTAX
- Set-vRAUserPrincipal -Id <String> [-Tenant <String>] [-FirstName <String>] [-LastName <String>] [-EmailAddress <String>] [-Description <String>] [-Password <String>] [-DisableAccount] [-EnableAccount] [-WhatIf] [-Confirm]  [<CommonParameters>]     
+
+```
+Set-vRAUserPrincipal -Id <String> [-Tenant <String>] [-FirstName <String>] [-LastName <String>]
+ [-EmailAddress <String>] [-Description <String>] [-Password <String>] [-DisableAccount] [-EnableAccount]
+ [-WhatIf] [-Confirm]
+```
 
 ## DESCRIPTION
-
 Update a vRA Principal (user)
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Set-vRAUserPrincipal -Id user@vsphere.local -FirstName FirstName-Updated -LastName LastName-Updated -EmailAddress userupdated@vsphere.local -Description Description-Updated
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Set-vRAUserPrincipal -Id user@vsphere.local -EnableAccount
+```
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Set-vRAUserPrincipal -Id user@vsphere.local -DisableAccount
+```
+
+### -------------------------- EXAMPLE 4 --------------------------
+```
+Set-vRAUserPrincipal -Id user@vsphere.local -Password s3cur3p@ss!
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 The principal id of the user
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### Tenant
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Tenant
 The tenant of the user
 
-* Required: false
-* Position: named
-* Default value: $Global:vRAConnection.Tenant
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### FirstName
+Required: False
+Position: Named
+Default value: $Global:vRAConnection.Tenant
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -FirstName
 First Name
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### LastName
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -LastName
 Last Name
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### EmailAddress
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -EmailAddress
 Email Address
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### Description
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Description
 Users text description
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### Password
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Password
 Users password
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### DisableAccount
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -DisableAccount
 Disable the user principal
 
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: LockAccount
 
-### EnableAccount
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -EnableAccount
 Enable or unlock the user principal
 
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: UnlockAccount
 
-### WhatIf
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
 
-### Confirm
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String.
+### System.String.
 System.Diagnostics.Switch
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject
+### System.Management.Automation.PSObject
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Set-vRAUserPrincipal -Id user@vsphere.local -FirstName FirstName-Updated -LastName LastName-Updated -EmailAddress userupdated@vsphere.local -Description Description-Updated
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Set-vRAUserPrincipal -Id user@vsphere.local -EnableAccount
-
-
-
-
-
-
--------------------------- EXAMPLE 3 --------------------------
-
-PS C:\>Set-vRAUserPrincipal -Id user@vsphere.local -DisableAccount
-
-
-
-
-
-
--------------------------- EXAMPLE 4 --------------------------
-
-PS C:\>Set-vRAUserPrincipal -Id user@vsphere.local -Password s3cur3p@ss!
-```
+## RELATED LINKS
 

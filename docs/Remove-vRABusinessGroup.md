@@ -1,92 +1,127 @@
 # Remove-vRABusinessGroup
 
 ## SYNOPSIS
-    
 Remove a vRA Business Group
 
 ## SYNTAX
- Remove-vRABusinessGroup -TenantId <String> -Id <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]  Remove-vRABusinessGroup -TenantId <String> -Name <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]     
+
+### Id (Default)
+```
+Remove-vRABusinessGroup -TenantId <String> -Id <String[]> [-WhatIf] [-Confirm]
+```
+
+### Name
+```
+Remove-vRABusinessGroup -TenantId <String> -Name <String[]> [-WhatIf] [-Confirm]
+```
 
 ## DESCRIPTION
-
 Remove a vRA Business Group
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Remove-vRABusinessGroup -TenantId Tenant01 -Id "f8e0d99e-c567-4031-99cb-d8410c841ed7"
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Remove-vRABusinessGroup -TenantId Tenant01 -Name "BusinessGroup01","BusinessGroup02"
+```
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Get-vRABusinessGroup -TenantId Tenant01 -Name BusinessGroup01 | Remove-vRABusinessGroup -Confirm:$false
+```
 
 ## PARAMETERS
 
-
-### TenantId
-
+### -TenantId
 Tenant Id
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByPropertyName)
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: Tenant
 
-### Id
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
 
+### -Id
 Business Group Id
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByPropertyName)
+```yaml
+Type: String[]
+Parameter Sets: Id
+Aliases: 
 
-### Name
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
 
+### -Name
 Business Group Name
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: Name
+Aliases: 
 
-### WhatIf
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
 
-### Confirm
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String.
+### System.String.
 
 ## OUTPUTS
 
-None
+### None
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Remove-vRABusinessGroup -TenantId Tenant01 -Id "f8e0d99e-c567-4031-99cb-d8410c841ed7"
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Remove-vRABusinessGroup -TenantId Tenant01 -Name "BusinessGroup01","BusinessGroup02"
-
-
-
-
-
-
--------------------------- EXAMPLE 3 --------------------------
-
-PS C:\>Get-vRABusinessGroup -TenantId Tenant01 -Name BusinessGroup01 | Remove-vRABusinessGroup -Confirm:$false
-```
+## RELATED LINKS
 

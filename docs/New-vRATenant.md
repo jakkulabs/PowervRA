@@ -1,111 +1,35 @@
 # New-vRATenant
 
 ## SYNOPSIS
-    
 Create a vRA Tenant
 
 ## SYNTAX
- New-vRATenant -Name <String> [-Description <String>] -URLName <String> [-ContactEmail <String>] -ID <String> [-WhatIf] [-Confirm] [<CommonParameters>]  New-vRATenant -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
-## DESCRIPTION
-
-Create a vRA Tenant
-
-## PARAMETERS
-
-
-### Name
-
-Tenant Name
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Description
-
-Tenant Description
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### URLName
-
-Tenant URL Name
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### ContactEmail
-
-Tenant Contact Email
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### ID
-
-Tenant ID
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+### Standard (Default)
+```
+New-vRATenant -Name <String> [-Description <String>] -URLName <String> [-ContactEmail <String>] -ID <String>
+ [-WhatIf] [-Confirm]
+```
 
 ### JSON
+```
+New-vRATenant -JSON <String> [-WhatIf] [-Confirm]
+```
 
-Body text to send in JSON format
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByValue)
-
-### WhatIf
-
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Confirm
-
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-## INPUTS
-
-System.String.
-
-## OUTPUTS
-
-System.Management.Automation.PSObject
+## DESCRIPTION
+Create a vRA Tenant
 
 ## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
 ```
--------------------------- EXAMPLE 1 --------------------------
+New-vRATenant -Name Tenant01 -Description "This is Tenant01" -URLName Tenant01 -ContactEmail admin.user@tenant01.local -ID Tenant01
+```
 
-PS C:\>New-vRATenant -Name Tenant01 -Description "This is Tenant01" -URLName Tenant01 -ContactEmail admin.user@tenant01.local -ID Tenant01
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>$JSON = @"
+### -------------------------- EXAMPLE 2 --------------------------
+```
+$JSON = @"
+```
 
 {
   "name" : "Tenant02",
@@ -118,5 +42,139 @@ PS C:\>$JSON = @"
 }
 "@
 $JSON | New-vRATenant
+
+## PARAMETERS
+
+### -Name
+Tenant Name
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
 ```
+
+### -Description
+Tenant Description
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -URLName
+Tenant URL Name
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ContactEmail
+Tenant Contact Email
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ID
+Tenant ID
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -JSON
+Body text to send in JSON format
+
+```yaml
+Type: String
+Parameter Sets: JSON
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+## INPUTS
+
+### System.String.
+
+## OUTPUTS
+
+### System.Management.Automation.PSObject
+
+## NOTES
+
+## RELATED LINKS
 

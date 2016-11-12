@@ -1,83 +1,112 @@
 # Remove-vRAReservationPolicy
 
 ## SYNOPSIS
-    
 Remove a vRA Reservation Policy
 
 ## SYNTAX
- Remove-vRAReservationPolicy -Id <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]  Remove-vRAReservationPolicy -Name <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]     
+
+### ById (Default)
+```
+Remove-vRAReservationPolicy -Id <String[]> [-WhatIf] [-Confirm]
+```
+
+### ByName
+```
+Remove-vRAReservationPolicy -Name <String[]> [-WhatIf] [-Confirm]
+```
 
 ## DESCRIPTION
-
 Remove a vRA Reservation Policy
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Remove-vRAReservationPolicy -Id "34ae1d6c-9972-4736-acdb-7ee109ad1dbd"
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Remove-vRAReservationPolicy -Name "ReservationPolicy01"
+```
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Get-vRAReservationPolicy -Name "ReservationPolicy01" | Remove-vRAReservationPolicy -Confirm:$false
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 Reservation Policy ID
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByValue, ByPropertyName)
+```yaml
+Type: String[]
+Parameter Sets: ById
+Aliases: 
 
-### Name
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
 
+### -Name
 Reservation Policy Name
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByPropertyName)
+```yaml
+Type: String[]
+Parameter Sets: ByName
+Aliases: 
 
-### WhatIf
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
 
-### Confirm
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String.
+### System.String.
 
 ## OUTPUTS
 
-None
+### None
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Remove-vRAReservationPolicy -Id "34ae1d6c-9972-4736-acdb-7ee109ad1dbd"
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Remove-vRAReservationPolicy -Name "ReservationPolicy01"
-
-
-
-
-
-
--------------------------- EXAMPLE 3 --------------------------
-
-PS C:\>Get-vRAReservationPolicy -Name "ReservationPolicy01" | Remove-vRAReservationPolicy -Confirm:$false
-```
+## RELATED LINKS
 

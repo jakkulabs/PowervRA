@@ -1,83 +1,112 @@
 # Remove-vRAStorageReservationPolicy
 
 ## SYNOPSIS
-    
 Remove a vRA Storage Reservation Policy
 
 ## SYNTAX
- Remove-vRAStorageReservationPolicy -Id <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]  Remove-vRAStorageReservationPolicy -Name <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]     
+
+### ById (Default)
+```
+Remove-vRAStorageReservationPolicy -Id <String[]> [-WhatIf] [-Confirm]
+```
+
+### ByName
+```
+Remove-vRAStorageReservationPolicy -Name <String[]> [-WhatIf] [-Confirm]
+```
 
 ## DESCRIPTION
-
 Remove a vRA Storage Reservation Policy
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Remove-vRAStorageReservationPolicy -Id "34ae1d6c-9972-4736-acdb-7ee109ad1dbd"
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Remove-vRAStorageReservationPolicy -Name "StorageReservationPolicy01"
+```
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Get-vRAStorageReservationPolicy -Name "StorageReservationPolicy01" | Remove-vRAStorageReservationPolicy -Confirm:$false
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 Storage Reservation Policy ID
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByValue, ByPropertyName)
+```yaml
+Type: String[]
+Parameter Sets: ById
+Aliases: 
 
-### Name
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
 
+### -Name
 Storage Reservation Policy Name
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByPropertyName)
+```yaml
+Type: String[]
+Parameter Sets: ByName
+Aliases: 
 
-### WhatIf
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
 
-### Confirm
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String.
+### System.String.
 
 ## OUTPUTS
 
-None
+### None
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Remove-vRAStorageReservationPolicy -Id "34ae1d6c-9972-4736-acdb-7ee109ad1dbd"
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Remove-vRAStorageReservationPolicy -Name "StorageReservationPolicy01"
-
-
-
-
-
-
--------------------------- EXAMPLE 3 --------------------------
-
-PS C:\>Get-vRAStorageReservationPolicy -Name "StorageReservationPolicy01" | Remove-vRAStorageReservationPolicy -Confirm:$false
-```
+## RELATED LINKS
 

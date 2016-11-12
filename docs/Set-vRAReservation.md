@@ -1,202 +1,318 @@
 # Set-vRAReservation
 
 ## SYNOPSIS
-    
 Set a vRA reservation
 
 ## SYNTAX
- Set-vRAReservation -Id <String> [-Name <String>] [-ReservationPolicy <String>] [-Priority <Int32>] [-Enabled] [-Quota <Int32>] [-MemoryGB <Int32>] [-ResourcePool <String>] [-EnableAlerts] [-EmailBusinessGroupManager] [-AlertRecipients  <String[]>] [-StorageAlertPercentageLevel <Int32>] [-MemoryAlertPercentageLevel <Int32>] [-CPUAlertPercentageLevel <Int32>] [-MachineAlertPercentageLevel <Int32>] [-AlertReminderFrequency <Int32>] [-WhatIf] [-Confirm]  [<CommonParameters>]     
+
+```
+Set-vRAReservation -Id <String> [-Name <String>] [-ReservationPolicy <String>] [-Priority <Int32>] [-Enabled]
+ [-Quota <Int32>] [-MemoryGB <Int32>] [-ResourcePool <String>] [-EnableAlerts] [-EmailBusinessGroupManager]
+ [-AlertRecipients <String[]>] [-StorageAlertPercentageLevel <Int32>] [-MemoryAlertPercentageLevel <Int32>]
+ [-CPUAlertPercentageLevel <Int32>] [-MachineAlertPercentageLevel <Int32>] [-AlertReminderFrequency <Int32>]
+ [-WhatIf] [-Confirm]
+```
 
 ## DESCRIPTION
-
 Set a vRA reservation
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vRAReservation -Name Reservation01 | Set-vRAReservation -Name Reservation01-Updated
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Set-vRAReservation -Id 75ae3400-beb5-4b0b-895a-0484413c93b1 -ReservationPolicy "ReservationPolicy01"
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 The Id of the reservation
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByPropertyName)
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### Name
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
 
+### -Name
 The name of the reservation
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### ReservationPolicy
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -ReservationPolicy
 The reservation policy that will be associated with the reservation
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### Priority
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Priority
 The priority of the reservation
 
-* Required: false
-* Position: named
-* Default value: 0
-* Accept pipeline input: false
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases: 
 
-### Enabled
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Enabled
+{{Fill Enabled Description}}
 
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: 
 
-### Quota
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Quota
 The number of machines that can be provisioned in the reservation
 
-* Required: false
-* Position: named
-* Default value: 0
-* Accept pipeline input: false
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases: 
 
-### MemoryGB
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -MemoryGB
 The amount of memory available to this reservation
 
-* Required: false
-* Position: named
-* Default value: 0
-* Accept pipeline input: false
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases: 
 
-### ResourcePool
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -ResourcePool
 The resource pool that will be associated with this reservation
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### EnableAlerts
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -EnableAlerts
 Enable alerts
 
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: 
 
-### EmailBusinessGroupManager
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -EmailBusinessGroupManager
 Email the alerts to the business group manager
 
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: 
 
-### AlertRecipients
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -AlertRecipients
 The recipients that will recieve email alerts
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: 
 
-### StorageAlertPercentageLevel
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -StorageAlertPercentageLevel
 The threshold for storage alerts
 
-* Required: false
-* Position: named
-* Default value: 0
-* Accept pipeline input: false
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases: 
 
-### MemoryAlertPercentageLevel
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -MemoryAlertPercentageLevel
 The threshold for memory alerts
 
-* Required: false
-* Position: named
-* Default value: 0
-* Accept pipeline input: false
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases: 
 
-### CPUAlertPercentageLevel
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -CPUAlertPercentageLevel
 The threshold for cpu alerts
 
-* Required: false
-* Position: named
-* Default value: 0
-* Accept pipeline input: false
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases: 
 
-### MachineAlertPercentageLevel
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -MachineAlertPercentageLevel
 The threshold for machine alerts
 
-* Required: false
-* Position: named
-* Default value: 0
-* Accept pipeline input: false
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases: 
 
-### AlertReminderFrequency
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -AlertReminderFrequency
 Alert frequency in days
 
-* Required: false
-* Position: named
-* Default value: 0
-* Accept pipeline input: false
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases: 
 
-### WhatIf
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
 
-### Confirm
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 System.Int
 System.Management.Automation.SwitchParameter
 System.Management.Automation.PSObject
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject
+### System.Management.Automation.PSObject
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vRAReservation -Name Reservation01 | Set-vRAReservation -Name Reservation01-Updated
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Set-vRAReservation -Id 75ae3400-beb5-4b0b-895a-0484413c93b1 -ReservationPolicy "ReservationPolicy01"
-```
+## RELATED LINKS
 

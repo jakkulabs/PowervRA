@@ -1,62 +1,65 @@
 # Get-vRACatalogPrincipal
 
 ## SYNOPSIS
-    
 Finds catalog principals
 
 ## SYNTAX
- Get-vRACatalogPrincipal -Id <String[]> [<CommonParameters>]     
+
+```
+Get-vRACatalogPrincipal -Id <String[]>
+```
 
 ## DESCRIPTION
-
-Internal function to find users or groups and return them as the api type catalogPrincipal.  
+Internal function to find users or groups and return them as the api type catalogPrincipal.
+ 
 
 DOCS: catalog-service/api/docs/ns0_catalogPrincipal.html
 
-[pscustomobject] is returned with lowercase property names to commply with expected payload
+\[pscustomobject\] is returned with lowercase property names to commply with expected payload
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vRACatalogPrincipal -Id group@vsphere.local
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vRACatalogPrincipal -Id user@vsphere.local
+```
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Get-vRACatalogPrincipal -Id group@vsphere.local
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 The Id of the group
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByValue, ByPropertyName)
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: Principal
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vRACatalogPrincipal -Id group@vsphere.local
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vRACatalogPrincipal -Id user@vsphere.local
-
-
-
-
-
-
--------------------------- EXAMPLE 3 --------------------------
-
-PS C:\>Get-vRACatalogPrincipal -Id group@vsphere.local
-```
+## RELATED LINKS
 

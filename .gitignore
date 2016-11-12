@@ -1,2 +1,3 @@
 Utils/
-tests/Variables.json
+tests/*.json
+

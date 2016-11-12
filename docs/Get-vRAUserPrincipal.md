@@ -1,103 +1,122 @@
 # Get-vRAUserPrincipal
 
 ## SYNOPSIS
-    
 Finds regular users
 
 ## SYNTAX
- Get-vRAUserPrincipal [-Tenant <String>] [-LocalUsersOnly] [-Limit <String>] [<CommonParameters>]  Get-vRAUserPrincipal -Id <String[]> [-Tenant <String>] [<CommonParameters>]     
+
+### Standard (Default)
+```
+Get-vRAUserPrincipal [-Tenant <String>] [-LocalUsersOnly] [-Limit <String>]
+```
+
+### byId
+```
+Get-vRAUserPrincipal -Id <String[]> [-Tenant <String>]
+```
 
 ## DESCRIPTION
-
 Finds regular users in one of the identity providers configured for the tenant.
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vRAUserPrincipal
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vRAUserPrincipal -LocalUsersOnly
+```
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Get-vRAUserPrincipal -Id user@vsphere.local
+```
+
+### -------------------------- EXAMPLE 4 --------------------------
+```
+Get-vRAUserPrincipal -UserName user@vsphere.local
+```
+
+### -------------------------- EXAMPLE 5 --------------------------
+```
+Get-vRAUserPrincipal -PrincipalId user@vsphere.local
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 The Id of the user
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: byId
+Aliases: UserName, PrincipalId
 
-### Tenant
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Tenant
 The tenant of the user
 
-* Required: false
-* Position: named
-* Default value: $Global:vRAConnection.Tenant
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### LocalUsersOnly
+Required: False
+Position: Named
+Default value: $Global:vRAConnection.Tenant
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -LocalUsersOnly
 Only return local users
 
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: Standard
+Aliases: 
 
-### Limit
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
-The number of entries returned per page from the API. This has a default value of 100.
+### -Limit
+The number of entries returned per page from the API.
+This has a default value of 100.
 
-* Required: false
-* Position: named
-* Default value: 100
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: 100
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vRAUserPrincipal
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vRAUserPrincipal -LocalUsersOnly
-
-
-
-
-
-
--------------------------- EXAMPLE 3 --------------------------
-
-PS C:\>Get-vRAUserPrincipal -Id user@vsphere.local
-
-
-
-
-
-
--------------------------- EXAMPLE 4 --------------------------
-
-PS C:\>Get-vRAUserPrincipal -UserName user@vsphere.local
-
-
-
-
-
-
--------------------------- EXAMPLE 5 --------------------------
-
-PS C:\>Get-vRAUserPrincipal -PrincipalId user@vsphere.local
-```
+## RELATED LINKS
 

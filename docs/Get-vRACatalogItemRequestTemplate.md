@@ -1,85 +1,91 @@
 # Get-vRACatalogItemRequestTemplate
 
 ## SYNOPSIS
-    
 Get the request template of a catalog item that the user is entitled to see
 
 ## SYNTAX
- Get-vRACatalogItemRequestTemplate -Id <String> [<CommonParameters>]  Get-vRACatalogItemRequestTemplate -Name <String> [<CommonParameters>]     
+
+### ById (Default)
+```
+Get-vRACatalogItemRequestTemplate -Id <String>
+```
+
+### ByName
+```
+Get-vRACatalogItemRequestTemplate -Name <String>
+```
 
 ## DESCRIPTION
-
 Get the request template of a catalog item that the user is entitled to see and return a JSON payload to reuse in a request
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vRAConsumerCatalogItemRequestTemplate -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vRAConsumerCatalogItemRequestTemplate -Name Centos_Template
+```
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Get-vRAConsumerEntitledCatalogItem | Get-vRACatalogItemRequestTemplate
+```
+
+### -------------------------- EXAMPLE 4 --------------------------
+```
+Get-vRAConsumerEntitledCatalogItem -Name Centos_Template | Get-vRACatalogItemRequestTemplate
+```
+
+### -------------------------- EXAMPLE 5 --------------------------
+```
+Get-vRAConsumerEntitledCatalogItem -Name Centos_Template | Get-vRACatalogItemRequestTemplate | ConvertFrom-Json
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 The id of the catalog item
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByValue, ByPropertyName)
+```yaml
+Type: String
+Parameter Sets: ById
+Aliases: 
 
-### Name
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
 
+### -Name
 The name of the catalog item
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: ByName
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.String
+### System.String
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vRAConsumerCatalogItemRequestTemplate -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vRAConsumerCatalogItemRequestTemplate -Name Centos_Template
-
-
-
-
-
-
--------------------------- EXAMPLE 3 --------------------------
-
-PS C:\>Get-vRAConsumerEntitledCatalogItem | Get-vRACatalogItemRequestTemplate
-
-
-
-
-
-
--------------------------- EXAMPLE 4 --------------------------
-
-PS C:\>Get-vRAConsumerEntitledCatalogItem -Name Centos_Template | Get-vRACatalogItemRequestTemplate
-
-
-
-
-
-
--------------------------- EXAMPLE 5 --------------------------
-
-PS C:\>Get-vRAConsumerEntitledCatalogItem -Name Centos_Template | Get-vRACatalogItemRequestTemplate | ConvertFrom-Json
-```
+## RELATED LINKS
 

@@ -1,75 +1,114 @@
 # Add-vRAReservationNetwork
 
 ## SYNOPSIS
-    
 Add a network to an existing vRA reservation
 
 ## SYNTAX
- Add-vRAReservationNetwork [-Id] <String> [-NetworkPath] <String> [[-NetworkProfile] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]     
+
+```
+Add-vRAReservationNetwork [-Id] <String> [-NetworkPath] <String> [[-NetworkProfile] <String>] [-WhatIf]
+ [-Confirm]
+```
 
 ## DESCRIPTION
-
-This cmdlet enables the user to add a new network to a reservation. Only one new network path can be added at a time.
+This cmdlet enables the user to add a new network to a reservation.
+Only one new network path can be added at a time.
 If a duplicate network path is detected, the API will throw an error.
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vRAReservation -Name Reservation01 | Add-vRAReservationNetwork -NetworkPath "DMZ" -NetworkProfile "DMZ-Profile"
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 The Id of the reservation
 
-* Required: true
-* Position: 1
-* Default value: 
-* Accept pipeline input: true (ByPropertyName)
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### NetworkPath
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
 
+### -NetworkPath
 The network path
 
-* Required: true
-* Position: 2
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### NetworkProfile
+Required: True
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -NetworkProfile
 The network profile
 
-* Required: false
-* Position: 3
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### WhatIf
+Required: False
+Position: 3
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
 
-### Confirm
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String.
+### System.String.
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject
+### System.Management.Automation.PSObject
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vRAReservation -Name Reservation01 | Add-vRAReservationNetwork -NetworkPath "DMZ" -NetworkProfile "DMZ-Profile"
-```
+## RELATED LINKS
 

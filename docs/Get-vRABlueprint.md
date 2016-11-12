@@ -1,76 +1,102 @@
 # Get-vRABlueprint
 
 ## SYNOPSIS
-    
 Retrieve vRA Blueprints
 
 ## SYNTAX
- Get-vRABlueprint [-Limit <String>] [<CommonParameters>]  Get-vRABlueprint -Id <String[]> [-Limit <String>] [<CommonParameters>]  Get-vRABlueprint -Name <String[]> [-Limit <String>] [<CommonParameters>]     
+
+### Standard (Default)
+```
+Get-vRABlueprint [-Limit <String>]
+```
+
+### ById
+```
+Get-vRABlueprint -Id <String[]> [-Limit <String>]
+```
+
+### ByName
+```
+Get-vRABlueprint -Name <String[]> [-Limit <String>]
+```
 
 ## DESCRIPTION
-
 Retrieve vRA Blueprints
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vRABlueprint
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vRABlueprint -Id "309100fd-b8ce-4e8c-ac8c-a667b8ace54f"
+```
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Get-vRABlueprint -Name "Blueprint01","Blueprint02"
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 Specify the ID of a Blueprint
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: ById
+Aliases: 
 
-### Name
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Name
 Specify the Name of a Blueprint
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: ByName
+Aliases: 
 
-### Limit
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
-The number of entries returned per page from the API. This has a default value of 100.
+### -Limit
+The number of entries returned per page from the API.
+This has a default value of 100.
 
-* Required: false
-* Position: named
-* Default value: 100
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: 100
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vRABlueprint
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vRABlueprint -Id "309100fd-b8ce-4e8c-ac8c-a667b8ace54f"
-
-
-
-
-
-
--------------------------- EXAMPLE 3 --------------------------
-
-PS C:\>Get-vRABlueprint -Name "Blueprint01","Blueprint02"
-```
+## RELATED LINKS
 

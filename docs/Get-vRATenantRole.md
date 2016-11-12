@@ -1,58 +1,81 @@
 # Get-vRATenantRole
 
 ## SYNOPSIS
-    
 Retrieve vRA Tenant Role
 
 ## SYNTAX
- Get-vRATenantRole [-TenantId] <String> [-PrincipalId] <String[]> [[-Limit] <String>] [<CommonParameters>]     
+
+```
+Get-vRATenantRole [-TenantId] <String> [-PrincipalId] <String[]> [[-Limit] <String>]
+```
 
 ## DESCRIPTION
-
 Retrieve vRA Tenant Role
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vRATenantRole -TenantId Tenant01 -PrincipalId Tenantadmin@vrademo.local
+```
 
 ## PARAMETERS
 
-
-### TenantId
-
+### -TenantId
 Specify the Tenant Id
 
-* Required: true
-* Position: 1
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### PrincipalId
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -PrincipalId
 Specify the Principal Id
 
-* Required: true
-* Position: 2
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: 
 
-### Limit
+Required: True
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
-The number of entries returned per page from the API. This has a default value of 100.
+### -Limit
+The number of entries returned per page from the API.
+This has a default value of 100.
 
-* Required: false
-* Position: 3
-* Default value: 100
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: 3
+Default value: 100
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vRATenantRole -TenantId Tenant01 -PrincipalId Tenantadmin@vrademo.local
-```
+## RELATED LINKS
 
