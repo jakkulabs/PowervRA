@@ -181,7 +181,7 @@ function Set-vRARoutedNetworkProfile {
                 $URI = "/iaas-proxy-provider/api/network/profiles/$($Id)"
                   
                 # --- Run vRA REST Request
-                $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body $NetworkProfileTemplate -Verbose:$VerbosePreference
+                Invoke-vRARestMethod -Method PUT -URI $URI -Body $NetworkProfileTemplate -Verbose:$VerbosePreference | Out-Null
 
                 # --- Output the Successful Result
                 Get-vRARoutedlNetworkProfile -Id $Id -Verbose:$VerbosePreference

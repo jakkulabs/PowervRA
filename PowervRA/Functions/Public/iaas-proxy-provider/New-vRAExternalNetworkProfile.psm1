@@ -158,10 +158,10 @@ function New-vRAExternalNetworkProfile {
                 $URI = "/iaas-proxy-provider/api/network/profiles"
                   
                 # --- Run vRA REST Request
-                $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Template -Verbose:$VerbosePreference
+                Invoke-vRARestMethod -Method POST -URI $URI -Body $Template -Verbose:$VerbosePreference | Out-Null
 
                 # --- Output the Successful Result
-                Get-vRAExternalNetworkProfile -Name $Name
+                Get-vRAExternalNetworkProfile -Name $Name -Verbose:$VerbosePreference
 
             }
 
