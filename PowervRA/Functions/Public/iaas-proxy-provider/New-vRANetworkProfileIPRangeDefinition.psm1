@@ -28,7 +28,7 @@
     New-vRANetworkProfileIPRangeDefinition -Name "External-Range-01" -Description "Example" -StartIPv4Address "10.20.1.2" -EndIPv4Address "10.20.1.5"
 
 #>
-[CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
@@ -50,6 +50,8 @@
 
     )
 
+    if ($PSCmdlet.ShouldProcess($Name)){
+
         # --- Define ip address range
         $IPAddressRange = [PSCustomObject] @{
 
@@ -66,5 +68,7 @@
 
         # --- Return the new ip address range
         $IPAddressRange
+        
+    }
 
 }
