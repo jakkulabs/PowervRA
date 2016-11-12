@@ -45,7 +45,7 @@ function Get-vRAResourceActionRequestTemplate {
     
     Begin {
 
-        xRequires -Version 7
+        xRequires -Version 7.0
 
     }
  
