@@ -6,22 +6,11 @@
 Param (
 
     [Parameter(Mandatory=$false)]
-    [String]$Task = 'Build',
-
-    [Parameter(Mandatory=$false, ParameterSetName="BumptVersion")]
-    [ValidateNotNullOrEmpty]
-    [Switch]$BumpVersion, 
-
-    [Parameter(Mandatory=$false, ParameterSetName="BumptVersion")]
-    [ValidateSet('Major','Minor','Patch')]
-    [String]$BuildVersion = 'Patch'
+    [String]$Task = 'Build'
 
 )
 
-# --- Import local depenencies
-Import-Module -Name "$($PSScriptRoot)\BuildHelpers\Update-ModuleManifestVersion.psm1"
-
 # --- Start Build
-Invoke-psake -buildFile "$($PSScriptRoot)\build.psake.ps1" -taskList $Task -parameters $Parameters -nologo -Verbose:$VerbosePreference
+Invoke-psake -buildFile "$($PSScriptRoot)\build.psake.ps1" -taskList $Task -nologo -Verbose:$VerbosePreference
 
 exit ( [int]( -not $psake.build_success ) )
