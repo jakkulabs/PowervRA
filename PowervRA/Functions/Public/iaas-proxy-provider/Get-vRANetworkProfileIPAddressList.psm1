@@ -26,7 +26,7 @@
     Get-vRAExternalNetworkProfile -Name EXT-01 | Get-vRANetworkProfileIPAddressList
 
     .EXAMPLE
-        Get-vRAExternalNetworkProfile -Name EXT-01 | Get-vRANetworkProfileIPAddressList -Limit 10 -Page 1
+     Get-vRAExternalNetworkProfile -Name EXT-01 | Get-vRANetworkProfileIPAddressList -Limit 10 -Page 1
 
 #>
 [CmdletBinding()][OutputType('System.Management.Automation.PSObject')]
