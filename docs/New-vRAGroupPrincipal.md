@@ -1,93 +1,40 @@
+---
+external help file: New-vRAGroupPrincipal-help.xml
+online version: 
+schema: 2.0.0
+---
+
 # New-vRAGroupPrincipal
 
 ## SYNOPSIS
-    
 Create a vRA custom group
 
 ## SYNTAX
- New-vRAGroupPrincipal [-Tenant <String>] -Name <String> [-Description <String>] [-WhatIf] [-Confirm] [<CommonParameters>]  New-vRAGroupPrincipal -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
-## DESCRIPTION
-
-Create a vRA Principal (user)
-
-## PARAMETERS
-
-
-### Tenant
-
-The tenant of the group
-
-* Required: false
-* Position: named
-* Default value: $Global:vRAConnection.Tenant
-* Accept pipeline input: false
-
-### Name
-
-Group name
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Description
-
-A description for the group
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+### Standard (Default)
+```
+New-vRAGroupPrincipal [-Tenant <String>] -Name <String> [-Description <String>] [-WhatIf] [-Confirm]
+```
 
 ### JSON
+```
+New-vRAGroupPrincipal -JSON <String> [-WhatIf] [-Confirm]
+```
 
-Body text to send in JSON format
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByValue)
-
-### WhatIf
-
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Confirm
-
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-## INPUTS
-
-System.String.
-
-## OUTPUTS
-
-System.Management.Automation.PSObject
+## DESCRIPTION
+Create a vRA Principal (user)
 
 ## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
 ```
--------------------------- EXAMPLE 1 --------------------------
+New-vRAGroupPrincipal -Name TestGroup01 -Description "Test Group 01"
+```
 
-PS C:\>New-vRAGroupPrincipal -Name TestGroup01 -Description "Test Group 01"
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>$JSON = @"
+### -------------------------- EXAMPLE 2 --------------------------
+```
+$JSON = @"
+```
 
 {
         "@type": "Group",
@@ -102,5 +49,109 @@ PS C:\>$JSON = @"
         }
     }
 "@
+
+## PARAMETERS
+
+### -Tenant
+The tenant of the group
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: $Global:vRAConnection.Tenant
+Accept pipeline input: False
+Accept wildcard characters: False
 ```
+
+### -Name
+Group name
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Description
+A description for the group
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -JSON
+Body text to send in JSON format
+
+```yaml
+Type: String
+Parameter Sets: JSON
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+## INPUTS
+
+### System.String.
+
+## OUTPUTS
+
+### System.Management.Automation.PSObject
+
+## NOTES
+
+## RELATED LINKS
 

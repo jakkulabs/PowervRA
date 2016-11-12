@@ -1,24 +1,39 @@
+---
+external help file: Get-vRAVersion-help.xml
+online version: 
+schema: 2.0.0
+---
+
 # Get-vRAVersion
 
 ## SYNOPSIS
-    
 Retrieve vRA version information
 
 ## SYNTAX
- Get-vRAVersion [<CommonParameters>]     
+
+```
+Get-vRAVersion
+```
 
 ## DESCRIPTION
-
 Retrieve vRA version information
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vRAVersion
+```
+
+## PARAMETERS
+
+## INPUTS
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vRAVersion
-```
+## RELATED LINKS
 

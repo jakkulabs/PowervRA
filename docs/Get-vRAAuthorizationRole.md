@@ -1,58 +1,77 @@
+---
+external help file: Get-vRAAuthorizationRole-help.xml
+online version: 
+schema: 2.0.0
+---
+
 # Get-vRAAuthorizationRole
 
 ## SYNOPSIS
-    
 Retrieve vRA Authorization Role
 
 ## SYNTAX
- Get-vRAAuthorizationRole [[-Id] <String[]>] [[-Limit] <String>] [<CommonParameters>]     
+
+```
+Get-vRAAuthorizationRole [[-Id] <String[]>] [[-Limit] <String>]
+```
 
 ## DESCRIPTION
-
 Retrieve vRA Authorization Role
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vRAAuthorizationRole
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vRAAuthorizationRole -Id CSP_TENANT_ADMIN
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 Specify the Id of a Role
 
-* Required: false
-* Position: 1
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: 
 
-### Limit
+Required: False
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
-The number of entries returned per page from the API. This has a default value of 100.
+### -Limit
+The number of entries returned per page from the API.
+This has a default value of 100.
 
-* Required: false
-* Position: 2
-* Default value: 100
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: 2
+Default value: 100
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vRAAuthorizationRole
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vRAAuthorizationRole -Id CSP_TENANT_ADMIN
-```
+## RELATED LINKS
 

@@ -1,236 +1,44 @@
+---
+external help file: Set-vRATenantDirectory-help.xml
+online version: 
+schema: 2.0.0
+---
+
 # Set-vRATenantDirectory
 
 ## SYNOPSIS
-    
 Update a vRA Tenant Directory
 
 ## SYNTAX
- Set-vRATenantDirectory -ID <String> [-Name <String>] [-Description <String>] [-Alias <String>] [-Type <String>] -Domain <String> [-UserNameDN <String>] [-Password <String>] [-URL <String>] [-GroupBaseSearchDN <String>]  [-UserBaseSearchDN <String>] [-Subdomains <String>] [-GroupBaseSearchDNs <String[]>] [-UserBaseSearchDNs <String[]>] [-DomainAdminUsername <String>] [-DomainAdminPassword <String>] [-Certificate <String>] [-TrustAll]  [-UseGlobalCatalog] [-WhatIf] [-Confirm] [<CommonParameters>]  Set-vRATenantDirectory -ID <String> -Domain <String> -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
-## DESCRIPTION
-
-Update a vRA Tenant Directory
-
-## PARAMETERS
-
-
-### ID
-
-Tenant ID
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Name
-
-Tenant Directory Name
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Description
-
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Alias
-
-Tenant Directory Alias
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Type
-
-Tenant Directory Type
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Domain
-
-Tenant Directory Domain
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### UserNameDN
-
-DN of the Username to authenticate the Tenant Directory with
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Password
-
-Password of the Username to authenticate the Tenant Directory with
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### URL
-
-Tenant Directory URL, e.g. ldap://dc01.vrademo.local:389
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### GroupBaseSearchDN
-
-Tenant Directory GroupBaseSearchDN
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### UserBaseSearchDN
-
-Tenant Directory UserBaseSearchDN
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Subdomains
-
-Tenant Directory Subdomains
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### GroupBaseSearchDNs
-
-Tenant Directory GroupBaseSearchDNs
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### UserBaseSearchDNs
-
-Tenant Directory UserBaseSearchDNs
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### DomainAdminUsername
-
-Tenant Directory DomainAdminUserName
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### DomainAdminPassword
-
-Tenant Directory DomainAdminPassword
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Certificate
-
-Tenant Directory Certificate
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### TrustAll
-
-Tenant Directory TrustAll
-
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
-
-### UseGlobalCatalog
-
-Tenant Directory UseGlobalCatalog
-
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
+### Standard (Default)
+```
+Set-vRATenantDirectory -ID <String> [-Name <String>] [-Description <String>] [-Alias <String>] [-Type <String>]
+ -Domain <String> [-UserNameDN <String>] [-Password <String>] [-URL <String>] [-GroupBaseSearchDN <String>]
+ [-UserBaseSearchDN <String>] [-Subdomains <String>] [-GroupBaseSearchDNs <String[]>]
+ [-UserBaseSearchDNs <String[]>] [-DomainAdminUsername <String>] [-DomainAdminPassword <String>]
+ [-Certificate <String>] [-TrustAll] [-UseGlobalCatalog] [-WhatIf] [-Confirm]
+```
 
 ### JSON
+```
+Set-vRATenantDirectory -ID <String> -Domain <String> -JSON <String> [-WhatIf] [-Confirm]
+```
 
-Body text to send in JSON format
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByValue)
-
-### WhatIf
-
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Confirm
-
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-## INPUTS
-
-System.String.
-
-## OUTPUTS
-
-System.Management.Automation.PSObject
+## DESCRIPTION
+Update a vRA Tenant Directory
 
 ## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
 ```
--------------------------- EXAMPLE 1 --------------------------
+Set-vRATenantDirectory -ID Tenant01 -Domain vrademo.local -GroupBaseSearchDNs "OU=Groups,OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -userBaseSearchDNs "OU=Users,OU=Tenant01,OU=Tenants,DC=vrademo,DC=local"
+```
 
-PS C:\>Set-vRATenantDirectory -ID Tenant01 -Domain vrademo.local -GroupBaseSearchDNs "OU=Groups,OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -userBaseSearchDNs "OU=Users,OU=Tenant01,OU=Tenants,DC=vrademo,DC=local"
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>$JSON = @"
+### -------------------------- EXAMPLE 2 --------------------------
+```
+$JSON = @"
+```
 
 {
   "name" : "Tenant01",
@@ -245,14 +53,359 @@ PS C:\>$JSON = @"
   "domain" : "vrademo.local",
   "domainAdminUsername" : "",
   "domainAdminPassword" : "",
-  "subdomains" : [ "" ],
-  "groupBaseSearchDns" : [ "OU=Groups,OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" ],
-  "userBaseSearchDns" : [ "OU=Users,OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" ],
+  "subdomains" : \[ "" \],
+  "groupBaseSearchDns" : \[ "OU=Groups,OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" \],
+  "userBaseSearchDns" : \[ "OU=Users,OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" \],
   "certificate" : "",
   "trustAll" : true,
   "useGlobalCatalog" : false
 }
 "@
 $JSON | Set-vRATenantDirectory -ID Tenant01 -Domain vrademo.local
+
+## PARAMETERS
+
+### -ID
+Tenant ID
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
 ```
+
+### -Name
+Tenant Directory Name
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Description
+{{Fill Description Description}}
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Alias
+Tenant Directory Alias
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Type
+Tenant Directory Type
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Domain
+Tenant Directory Domain
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UserNameDN
+DN of the Username to authenticate the Tenant Directory with
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Password
+Password of the Username to authenticate the Tenant Directory with
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -URL
+Tenant Directory URL, e.g.
+ldap://dc01.vrademo.local:389
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -GroupBaseSearchDN
+Tenant Directory GroupBaseSearchDN
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UserBaseSearchDN
+Tenant Directory UserBaseSearchDN
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Subdomains
+Tenant Directory Subdomains
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -GroupBaseSearchDNs
+Tenant Directory GroupBaseSearchDNs
+
+```yaml
+Type: String[]
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UserBaseSearchDNs
+Tenant Directory UserBaseSearchDNs
+
+```yaml
+Type: String[]
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DomainAdminUsername
+Tenant Directory DomainAdminUserName
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DomainAdminPassword
+Tenant Directory DomainAdminPassword
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Certificate
+Tenant Directory Certificate
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TrustAll
+Tenant Directory TrustAll
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UseGlobalCatalog
+Tenant Directory UseGlobalCatalog
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -JSON
+Body text to send in JSON format
+
+```yaml
+Type: String
+Parameter Sets: JSON
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+## INPUTS
+
+### System.String.
+
+## OUTPUTS
+
+### System.Management.Automation.PSObject
+
+## NOTES
+
+## RELATED LINKS
 

@@ -1,77 +1,110 @@
+---
+external help file: DEPRECATED-Get-vRAConsumerResourceType-help.xml
+online version: 
+schema: 2.0.0
+---
+
 # Get-vRAConsumerResourceType
 
 ## SYNOPSIS
-    
 Get a consumer resource type
 
 ## SYNTAX
- Get-vRAConsumerResourceType [-Limit <String>] [<CommonParameters>]  Get-vRAConsumerResourceType [-Id <String[]>] [-Limit <String>] [<CommonParameters>]  Get-vRAConsumerResourceType [-Name <String[]>] [-Limit <String>] [<CommonParameters>]     
+
+### Standard (Default)
+```
+Get-vRAConsumerResourceType [-Limit <String>]
+```
+
+### ById
+```
+Get-vRAConsumerResourceType [-Id <String[]>] [-Limit <String>]
+```
+
+### ByName
+```
+Get-vRAConsumerResourceType [-Name <String[]>] [-Limit <String>]
+```
 
 ## DESCRIPTION
-
-A Resource type is a type assigned to resources. The types are defined by the provider types. 
+A Resource type is a type assigned to resources.
+The types are defined by the provider types. 
 It allows similar resources to be grouped together.
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vRAConsumerResourceType
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vRAConsumerResourceType -Id "Infrastructure.Machine"
+```
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Get-vRAConsumerResourceType -Name "Machine"
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 The id of the resource type
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: ById
+Aliases: 
 
-### Name
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Name
 The Name of the resource type
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: ByName
+Aliases: 
 
-### Limit
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
-The number of entries returned per page from the API. This has a default value of 100.
+### -Limit
+The number of entries returned per page from the API.
+This has a default value of 100.
 
-* Required: false
-* Position: named
-* Default value: 100
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: 100
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vRAConsumerResourceType
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vRAConsumerResourceType -Id "Infrastructure.Machine"
-
-
-
-
-
-
--------------------------- EXAMPLE 3 --------------------------
-
-PS C:\>Get-vRAConsumerResourceType -Name "Machine"
-```
+## RELATED LINKS
 

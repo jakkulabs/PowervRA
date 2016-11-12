@@ -1,128 +1,48 @@
+---
+external help file: Set-vRABusinessGroup-help.xml
+online version: 
+schema: 2.0.0
+---
+
 # Set-vRABusinessGroup
 
 ## SYNOPSIS
-    
 Update a vRA Business Group
 
 ## SYNTAX
- Set-vRABusinessGroup -TenantId <String> -ID <String> [-Name <String>] [-Description <String>] [-MachinePrefixId <String>] [-SendManagerEmailsTo <String>] [-WhatIf] [-Confirm] [<CommonParameters>]  Set-vRABusinessGroup -TenantId <String> -ID <String> -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
-## DESCRIPTION
-
-Update a vRA Business Group
-
-## PARAMETERS
-
-
-### TenantId
-
-Tenant ID
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### ID
-
-Business Group ID
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Name
-
-Business Group Name
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Description
-
-Business Group Description
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### MachinePrefixId
-
-Machine Prefix Id
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### SendManagerEmailsTo
-
-Send Manager Emails To
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+### Standard (Default)
+```
+Set-vRABusinessGroup -TenantId <String> -ID <String> [-Name <String>] [-Description <String>]
+ [-MachinePrefixId <String>] [-SendManagerEmailsTo <String>] [-WhatIf] [-Confirm]
+```
 
 ### JSON
+```
+Set-vRABusinessGroup -TenantId <String> -ID <String> -JSON <String> [-WhatIf] [-Confirm]
+```
 
-Body text to send in JSON format
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByValue)
-
-### WhatIf
-
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Confirm
-
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-## INPUTS
-
-System.String.
-
-## OUTPUTS
-
-System.Management.Automation.PSObject
+## DESCRIPTION
+Update a vRA Business Group
 
 ## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
 ```
--------------------------- EXAMPLE 1 --------------------------
+Set-vRABusinessGroup -TenantId Tenant01 -Id "f8e0d99e-c567-4031-99cb-d8410c841ed7" -Name BusinessGroup01 -Description "Business Group 01" -MachinePrefixId "87e99513-cbea-4589-8678-c84c5907bdf2" -SendManagerEmailsTo "busgroupmgr01@vrademo.local"
+```
 
-PS C:\>Set-vRABusinessGroup -TenantId Tenant01 -Id "f8e0d99e-c567-4031-99cb-d8410c841ed7" -Name BusinessGroup01 -Description "Business Group 01" -MachinePrefixId "87e99513-cbea-4589-8678-c84c5907bdf2" -SendManagerEmailsTo 
-"busgroupmgr01@vrademo.local"
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>$JSON = @"
+### -------------------------- EXAMPLE 2 --------------------------
+```
+$JSON = @"
+```
 
 {
     "id": "f8e0d99e-c567-4031-99cb-d8410c841ed7",
     "name": "BusinessGroup01",
     "description": "Business Group 01",
     "extensionData": {
-    "entries": [
+    "entries": \[
         {
         "key": "iaas-machine-prefix",
         "value": {
@@ -137,11 +57,160 @@ PS C:\>$JSON = @"
             "value": "busgroupmgr01@vrademo.local"
         }
         }
-    ]
+    \]
     },
     "tenant": "Tenant01"
 }
 "@
 $JSON | Set-vRABusinessGroup -ID Tenant01 -Id "f8e0d99e-c567-4031-99cb-d8410c841ed7"
+
+## PARAMETERS
+
+### -TenantId
+Tenant ID
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
 ```
+
+### -ID
+Business Group ID
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+Business Group Name
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Description
+Business Group Description
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -MachinePrefixId
+Machine Prefix Id
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SendManagerEmailsTo
+Send Manager Emails To
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -JSON
+Body text to send in JSON format
+
+```yaml
+Type: String
+Parameter Sets: JSON
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+## INPUTS
+
+### System.String.
+
+## OUTPUTS
+
+### System.Management.Automation.PSObject
+
+## NOTES
+
+## RELATED LINKS
 

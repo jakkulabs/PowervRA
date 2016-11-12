@@ -1,111 +1,58 @@
+---
+external help file: Request-vRAResourceAction-help.xml
+online version: 
+schema: 2.0.0
+---
+
 # Request-vRAResourceAction
 
 ## SYNOPSIS
-    
 Request an available resourceAction for a catalog resource
 
 ## SYNTAX
- Request-vRAResourceAction -ActionId <String> -ResourceId <String> [-WhatIf] [-Confirm] [<CommonParameters>]  Request-vRAResourceAction -ActionId <String> -ResourceName <String> [-WhatIf] [-Confirm] [<CommonParameters>]  Request-vRAResourceAction -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
+
+### ByResourceId (Default)
+```
+Request-vRAResourceAction -ActionId <String> -ResourceId <String> [-WhatIf] [-Confirm]
+```
+
+### ByResourceName
+```
+Request-vRAResourceAction -ActionId <String> -ResourceName <String> [-WhatIf] [-Confirm]
+```
+
+### JSON
+```
+Request-vRAResourceAction -JSON <String> [-WhatIf] [-Confirm]
+```
 
 ## DESCRIPTION
-
 A resourceAction is a specific type of ResourceOperation that is performed by submitting a request. 
 Unlike ResourceExtensions, resource actions can be invoked via the Service Catalog service and subject to approvals.
 
-## PARAMETERS
-
-
-### ActionId
-
-The Id for the resource action
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### ResourceId
-
-The id of the resource that the resourceAction will execute against
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByValue, ByPropertyName)
-
-### ResourceName
-
-The name of the resource that the resourceAction will execute against
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### JSON
-
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByValue)
-
-### WhatIf
-
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Confirm
-
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-## INPUTS
-
-System.String
-
-## OUTPUTS
-
-System.Management.Automation.PSObject
-
 ## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
 
-PS C:\>$ResourceActionId = (Get-vRAResource -Name vm01 | Get-vRAResourceAction "Reboot").id
+### -------------------------- EXAMPLE 1 --------------------------
+```
+$ResourceActionId = (Get-vRAResource -Name vm01 | Get-vRAResourceAction "Reboot").id
+```
 
 Request-vRAResourceAction -Id $ResourceActionId -ResourceName vm01
 
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Request-vRAResourceAction -Id 6a301f8c-d868-4908-8348-80ad0eb35b00 -ResourceId 20402e93-fb1d-4bd9-8a51-b809fbb946fd
+```
 
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Request-vRAResourceAction -Id 6a301f8c-d868-4908-8348-80ad0eb35b00 -ResourceName vm01
+```
 
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Request-vRAResourceAction -Id 6a301f8c-d868-4908-8348-80ad0eb35b00 -ResourceId 20402e93-fb1d-4bd9-8a51-b809fbb946fd
-
-
-
-
-
-
--------------------------- EXAMPLE 3 --------------------------
-
-PS C:\>Request-vRAResourceAction -Id 6a301f8c-d868-4908-8348-80ad0eb35b00 -ResourceName vm01
-
-
-
-
-
-
--------------------------- EXAMPLE 4 --------------------------
-
-PS C:\>$JSON = @"
+### -------------------------- EXAMPLE 4 --------------------------
+```
+$JSON = @"
+```
 
 {
         "type":  "com.vmware.vcac.catalog.domain.request.CatalogResourceRequest",
@@ -120,5 +67,109 @@ PS C:\>$JSON = @"
 "@
 
 $JSON | Request-vRAResourceAction
+
+## PARAMETERS
+
+### -ActionId
+The Id for the resource action
+
+```yaml
+Type: String
+Parameter Sets: ByResourceId, ByResourceName
+Aliases: Id
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
 ```
+
+### -ResourceId
+The id of the resource that the resourceAction will execute against
+
+```yaml
+Type: String
+Parameter Sets: ByResourceId
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
+
+### -ResourceName
+The name of the resource that the resourceAction will execute against
+
+```yaml
+Type: String
+Parameter Sets: ByResourceName
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -JSON
+{{Fill JSON Description}}
+
+```yaml
+Type: String
+Parameter Sets: JSON
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+## INPUTS
+
+### System.String
+
+## OUTPUTS
+
+### System.Management.Automation.PSObject
+
+## NOTES
+
+## RELATED LINKS
 

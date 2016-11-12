@@ -1,96 +1,145 @@
+---
+external help file: Connect-vRAServer-help.xml
+online version: 
+schema: 2.0.0
+---
+
 # Connect-vRAServer
 
 ## SYNOPSIS
-    
 Connect to a vRA Server
 
 ## SYNTAX
- Connect-vRAServer -Server <String> [-Tenant <String>] -Username <String> -Password <String> [-IgnoreCertRequirements] [<CommonParameters>]  Connect-vRAServer -Server <String> [-Tenant <String>] -Credential <PSCredential> [-IgnoreCertRequirements] [<CommonParameters>]     
+
+### Username (Default)
+```
+Connect-vRAServer -Server <String> [-Tenant <String>] -Username <String> -Password <String>
+ [-IgnoreCertRequirements]
+```
+
+### Credential
+```
+Connect-vRAServer -Server <String> [-Tenant <String>] -Credential <PSCredential> [-IgnoreCertRequirements]
+```
 
 ## DESCRIPTION
-
 Connect to a vRA Server and generate a connection object with Servername, Token etc
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Connect-vRAServer -Server vraappliance01.domain.local -Tenant Tenant01 -Username TenantAdmin01 -Password P@ssword -IgnoreCertRequirements
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Connect-vRAServer -Server vraappliance01.domain.local -Tenant Tenant01 -Credential (Get-Credential)
+```
 
 ## PARAMETERS
 
-
-### Server
-
+### -Server
 vRA Server to connect to
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### Tenant
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Tenant
 Tenant to connect to
 
-* Required: false
-* Position: named
-* Default value: vsphere.local
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### Username
+Required: False
+Position: Named
+Default value: Vsphere.local
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Username
 Username to connect with
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: Username
+Aliases: 
 
-### Password
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Password
 Password to connect with
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: Username
+Aliases: 
 
-### Credential
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Credential
 Credential object to connect with
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: PSCredential
+Parameter Sets: Credential
+Aliases: 
 
-### IgnoreCertRequirements
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -IgnoreCertRequirements
 Ignore requirements to use fully signed certificates
 
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 Management.Automation.PSCredential
 Switch
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Connect-vRAServer -Server vraappliance01.domain.local -Tenant Tenant01 -Username TenantAdmin01 -Password P@ssword -IgnoreCertRequirements
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Connect-vRAServer -Server vraappliance01.domain.local -Tenant Tenant01 -Credential (Get-Credential)
-```
+## RELATED LINKS
 

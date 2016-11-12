@@ -1,58 +1,76 @@
+---
+external help file: Get-vRATenantDirectoryStatus-help.xml
+online version: 
+schema: 2.0.0
+---
+
 # Get-vRATenantDirectoryStatus
 
 ## SYNOPSIS
-    
 Retrieve vRA Tenant Directory Status
 
 ## SYNTAX
- Get-vRATenantDirectoryStatus [-Id] <String> [[-Domain] <String[]>] [<CommonParameters>]     
+
+```
+Get-vRATenantDirectoryStatus [-Id] <String> [[-Domain] <String[]>]
+```
 
 ## DESCRIPTION
-
 Retrieve vRA Tenant Directory Status
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vRATenantDirectoryStatus -Id Tenant01 -Domain vrademo.local
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vRATenantDirectoryStatus -Id Tenant01 -Domain vrademo.local,test.local
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 Specify the ID of a Tenant
 
-* Required: true
-* Position: 1
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### Domain
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Domain
 Specify the Domain of a Tenant Directory
 
-* Required: false
-* Position: 2
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vRATenantDirectoryStatus -Id Tenant01 -Domain vrademo.local
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vRATenantDirectoryStatus -Id Tenant01 -Domain vrademo.local,test.local
-```
+## RELATED LINKS
 

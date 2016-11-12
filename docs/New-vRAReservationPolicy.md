@@ -1,84 +1,40 @@
+---
+external help file: New-vRAReservationPolicy-help.xml
+online version: 
+schema: 2.0.0
+---
+
 # New-vRAReservationPolicy
 
 ## SYNOPSIS
-    
 Create a vRA Reservation Policy
 
 ## SYNTAX
- New-vRAReservationPolicy -Name <String> [-Description <String>] [-WhatIf] [-Confirm] [<CommonParameters>]  New-vRAReservationPolicy -JSON <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
 
-## DESCRIPTION
-
-Create a vRA Reservation Policy
-
-## PARAMETERS
-
-
-### Name
-
-Reservation Policy Name
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Description
-
-Reservation Policy Description
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+### Standard (Default)
+```
+New-vRAReservationPolicy -Name <String> [-Description <String>] [-WhatIf] [-Confirm]
+```
 
 ### JSON
+```
+New-vRAReservationPolicy -JSON <String> [-WhatIf] [-Confirm]
+```
 
-Body text to send in JSON format
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByValue)
-
-### WhatIf
-
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Confirm
-
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-## INPUTS
-
-System.String.
-
-## OUTPUTS
-
-System.Management.Automation.PSObject
+## DESCRIPTION
+Create a vRA Reservation Policy
 
 ## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
 ```
--------------------------- EXAMPLE 1 --------------------------
+New-vRAReservationPolicy -Name ReservationPolicy01 -Description "This is Reservation Policy 01"
+```
 
-PS C:\>New-vRAReservationPolicy -Name ReservationPolicy01 -Description "This is Reservation Policy 01"
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>$JSON = @"
+### -------------------------- EXAMPLE 2 --------------------------
+```
+$JSON = @"
+```
 
 {
   "name": "ReservationPolicy01",
@@ -87,5 +43,94 @@ PS C:\>$JSON = @"
 }
 "@
 $JSON | New-vRAReservationPolicy
+
+## PARAMETERS
+
+### -Name
+Reservation Policy Name
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
 ```
+
+### -Description
+Reservation Policy Description
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -JSON
+Body text to send in JSON format
+
+```yaml
+Type: String
+Parameter Sets: JSON
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+## INPUTS
+
+### System.String.
+
+## OUTPUTS
+
+### System.Management.Automation.PSObject
+
+## NOTES
+
+## RELATED LINKS
 

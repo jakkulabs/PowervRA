@@ -1,76 +1,108 @@
+---
+external help file: Get-vRAStorageReservationPolicy-help.xml
+online version: 
+schema: 2.0.0
+---
+
 # Get-vRAStorageReservationPolicy
 
 ## SYNOPSIS
-    
 Retrieve vRA Storage Reservation Policies
 
 ## SYNTAX
- Get-vRAStorageReservationPolicy [-Limit <String>] [<CommonParameters>]  Get-vRAStorageReservationPolicy -Id <String[]> [-Limit <String>] [<CommonParameters>]  Get-vRAStorageReservationPolicy -Name <String[]> [-Limit <String>] [<CommonParameters>]     
+
+### Standard (Default)
+```
+Get-vRAStorageReservationPolicy [-Limit <String>]
+```
+
+### ById
+```
+Get-vRAStorageReservationPolicy -Id <String[]> [-Limit <String>]
+```
+
+### ByName
+```
+Get-vRAStorageReservationPolicy -Name <String[]> [-Limit <String>]
+```
 
 ## DESCRIPTION
-
 Retrieve vRA Storage Reservation Policies
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vRAStorageReservationPolicy
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vRAStorageReservationPolicy -Id "068afd10-560f-4360-aa52-786a28573fdc"
+```
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Get-vRAStorageReservationPolicy -Name "StorageReservationPolicy01","StorageReservationPolicy02"
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 Specify the ID of a Storage Reservation Policy
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: ById
+Aliases: 
 
-### Name
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Name
 Specify the Name of a Storage Reservation Policy
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: ByName
+Aliases: 
 
-### Limit
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
-The number of entries returned per page from the API. This has a default value of 100.
+### -Limit
+The number of entries returned per page from the API.
+This has a default value of 100.
 
-* Required: false
-* Position: named
-* Default value: 100
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: 100
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vRAStorageReservationPolicy
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vRAStorageReservationPolicy -Id "068afd10-560f-4360-aa52-786a28573fdc"
-
-
-
-
-
-
--------------------------- EXAMPLE 3 --------------------------
-
-PS C:\>Get-vRAStorageReservationPolicy -Name "StorageReservationPolicy01","StorageReservationPolicy02"
-```
+## RELATED LINKS
 

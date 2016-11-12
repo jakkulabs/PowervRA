@@ -1,67 +1,83 @@
+---
+external help file: Get-vRAApplianceServiceStatus-help.xml
+online version: 
+schema: 2.0.0
+---
+
 # Get-vRAApplianceServiceStatus
 
 ## SYNOPSIS
-    
 Get information about vRA services
 
 ## SYNTAX
- Get-vRAApplianceServiceStatus [[-Name] <String[]>] [[-Limit] <String>] [<CommonParameters>]     
+
+```
+Get-vRAApplianceServiceStatus [[-Name] <String[]>] [[-Limit] <String>]
+```
 
 ## DESCRIPTION
+Get information about vRA services.
+These are the same services that you will see via the service tab
 
-Get information about vRA services. These are the same services that you will see via the service tab
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vRAApplianceServiceStatus
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vRAApplianceServiceStatus -Limit 9999
+```
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Get-vRAApplianceServiceStatus -Name iaas-service
+```
 
 ## PARAMETERS
 
-
-### Name
-
+### -Name
 The name of the service to query
 
-* Required: false
-* Position: 1
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: 
 
-### Limit
+Required: False
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
-The number of entries returned per page from the API. This has a default value of 100.
+### -Limit
+The number of entries returned per page from the API.
+This has a default value of 100.
 
-* Required: false
-* Position: 2
-* Default value: 100
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: 2
+Default value: 100
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject
+### System.Management.Automation.PSObject
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vRAApplianceServiceStatus
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vRAApplianceServiceStatus -Limit 9999
-
-
-
-
-
-
--------------------------- EXAMPLE 3 --------------------------
-
-PS C:\>Get-vRAApplianceServiceStatus -Name iaas-service
-```
+## RELATED LINKS
 

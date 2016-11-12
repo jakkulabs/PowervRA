@@ -1,86 +1,115 @@
+---
+external help file: DEPRECATED-Get-vRAConsumerCatalogItem-help.xml
+online version: 
+schema: 2.0.0
+---
+
 # Get-vRAConsumerCatalogItem
 
 ## SYNOPSIS
-    
 Get a consumer catalog item that the user is allowed to review.
 
 ## SYNTAX
- Get-vRAConsumerCatalogItem [-Limit <String>] [<CommonParameters>]  Get-vRAConsumerCatalogItem -Id <String[]> [-Limit <String>] [<CommonParameters>]  Get-vRAConsumerCatalogItem -Name <String[]> [-Limit <String>] [<CommonParameters>]     
+
+### Standard (Default)
+```
+Get-vRAConsumerCatalogItem [-Limit <String>]
+```
+
+### ById
+```
+Get-vRAConsumerCatalogItem -Id <String[]> [-Limit <String>]
+```
+
+### ByName
+```
+Get-vRAConsumerCatalogItem -Name <String[]> [-Limit <String>]
+```
 
 ## DESCRIPTION
-
-Consumer REST API for Catalog Items. This API does not take entitlements into account but only global user permissions.
+Consumer REST API for Catalog Items.
+This API does not take entitlements into account but only global user permissions.
 However, if a request is submitted for a catalogitem without the appropriate entitlement it will be rejected.
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vRAConsumerCatalogItem
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vRAConsumerCatalogItem -Limit 9999
+```
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Get-vRAConsumerCatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e
+```
+
+### -------------------------- EXAMPLE 4 --------------------------
+```
+Get-vRAConsumerCatalogItem -Name Centos_Template
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 The id of the catalog item
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: ById
+Aliases: 
 
-### Name
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Name
 The name of the catalog item
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: ByName
+Aliases: 
 
-### Limit
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
-The number of entries returned per page from the API. This has a default value of 100.
+### -Limit
+The number of entries returned per page from the API.
+This has a default value of 100.
 
-* Required: false
-* Position: named
-* Default value: 100
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: 100
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject
+### System.Management.Automation.PSObject
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vRAConsumerCatalogItem
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vRAConsumerCatalogItem -Limit 9999
-
-
-
-
-
-
--------------------------- EXAMPLE 3 --------------------------
-
-PS C:\>Get-vRAConsumerCatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e
-
-
-
-
-
-
--------------------------- EXAMPLE 4 --------------------------
-
-PS C:\>Get-vRAConsumerCatalogItem -Name Centos_Template
-```
+## RELATED LINKS
 

@@ -1,76 +1,107 @@
+---
+external help file: Get-vRAReservationComputeResource-help.xml
+online version: 
+schema: 2.0.0
+---
+
 # Get-vRAReservationComputeResource
 
 ## SYNOPSIS
-    
 Get a compute resource for a reservation type
 
 ## SYNTAX
- Get-vRAReservationComputeResource -Type <String> [<CommonParameters>]  Get-vRAReservationComputeResource -Type <String> -Id <String[]> [<CommonParameters>]  Get-vRAReservationComputeResource -Type <String> -Name <String[]> [<CommonParameters>]     
+
+### Standard (Default)
+```
+Get-vRAReservationComputeResource -Type <String>
+```
+
+### ById
+```
+Get-vRAReservationComputeResource -Type <String> -Id <String[]>
+```
+
+### ByName
+```
+Get-vRAReservationComputeResource -Type <String> -Name <String[]>
+```
 
 ## DESCRIPTION
-
 Get a compute resource for a reservation type
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vRAReservationComputeResource -Type vSphere -Id 75ae3400-beb5-4b0b-895a-0484413c93b1
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vRAReservationComputeResource -Type vSphere -Name "Cluster01"
+```
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Get-vRAReservationComputeResource -Type vSphere
+```
 
 ## PARAMETERS
 
-
-### Type
-
+### -Type
 The resource type
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### Id
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Id
 The id of the compute resource
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: ById
+Aliases: 
 
-### Name
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Name
 The name of the compute resource
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: ByName
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject
+### System.Management.Automation.PSObject
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vRAReservationComputeResource -Type vSphere -Id 75ae3400-beb5-4b0b-895a-0484413c93b1
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vRAReservationComputeResource -Type vSphere -Name "Cluster01"
-
-
-
-
-
-
--------------------------- EXAMPLE 3 --------------------------
-
-PS C:\>Get-vRAReservationComputeResource -Type vSphere
-```
+## RELATED LINKS
 

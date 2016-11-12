@@ -1,66 +1,97 @@
+---
+external help file: Get-vRAReservationComputeResourceResourcePool-help.xml
+online version: 
+schema: 2.0.0
+---
+
 # Get-vRAReservationComputeResourceResourcePool
 
 ## SYNOPSIS
-    
 Get available resource pools for a compute resource
 
 ## SYNTAX
- Get-vRAReservationComputeResourceResourcePool -Type <String> -ComputeResourceId <String> [<CommonParameters>]  Get-vRAReservationComputeResourceResourcePool -Type <String> -ComputeResourceId <String> -Name <String[]> [<CommonParameters>]     
+
+### Standard (Default)
+```
+Get-vRAReservationComputeResourceResourcePool -Type <String> -ComputeResourceId <String>
+```
+
+### ByName
+```
+Get-vRAReservationComputeResourceResourcePool -Type <String> -ComputeResourceId <String> -Name <String[]>
+```
 
 ## DESCRIPTION
-
 Get available resource pools for a compute resource
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vRAReservationComputeResourceResourcePool -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d -Name ResourcePool1
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vRAReservationComputeResourceResourcePool -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d
+```
 
 ## PARAMETERS
 
-
-### Type
-
+### -Type
 The reservation type
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### ComputeResourceId
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -ComputeResourceId
+{{Fill ComputeResourceId Description}}
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### Name
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Name
 The name of the resource pool
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: ByName
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject
+### System.Management.Automation.PSObject
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vRAReservationComputeResourceResourcePool -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d -Name ResourcePool1
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vRAReservationComputeResourceResourcePool -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d
-```
+## RELATED LINKS
 

@@ -1,249 +1,40 @@
+---
+external help file: New-vRAReservation-help.xml
+online version: 
+schema: 2.0.0
+---
+
 # New-vRAReservation
 
 ## SYNOPSIS
-    
 Create a new reservation
 
 ## SYNTAX
- New-vRAReservation -Type <String> -Name <String> [-Tenant <String>] -BusinessGroup <String> [-ReservationPolicy <String>] [-Priority <Int32>] -ComputeResourceId <String> [-Quota <Int32>] -MemoryGB <Int32> -Storage <PSObject[]>  [-Network <PSObject[]>] [-ResourcePool <String>] [-EnableAlerts] [-EmailBusinessGroupManager] [-AlertRecipients <String[]>] [-StorageAlertPercentageLevel <Int32>] [-MemoryAlertPercentageLevel <Int32>] [-CPUAlertPercentageLevel  <Int32>] [-MachineAlertPercentageLevel <Int32>] [-AlertReminderFrequency <Int32>] [-WhatIf] [-Confirm] [<CommonParameters>]  New-vRAReservation -JSON <String> [-NewName <String>] [-WhatIf] [-Confirm] [<CommonParameters>]     
 
-## DESCRIPTION
-
-Create a new reservation
-
-## PARAMETERS
-
-
-### Type
-
-The reservation type
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Name
-
-The name of the reservation
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Tenant
-
-The tenant that will own the reservation
-
-* Required: false
-* Position: named
-* Default value: $Global:vRAConnection.Tenant
-* Accept pipeline input: false
-
-### BusinessGroup
-
-The business group that will be associated with the reservation
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### ReservationPolicy
-
-The reservation policy that will be associated with the reservation
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Priority
-
-The priority of the reservation
-
-* Required: false
-* Position: named
-* Default value: 0
-* Accept pipeline input: false
-
-### ComputeResourceId
-
-The compute resource that will be associated with the reservation
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Quota
-
-The number of machines that can be provisioned in the reservation
-
-* Required: false
-* Position: named
-* Default value: 0
-* Accept pipeline input: false
-
-### MemoryGB
-
-The amount of memory available to this reservation
-
-* Required: true
-* Position: named
-* Default value: 0
-* Accept pipeline input: false
-
-### Storage
-
-The storage that will be associated with the reservation
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Network
-
-The network that will be associated with this reservation
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### ResourcePool
-
-The resource pool that will be associated with this reservation
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### EnableAlerts
-
-Enable alerts
-
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
-
-### EmailBusinessGroupManager
-
-Email the alerts to the business group manager
-
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
-
-### AlertRecipients
-
-The recipients that will recieve email alerts
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### StorageAlertPercentageLevel
-
-The threshold for storage alerts
-
-* Required: false
-* Position: named
-* Default value: 80
-* Accept pipeline input: false
-
-### MemoryAlertPercentageLevel
-
-The threshold for memory alerts
-
-* Required: false
-* Position: named
-* Default value: 80
-* Accept pipeline input: false
-
-### CPUAlertPercentageLevel
-
-The threshold for cpu alerts
-
-* Required: false
-* Position: named
-* Default value: 80
-* Accept pipeline input: false
-
-### MachineAlertPercentageLevel
-
-The threshold for machine alerts
-
-* Required: false
-* Position: named
-* Default value: 80
-* Accept pipeline input: false
-
-### AlertReminderFrequency
-
-Alert frequency in days
-
-* Required: false
-* Position: named
-* Default value: 20
-* Accept pipeline input: false
+### Standard (Default)
+```
+New-vRAReservation -Type <String> -Name <String> [-Tenant <String>] -BusinessGroup <String>
+ [-ReservationPolicy <String>] [-Priority <Int32>] -ComputeResourceId <String> [-Quota <Int32>]
+ -MemoryGB <Int32> -Storage <PSObject[]> [-Network <PSObject[]>] [-ResourcePool <String>] [-EnableAlerts]
+ [-EmailBusinessGroupManager] [-AlertRecipients <String[]>] [-StorageAlertPercentageLevel <Int32>]
+ [-MemoryAlertPercentageLevel <Int32>] [-CPUAlertPercentageLevel <Int32>]
+ [-MachineAlertPercentageLevel <Int32>] [-AlertReminderFrequency <Int32>] [-WhatIf] [-Confirm]
+```
 
 ### JSON
+```
+New-vRAReservation -JSON <String> [-NewName <String>] [-WhatIf] [-Confirm]
+```
 
-Body text to send in JSON format
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByValue)
-
-### NewName
-
-If passing a JSON payload NewName can be used to set the reservation name
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### WhatIf
-
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Confirm
-
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-## INPUTS
-
-System.String
-System.Int
-System.Management.Automation.SwitchParameter
-System.Management.Automation.PSObject
-
-## OUTPUTS
-
-System.Management.Automation.PSObject
+## DESCRIPTION
+Create a new reservation
 
 ## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
 
-PS C:\># --- Get the compute resource id
+### -------------------------- EXAMPLE 1 --------------------------
+```
+# --- Get the compute resource id
+```
 
 $ComputeResource = Get-vRAReservationComputeResource -Type vSphere -Name "Cluster01 (vCenter)"
 
@@ -263,7 +54,7 @@ $Param = @{
     Type = "vSphere"
     Name = "Reservation01"
     Tenant = "Tenant01"
-    BusinessGroup = "Default Business Group[Tenant01]"
+    BusinessGroup = "Default Business Group\[Tenant01\]"
     ReservationPolicy = "ReservationPolicy1"
     Priority = 0
     ComputeResourceId = $ComputeResource.Id
@@ -277,5 +68,382 @@ $Param = @{
 }
 
 New-vRAReservation @Param -Verbose
+
+## PARAMETERS
+
+### -Type
+The reservation type
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
 ```
+
+### -Name
+The name of the reservation
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Tenant
+The tenant that will own the reservation
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: $Global:vRAConnection.Tenant
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -BusinessGroup
+The business group that will be associated with the reservation
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ReservationPolicy
+The reservation policy that will be associated with the reservation
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Priority
+The priority of the reservation
+
+```yaml
+Type: Int32
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ComputeResourceId
+The compute resource that will be associated with the reservation
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Quota
+The number of machines that can be provisioned in the reservation
+
+```yaml
+Type: Int32
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -MemoryGB
+The amount of memory available to this reservation
+
+```yaml
+Type: Int32
+Parameter Sets: Standard
+Aliases: 
+
+Required: True
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Storage
+The storage that will be associated with the reservation
+
+```yaml
+Type: PSObject[]
+Parameter Sets: Standard
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Network
+The network that will be associated with this reservation
+
+```yaml
+Type: PSObject[]
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ResourcePool
+The resource pool that will be associated with this reservation
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EnableAlerts
+Enable alerts
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EmailBusinessGroupManager
+Email the alerts to the business group manager
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AlertRecipients
+The recipients that will recieve email alerts
+
+```yaml
+Type: String[]
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -StorageAlertPercentageLevel
+The threshold for storage alerts
+
+```yaml
+Type: Int32
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: 80
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -MemoryAlertPercentageLevel
+The threshold for memory alerts
+
+```yaml
+Type: Int32
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: 80
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CPUAlertPercentageLevel
+The threshold for cpu alerts
+
+```yaml
+Type: Int32
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: 80
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -MachineAlertPercentageLevel
+The threshold for machine alerts
+
+```yaml
+Type: Int32
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: 80
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AlertReminderFrequency
+Alert frequency in days
+
+```yaml
+Type: Int32
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: 20
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -JSON
+Body text to send in JSON format
+
+```yaml
+Type: String
+Parameter Sets: JSON
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -NewName
+If passing a JSON payload NewName can be used to set the reservation name
+
+```yaml
+Type: String
+Parameter Sets: JSON
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+## INPUTS
+
+### System.String
+System.Int
+System.Management.Automation.SwitchParameter
+System.Management.Automation.PSObject
+
+## OUTPUTS
+
+### System.Management.Automation.PSObject
+
+## NOTES
+
+## RELATED LINKS
 
