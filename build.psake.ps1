@@ -123,7 +123,7 @@ Task UpdateDocumentation {
     }
 
     # --- ErrorAction set to SilentlyContinue so this command will not overwrite an existing MD file.
-    New-MarkdownHelp -Module $ModuleName -Locale $DefaultLocale -OutputFolder $DocsDirectory `
+    New-MarkdownHelp -Module $ModuleName -Locale $DefaultLocale -OutputFolder $DocsDirectory -NoMetadata `
                     -ErrorAction SilentlyContinue -Verbose:$VerbosePreference | Out-Null
 
     # --- Ensure that index.md is present and up to date
