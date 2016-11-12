@@ -42,9 +42,6 @@ function New-vRARoutedNetworkProfile {
     .PARAMETER SecondaryWinsAddress
     The address of the secondary wins server
 
-    .PARAMETER IPRanges
-    An array of ip address ranges
-
     .PARAMETER RangeSubnetMask
     The subnetMask for the routed range
 
@@ -115,10 +112,6 @@ function New-vRARoutedNetworkProfile {
         [ValidateScript({$_ -match [IPAddress]$_ })]  
         [String]$SecondaryWinsAddress,
 
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullOrEmpty()]
-        [PSCustomObject[]]$IPRanges,
-
         [Parameter(Mandatory=$false)]
         [ValidateScript({$_ -match [IPAddress]$_ })] 
         [String]$RangeSubnetMask,
@@ -130,6 +123,8 @@ function New-vRARoutedNetworkProfile {
     )    
 
     begin {
+
+        xRequires -Version 7.1
     
     }
     
@@ -137,7 +132,7 @@ function New-vRARoutedNetworkProfile {
            
         try {
             
-            $ExternalNetworkProfileObject = Get-vRANetworkProfile -Name $ExternalNetworkProfile -Verbose:$VerbosePreference
+            $ExternalNetworkProfileObject = Get-vRAExternalNetworkProfile -Name $ExternalNetworkProfile -Verbose:$VerbosePreference
 
             if ($PSBoundParameters.ContainsKey("UseExternalNetworkProfileSettings")) {
 
@@ -218,21 +213,7 @@ function New-vRARoutedNetworkProfile {
                     "baseIP": "$($BaseIPAddress)"
                 }
 
-"@
-
-            if ($PSBoundParameters.ContainsKey("IPRanges")) {
-
-                $Object = $Template | ConvertFrom-Json
-
-                foreach ($IPRange in $IPRanges) {
-
-                    $Object.definedRanges += $IPRange
-
-                }
-
-                $Template = $Object | ConvertTo-Json -Depth 20 -Compress
-
-            }                
+"@                
 
             if ($PSCmdlet.ShouldProcess($Name)){
 
