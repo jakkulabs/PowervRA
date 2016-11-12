@@ -1,4 +1,4 @@
-function Set-vRAExternalNetworkProfile {
+function Set-vRARoutedNetworkProfile {
 <#
     .SYNOPSIS
     Set a vRA network profile
@@ -89,6 +89,8 @@ function Set-vRAExternalNetworkProfile {
     )    
 
     begin {
+
+        xRequires -Version 7.1
     
     }
     
