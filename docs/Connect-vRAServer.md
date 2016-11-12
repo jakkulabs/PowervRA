@@ -1,9 +1,3 @@
----
-external help file: Connect-vRAServer-help.xml
-online version: 
-schema: 2.0.0
----
-
 # Connect-vRAServer
 
 ## SYNOPSIS

@@ -1,9 +1,3 @@
----
-external help file: DEPRECATED-Get-vRAConsumerCatalogItem-help.xml
-online version: 
-schema: 2.0.0
----
-
 # Get-vRAConsumerCatalogItem
 
 ## SYNOPSIS

@@ -1,9 +1,3 @@
----
-external help file: Remove-vRAReservation-help.xml
-online version: 
-schema: 2.0.0
----
-
 # Remove-vRAReservation
 
 ## SYNOPSIS

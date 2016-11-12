@@ -1,9 +1,3 @@
----
-external help file: Remove-vRAService-help.xml
-online version: 
-schema: 2.0.0
----
-
 # Remove-vRAService
 
 ## SYNOPSIS

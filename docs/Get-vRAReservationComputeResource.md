@@ -1,9 +1,3 @@
----
-external help file: Get-vRAReservationComputeResource-help.xml
-online version: 
-schema: 2.0.0
----
-
 # Get-vRAReservationComputeResource
 
 ## SYNOPSIS

@@ -1,9 +1,3 @@
----
-external help file: Add-vRAPrincipalToTenantRole-help.xml
-online version: 
-schema: 2.0.0
----
-
 # Add-vRAPrincipalToTenantRole
 
 ## SYNOPSIS

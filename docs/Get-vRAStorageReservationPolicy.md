@@ -1,9 +1,3 @@
----
-external help file: Get-vRAStorageReservationPolicy-help.xml
-online version: 
-schema: 2.0.0
----
-
 # Get-vRAStorageReservationPolicy
 
 ## SYNOPSIS

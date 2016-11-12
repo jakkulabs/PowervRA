@@ -1,9 +1,3 @@
----
-external help file: Get-vRAGroupPrincipal-help.xml
-online version: 
-schema: 2.0.0
----
-
 # Get-vRAGroupPrincipal
 
 ## SYNOPSIS

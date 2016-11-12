@@ -1,9 +1,3 @@
----
-external help file: Disconnect-vRAServer-help.xml
-online version: 
-schema: 2.0.0
----
-
 # Disconnect-vRAServer
 
 ## SYNOPSIS

@@ -1,9 +1,3 @@
----
-external help file: Set-vRAReservation-help.xml
-online version: 
-schema: 2.0.0
----
-
 # Set-vRAReservation
 
 ## SYNOPSIS

@@ -1,9 +1,3 @@
----
-external help file: New-vRAContentPackage-help.xml
-online version: 
-schema: 2.0.0
----
-
 # New-vRAContentPackage
 
 ## SYNOPSIS

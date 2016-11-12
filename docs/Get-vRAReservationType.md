@@ -1,9 +1,3 @@
----
-external help file: Get-vRAReservationType-help.xml
-online version: 
-schema: 2.0.0
----
-
 # Get-vRAReservationType
 
 ## SYNOPSIS

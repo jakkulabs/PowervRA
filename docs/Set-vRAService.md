@@ -1,9 +1,3 @@
----
-external help file: Set-vRAService-help.xml
-online version: 
-schema: 2.0.0
----
-
 # Set-vRAService
 
 ## SYNOPSIS

@@ -1,9 +1,3 @@
----
-external help file: Export-vRAContentPackage-help.xml
-online version: 
-schema: 2.0.0
----
-
 # Export-vRAContentPackage
 
 ## SYNOPSIS

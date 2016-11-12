@@ -1,9 +1,3 @@
----
-external help file: Remove-vRATenant-help.xml
-online version: 
-schema: 2.0.0
----
-
 # Remove-vRATenant
 
 ## SYNOPSIS

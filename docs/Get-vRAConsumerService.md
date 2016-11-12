@@ -1,9 +1,3 @@
----
-external help file: DEPRECATED-Get-vRAConsumerService-help.xml
-online version: 
-schema: 2.0.0
----
-
 # Get-vRAConsumerService
 
 ## SYNOPSIS

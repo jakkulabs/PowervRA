@@ -1,9 +1,3 @@
----
-external help file: Remove-vRATenantDirectory-help.xml
-online version: 
-schema: 2.0.0
----
-
 # Remove-vRATenantDirectory
 
 ## SYNOPSIS

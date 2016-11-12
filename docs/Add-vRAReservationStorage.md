@@ -1,9 +1,3 @@
----
-external help file: Add-vRAReservationStorage-help.xml
-online version: 
-schema: 2.0.0
----
-
 # Add-vRAReservationStorage
 
 ## SYNOPSIS

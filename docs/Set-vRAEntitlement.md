@@ -1,9 +1,3 @@
----
-external help file: Set-vRAEntitlement-help.xml
-online version: 
-schema: 2.0.0
----
-
 # Set-vRAEntitlement
 
 ## SYNOPSIS

@@ -1,9 +1,3 @@
----
-external help file: Get-vRAEntitledService-help.xml
-online version: 
-schema: 2.0.0
----
-
 # Get-vRAEntitledService
 
 ## SYNOPSIS

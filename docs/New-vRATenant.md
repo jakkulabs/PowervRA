@@ -1,9 +1,3 @@
----
-external help file: New-vRATenant-help.xml
-online version: 
-schema: 2.0.0
----
-
 # New-vRATenant
 
 ## SYNOPSIS

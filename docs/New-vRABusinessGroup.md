@@ -1,9 +1,3 @@
----
-external help file: New-vRABusinessGroup-help.xml
-online version: 
-schema: 2.0.0
----
-
 # New-vRABusinessGroup
 
 ## SYNOPSIS

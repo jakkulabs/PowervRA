@@ -1,9 +1,3 @@
----
-external help file: Request-vRAResourceAction-help.xml
-online version: 
-schema: 2.0.0
----
-
 # Request-vRAResourceAction
 
 ## SYNOPSIS
