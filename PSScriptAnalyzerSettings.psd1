@@ -1,4 +1,4 @@
 @{
-    ExcludeRules=@("PSAvoidUsingUserNameAndPassWordParams")
-    Severity='Error'
+    ExcludeRules=@("PSAvoidUsingUserNameAndPassWordParams","PSAvoidGlobalVars")
+    Severity=@("Warning","Error")
 }
