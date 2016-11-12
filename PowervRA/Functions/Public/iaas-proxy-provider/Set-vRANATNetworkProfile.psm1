@@ -131,6 +131,8 @@ function Set-vRANATNetworkProfile {
     )    
 
     begin {
+
+        xRequires -Version 7.1
     
     }
     

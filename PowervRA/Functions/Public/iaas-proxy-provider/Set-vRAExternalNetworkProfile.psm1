@@ -88,6 +88,8 @@ function Set-vRAExternalNetworkProfile {
     )    
 
     begin {
+
+        xRequires -Version 7.1
     
     }
     
