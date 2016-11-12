@@ -9,7 +9,7 @@ Task Release -depends Build, Test, BumpVersion
 Task Analyze {
 
     $Results = Invoke-ScriptAnalyzer -Path $ModuleDirectory -Recurse  -Settings $ScriptAnalyzerSettingsPath -Verbose:$VerbosePreference
-    $Results | Format-Table
+    $Results | Select RuleName, Severity, ScriptName, Line, Message | Format-List
 
     switch ($ScriptAnalysisFailBuildOnSeverityLevel) {
 
