@@ -71,6 +71,7 @@ Task UpdateDocumentation {
 
     $ModuleInfo = Import-Module $ModuleDirectory\$ModuleName.psd1 -Global -Force -PassThru
 
+    # --- Create or update existing MD documentation
     if ($ModuleInfo.ExportedCommands.Count -eq 0) {
         "No commands have been exported. Skipping $($psake.context.currentTaskName) task."
         return
@@ -90,8 +91,30 @@ Task UpdateDocumentation {
     New-MarkdownHelp -Module $ModuleName -Locale $DefaultLocale -OutputFolder $DocsDirectory `
                     -ErrorAction SilentlyContinue -Verbose:$VerbosePreference | Out-Null
 
-    # --- Update mkdocs.yml
-    Update-MKDocsYML -Module $ModuleManifest -Path "$($PSScriptRoot)\mkdocs.yml" -Verbose:$VerbosePreference
+    # --- Update mkdocs.yml with new functions
+    $Mkdocs = "$($PSScriptRoot)\mkdocs.yml"
+
+    if (!(Test-Path -Path $Mkdocs)) {
+        
+        Write-Verbose -Message "Creating MKDocs.yml"
+        
+        New-Item -Path $Mkdocs -ItemType File -Force | Out-Null           
+
+    }
+        
+    $Functions = $ModuleInfo.ExportedCommands.Keys | % {"    - $($_) : $($_).md"}
+    
+    $Template = @"
+---
+
+site_name: $($ModuleName)
+pages:
+- 'Home' : 'index.md'
+- 'Functions': 
+$($Functions -join "`r`n")
+"@
+
+    $Template | Out-File -FilePath $Mkdocs -Force
 
 }
 
@@ -128,8 +151,6 @@ Task BumpVersion {
 
 Task Test {
 
-    $ResultsFile = "$($BinDirectory)\Pester.Results-$(Get-Date -Format ddMMyyyHHMMSS).json"
-    Set-Location -Path $PSScriptRoot
     $Result = Invoke-Pester -Verbose:$VerbosePreference -PassThru
 
     if ($Result) {

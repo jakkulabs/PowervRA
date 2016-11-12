@@ -24,12 +24,10 @@ Properties {
     $TestDirectory = "$PSScriptRoot\tests"
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
-    $BinDirectory = "$($PSScriptRoot)\bin"
+    $BuildHelpersDirectory = "$($PSScriptRoot)\BuildHelpers"
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
     $DefaultLocale = "en-US"
-
-# ------------------ Script analysis properties ---------------------------
 
     # Enable/disable use of PSScriptAnalyzer to perform script analysis.
     [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
@@ -47,5 +45,13 @@ Properties {
     # Path to the PSScriptAnalyzer settings file.
     [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
     $ScriptAnalyzerSettingsPath = "$PSScriptRoot\PSScriptAnalyzerSettings.psd1"    
+
+# ------------------ Test Properties ---------------------------
+
+    # Set the location and name of the Pester results file.
+    # Remember to update .gitignore if the path changes
+    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
+    $ResultsFile = "$($PSScriptRoot)\Pester.Results-$(Get-Date -Format ddMMyyyHHMMSS).json"
+
     
 }

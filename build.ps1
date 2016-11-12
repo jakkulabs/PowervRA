@@ -1,18 +1,11 @@
 #Requires -Modules Psake, Pester, PSScriptAnalyzer, PlatyPS
 #Requires -Version 5
 
-<#
-  .SYNOPSIS
-  Wrapper for PSake build file
-  Resolve-Module borrowed from https://github.com/stefanstranger/Wunderlist/blob/master/build.ps1
-#>
-
 [Cmdletbinding()]
 
 Param (
 
     [Parameter(Mandatory=$false)]
-    [ValidateSet('Build','Release')]
     [String]$Task = 'Build',
 
     [Parameter(Mandatory=$false, ParameterSetName="BumptVersion")]
@@ -25,14 +18,8 @@ Param (
 
 )
 
-$LocalDependencies = @(
-
-    "$($PSScriptRoot)\bin\Update-MKDocsYML.psm1",
-    "$($PSScriptRoot)\bin\Update-ModuleManifestVersion.psm1"
-
-)
-
-$LocalDependencies | % {Import-Module -Name $_ -Force}
+# --- Import local depenencies
+Import-Module -Name "$($PSScriptRoot)\BuildHelpers\Update-ModuleManifestVersion.psm1"
 
 # --- Start Build
 Invoke-psake -buildFile "$($PSScriptRoot)\build.psake.ps1" -taskList $Task -parameters $Parameters -nologo -Verbose:$VerbosePreference
