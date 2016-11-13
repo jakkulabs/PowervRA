@@ -86,6 +86,11 @@
                             LastModifiedDate = $NetworkProfile.lastModifiedDate
                             IsHidden = $NetworkProfile.ishidden
                             DefinedRanges = $NetworkProfile.definedRanges
+                            DefinedAddresses = $NetworkProfile.definedAddresses
+                            ReclaimedAddresses = $NetworkProfile.reclaimedAddresses
+                            IPAMEndpointId = $NetworkProfile.IPAMEndpointId
+                            IPAMEndpointName = $NetworkProfile.IPAMEndpointName
+                            AddressSpaceExternalId = $NetworkProfile.addressspaceExternalId
                             ProfileType = $NetworkProfile.profileType
                             RangeSubnetMask = $NetworkProfile.rangeSubnetMask
                             SubnetMask = $NetworkProfile.subnetMask

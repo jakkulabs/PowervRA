@@ -44,7 +44,7 @@
 
                     $URI = "/iaas-proxy-provider/api/network/profiles/$($NetworkProfileId)"
 
-                    Invoke-vRARestMethod -Method DELETE -URI "$($URI)" -Verbose:$VerbosePreference | Out-Null
+                    Invoke-vRARestMethod -Method DELETE -URI $URI -Verbose:$VerbosePreference | Out-Null
 
                 }
 

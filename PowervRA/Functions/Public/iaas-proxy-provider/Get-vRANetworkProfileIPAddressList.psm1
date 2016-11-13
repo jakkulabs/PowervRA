@@ -60,13 +60,13 @@
 
             [PSCustomObject] @{
 
-                "Id" = $NetworkProfileIPAddress.id
-                "IPv4Address" = $NetworkProfileIPAddress.ipv4Address
-                "IPSortValue" = $NetworkProfileIPAddress.ipSortValue
-                "State" = $NetworkProfileIPAddress.state
-                "StateValue" = $NetworkProfileIPAddress.stateValue
-                "CreatedDate" = $NetworkProfileIPAddress.createdDate
-                "LastModifiedDate" = $NetworkProfileIPAddress.lastModifiedDate
+                Id = $NetworkProfileIPAddress.id
+                IPv4Address = $NetworkProfileIPAddress.ipv4Address
+                IPSortValue = $NetworkProfileIPAddress.ipSortValue
+                State = $NetworkProfileIPAddress.state
+                StateValue = $NetworkProfileIPAddress.stateValue
+                CreatedDate = $NetworkProfileIPAddress.createdDate
+                LastModifiedDate = $NetworkProfileIPAddress.lastModifiedDate
 
             }
 

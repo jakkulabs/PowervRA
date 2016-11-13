@@ -60,19 +60,19 @@
 
             [PSCustomObject] @{
 
-                "Id" = $NetworkProfileRange.id
-                "Name" = $NetworkProfileRange.name
-                "Description" = $NetworkProfileRange.description
-                "BeginIPv4Address" = $NetworkProfileRange.beginIPv4Address
-                "EndIPv4Address" = $NetworkProfileRange.endIPv4Address
-                "State" = $NetworkProfileRange.state
-                "CreatedDate" = $NetworkProfileRange.createdDate
-                "LastModifiedDate" = $NetworkProfileRange.lastModifiedDate
-                "TotalAddresses" = $NetworkProfileRange.totalAddresses
-                "AllocatedAddresses" = $NetworkProfileRange.allocatedAddresses
-                "UnallocatedAddresses" = $NetworkProfileRange.unallocatedAddresses
-                "DestroyedAddresses" = $NetworkProfileRange.destroyedAddresses
-                "ExpiredAddresses" = $NetworkProfileRange.expiredAddresses
+                Id = $NetworkProfileRange.id
+                Name = $NetworkProfileRange.name
+                Description = $NetworkProfileRange.description
+                BeginIPv4Address = $NetworkProfileRange.beginIPv4Address
+                EndIPv4Address = $NetworkProfileRange.endIPv4Address
+                State = $NetworkProfileRange.state
+                CreatedDate = $NetworkProfileRange.createdDate
+                LastModifiedDate = $NetworkProfileRange.lastModifiedDate
+                TotalAddresses = $NetworkProfileRange.totalAddresses
+                AllocatedAddresses = $NetworkProfileRange.allocatedAddresses
+                UnallocatedAddresses = $NetworkProfileRange.unallocatedAddresses
+                DestroyedAddresses = $NetworkProfileRange.destroyedAddresses
+                ExpiredAddresses = $NetworkProfileRange.expiredAddresses
 
             }
 

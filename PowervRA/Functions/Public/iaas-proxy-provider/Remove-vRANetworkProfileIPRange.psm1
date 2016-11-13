@@ -57,7 +57,7 @@
 
                 }
 
-                # --- Creae a new array
+                # --- Create a new array
                 Write-Verbose -Message "Removing IP Range $($NetworkProfileName) From Network Profile $($NetworkProfile.name)"
                 
                 $NetworkProfile.definedRanges = @($NetworkProfile.definedRanges | Where-Object {$_.name -ne $NetworkProfileName})
@@ -66,7 +66,7 @@
 
                     $URI = "/iaas-proxy-provider/api/network/profiles/$($NetworkProfileId)"
             
-                    Invoke-vRARestMethod -Method PUT -URI "$($URI)" -Body ($NetworkProfile | ConvertTo-Json -Depth 20 -Compress) -Verbose:$VerbosePreference | Out-Null
+                    Invoke-vRARestMethod -Method PUT -URI $URI -Body ($NetworkProfile | ConvertTo-Json -Depth 20 -Compress) -Verbose:$VerbosePreference | Out-Null
 
                 }
       

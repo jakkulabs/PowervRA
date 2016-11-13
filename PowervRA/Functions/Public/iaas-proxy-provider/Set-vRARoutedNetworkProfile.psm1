@@ -36,7 +36,6 @@ function Set-vRARoutedNetworkProfile {
     .INPUTS
     System.String.
 
-
     .OUTPUTS
     System.Management.Automation.PSObject
 
