@@ -52,7 +52,6 @@ Describe -Name 'Iaas-Proxy-Provider Tests' -Fixture {
 
         } 
 
-
         # --- UPDATE
         It -Name "Update named External Network Profile" -Test {
 
