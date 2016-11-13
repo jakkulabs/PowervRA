@@ -292,7 +292,7 @@ function New-vRANATNetworkProfile {
 
             # --- Output the Successful Result
             Get-vRANATNetworkProfile -Name $Name -Verbose:$VerbosePreference
-            
+
         }
 
     }
@@ -301,3 +301,5 @@ function New-vRANATNetworkProfile {
         throw
         
     }
+
+}

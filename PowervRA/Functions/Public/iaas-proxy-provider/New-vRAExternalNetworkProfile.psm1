@@ -165,5 +165,7 @@ function New-vRAExternalNetworkProfile {
     catch [Exception]{
 
         throw
-        
+
     }
+
+}
