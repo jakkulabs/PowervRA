@@ -130,13 +130,13 @@ function Set-vRANATNetworkProfile {
 
     )    
 
-    begin {
+    Begin {
 
         xRequires -Version 7.1
     
     }
     
-    process {     
+    Process {     
            
         try {
 
@@ -345,7 +345,7 @@ function Set-vRANATNetworkProfile {
 
     }
     
-    end {
+    End {
         
     }
 

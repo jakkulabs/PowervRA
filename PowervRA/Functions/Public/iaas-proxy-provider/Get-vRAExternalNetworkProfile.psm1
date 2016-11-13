@@ -35,7 +35,7 @@
     Get-vRAExternalNetworkProfile
 
 #>
-[CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(DefaultParameterSetName="ById")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
@@ -47,15 +47,17 @@
         [ValidateNotNullOrEmpty()]
         [String[]]$Name,    
         
-        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [Int]$Limit = 100,
     
-        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [Int]$Page = 1
        
     )    
+
+    xRequires -Version 7.1
 
     try {
 

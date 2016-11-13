@@ -122,120 +122,112 @@ function New-vRARoutedNetworkProfile {
 
     )    
 
-    begin {
+    xRequires -Version 7.1
 
-        xRequires -Version 7.1
-    
-    }
-    
-    process {     
-           
-        try {
+    try {
+        
+        $ExternalNetworkProfileObject = Get-vRAExternalNetworkProfile -Name $ExternalNetworkProfile -Verbose:$VerbosePreference
+
+        if ($PSBoundParameters.ContainsKey("UseExternalNetworkProfileSettings")) {
+
+            Write-Verbose -Message "Using External Network Profile Settings"
+        
+            if ($ExternalNetworkProfileObject.primaryDNSAddress) {
             
-            $ExternalNetworkProfileObject = Get-vRAExternalNetworkProfile -Name $ExternalNetworkProfile -Verbose:$VerbosePreference
+                $PrimaryDNSAddress = $ExternalNetworKProfileObject.primaryDNSAddress
 
-            if ($PSBoundParameters.ContainsKey("UseExternalNetworkProfileSettings")) {
-
-                Write-Verbose -Message "Using External Network Profile Settings"
-            
-                if ($ExternalNetworkProfileObject.primaryDNSAddress) {
-                
-                    $PrimaryDNSAddress = $ExternalNetworKProfileObject.primaryDNSAddress
-
-                    Write-Verbose -Message "Primary DNS Address: $($PrimaryDNSAddress)"
-
-                }
-
-                if ($ExternalNetworkProfileObject.secondaryDNSAddress) {
-
-                    $SecondaryDNSAddress = $ExternalNetworKProfileObject.secondaryDNSAddress
-
-                    Write-Verbose -Message "Secondary DNS Address: $($SecondaryDNSAddress)"
-
-                }
-
-                if ($ExternalNetworkProfileObject.dnsSuffix) {
-
-                    $DNSSuffix = $ExternalNetworKProfileObject.dnsSuffix
-
-                    Write-Verbose -Message "DNS Suffix: $($DNSSuffix)"
-
-                }
-
-                if ($ExternalNetworkProfileObject.dnsSearchSuffix) {
-
-                    $DNSSearchSuffix = $ExternalNetworKProfileObject.dnsSearchSuffix
-
-                    Write-Verbose -Message "DNS Search Suffix: $($DNSSearchSuffix)"
-
-                }
-
-                if ($ExternalNetworkProfileObject.primaryWinsAddress) {
-
-                    $PrimaryWinsAddress = $ExternalNetworKProfileObject.primaryWinsAddress
-
-                    Write-Verbose -Message "Primary Wins Address: $($PrimaryWinsAddress)"
-
-                }
-
-                if ($ExternalNetworkProfileObject.secondaryWinsAddress) {
-
-                    $SecondaryWinsAddress = $ExternalNetworKProfileObject.secondaryWinsAddress
-
-                    Write-Verbose -Message "Secondary Wins Address: $($SecondaryWinsAddress)"
-
-                }
+                Write-Verbose -Message "Primary DNS Address: $($PrimaryDNSAddress)"
 
             }
 
-            # --- Define the network profile template
-            $Template = @"
+            if ($ExternalNetworkProfileObject.secondaryDNSAddress) {
 
-                {
-                    "@type": "RoutedNetworkProfile",
-                    "name": "$($Name)",
-                    "description": "$($Description)",
-                    "createdDate": null,
-                    "lastModifiedDate": null,
-                    "isHidden": false,
-                    "definedRanges": [],
-                    "profileType": "ROUTED",
-                    "rangeSubnetMask": "$($RangeSubnetMask)",
-                    "subnetMask": "$($SubnetMask)",
-                    "primaryDnsAddress": "$($PrimaryDNSAddress)",
-                    "secondaryDnsAddress": "$($SecondaryDNSAddress)",
-                    "dnsSuffix": "$($DNSSuffix)",
-                    "dnsSearchSuffix": "$($DNSSearchSuffix)",
-                    "primaryWinsAddress": "$($PrimaryWinsAddress)",
-                    "secondaryWinsAddress": "$($SecondaryWinsAddress)",
-                    "externalNetworkProfileId": "$($ExternalNetworkProfileObject.id)",
-                    "externalNetworkProfileName": "$($ExternalNetworkProfileObject.name)",
-                    "baseIP": "$($BaseIPAddress)"
-                }
+                $SecondaryDNSAddress = $ExternalNetworKProfileObject.secondaryDNSAddress
+
+                Write-Verbose -Message "Secondary DNS Address: $($SecondaryDNSAddress)"
+
+            }
+
+            if ($ExternalNetworkProfileObject.dnsSuffix) {
+
+                $DNSSuffix = $ExternalNetworKProfileObject.dnsSuffix
+
+                Write-Verbose -Message "DNS Suffix: $($DNSSuffix)"
+
+            }
+
+            if ($ExternalNetworkProfileObject.dnsSearchSuffix) {
+
+                $DNSSearchSuffix = $ExternalNetworKProfileObject.dnsSearchSuffix
+
+                Write-Verbose -Message "DNS Search Suffix: $($DNSSearchSuffix)"
+
+            }
+
+            if ($ExternalNetworkProfileObject.primaryWinsAddress) {
+
+                $PrimaryWinsAddress = $ExternalNetworKProfileObject.primaryWinsAddress
+
+                Write-Verbose -Message "Primary Wins Address: $($PrimaryWinsAddress)"
+
+            }
+
+            if ($ExternalNetworkProfileObject.secondaryWinsAddress) {
+
+                $SecondaryWinsAddress = $ExternalNetworKProfileObject.secondaryWinsAddress
+
+                Write-Verbose -Message "Secondary Wins Address: $($SecondaryWinsAddress)"
+
+            }
+
+        }
+
+        # --- Define the network profile template
+        $Template = @"
+
+            {
+                "@type": "RoutedNetworkProfile",
+                "name": "$($Name)",
+                "description": "$($Description)",
+                "createdDate": null,
+                "lastModifiedDate": null,
+                "isHidden": false,
+                "definedRanges": [],
+                "reclaimedAddresses":  null,
+                "IPAMEndpointId":  null,
+                "IPAMEndpointName":  null,
+                "addressSpaceExternalId":  null,
+                "profileType": "ROUTED",
+                "rangeSubnetMask": "$($RangeSubnetMask)",
+                "subnetMask": "$($SubnetMask)",
+                "primaryDnsAddress": "$($PrimaryDNSAddress)",
+                "secondaryDnsAddress": "$($SecondaryDNSAddress)",
+                "dnsSuffix": "$($DNSSuffix)",
+                "dnsSearchSuffix": "$($DNSSearchSuffix)",
+                "primaryWinsAddress": "$($PrimaryWinsAddress)",
+                "secondaryWinsAddress": "$($SecondaryWinsAddress)",
+                "externalNetworkProfileId": "$($ExternalNetworkProfileObject.id)",
+                "externalNetworkProfileName": "$($ExternalNetworkProfileObject.name)",
+                "baseIP": "$($BaseIPAddress)"
+            }
 
 "@                
 
-            if ($PSCmdlet.ShouldProcess($Name)){
+        if ($PSCmdlet.ShouldProcess($Name)){
 
-                $URI = "/iaas-proxy-provider/api/network/profiles"
-                  
-                # --- Run vRA REST Request
-                Invoke-vRARestMethod -Method POST -URI $URI -Body $Template -Verbose:$VerbosePreference | Out-Null
+            $URI = "/iaas-proxy-provider/api/network/profiles"
+                
+            # --- Run vRA REST Request
+            Invoke-vRARestMethod -Method POST -URI $URI -Body $Template -Verbose:$VerbosePreference | Out-Null
 
-                # --- Output the Successful Result
-                Get-vRARoutedNetworkProfile -Name $Name -Verbose:$VerbosePreference
+            # --- Output the Successful Result
+            Get-vRARoutedNetworkProfile -Name $Name -Verbose:$VerbosePreference
 
-            }
-
-        }
-        catch [Exception]{
-
-            throw
         }
 
     }
-    end {
+    catch [Exception]{
+
+        throw
         
     }
-    
-}

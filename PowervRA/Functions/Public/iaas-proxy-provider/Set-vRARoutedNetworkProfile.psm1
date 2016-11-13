@@ -87,13 +87,13 @@ function Set-vRARoutedNetworkProfile {
 
     )    
 
-    begin {
+    Begin {
 
         xRequires -Version 7.1
     
     }
     
-    process {     
+    Process {     
            
         try {
 
@@ -196,7 +196,7 @@ function Set-vRARoutedNetworkProfile {
 
     }
     
-    end {
+    End {
         
     }
 

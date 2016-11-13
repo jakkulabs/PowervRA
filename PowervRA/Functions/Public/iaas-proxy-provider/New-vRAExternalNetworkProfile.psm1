@@ -103,77 +103,67 @@ function New-vRAExternalNetworkProfile {
 
     )    
 
-    begin {
+    xRequires -Version 7.1
 
-        xRequires -Version 7.1
-    
-    }
-    
-    process {     
-           
-        try {
+    try {
 
-            # --- Define the network profile template
-            $Template = @"
+        # --- Define the network profile template
+        $Template = @"
 
-                {
-                    "@type": "ExternalNetworkProfile",
-                    "name": "$($Name)",
-                    "description": "$($Description)",
-                    "createdDate": null,
-                    "lastModifiedDate": null,
-                    "isHidden": false,
-                    "definedRanges": [],
-                    "profileType": "EXTERNAL",
-                    "subnetMask": "$($SubnetMask)",
-                    "gatewayAddress": "$($GatewayAddress)",
-                    "primaryDnsAddress": "$($PrimaryDNSAddress)",
-                    "secondaryDnsAddress": "$($SecondaryDNSAddress)",
-                    "dnsSuffix": "$($DNSSuffix)",
-                    "dnsSearchSuffix": "$($DNSSearchSuffix)",
-                    "primaryWinsAddress": "$($PrimaryWinsAddress)",
-                    "secondaryWinsAddress": "$($SecondaryWinsAddress)"
-                }
+            {
+                "@type": "ExternalNetworkProfile",
+                "name": "$($Name)",
+                "description": "$($Description)",
+                "createdDate": null,
+                "lastModifiedDate": null,
+                "isHidden": false,
+                "definedRanges": [],
+                "reclaimedAddresses":  null,
+                "IPAMEndpointId":  null,
+                "IPAMEndpointName":  null,
+                "addressSpaceExternalId":  null,
+                "profileType": "EXTERNAL",
+                "subnetMask": "$($SubnetMask)",
+                "gatewayAddress": "$($GatewayAddress)",
+                "primaryDnsAddress": "$($PrimaryDNSAddress)",
+                "secondaryDnsAddress": "$($SecondaryDNSAddress)",
+                "dnsSuffix": "$($DNSSuffix)",
+                "dnsSearchSuffix": "$($DNSSearchSuffix)",
+                "primaryWinsAddress": "$($PrimaryWinsAddress)",
+                "secondaryWinsAddress": "$($SecondaryWinsAddress)"
+            }
 
 "@
 
-            if ($PSBoundParameters.ContainsKey("IPRanges")) {
+        if ($PSBoundParameters.ContainsKey("IPRanges")) {
 
-                $Object = $Template | ConvertFrom-Json
+            $Object = $Template | ConvertFrom-Json
 
-                foreach ($IPRange in $IPRanges) {
+            foreach ($IPRange in $IPRanges) {
 
-                    $Object.definedRanges += $IPRange
-
-                }
-
-                $Template = $Object | ConvertTo-Json
+                $Object.definedRanges += $IPRange
 
             }
 
-            Write-Verbose -Message $Template
-
-            if ($PSCmdlet.ShouldProcess($Name)){
-
-                $URI = "/iaas-proxy-provider/api/network/profiles"
-                  
-                # --- Run vRA REST Request
-                Invoke-vRARestMethod -Method POST -URI $URI -Body $Template -Verbose:$VerbosePreference | Out-Null
-
-                # --- Output the Successful Result
-                Get-vRAExternalNetworkProfile -Name $Name -Verbose:$VerbosePreference
-
-            }
+            $Template = $Object | ConvertTo-Json
 
         }
-        catch [Exception]{
 
-            throw
+        if ($PSCmdlet.ShouldProcess($Name)){
+
+            $URI = "/iaas-proxy-provider/api/network/profiles"
+                
+            # --- Run vRA REST Request
+            Invoke-vRARestMethod -Method POST -URI $URI -Body $Template -Verbose:$VerbosePreference | Out-Null
+
+            # --- Output the Successful Result
+            Get-vRAExternalNetworkProfile -Name $Name -Verbose:$VerbosePreference
+
         }
 
     }
-    end {
+    catch [Exception]{
+
+        throw
         
     }
-
-}

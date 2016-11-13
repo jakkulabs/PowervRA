@@ -151,159 +151,153 @@ function New-vRANATNetworkProfile {
 
     )    
 
-    begin {
-    
-        xRequires -Version 7.1
+    xRequires -Version 7.1
+               
+    try {
 
-    }
-    
-    process {     
-           
-        try {
+        $ExternalNetworkProfileObject = Get-vRAExternalNetworkProfile -Name $ExternalNetworkProfile -Verbose:$VerbosePreference
 
-            $ExternalNetworkProfileObject = Get-vRAExternalNetworkProfile -Name $ExternalNetworkProfile -Verbose:$VerbosePreference
+        if ($PSBoundParameters.ContainsKey("UseExternalNetworkProfileSettings")) {
 
-            if ($PSBoundParameters.ContainsKey("UseExternalNetworkProfileSettings")) {
-
-                Write-Verbose -Message "Using External Network Profile Settings"
+            Write-Verbose -Message "Using External Network Profile Settings"
+        
+            if ($ExternalNetworkProfileObject.primaryDNSAddress) {
             
-                if ($ExternalNetworkProfileObject.primaryDNSAddress) {
-                
-                    $PrimaryDNSAddress = $ExternalNetworKProfileObject.primaryDNSAddress
+                $PrimaryDNSAddress = $ExternalNetworKProfileObject.primaryDNSAddress
 
-                    Write-Verbose -Message "Primary DNS Address: $($PrimaryDNSAddress)"
-
-                }
-
-                if ($ExternalNetworkProfileObject.secondaryDNSAddress) {
-
-                    $SecondaryDNSAddress = $ExternalNetworKProfileObject.secondaryDNSAddress
-
-                    Write-Verbose -Message "Secondary DNS Address: $($SecondaryDNSAddress)"
-
-                }
-
-                if ($ExternalNetworkProfileObject.dnsSuffix) {
-
-                    $DNSSuffix = $ExternalNetworKProfileObject.dnsSuffix
-
-                    Write-Verbose -Message "DNS Suffix: $($DNSSuffix)"
-
-                }
-
-                if ($ExternalNetworkProfileObject.dnsSearchSuffix) {
-
-                    $DNSSearchSuffix = $ExternalNetworKProfileObject.dnsSearchSuffix
-
-                    Write-Verbose -Message "DNS Search Suffix: $($DNSSearchSuffix)"
-
-                }
-
-                if ($ExternalNetworkProfileObject.primaryWinsAddress) {
-
-                    $PrimaryWinsAddress = $ExternalNetworKProfileObject.primaryWinsAddress
-
-                    Write-Verbose -Message "Primary Wins Address: $($PrimaryWinsAddress)"
-
-                }
-
-                if ($ExternalNetworkProfileObject.secondaryWinsAddress) {
-
-                    $SecondaryWinsAddress = $ExternalNetworKProfileObject.secondaryWinsAddress
-
-                    Write-Verbose -Message "Secondary Wins Address: $($SecondaryWinsAddress)"
-
-                }
+                Write-Verbose -Message "Primary DNS Address: $($PrimaryDNSAddress)"
 
             }
 
-            # --- Define the network profile
-            $Template = @"
+            if ($ExternalNetworkProfileObject.secondaryDNSAddress) {
 
-                {
-                    "@type": "NATNetworkProfile",
-                    "name": "$($Name)",
-                    "description": "$($Description)",
-                    "createdDate": null,
-                    "lastModifiedDate": null,
-                    "isHidden": false,
-                    "definedRanges": [],
-                    "profileType": "NAT",
-                    "natType": "$($NatType)",
-                    "subnetMask": "$($SubnetMask)",
-                    "gatewayAddress": "$($GatewayAddress)",
-                    "primaryDnsAddress": "$($PrimaryDNSAddress)",
-                    "secondaryDnsAddress": "$($SecondaryDNSAddress)",
-                    "dnsSuffix": "$($DNSSuffix)",
-                    "dnsSearchSuffix": "$($DNSSearchSuffix)",
-                    "primaryWinsAddress": "$($PrimaryWinsAddress)",
-                    "secondaryWinsAddress": "$($SecondaryWinsAddress)",
-                    "externalNetworkProfileId": "$($ExternalNetworkProfileObject.id)",
-                    "externalNetworkProfileName": "$($ExternalNetworkProfileObject.name)"
-                }
+                $SecondaryDNSAddress = $ExternalNetworKProfileObject.secondaryDNSAddress
 
-"@
-
-            # --- Enable DHCP
-            if ($DHCPEnabled -and $NatType -eq "ONETOMANY") {
-
-                Write-Verbose -Message "DHCP has been enabled and nat type is set to One-to-Many"
-                    
-                $DHCPConfigurationTemplate = @"
-
-                        {
-                            "dhcpStartIPAddress": "$($DHCPStartAddress)",
-                            "dhcpEndIPAddress": "$($DHCPEndAddress)",
-                            "dhcpLeaseTimeInSeconds": $($DHCPLeaseTime)
-                        }
-
-"@
-                            
-                # --- Add the dhcp configuration to the network profile object
-                $Object = $Template | ConvertFrom-Json
-
-                $DHCPConfiguration = $DHCPConfigurationTemplate | ConvertFrom-Json               
-
-                Add-Member -InputObject $Object -MemberType NoteProperty -Name "dhcpConfig" -Value $DHCPConfiguration
-
-                # --- Convert the modified object back to json
-                $Template = $Object | ConvertTo-Json -Depth 20
+                Write-Verbose -Message "Secondary DNS Address: $($SecondaryDNSAddress)"
 
             }
 
-            if ($PSBoundParameters.ContainsKey("IPRanges")) {
+            if ($ExternalNetworkProfileObject.dnsSuffix) {
 
-                $Object = $Template | ConvertFrom-Json
+                $DNSSuffix = $ExternalNetworKProfileObject.dnsSuffix
 
-                foreach ($IPRange in $IPRanges) {
-
-                    $Object.definedRanges += $IPRange
-
-                }
-
-                $Template = $Object | ConvertTo-Json -Depth 20 -Compress
+                Write-Verbose -Message "DNS Suffix: $($DNSSuffix)"
 
             }
 
-            if ($PSCmdlet.ShouldProcess($Name)){
+            if ($ExternalNetworkProfileObject.dnsSearchSuffix) {
 
-                $URI = "/iaas-proxy-provider/api/network/profiles"
-                
-                # --- Run vRA REST Request
-                Invoke-vRARestMethod -Method POST -URI $URI -Body $Template -Verbose:$VerbosePreference | Out-Null
+                $DNSSearchSuffix = $ExternalNetworKProfileObject.dnsSearchSuffix
 
-                # --- Output the Successful Result
-                Get-vRANATNetworkProfile -Name $Name -Verbose:$VerbosePreference
+                Write-Verbose -Message "DNS Search Suffix: $($DNSSearchSuffix)"
+
+            }
+
+            if ($ExternalNetworkProfileObject.primaryWinsAddress) {
+
+                $PrimaryWinsAddress = $ExternalNetworKProfileObject.primaryWinsAddress
+
+                Write-Verbose -Message "Primary Wins Address: $($PrimaryWinsAddress)"
+
+            }
+
+            if ($ExternalNetworkProfileObject.secondaryWinsAddress) {
+
+                $SecondaryWinsAddress = $ExternalNetworKProfileObject.secondaryWinsAddress
+
+                Write-Verbose -Message "Secondary Wins Address: $($SecondaryWinsAddress)"
+
             }
 
         }
-        catch [Exception]{
 
-            throw
+        # --- Define the network profile
+        $Template = @"
+
+            {
+                "@type": "NATNetworkProfile",
+                "name": "$($Name)",
+                "description": "$($Description)",
+                "createdDate": null,
+                "lastModifiedDate": null,
+                "isHidden": false,
+                "definedRanges": [],
+                "reclaimedAddresses":  null,
+                "IPAMEndpointId":  null,
+                "IPAMEndpointName":  null,
+                "addressSpaceExternalId":  null,
+                "profileType": "NAT",
+                "natType": "$($NatType)",
+                "subnetMask": "$($SubnetMask)",
+                "gatewayAddress": "$($GatewayAddress)",
+                "primaryDnsAddress": "$($PrimaryDNSAddress)",
+                "secondaryDnsAddress": "$($SecondaryDNSAddress)",
+                "dnsSuffix": "$($DNSSuffix)",
+                "dnsSearchSuffix": "$($DNSSearchSuffix)",
+                "primaryWinsAddress": "$($PrimaryWinsAddress)",
+                "secondaryWinsAddress": "$($SecondaryWinsAddress)",
+                "externalNetworkProfileId": "$($ExternalNetworkProfileObject.id)",
+                "externalNetworkProfileName": "$($ExternalNetworkProfileObject.name)"
+            }
+
+"@
+
+        # --- Enable DHCP
+        if ($DHCPEnabled -and $NatType -eq "ONETOMANY") {
+
+            Write-Verbose -Message "DHCP has been enabled and nat type is set to One-to-Many"
+                
+            $DHCPConfigurationTemplate = @"
+
+                    {
+                        "dhcpStartIPAddress": "$($DHCPStartAddress)",
+                        "dhcpEndIPAddress": "$($DHCPEndAddress)",
+                        "dhcpLeaseTimeInSeconds": $($DHCPLeaseTime)
+                    }
+
+"@
+                        
+            # --- Add the dhcp configuration to the network profile object
+            $Object = $Template | ConvertFrom-Json
+
+            $DHCPConfiguration = $DHCPConfigurationTemplate | ConvertFrom-Json               
+
+            Add-Member -InputObject $Object -MemberType NoteProperty -Name "dhcpConfig" -Value $DHCPConfiguration
+
+            # --- Convert the modified object back to json
+            $Template = $Object | ConvertTo-Json -Depth 20
+
         }
+
+        if ($PSBoundParameters.ContainsKey("IPRanges")) {
+
+            $Object = $Template | ConvertFrom-Json
+
+            foreach ($IPRange in $IPRanges) {
+
+                $Object.definedRanges += $IPRange
+
+            }
+
+            $Template = $Object | ConvertTo-Json -Depth 20 -Compress
+
+        }
+
+        if ($PSCmdlet.ShouldProcess($Name)){
+
+            $URI = "/iaas-proxy-provider/api/network/profiles"
+            
+            # --- Run vRA REST Request
+            Invoke-vRARestMethod -Method POST -URI $URI -Body $Template -Verbose:$VerbosePreference | Out-Null
+
+            # --- Output the Successful Result
+            Get-vRANATNetworkProfile -Name $Name -Verbose:$VerbosePreference
+            
+        }
+
     }
-    end {
+    catch [Exception]{
+
+        throw
         
     }
-
-}

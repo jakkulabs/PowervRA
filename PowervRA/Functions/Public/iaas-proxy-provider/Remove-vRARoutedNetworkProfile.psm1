@@ -32,7 +32,11 @@
        
     )
     
-    Begin {}
+    Begin {
+
+        xRequires -Version 7.1
+
+    }
     
     Process {    
 
@@ -57,6 +61,10 @@
 
         }
         
-    }     
+    }
+
+    End {
+
+    }
 
 }
