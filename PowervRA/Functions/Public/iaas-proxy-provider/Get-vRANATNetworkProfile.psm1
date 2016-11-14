@@ -35,7 +35,7 @@
     Get-vRANATNetworkProfile
 
 #>
-[CmdletBinding(DefaultParameterSetName="ById")][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
