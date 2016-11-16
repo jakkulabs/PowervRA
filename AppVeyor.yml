@@ -1,17 +1,8 @@
-# Enable WMF 5 support
 image: WMF 5
-
-# Skip build
 build: off
-
-# Ensure NuGet package provider is installed
 init:
   - ps: Install-PackageProvider NuGet -Force
-
-# Install required modules
 install:
   - ps: Install-Module -Name Psake, Pester, PSScriptAnalyzer, PlatyPS -Force
-
-# Run Tests
 test_script:
   - ps: .\build.ps1 -Task Analyze
