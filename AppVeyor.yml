@@ -1,8 +1,8 @@
-# Skip build
-build: false
-
 # Enable WMF 5 support
 image: WMF 5
+
+# Skip build
+build: off
 
 # Ensure NuGet package provider is installed
 init:
