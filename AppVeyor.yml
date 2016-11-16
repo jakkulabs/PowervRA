@@ -1,3 +1,4 @@
+version: 1.4.0.{build}
 image: WMF 5
 build: off
 init:
