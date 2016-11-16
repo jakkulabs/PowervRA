@@ -2,7 +2,7 @@ version: 1.4.0.{build}
 image: WMF 5
 build: off
 init:
-  - ps: Install-PackageProvider NuGet -Force
+  - ps: Install-PackageProvider NuGet -Force | Out-Null
 install:
   - ps: Install-Module -Name Psake, Pester, PSScriptAnalyzer, PlatyPS -Force
 test_script:
