@@ -183,7 +183,7 @@ function Set-vRARoutedNetworkProfile {
                 Invoke-vRARestMethod -Method PUT -URI $URI -Body $NetworkProfileTemplate -Verbose:$VerbosePreference | Out-Null
 
                 # --- Output the Successful Result
-                Get-vRARoutedlNetworkProfile -Id $Id -Verbose:$VerbosePreference
+                Get-vRARoutedNetworkProfile -Id $Id -Verbose:$VerbosePreference
 
             }
 
