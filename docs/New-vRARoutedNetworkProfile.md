@@ -11,14 +11,14 @@ New-vRARoutedNetworkProfile -Name <String> [-Description <String>] -SubnetMask <
  [-GatewayAddress <String>] -ExternalNetworkProfile <String> [-PrimaryDNSAddress <String>]
  [-SecondaryDNSAddress <String>] [-DNSSuffix <String>] [-DNSSearchSuffix <String>]
  [-PrimaryWinsAddress <String>] [-SecondaryWinsAddress <String>] [-RangeSubnetMask <String>]
- [-BaseIPAddress <String>] [-WhatIf] [-Confirm]
+ [-BaseIPAddress <String>] -IPRanges <PSObject[]> [-WhatIf] [-Confirm]
 ```
 
 ### UseExternalProfileSettings
 ```
 New-vRARoutedNetworkProfile -Name <String> [-Description <String>] -SubnetMask <String>
  [-GatewayAddress <String>] -ExternalNetworkProfile <String> [-UseExternalNetworkProfileSettings]
- [-RangeSubnetMask <String>] [-BaseIPAddress <String>] [-WhatIf] [-Confirm]
+ [-RangeSubnetMask <String>] [-BaseIPAddress <String>] -IPRanges <PSObject[]> [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -28,8 +28,10 @@ Create a vRA routed network profiles
 
 ### -------------------------- EXAMPLE 1 --------------------------
 ```
-New-vRARoutedNetworkProfile -Name Network-Routed -Description "Routed" -SubnetMask "255.255.255.0" -GatewayAddress "10.80.1.1" -PrimaryDNSAddress "10.80.1.100" -SecondaryDNSAddress "10.80.1.101" -DNSSuffix "corp.local" -DNSSearchSuffix "corp.local" -ExternalNetworkProfile "Network-External" -RangeSubnetMask "255.255.255.0" -BaseIPAddress "10.80.1.2"
+$DefinedRange1 = New-vRANetworkProfileIPRangeDefinition -Name "External-Range-01" -Description "Example 1" -StartIPv4Address "10.80.1.2" -EndIPv4Address "10.80.1.5"
 ```
+
+New-vRARoutedNetworkProfile -Name Network-Routed -Description "Routed" -SubnetMask "255.255.255.0" -GatewayAddress "10.80.1.1" -PrimaryDNSAddress "10.80.1.100" -SecondaryDNSAddress "10.80.1.101" -DNSSuffix "corp.local" -DNSSearchSuffix "corp.local" -ExternalNetworkProfile "Network-External" -RangeSubnetMask "255.255.255.0" -BaseIPAddress "10.80.1.2" -IPRanges $DefinedRange1
 
 ## PARAMETERS
 
@@ -237,6 +239,21 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IPRanges
+An array of ip address ranges
+
+```yaml
+Type: PSObject[]
+Parameter Sets: (All)
+Aliases: 
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
