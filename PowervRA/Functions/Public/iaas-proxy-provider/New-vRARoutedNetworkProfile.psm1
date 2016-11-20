@@ -48,6 +48,9 @@ function New-vRARoutedNetworkProfile {
     .PARAMETER BaseIPAddress
     The base ip of the routed range
 
+    .PARAMETER IPRanges
+    An array of ip address ranges
+
     .INPUTS
     System.String
     System.Switch
@@ -57,7 +60,9 @@ function New-vRARoutedNetworkProfile {
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    New-vRARoutedNetworkProfile -Name Network-Routed -Description "Routed" -SubnetMask "255.255.255.0" -GatewayAddress "10.80.1.1" -PrimaryDNSAddress "10.80.1.100" -SecondaryDNSAddress "10.80.1.101" -DNSSuffix "corp.local" -DNSSearchSuffix "corp.local" -ExternalNetworkProfile "Network-External" -RangeSubnetMask "255.255.255.0" -BaseIPAddress "10.80.1.2"
+    $DefinedRange1 = New-vRANetworkProfileIPRangeDefinition -Name "External-Range-01" -Description "Example 1" -StartIPv4Address "10.80.1.2" -EndIPv4Address "10.80.1.5"
+
+    New-vRARoutedNetworkProfile -Name Network-Routed -Description "Routed" -SubnetMask "255.255.255.0" -GatewayAddress "10.80.1.1" -PrimaryDNSAddress "10.80.1.100" -SecondaryDNSAddress "10.80.1.101" -DNSSuffix "corp.local" -DNSSearchSuffix "corp.local" -ExternalNetworkProfile "Network-External" -RangeSubnetMask "255.255.255.0" -BaseIPAddress "10.80.1.2" -IPRanges $DefinedRange1
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
@@ -118,7 +123,11 @@ function New-vRARoutedNetworkProfile {
 
         [Parameter(Mandatory=$false)]
         [ValidateScript({$_ -match [IPAddress]$_ })] 
-        [String]$BaseIPAddress
+        [String]$BaseIPAddress,
+
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
+        [PSCustomObject[]]$IPRanges
 
     )    
 
@@ -211,7 +220,25 @@ function New-vRARoutedNetworkProfile {
                 "baseIP": "$($BaseIPAddress)"
             }
 
-"@                
+"@     
+
+        if ($PSBoundParameters.ContainsKey("IPRanges")) {
+
+            $Object = $Template | ConvertFrom-Json
+
+            Write-Output $Object
+
+            foreach ($IPRange in $IPRanges) {
+
+                $Object.definedRanges += $IPRange
+
+            }
+
+            $Template = $Object | ConvertTo-Json -Depth 20
+
+        }
+
+        Write-Debug -Message $Template
 
         if ($PSCmdlet.ShouldProcess($Name)){
 
