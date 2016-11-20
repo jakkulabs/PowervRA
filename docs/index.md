@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/na25wbus68wb24y3?svg=true)](https://ci.appveyor.com/project/chelnak/powervra)
+
 # Welcome to PowervRA
 PowervRA is a PowerShell module built on top of the services exposed by the vRealize Automation 7 REST API.
 
