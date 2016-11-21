@@ -1,0 +1,163 @@
+{
+  "Connection":
+  {
+    "vRAAppliance": "vraap04.vrademo.local",
+    "Tenant": "Tenant01",
+    "Username": "TenantAdmin01@vrademo.local",
+    "Password": "P@ssword!"
+  },
+    "DefaultTenantConnection":
+  {
+    "vRAAppliance": "vraap04.vrademo.local",
+    "Tenant": "vsphere.local",
+    "Username": "administrator@vsphere.local",
+    "Password": "P@ssword!"
+  },
+  "UserConnection":
+  {
+    "vRAAppliance": "vraap04.vrademo.local",
+    "Tenant": "Tenant01",
+    "Username": "TenantUser01@vrademo.local",
+    "Password": "P@ssword!"
+  },
+  "Tenant":
+  {
+    "Name": "Tenant100",
+    "Description": "Tenant 100",
+    "UpdatedDescription": "Tenant 100 Updated",
+    "URLName": "Tenant100",
+    "ContactEmail": "admin.user@tenant01.local",
+    "ID": "Tenant100"
+  },
+  "TenantDirectory":
+  {
+    "Name": "Tenant100",
+    "Description": "Tenant Directory 100",
+    "ID": "Tenant100",
+    "Type": "AD",
+    "Domain": "vrademo.local",
+    "UserNameDN": "CN=tenant100svc,OU=Users,OU=Tenant100,OU=Tenants,DC=vrademo,DC=local",
+    "Password": "P@ssword!",
+    "URL": "ldap://dc01.vrademo.local:389",
+    "GroupBaseSearchDN": "OU=Tenant100,OU=Tenants,DC=vrademo,DC=local",
+    "UpdatedGroupBaseSearchDNs": "OU=Tenants,DC=vrademo,DC=local",
+    "UserBaseSearchDN": "OU=Tenant100,OU=Tenants,DC=vrademo,DC=local",
+    "GroupBaseSearchDNs": "OU=Tenant100,OU=Tenants,DC=vrademo,DC=local",
+    "UserBaseSearchDNs": "OU=Tenant100,OU=Tenants,DC=vrademo,DC=local"
+  },
+  "TenantRole":
+  {
+    "TenantId": "Tenant100",
+    "PrincipalID": "tenantadmins100@vrademo.local",
+    "RoleId": "CSP_TENANT_ADMIN"
+  },
+  "ReservationPolicy":
+  {
+    "Name": "ReservationPolicy100",
+    "NewName": "ReservationPolicy100New",
+    "Description": "Reservation Policy 100"
+  },
+  "StorageReservationPolicy":
+  {
+    "Name": "StorageReservationPolicy100",
+    "NewName": "StorageReservationPolicy100New",
+    "Description": "Storage Reservation Policy 100"
+  },
+   "BusinessGroup":
+  {
+    "Name": "BusinessGroup100",
+    "Description": "Business Group 100",
+    "UpdatedDescription": "Business Group 100 Updated",
+    "Manager": "busgroupmgr100@vrademo.local",
+    "SupportUser": "busgroupsu100@vrademo.local",
+    "BasicUser": "busgroupbu100@vrademo.local",
+    "MachinePrefixId": "8aa18428-1d82-45c9-95e4-475d0c03533c"
+  },
+   "Service":
+  {
+    "Name": "Service100",
+    "Description": "Service 100",
+    "UpdatedDescription": "Service 100 Updated",
+    "Owner": "serviceowner01@vrademo.local",
+    "SupportTeam": "servicesupport01@vrademo.local"
+  },
+   "Entitlement":
+  {
+    "Name": "Entitlement",
+    "Description": "Entitlement ",
+    "UpdatedDescription": "Entitlement Updated",
+    "BusinessGroup": "BusinessGroup01",
+    "Principals": "TenantUsers01@vrademo.local",
+    "EntitledCatalogItems": "centos",
+    "EntitledServices": "Service01"
+  },
+   "Blueprint":
+  {
+    "Name": "centos"
+  },
+   "ServiceBlueprint":
+  {
+    "Name": "Create cluster"
+  },
+   "ContentPackage":
+  {
+    "Name": "ContentPackage100",
+    "Description": "Content Package 100 ",
+    "BlueprintName": "centos",
+    "Path": "C:\\Packages",
+    "FileName": "C:\\Packages\\ContentPackage100.zip",
+    "ImportStatusMessage": "Found matching content, import will overwrite this content.",
+    "TestStatusMessage": "WARNING"
+  },
+  "Reservation":
+  {
+    "Name": "Reservation100",
+    "UpdatedName": "Reservation100Updated",
+    "ComputeResourceName": "Cluster01 (vCenter)",
+    "ComputeResourceMemoryTotalSizeMB": "8191",
+    "NetworkPath": "VM Network",
+    "NetworkProfile": "NetworkProfile01",
+    "AdditionalNetworkPath": "VM Network2",
+    "AdditionalNetworkProfile": "NetworkProfile02",
+    "Datastore": "NFS001",
+    "DatastoreReservedSizeGB": "1",
+    "DatastorePriority": "0",
+    "AdditionalDatastore": "datastore1",
+    "AdditionalDatastoreReservedSizeGB": "0",
+    "AdditionalDatastorePriority": "1",
+    "BusinessGroup": "BusinessGroup01",
+    "ReservationPolicy": "ReservationPolicy01",
+    "Priority": "0",
+    "Quota": "0",
+    "MemoryGB": "2048",
+    "ResourcePool": "Resources"
+  },
+   "CatalogItem":
+  {
+    "Name": "centos",
+    "ConsumerResource": "vm701-02"
+  },
+  "Principal":
+  {
+    "UserPrincipalId": "TeanantAdmin02@vsphere.local",
+    "UserPrincipalFirstName": "Tenant",
+    "UserPrincipalFirstNameUpdated": "Tenant-Updated",
+    "UserPrincipalLastName": "Admin",
+    "UserPrincipalDescription": "Tenant Admin 02 Description",
+    "UserPrincipalEmailAddress": "tenantadmin02@company.com",
+    "UserPrincipalPassword": "P@ssword!",
+    "GroupPrincipalName": "Group01",
+    "GroupPrincipalDescription": "Group 01 Description",
+    "GroupPrincipalDescriptionUpdated": "Group 01 Description Updated"    
+  }, 
+   "Misc":
+  {
+    "ApplianceServiceName": "iaas-service",
+    "AuthorizationRole": "CSP_TENANT_ADMIN",
+    "ConsumerResourceOperationId": "204fca39-78c2-4ea7-948e-10e8bd422e76",
+    "ResourceTypeId": "Infrastructure.Machine",
+    "ResourceOperation": "Power On",
+    "ConsumerService": "Service01",
+    "MetricsVM": "vm701-02"
+  }
+}
