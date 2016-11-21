@@ -9,31 +9,33 @@ Describe -Name 'Catalog-Service Tests' -Fixture {
 
     Context -Name 'CatalogItem' -Fixture {
 
-        It -Name "Return named Catalog Item $($JSON.CatalogService.CatalogItem.Name)" -Test {
+        $CatalogItemName = $JSON.CatalogService.CatalogItem.Name
 
-            $CatalogItem = Get-vRACatalogItem -Name $JSON.CatalogService.CatalogItem.Name
-            $CatalogItem.Name | Should Be $JSON.CatalogService.CatalogItem.Name
+        It -Name "Return named Catalog Item" -Test {
 
-        }
-
-        It -Name "Return named entitled Catalog Item $($JSON.CatalogService.CatalogItem.Name)" -Test {
-
-            $CatalogItem = Get-vRAEntitledCatalogItem -Name $JSON.CatalogService.CatalogItem.Name
-            $CatalogItem.Name | Should Be $JSON.CatalogService.CatalogItem.Name
+            $CatalogItem = Get-vRACatalogItem -Name $CatalogItemName
+            $CatalogItem.Name | Should Be $CatalogItemName
 
         }
 
-        It -Name "Return named Catlaog Item request template $($JSON.CatalogService.CatalogItem.Name)" -Test {
+        It -Name "Return named entitled Catalog Item" -Test {
 
-            $CatalogItemRequestTemplate = Get-vRACatalogItemRequestTemplate -Name $JSON.CatalogService.CatalogItem.Name
+            $CatalogItem = Get-vRAEntitledCatalogItem -Name $CatalogItemName
+            $CatalogItem.Name | Should Be $CatalogItemName
+
+        }
+
+        It -Name "Return named Catlaog Item request template" -Test {
+
+            $CatalogItemRequestTemplate = Get-vRACatalogItemRequestTemplate -Name $CatalogItemName
             $CatalogItemRequestTemplate.getType().Name | Should Be "String"
 
         }
 
-        It -Name "Update named Catalog Item $($JSON.CatalogService.CatalogItem.Name)" -Test {
+        It -Name "Update named Catalog Item" -Test {
 
             $Quota = Get-Random -Minimum 10 -Maximum 51
-            $CatalogItem = Get-vRACatalogItem -Name $JSON.CatalogService.CatalogItem.Name | Set-vRACatalogItem -Quota $Quota -Confirm:$false
+            $CatalogItem = Get-vRACatalogItem -Name $CatalogItemName | Set-vRACatalogItem -Quota $Quota -Confirm:$false
             $CatalogItem.Quota | Should Be $Quota
 
         }
@@ -97,11 +99,11 @@ Describe -Name 'Catalog-Service Tests' -Fixture {
     Context -Name "Service" -Fixture {
 
         # --- Set Service Name
-        $ServiceName = "$($JSON.CatalogService.Service.Name)-$(Get-Random -Maximum 20)"
+        $ServiceName = "Test Service - $(Get-Random -Maximum 20)"
 
         It -Name "Create named Service" -Test {
 
-            $Service = New-vRAService -Name $ServiceName -Description $JSON.CatalogService.Service.Description
+            $Service = New-vRAService -Name $ServiceName -Description "Test Description"
             $Service.Name | Should Be $ServiceName
 
         }
@@ -122,8 +124,8 @@ Describe -Name 'Catalog-Service Tests' -Fixture {
 
         It -Name "Update named Service" -Test {
             
-            $UpdatedServiceDescription = "$($JSON.Service.Description) $(Get-Random -Maximum 20)"
             $Service = Get-vRAService -Name $ServiceName
+            $UpdatedServiceDescription = "$($Service.Description) Updated"
             $Service = Set-vRAService -Id $Service.Id -Description $UpdatedServiceDescription -Confirm:$false
             $Service.Description | Should Be $UpdatedServiceDescription
 
@@ -149,14 +151,14 @@ Describe -Name 'Catalog-Service Tests' -Fixture {
     Context -Name "Entitlement" -Fixture {
 
         # --- Set Entitlement Name
-        $EntitlementName = "$($JSON.CatalogService.Entitlement.Name)-$(Get-Random -Maximum 20)"
+        $EntitlementName = "Test Entitlement - $(Get-Random -Maximum 20)"
 
         It -Name "Create named Entitlement" -Test {
             
             $BusinessGroup = Get-vRABusinessGroup -Limit 1
             $BusinessUser = $BusinessGroup.UserRole | Select -First 1
             $UserPrincipal = "$($BusinessUser.name)@$($BusinessUser.domain)"
-            $Entitlement = New-vRAEntitlement -Name $EntitlementName -Description $JSON.CatalogService.Entitlement.Description -BusinessGroup $BusinessGroup.Name -Principals $UserPrincipal
+            $Entitlement = New-vRAEntitlement -Name $EntitlementName -Description "Test Description" -BusinessGroup $BusinessGroup.Name -Principals $UserPrincipal
             $Entitlement.Name | Should Be $EntitlementName
 
         }
@@ -170,8 +172,8 @@ Describe -Name 'Catalog-Service Tests' -Fixture {
 
         It -Name "Update named Entitlement" -Test {
 
-            $UpdatedEntitlementDescription = "$($JSON.CatalogService.Entitlement.Description) $(Get-Random -Maximum 20)"
             $Entitlement = Get-vRAEntitlement -Name $EntitlementName
+            $UpdatedEntitlementDescription = "$($Entitlement.Description) Updated"
             $Entitlement = Set-vRAEntitlement -Id $Entitlement.Id -Description $UpdatedEntitlementDescription -Confirm:$false
             $Entitlement.Description | Should Be $UpdatedEntitlementDescription
 
