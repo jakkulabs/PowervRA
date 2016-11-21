@@ -73,24 +73,6 @@
     "BasicUser": "busgroupbu100@vrademo.local",
     "MachinePrefixId": "8aa18428-1d82-45c9-95e4-475d0c03533c"
   },
-   "Service":
-  {
-    "Name": "Service100",
-    "Description": "Service 100",
-    "UpdatedDescription": "Service 100 Updated",
-    "Owner": "serviceowner01@vrademo.local",
-    "SupportTeam": "servicesupport01@vrademo.local"
-  },
-   "Entitlement":
-  {
-    "Name": "Entitlement",
-    "Description": "Entitlement ",
-    "UpdatedDescription": "Entitlement Updated",
-    "BusinessGroup": "BusinessGroup01",
-    "Principals": "TenantUsers01@vrademo.local",
-    "EntitledCatalogItems": "centos",
-    "EntitledServices": "Service01"
-  },
    "Blueprint":
   {
     "Name": "centos"
@@ -132,10 +114,18 @@
     "MemoryGB": "2048",
     "ResourcePool": "Resources"
   },
-   "CatalogItem":
+   "CatalogService":
   {
-    "Name": "centos",
-    "ConsumerResource": "vm701-02"
+    "CatalogItem" : {
+
+      "Name" : "Ubuntu 14.04 x64 Base"
+
+    },
+    "Resource" : {
+
+      "Name" : "vm701-02"
+
+    }
   },
   "Principal":
   {
