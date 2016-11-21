@@ -80,13 +80,15 @@
 
                         $EscapedURI = [uri]::EscapeUriString($URI)
 
-                        $ResourceType = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
+                        $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
                         if ($Response.content.Count -eq 0){
 
                             throw "Could not find Resource Type with Id: $($ResourceTypeId)"
 
                         }
+
+                        $ResourceType = $Response.content
 
                         [PSCustomObject] @{
 
