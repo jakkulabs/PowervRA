@@ -41,6 +41,9 @@
     )    
 
     begin {
+
+        Write-Warning -Message "This command is deprecated and will be removed in a future release. Please use Remove-vRAPackage instead."
+    
         # --- Test for vRA API version
         xRequires -Version 7.0
     }
