@@ -66,48 +66,58 @@ Describe -Name 'Content-Management-Service Tests' -Fixture {
 
     Context -Name "Package" -Fixture {
 
-        It -Name "Create named Content Package $($JSON.Package.Name)" -Test {
+        $PackageName = "Package-$(Get-Random -Maximum 200)"
 
-            $PackageA = New-vRAPackage -Name $JSON.Package.Name -Description $JSON.Package.Description -BlueprintName $JSON.Package.BlueprintName
-            $PackageA.Name | Should Be $JSON.Package.Name
+
+        It -Name "Create named Package" -Test {
+
+            $Content = Get-vRAContent | Select-Object -First 1
+
+            $Package = New-vRAPackage -Name $PackageName -Description "Test Description" -ContentId $Content.Id
+            $Package.Name | Should Be $PackageName
         }
 
-        It -Name "Return named Content Package $($JSON.Package.Name)" -Test {
+        It -Name "Return named Package" -Test {
 
-            $PackageB = Get-vRAPackage -Name $JSON.Package.Name
-            $PackageB.Name | Should Be $JSON.Package.Name
+            $Package = Get-vRAPackage -Name $PackageName
+            $Package.Name | Should Be $PackageName
         }
 
-        It -Name "Export named Content Package $($JSON.Package.Name)" -Test {
+        It -Name "Export named Package" -Test {
 
-            $PackageC = Export-vRAPackage -Name $JSON.Package.Name -Path $JSON.Package.Path
-            $PackageC.FullName | Should Be $JSON.Package.FileName
+            $Package = Export-vRAPackage -Name $PackageName -Path "$($PSScriptRoot)\data"
+            $Package.BaseName | Should Be $PackageName
         }
 
-        It -Name "Remove named Content Package $($JSON.Package.Name)" -Test {
+        It -Name "Remove named Package" -Test {
 
-            Remove-vRAPackage -Name $JSON.Package.Name -Confirm:$false
+            Remove-vRAPackage -Name $PackageName -Confirm:$false
             
             try {
             
-                $PackageD = Get-vRAPackage -Name $JSON.Package.Name
+                $Package = Get-vRAPackage -Name $PackageName
             }
             catch [Exception]{
 
             }
-            $PackageD | Should Be $null
+            $Package | Should Be $null
         }
 
-        It -Name "Test named Content Package $($JSON.Package.Name)" -Test {
+        It -Name "Test named Package" -Test {
 
-            $TestStatus = Test-vRAPackage -File $JSON.Package.FileName
-            $TestStatus.operationStatus | Should Be $JSON.Package.TestStatusMessage
+            $PackageFile = "$($PSScriptRoot)\data\$($PackageName).zip"
+
+            $TestStatus = Test-vRAPackage -File $PackageFile
+            $TestStatus.operationStatus | Should Be "WARNING"
+
         }
 
-        It -Name "Import named Content Package $($JSON.Package.Name)" -Test {
+        It -Name "Import named Package" -Test {
 
-            $ImportStatus = Import-vRAPackage -File $JSON.Package.FileName -Confirm:$false
-            $ImportStatus.operationResults.Messages | Should Be $JSON.Package.ImportStatusMessage
+            $PackageFile = "$($PSScriptRoot)\data\$($PackageName).zip"
+            $ImportStatus = Import-vRAPackage -File $PackageFile -Confirm:$false
+            $ImportStatus.operationStatus | Should Be "WARNING"
+
         }
 
     }
@@ -115,4 +125,7 @@ Describe -Name 'Content-Management-Service Tests' -Fixture {
 }
 
 # --- Cleanup
+
+Remove-Item -Path "$($PSScriptRoot)\data\Package-*.zip" -Force
+
 Disconnect-vRAServer -Confirm:$false
