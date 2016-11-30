@@ -11,7 +11,7 @@ Describe -Name 'Module Tests' -Fixture {
 
         try {
         
-            xRequires -Version 7 -Context $MyInvocation
+            xRequires -Version 7
         }
         catch {
 

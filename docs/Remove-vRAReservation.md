@@ -1,79 +1,110 @@
 # Remove-vRAReservation
 
 ## SYNOPSIS
-    
 Remove a reservation
 
 ## SYNTAX
- Remove-vRAReservation -Id <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]  Remove-vRAReservation -Name <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]     
+
+### ById (Default)
+```
+Remove-vRAReservation -Id <String[]> [-WhatIf] [-Confirm]
+```
+
+### ByName
+```
+Remove-vRAReservation -Name <String[]> [-WhatIf] [-Confirm]
+```
 
 ## DESCRIPTION
-
 Remove a reservation
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Remove-vRAReservation -Name Reservation1
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Remove-vRAReservation -Id 75ae3400-beb5-4b0b-895a-0484413c93b1
+```
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Get-vRAReservation -Name Reservation1 | Remove-vRAReservation
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 The id of the reservation
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByPropertyName)
+```yaml
+Type: String[]
+Parameter Sets: ById
+Aliases: 
 
-### Name
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
 
+### -Name
 The name of the reservation
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: ByName
+Aliases: 
 
-### WhatIf
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
 
-### Confirm
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## OUTPUTS
 
-PS C:\>Remove-vRAReservation -Name Reservation1
+## NOTES
 
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Remove-vRAReservation -Id 75ae3400-beb5-4b0b-895a-0484413c93b1
-
-
-
-
-
-
--------------------------- EXAMPLE 3 --------------------------
-
-PS C:\>Get-vRAReservation -Name Reservation1 | Remove-vRAReservation
-```
+## RELATED LINKS
 

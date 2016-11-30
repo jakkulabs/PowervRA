@@ -1,14 +1,16 @@
 # Set-vRAService
 
 ## SYNOPSIS
-    
 Set a vRA Service
 
 ## SYNTAX
- Set-vRAService -Id <String> [-Name <String>] [-Description <String>] [-Status <String>] [-Owner <String>] [-SupportTeam <String>] [-WhatIf] [-Confirm] [<CommonParameters>]     
+
+```
+Set-vRAService [-Id] <String> [[-Name] <String>] [[-Description] <String>] [[-Status] <String>]
+ [[-Owner] <String>] [[-SupportTeam] <String>] [-WhatIf] [-Confirm]
+```
 
 ## DESCRIPTION
-
 Set a vRA Service
 
 Currently unsupported interactive actions:
@@ -19,136 +21,170 @@ Currently unsupported interactive actions:
 * ChangeWindowStartTime
 * ChangeWindowEndTime
 
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vRAService -Name "Default" | Set-vRAService -Owner user@vsphere.local
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1"
+```
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Description "updated from posh"
+```
+
+### -------------------------- EXAMPLE 4 --------------------------
+```
+Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Description "updated from posh" -Owner "user@vsphere.local"
+```
+
+### -------------------------- EXAMPLE 5 --------------------------
+```
+Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Description "updated from posh" -Owner "user@vsphere.local" -SupportTeam "support@vsphere.local"
+```
+
+### -------------------------- EXAMPLE 6 --------------------------
+```
+Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Description "updated from posh" -Owner "user@vsphere.local" -SupportTeam "support@vsphere.local" -Status INACTIVE
+```
+
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 The id of the service
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByPropertyName)
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### Name
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
 
+### -Name
 The name of the service
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### Description
+Required: False
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Description
 A description of the service
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### Status
+Required: False
+Position: 3
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Status
 The status of the service
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### Owner
+Required: False
+Position: 4
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Owner
 The owner of the service
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### SupportTeam
+Required: False
+Position: 5
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -SupportTeam
 The support team of the service
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### WhatIf
+Required: False
+Position: 6
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
 
-### Confirm
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject
+### System.Management.Automation.PSObject
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vRAService -Name "Default" | Set-vRAService -Owner user@vsphere.local
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1"
-
-
-
-
-
-
--------------------------- EXAMPLE 3 --------------------------
-
-PS C:\>Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Description "updated from posh"
-
-
-
-
-
-
--------------------------- EXAMPLE 4 --------------------------
-
-PS C:\>Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Description "updated from posh" -Owner "user@vsphere.local"
-
-
-
-
-
-
--------------------------- EXAMPLE 5 --------------------------
-
-PS C:\>Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Description "updated from posh" -Owner "user@vsphere.local" -SupportTeam "support@vsphere.local"
-
-
-
-
-
-
--------------------------- EXAMPLE 6 --------------------------
-
-PS C:\>Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Description "updated from posh" -Owner "user@vsphere.local" -SupportTeam "support@vsphere.local" -Status INACTIVE
-```
+## RELATED LINKS
 

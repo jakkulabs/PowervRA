@@ -1,112 +1,143 @@
 # Get-vRAConsumerResource
 
 ## SYNOPSIS
-    
 Get a provisioned resource
 
 ## SYNTAX
- Get-vRAConsumerResource [-WithExtendedData] [-WithOperations] [-Limit <String>] [<CommonParameters>]  Get-vRAConsumerResource [-Id <String[]>] [-Limit <String>] [<CommonParameters>]  Get-vRAConsumerResource [-Name <String[]>] [-Limit <String>] [<CommonParameters>]     
+
+### Standard (Default)
+```
+Get-vRAConsumerResource [-WithExtendedData] [-WithOperations] [-Limit <String>]
+```
+
+### ById
+```
+Get-vRAConsumerResource [-Id <String[]>] [-Limit <String>]
+```
+
+### ByName
+```
+Get-vRAConsumerResource [-Name <String[]>] [-Limit <String>]
+```
 
 ## DESCRIPTION
-
 A Resource represents a deployed artifact that has been provisioned by a provider.
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vRAConsumerResource
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vRAConsumerResource -WithExtendedData
+```
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Get-vRAConsumerResource -WithOperations
+```
+
+### -------------------------- EXAMPLE 4 --------------------------
+```
+Get-vRAConsumerResource -Id "6195fd70-7243-4dc9-b4f3-4b2300e15ef8"
+```
+
+### -------------------------- EXAMPLE 5 --------------------------
+```
+Get-vRAConsumerResource -Name "vm-01"
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 The id of the resource
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: ById
+Aliases: 
 
-### Name
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Name
 The Name of the resource
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: ByName
+Aliases: 
 
-### WithExtendedData
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -WithExtendedData
 Populate resources' extended data by calling their provider
 
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: Standard
+Aliases: 
 
-### WithOperations
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
-Populate resources' operations attribute by calling the provider. This will force withExtendedData to true.
+### -WithOperations
+Populate resources' operations attribute by calling the provider.
+This will force withExtendedData to true.
 
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: Standard
+Aliases: 
 
-### Limit
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
-The number of entries returned per page from the API. This has a default value of 100.
+### -Limit
+The number of entries returned per page from the API.
+This has a default value of 100.
 
-* Required: false
-* Position: named
-* Default value: 100
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: 100
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vRAConsumerResource
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vRAConsumerResource -WithExtendedData
-
-
-
-
-
-
--------------------------- EXAMPLE 3 --------------------------
-
-PS C:\>Get-vRAConsumerResource -WithOperations
-
-
-
-
-
-
--------------------------- EXAMPLE 4 --------------------------
-
-PS C:\>Get-vRAConsumerResource -Id "6195fd70-7243-4dc9-b4f3-4b2300e15ef8"
-
-
-
-
-
-
--------------------------- EXAMPLE 5 --------------------------
-
-PS C:\>Get-vRAConsumerResource -Name "vm-01"
-```
+## RELATED LINKS
 

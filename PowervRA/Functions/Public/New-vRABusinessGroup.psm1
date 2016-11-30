@@ -109,9 +109,9 @@
 
     Param (
 
-    [parameter(Mandatory=$true)]
+    [parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
-    [String]$TenantId,
+    [String]$TenantId = $Global:vRAConnection.Tenant,
     
     [parameter(Mandatory=$true,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
@@ -148,7 +148,7 @@
 
     begin {
         # --- Test for vRA API version
-        xRequires -Version 7 -Context $MyInvocation
+        xRequires -Version 7.0
     }
     
     process {

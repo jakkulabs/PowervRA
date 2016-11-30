@@ -3,5 +3,11 @@ tests/ export-ignore
 README.md export-ignore
 mkdocs.yml export-ignore
 Get-PowervRA.ps1 export-ignore
+appveyor.yml export-ignore
+build.ps1 export-ignore
+build.psake.ps1 export-ignore
+build.settings.ps1 export-ignore
+PowervRA-icon.png export-ignore
+PSScriptAnalyzerSettings.psd1 export-ignore
 .gitignore export-ignore
 .gitattributes export-ignore

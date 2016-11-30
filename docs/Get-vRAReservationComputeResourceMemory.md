@@ -1,48 +1,65 @@
 # Get-vRAReservationComputeResourceMemory
 
 ## SYNOPSIS
-    
 Get available memory for a compute resource
 
 ## SYNTAX
- Get-vRAReservationComputeResourceMemory [-Type] <String> [-ComputeResourceId] <String> [<CommonParameters>]     
+
+```
+Get-vRAReservationComputeResourceMemory [-Type] <String> [-ComputeResourceId] <String>
+```
 
 ## DESCRIPTION
-
 Get available memory for a compute resource
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vRAReservationComputeResourceMemory -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d
+```
 
 ## PARAMETERS
 
-
-### Type
-
+### -Type
 The reservation type
 
-* Required: true
-* Position: 1
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### ComputeResourceId
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -ComputeResourceId
+{{Fill ComputeResourceId Description}}
 
-* Required: true
-* Position: 2
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: True
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject
+### System.Management.Automation.PSObject
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vRAReservationComputeResourceMemory -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d
-```
+## RELATED LINKS
 

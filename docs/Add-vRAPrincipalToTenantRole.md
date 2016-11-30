@@ -1,83 +1,117 @@
 # Add-vRAPrincipalToTenantRole
 
 ## SYNOPSIS
-    
 Add a vRA Principal to a Tenant Role
 
 ## SYNTAX
- Add-vRAPrincipalToTenantRole [-TenantId] <String> [-PrincipalId] <String[]> [-RoleId] <String> [-WhatIf] [-Confirm] [<CommonParameters>]     
+
+```
+Add-vRAPrincipalToTenantRole [-TenantId] <String> [-PrincipalId] <String[]> [-RoleId] <String> [-WhatIf]
+ [-Confirm]
+```
 
 ## DESCRIPTION
-
 Add a vRA Principal to a Tenant Role
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Add-vRAPrincipalToTenantRole -TenantId Tenant01 -PrincipalId Tenantadmin@vrademo.local -RoleId CSP_TENANT_ADMIN
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vRAUserPrincipal -UserName Tenantadmin@vrademo.local | Add-vRAPrincipalToTenantRole -TenantId Tenant01 -RoleId CSP_TENANT_ADMIN
+```
 
 ## PARAMETERS
 
-
-### TenantId
-
+### -TenantId
 Specify the Tenant Id
 
-* Required: true
-* Position: 1
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### PrincipalId
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -PrincipalId
 Specify the Principal Id
 
-* Required: true
-* Position: 2
-* Default value: 
-* Accept pipeline input: true (ByValue, ByPropertyName)
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: 
 
-### RoleId
+Required: True
+Position: 2
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
 
+### -RoleId
 Specify the Role Id
 
-* Required: true
-* Position: 3
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### WhatIf
+Required: True
+Position: 3
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
 
-### Confirm
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Add-vRAPrincipalToTenantRole -TenantId Tenant01 -PrincipalId Tenantadmin@vrademo.local -RoleId CSP_TENANT_ADMIN
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vRAUserPrincipal -UserName Tenantadmin@vrademo.local | Add-vRAPrincipalToTenantRole -TenantId Tenant01 -RoleId CSP_TENANT_ADMIN
-```
+## RELATED LINKS
 

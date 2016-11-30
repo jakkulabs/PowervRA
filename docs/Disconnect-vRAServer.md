@@ -1,47 +1,67 @@
 # Disconnect-vRAServer
 
 ## SYNOPSIS
-    
 Disconnect from a vRA server
 
 ## SYNTAX
- Disconnect-vRAServer [-WhatIf] [-Confirm] [<CommonParameters>]     
+
+```
+Disconnect-vRAServer [-WhatIf] [-Confirm]
+```
 
 ## DESCRIPTION
-
 Disconnect from a vRA server by removing the authorization token and the global vRAConnection variable from PowerShell
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Disconnect-vRAServer
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Disconnect-vRAServer -Confirm:$false
+```
 
 ## PARAMETERS
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
-### WhatIf
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
 
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Confirm
-
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-## EXAMPLES
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
 ```
--------------------------- EXAMPLE 1 --------------------------
 
-PS C:\>Disconnect-vRAServer
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
 
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Disconnect-vRAServer -Confirm:$false
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
 ```
+
+## INPUTS
+
+## OUTPUTS
+
+## NOTES
+
+## RELATED LINKS
 

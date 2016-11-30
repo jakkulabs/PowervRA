@@ -1,116 +1,80 @@
+#Requires -Modules Psake, Pester, PSScriptAnalyzer, PlatyPS
+#Requires -Version 5
+
 <#
-.SYNOPSIS
-Wrapper for PSake build file
-Resolve-Module borrowed from https://github.com/stefanstranger/Wunderlist/blob/master/build.ps1
+    .SYNOPSIS
+    A wrapper script for build.psake.ps1
+
+    .DESCRIPTION
+    This script is a wrapper for the processes defined in build.psake.ps1. For this process to be succesful the following modules are required:
+
+    - Psake
+    - Pester
+    - PSScriptAnalyzer
+    - PlatyPS
+
+    Each task in build.psake.ps1 relies on settings provided in build.settings.ps1
+
+    By default the build task will be executed but it is possible to select individual tasks. See the Task parameter for more information.
+
+    .PARAMETER Task
+    The build task that needs to be executed. The value of this parameter can be:
+
+    - Build
+    - Release
+    - Analyze
+    - UpdateModuleManifest
+    - UpdateDocumentation
+    - BumpVersion
+    - Test
+
+    The default value is Build which will execute the following tasks: Analyze, UpdateModuleManifest, UpdateDocumentation
+
+    Chosing release will execute the following tasks: All tasks in Build, Test, BumpVersion.
+
+    The BumpVersion will increment the version of the Module Manifest based on the $BumpVersion setting provided in build.settings.ps1.
+    By default this is patch.
+
+    .INPUTS
+    System.String
+
+    .OUTPUTS
+    None
+    
+    .EXAMPLE
+    .\build.ps1
+
+    .Example 
+    .\build.ps1 -Task Release
+
+    .Example 
+    .\build.ps1 -Task Analyze
+
+    .Example 
+    .\build.ps1 -Task UpdateModuleManifest
+
+    .Example 
+    .\build.ps1 -Task UpdateDocumentation
+
+    .Example 
+    .\build.ps1 -Task BumpVersion
+
+    .Example 
+    .\build.ps1 -Task Test
+
 #>
 
 [Cmdletbinding()]
 
 Param (
 
-    [Parameter(Mandatory=$false)]
-    [ValidateSet('Build','Release')]
-    [String]$Task = 'Build', 
-
-    [Parameter(Mandatory=$false)]
-    [ValidateSet('Major','Minor','Patch')]
-    [String]$BuildVersion = 'Patch'
+    [Parameter()]    
+    [ValidateSet("Build", "Release", "Analyze", "UpdateModuleManifest", "UpdateDocumentation", "BumpVersion", "Test")]
+    [String]$Task = "Build"
 
 )
-
-function Resolve-Module {
-
-  [Cmdletbinding()]
-
-  param (
-    [Parameter(Mandatory=$true)]
-    [string[]]$Name
-  )
-
-  Process {
-    foreach ($ModuleName in $Name) {
-
-      $Module = Get-Module -Name $ModuleName -ListAvailable
-      Write-Verbose -Message "Resolving Module $($ModuleName)"
-            
-      if ($Module) {
-
-        $Version = $Module |
-        Measure-Object -Property Version -Maximum |
-        Select-Object -ExpandProperty Maximum
-
-        $GalleryVersion = Find-Module -Name $ModuleName -Repository PSGallery |
-        Measure-Object -Property Version -Maximum |
-        Select-Object -ExpandProperty Maximum
-
-        if ($Version -lt $GalleryVersion) {
-
-          if ((Get-PSRepository -Name PSGallery).InstallationPolicy -ne 'Trusted') {
-
-            Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-
-          }
-
-          Write-Verbose -Message "$($ModuleName) Installed Version [$($Version.tostring())] is outdated. Installing Gallery Version [$($GalleryVersion.tostring())]"
-                    
-          Install-Module -Name $ModuleName -Force -SkipPublisherCheck #skip
-          Import-Module -Name $ModuleName -Force -RequiredVersion $GalleryVersion
-
-        }
-        else {
-
-          Write-Verbose -Message "Module Installed, Importing $($ModuleName)"
-          Import-Module -Name $ModuleName -Force -RequiredVersion $Version
-
-        }
-
-      }
-      else {
-
-        Write-Verbose -Message "$($ModuleName) Missing, installing Module"
-        Install-Module -Name $ModuleName -Force
-        Import-Module -Name $ModuleName -Force -RequiredVersion $Version
-
-      }
-
-    }
-
-  }
-
-}
-
-# --- Build Parameters
-$BaseDirectory = $PSScriptRoot #(Resolve-Path -Path .).Path
-$BinDirectory = "$($BaseDirectory)\bin"
-$ModulePath = "$($BaseDirectory)\PowervRA"
-$ModuleManifest = "$($ModulePath)\PowervRA.psd1"
-
-$Parameters = @{
-
-    BaseDirectory = $BaseDirectory
-    BinDirectory = $BinDirectory
-    ModulePath = $ModulePath
-    ModuleManifest = $ModuleManifest
-    BuildVersion = $BuildVersion
-
-}
-
-Write-Output $Parameters
-
-Resolve-Module Psake, Pester, PSScriptAnalyzer -Verbose:$VerbosePreference
-
-$LocalDependencies = @(
-
-    "$($BinDirectory)\Update-MKDocsYML.psm1",
-    "$($BinDirectory)\Update-ModuleDocumentation.psm1",
-    "$($BinDirectory)\Update-ModuleManifestVersion.psm1",
-    "$($BinDirectory)\Update-ModuleManifestFunctions.psm1"
-
-)
-
-$LocalDependencies | % {Import-Module -Name $_ -Force}
 
 # --- Start Build
-Invoke-psake -buildFile "$($PSScriptRoot)\bin\psake.build.ps1" -taskList $Task -parameters $Parameters -nologo -Verbose:$VerbosePreference
+Invoke-psake -buildFile "$($PSScriptRoot)\build.psake.ps1" -taskList $Task -nologo -Verbose:$VerbosePreference
 
 exit ( [int]( -not $psake.build_success ) )

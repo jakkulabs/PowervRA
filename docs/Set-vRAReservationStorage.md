@@ -1,93 +1,144 @@
 # Set-vRAReservationStorage
 
 ## SYNOPSIS
-    
 Set vRA reservation storage properties
 
 ## SYNTAX
- Set-vRAReservationStorage [-Id] <String> [-Path] <String> [[-ReservedSizeGB] <Int32>] [[-Priority] <Int32>] [-Enabled] [-WhatIf] [-Confirm] [<CommonParameters>]     
+
+```
+Set-vRAReservationStorage [-Id] <String> [-Path] <String> [[-ReservedSizeGB] <Int32>] [[-Priority] <Int32>]
+ [-Enabled] [-WhatIf] [-Confirm]
+```
 
 ## DESCRIPTION
-
 Set vRA reservation storage properties
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vRAReservation -Name "Reservation01" | Set-vRAReservationStorage -Path "Datastore01"  -ReservedSizeGB 20 -Priority 10
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 The Id of the reservation
 
-* Required: true
-* Position: 1
-* Default value: 
-* Accept pipeline input: true (ByPropertyName)
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### Path
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
 
+### -Path
 The storage path
 
-* Required: true
-* Position: 2
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### ReservedSizeGB
+Required: True
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -ReservedSizeGB
+{{Fill ReservedSizeGB Description}}
 
-* Required: false
-* Position: 3
-* Default value: 0
-* Accept pipeline input: false
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases: 
 
-### Priority
+Required: False
+Position: 3
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Priority
 The priority of storage
 
-* Required: false
-* Position: 4
-* Default value: 0
-* Accept pipeline input: false
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases: 
 
-### Enabled
+Required: False
+Position: 4
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Enabled
 The status of the storage
 
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: 
 
-### WhatIf
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
 
-### Confirm
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String.
+### System.String.
 System.Int.
 System.Management.Automation.SwitchParameter
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject
+### System.Management.Automation.PSObject
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vRAReservation -Name "Reservation01" | Set-vRAReservationStorage -Path "Datastore01"  -ReservedSizeGB 20 -Priority 10
-```
+## RELATED LINKS
 
