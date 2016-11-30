@@ -139,7 +139,7 @@
             $URI = "/content-management-service/api/packages"
 
             # --- Run vRA REST Request
-            $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body
+            Invoke-vRARestMethod -Method POST -URI $URI -Body $Body | Out-Null
 
             # --- Output the Successful Result
             Get-vRAContentPackage -Name $Name
