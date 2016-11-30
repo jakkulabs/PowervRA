@@ -33,14 +33,13 @@
 
     .EXAMPLE
     Get-vRAContent -Name "some content"
-
     
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
     
-        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName="ById")]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="ById")]
         [ValidateNotNullOrEmpty()]
         [String[]]$Id,
 
@@ -58,9 +57,9 @@
 
     )
 
-    xRequires -Version 7.0
-
     Begin {
+
+        xRequires -Version 7.0
 
     }
 

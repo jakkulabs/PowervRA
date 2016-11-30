@@ -12,11 +12,11 @@
     .PARAMETER Description
     Content Package Description
 
-    .PARAMETER BlueprintId
-    Blueprint Ids to include in the Content Package
+    .PARAMETER ContentId
+    A list content Ids to include in the Package
 
-    .PARAMETER BlueprintName
-    Blueprint Names to include in the Content Package
+    .PARAMETER ContentName
+    A list of Names to include in the Package
 
     .PARAMETER JSON
     Body text to send in JSON format
@@ -28,10 +28,10 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    New-vRAPackage -Name Package01 -Description "This is Content Package 01" -BlueprintId "58e10956-172a-48f6-9373-932f99eab37a","0c74b085-dbc1-4fea-9cbf-a1601f668a1f"
+    New-vRAPackage -Name Package01 -Description "This is Content Package 01" -ContentId "58e10956-172a-48f6-9373-932f99eab37a","0c74b085-dbc1-4fea-9cbf-a1601f668a1f"
 
     .EXAMPLE
-    New-vRAPackage -Name Package01 -Description "This is Content Package 01" -BlueprintName "Blueprint01","Blueprint02"
+    New-vRAPackage -Name Package01 -Description "This is Content Package 01" -ContentName "Blueprint01","Blueprint02"
     
     .EXAMPLE
     $JSON = @"
@@ -58,11 +58,11 @@
 
         [Parameter(Mandatory=$true,ParameterSetName="ById")]
         [ValidateNotNullOrEmpty()]
-        [String[]]$BlueprintId,
+        [String[]]$ContentId,
 
         [Parameter(Mandatory=$true,ParameterSetName="ByName")]
         [ValidateNotNullOrEmpty()]
-        [String[]]$BlueprintName,
+        [String[]]$ContentName,
 
         [Parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="JSON")]
         [ValidateNotNullOrEmpty()]
@@ -70,9 +70,9 @@
 
     )
 
-    xRequires -Version 7.0
-
     begin {
+
+        xRequires -Version 7.0
 
     }
     
@@ -89,7 +89,7 @@
                     contents = @()
                 }
 
-                foreach ($Id in $BlueprintId) {
+                foreach ($Id in $ContentId) {
 
                     $Object.contents += $Id
 
@@ -109,9 +109,9 @@
                     contents = @()
                 }
 
-                foreach ($BPName in $BlueprintName) {
+                foreach ($CName in $ContentName) {
 
-                    $Id = (Get-vRABlueprint -Name $BPName).Id
+                    $Id = (Get-vRAContent -Name $CName).Id
 
                     $Object.contents += $Id
 

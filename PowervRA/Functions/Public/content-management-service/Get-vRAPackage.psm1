@@ -32,7 +32,7 @@
     Get-vRAPackage -Id "b2d72c5d-775b-400c-8d79-b2483e321bae"
 
     .EXAMPLE
-    Get-vRAPackage -Name "ContentPackage01","ContentPackage02"
+    Get-vRAPackage -Name "Package01","Package02"
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 

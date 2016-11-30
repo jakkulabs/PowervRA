@@ -29,7 +29,7 @@
 
     Param (
     
-        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true)]
         [ValidateNotNullOrEmpty()]
         [String[]]$Id,
 
@@ -39,9 +39,9 @@
 
     )
 
-    xRequires -Version 7.0
-
     Begin {
+
+        xRequires -Version 7.0
 
     }
 

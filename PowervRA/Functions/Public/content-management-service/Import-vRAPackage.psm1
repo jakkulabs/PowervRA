@@ -39,9 +39,9 @@
 
     )
 
-    xRequires -Version 7.0
-
     Begin {
+
+        xRequires -Version 7.0
 
         # --- Set Set Line Feed
         $LF = "`r`n"
@@ -116,7 +116,7 @@
                 if ($PSCmdlet.ShouldProcess($FileInfo.FullName)){
 
                     # --- Run vRA REST request
-                    Invoke-vRARestMethod -Method POST -Uri $URI -Body $Form -Headers $Headers -Verbose:$VerbosePreference | Out-Null
+                    Invoke-vRARestMethod -Method POST -Uri $URI -Body $Form -Headers $Headers -Verbose:$VerbosePreference
 
                 }
 

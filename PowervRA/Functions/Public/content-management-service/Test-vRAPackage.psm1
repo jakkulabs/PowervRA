@@ -32,9 +32,9 @@
 
     )
 
-    xRequires -Version 7.0
-
     begin {
+
+        xRequires -Version 7.0
 
         # --- Set Set Line Feed
         $LF = "`r`n"
