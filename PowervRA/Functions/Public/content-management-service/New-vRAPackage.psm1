@@ -16,7 +16,7 @@
     A list content Ids to include in the Package
 
     .PARAMETER ContentName
-    A list of Names to include in the Package
+    A list of content names to include in the Package
 
     .PARAMETER JSON
     Body text to send in JSON format
