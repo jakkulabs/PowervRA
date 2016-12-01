@@ -134,7 +134,6 @@
 
                     }
 
-
                 } else {
 
                     # --- It would be nice to exit cleanly here
@@ -143,7 +142,6 @@
                     return
 
                 }
-
 
             } else {
 
@@ -204,7 +202,6 @@
 
                 }
 
-
                 $ReservationNetworks = $Reservation.extensionData.entries | Where-Object {$_.key -eq "reservationNetworks"}
 
                 $ReservationNetworks.value.items += $ReservationNetworkObject
@@ -234,7 +231,6 @@
     }
 }
 
-
 function getNetworkProfileByName($Network) {
 
 <#
@@ -262,7 +258,6 @@ function getNetworkByPath ($ReservationNetworks, $NetworkPath) {
     Internal helper function to retrieve an existing network path
 
 #>
-
 
     foreach ($ReservationNetwork in $ReservationNetworks) {
 
