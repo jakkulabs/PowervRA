@@ -23,7 +23,8 @@ Describe -Name 'User Principal Tests' -Fixture {
 
     It -Name "Update named User Principal $($JSON.Principal.UserPrincipalId)" -Test {
 
-        $UserPrincipalC = Set-vRAUserPrincipal -Id $JSON.Principal.UserPrincipalId -FirstName $JSON.Principal.UserPrincipalFirstNameUpdated
+        $Password = -join(33..126|%{[char]$_}|Get-Random -C 20)
+        $UserPrincipalC = Set-vRAUserPrincipal -Id $JSON.Principal.UserPrincipalId -FirstName $JSON.Principal.UserPrincipalFirstNameUpdated -Password $Password
         $UserPrincipalC.FirstName | Should Be $JSON.Principal.UserPrincipalFirstNameUpdated
 
     }
