@@ -96,7 +96,7 @@ function Set-vRAUserPrincipal {
 
     )    
 
-    begin {
+    Begin {
         # --- Test for vRA API version
         xRequires -Version 7.0
 
@@ -118,7 +118,7 @@ function Set-vRAUserPrincipal {
 
     }
     
-    process {
+    Process {
 
         try {
             
@@ -215,7 +215,7 @@ function Set-vRAUserPrincipal {
         }
         
     }
-    end {
+    End {
         
     }
 }
