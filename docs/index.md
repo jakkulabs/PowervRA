@@ -7,7 +7,7 @@ Note: this module is not in any way developed or supported by anyone officially 
 
 ## Compatibility
 
-**vRA: version 6.2.4, 7.0 and 7.0.1** - Note: support for 6.2.4 is limited given API restrictions. Functions which don't support 6.2.4 will exit early and cleanly.
+**vRA: version 6.2.4, 7.0, 7.0.1 and 7.1** - Note: support for 6.2.4 is limited given API restrictions. Functions which don't support 6.2.4 will exit early and cleanly.
 
 **PowerShell: version 4 and 5**
 

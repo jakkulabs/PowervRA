@@ -12,14 +12,30 @@ Set-vRAReservationNetwork [-Id] <String> [-NetworkPath] <String> [[-NetworkProfi
 
 ## DESCRIPTION
 Set vRA reservation network properties.
-This cmdlet can be used to set the Network Profile for a
-Network Path in a reservation.
+
+This function enables you to:
+
+- Add a new network path to a reservation
+- Add a new network path to a reservation and assign a network profile
+- Update the network profile of an existing network path
+
+If the network path you supply is already selected in the reservation and no network profile is supplied, no action will be taken.
 
 ## EXAMPLES
 
 ### -------------------------- EXAMPLE 1 --------------------------
 ```
 Get-vRAReservation -Name "Reservation01" | Set-vRAReservationNetwork -NetworkPath "VM Network" -NetworkProfile "Test Profile 1"
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vRAReservation -Name "Reservation01" | Set-vRAReservationNetwork -NetworkPath "VM Network" -NetworkProfile "Test Profile 2"
+```
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Get-vRAReservation -Name "Reservation01" | Set-vRAReservationNetwork -NetworkPath "Test Network"
 ```
 
 ## PARAMETERS
@@ -102,11 +118,11 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### System.String.
+### System.String
 
 ## OUTPUTS
 
-### System.Management.Automation.PSObject
+### None
 
 ## NOTES
 
