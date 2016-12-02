@@ -154,7 +154,7 @@
                 # --- Build the URI string for the catalog item   
                 $URI = "/catalog-service/api/catalogItems/$($Id)"      
             
-                $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body ($CatalogItem | ConvertTo-Json -Depth 100) -Verbose:$VerbosePreference
+                Invoke-vRARestMethod -Method PUT -URI $URI -Body ($CatalogItem | ConvertTo-Json -Depth 100) -Verbose:$VerbosePreference | Out-Null
 
                 Get-vRACatalogItem -Id $($CatalogItem.id)
                 

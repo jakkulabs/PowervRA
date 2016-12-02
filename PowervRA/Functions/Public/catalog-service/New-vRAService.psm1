@@ -165,7 +165,7 @@
             
                 $URI = "/catalog-service/api/services"
                            
-                $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference
+                Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference | Out-Null
 
                 Get-vRAService -Name "$($Name)"
 
