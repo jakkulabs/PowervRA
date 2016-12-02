@@ -165,7 +165,11 @@
             
                 $URI = "/catalog-service/api/services"
                            
+<<<<<<< HEAD:PowervRA/Functions/Public/catalog-service/New-vRAService.psm1
                 Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference | Out-Null
+=======
+                $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference
+>>>>>>> master:PowervRA/Functions/Public/catalog-service/New-vRAService.psm1
 
                 Get-vRAService -Name "$($Name)"
 

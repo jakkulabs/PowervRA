@@ -99,6 +99,7 @@ function Set-vRAUserPrincipal {
     Begin {
         # --- Test for vRA API version
         xRequires -Version 7.0
+<<<<<<< HEAD
 
         # --- Fix for bug found in 7.1 and 7.2 where the PUT will fail if the password attribute is sent back NULL
         # --- If the API version is 7.1 or 7.2 and the Password parameter is not passed Remove unsupported parameters from $PSBoundParameters
@@ -116,6 +117,8 @@ function Set-vRAUserPrincipal {
 
         }
 
+=======
+>>>>>>> master
     }
     
     Process {
