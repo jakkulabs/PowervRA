@@ -4,8 +4,15 @@
     Set vRA reservation network properties
 
     .DESCRIPTION
-    Set vRA reservation network properties. This cmdlet can be used to set the Network Profile for a
-    Network Path in a reservation.
+    Set vRA reservation network properties.
+
+    This function enables you to:
+
+    - Add a new network path to a reservation
+    - Add a new network path to a reservation and assign a network profile
+    - Update the network profile of an existing network path
+
+    If the network path you supply is already selected in the reservation and no network profile is supplied, no action will be taken.
 
     .PARAMETER Id
     The Id of the reservation
@@ -17,30 +24,36 @@
     The network profile
 
     .INPUTS
-    System.String.
+    System.String
 
     .OUTPUTS
-    System.Management.Automation.PSObject
+    None
 
     .EXAMPLE
     Get-vRAReservation -Name "Reservation01" | Set-vRAReservationNetwork -NetworkPath "VM Network" -NetworkProfile "Test Profile 1"
 
+    .EXAMPLE
+    Get-vRAReservation -Name "Reservation01" | Set-vRAReservationNetwork -NetworkPath "VM Network" -NetworkProfile "Test Profile 2"
+
+    .EXAMPLE
+    Get-vRAReservation -Name "Reservation01" | Set-vRAReservationNetwork -NetworkPath "Test Network"
+
 #>
-[CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")][OutputType()]
 
     Param (
 
-    [parameter(Mandatory=$true,ValueFromPipelineByPropertyName)]
-    [ValidateNotNullOrEmpty()]
-    [String]$Id,
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true)]
+        [ValidateNotNullOrEmpty()]
+        [String]$Id,
 
-    [parameter(Mandatory=$true)]
-    [ValidateNotNullOrEmpty()]
-    [String]$NetworkPath,
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
+        [String]$NetworkPath,
 
-    [parameter(Mandatory=$false)]
-    [ValidateNotNull()]
-    [String]$NetworkProfile
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [String]$NetworkProfile
 
     )
  
@@ -54,11 +67,9 @@
 
             # --- Get the reservation
 
-            $URI = "/reservation-service/api/reservations/$($id)"
-
-            $Reservation = Invoke-vRARestMethod -Method GET -URI $URI
+            $Reservation = Invoke-vRARestMethod -Method GET -URI "/reservation-service/api/reservations/$($id)" -Verbose:$VerbosePreference
             
-            $ReservationTypeName = (Get-vRAReservationType -Id $Reservation.reservationTypeId).name
+            $ReservationTypeName = (Get-vRAReservationType -Id $Reservation.reservationTypeId -Verbose:$VerbosePreference).name
 
             $ComputeResourceId = ($Reservation.extensionData.entries | Where-Object {$_.key -eq "computeResource"}).value.id                         
 
@@ -66,93 +77,134 @@
             # --- Set Network Properties
             # ---
 
-            $ReservationNetworkPathId = ((Get-vRAReservationComputeResourceNetwork -Type $ReservationTypeName -ComputeResourceId $ComputeResourceId -Name $NetworkPath).values.entries | Where-Object {$_.key -eq "networkPath"}).value.id
+            $NetworkPathId = ((Get-vRAReservationComputeResourceNetwork -Type $ReservationTypeName -ComputeResourceId $ComputeResourceId -Name $NetworkPath -Verbose:$VerbosePreference).values.entries | Where-Object {$_.key -eq "networkPath"}).value.id
 
-            $ReservationNetworks = $Reservation.extensionData.entries | Where-Object {$_.key -eq "reservationNetworks"}  
+            # --- Check to see if the provided network path is available for the reservation
+            If(!$NetworkPathId) {
 
-            $ReservationNetworkItems = $ReservationNetworks.value.items
+                throw "Could not find network path $($NetworkPath) in Compute Resource $($ComputeResourceId)"
 
-            foreach ($ReservationNetworkItem in $ReservationNetworkItems) {
+            }
 
-                $NetworkPathId = ($ReservationNetworkItem.values.entries | Where-Object {$_.key -eq "networkPath"}).value.id                 
-               
-                if ($NetworkPathId -eq $ReservationNetworkPathId) {
+            # --- Get a list of networks currently selected by the reservation
+            $SelectedReservationNetworks = ($Reservation.extensionData.entries | Where-Object {$_.key -eq "reservationNetworks"}).value.items
 
-                    if ($PSBoundParameters.ContainsKey("NetworkProfile")){
+            # --- Check to see if the provided networkpath is currently selected in the reservation
+            $ExistingReservationNetwork = getNetworkByPath $SelectedReservationNetworks $NetworkPath
 
-                        # --- Test to see if a network profile exists in the reservation
-                        $ExistingNetworkProfile = $ReservationNetworkItem.values.entries | Where-Object {$_.key -eq "networkProfile"}
+            if ($ExistingReservationNetwork) {
 
-                        if ($ExistingNetworkProfile) {
+                # --- If the network path exists and network profile is passed update otherwise exit with nothing to do
+                if ($PSBoundParameters.ContainsKey("NetworkProfile")) {
 
-                            if ($NetworkProfile -eq '') {
+                    Write-Verbose -Message "Network path exists in reservation and Network Profile has been specified"
+                
+                    $NetworkProfileObject = getNetworkProfileByName $NetworkProfile
 
-                                # --- Remove an existing network profile
+                    # --- Check to see if the network path already has a profile assigned, if one exists, update it, if not add it
+                    $ExistingReservationNetworkProfile = $ExistingReservationNetwork | Where-Object{$_.key -eq "networkProfile"}
 
-                                Write-Verbose -Message "Removing Network Profile"
+                    if ($ExistingReservationNetworkProfile) {
 
-                                $ReservationNetworkItem.values.entries = @($ReservationNetworkItem.values.entries | Where-Object {$_.key -ne "networkProfile"})
+                        Write-Verbose -Message "Updating existing Network Profile"
 
-                            }
-                            else {
+                        $ExistingReservationNetworkProfile.value.id = $NetworkProfileObject.id
+                        $ExistingReservationNetworkProfile.value.label = $NetworkProfileObject.name
 
-                                # --- Get network profile information 
-                                $Response = Invoke-vRARestMethod -Method GET -URI "/iaas-proxy-provider/api/network/profiles?`$filter=name%20eq%20'$($NetworkProfile)'"
+                    } else {
 
-                                if ($Response.content.Count -eq 0) {
+                        Write-Verbose -Message "Adding new Network Profile"
 
-                                    throw "Could not find network profile with name $($NetworkProfile)"
+                        $ReservationNetworkProfileTemplate = @"
 
+                            {
+                                "key": "networkProfile",
+                                "value": {
+                                    "type": "entityRef",
+                                    "componentId": null,
+                                    "classId": "networkProfile",
+                                    "id": "$($NetworkProfileObject.id)",
+                                    "label": "$($NetworkProfileObject.name)"
                                 }
-
-                                # --- Handle updating an existing network profile
-
-                                Write-Verbose -Message "Updating Network Profile: $($ExistingNetworkProfile.value.label) >> $($NetworkProfile)"
-
-                                $ExistingNetworkProfile.value.id = $Response.content[0].id
-
-                                $ExistingNetworkProfile.value.label = $Response.content[0].name
-
                             }
-
-                        }
-                        else {
-
-                            # --- Get network profile information 
-                            $Response = Invoke-vRARestMethod -Method GET -URI "/iaas-proxy-provider/api/network/profiles?`$filter=name%20eq%20'$($NetworkProfile)'"
-
-                            if ($Response.content.Count -eq 0) {
-
-                                throw "Could not find network profile with name $($NetworkProfile)"
-
-                            }
-
-                            # --- Handle adding a new network profile to an existing path
-
-                            Write-Verbose -Message "Adding Network Profile: $($NetworkProfile)"
-
-                            $NetworkProfileTemplate = @"
-
-                                {
-                                    "key":  "networkProfile",
-                                    "value":  {
-                                                  "type":  "entityRef",
-                                                  "componentId":  null,
-                                                  "classId":  "Network",
-                                                  "id":  "$($NetworkProfileObject.id)",
-                                                  "label":  "$($NetworkProfileObject.name)"
-                                              }
-                                }
 
 "@
 
-                            $ReservationNetworkItem.values.entries += ($NetworkProfileTemplate | ConvertFrom-Json)
-
-                        }
+                            $ExistingReservationNetwork.values.entries += ($ReservationNetworkProfileTemplate | ConvertFrom-Json)
 
                     }
 
+                } else {
+
+                    # --- It would be nice to exit cleanly here
+                    Write-Verbose -Message "Network path exists in reservation but no Network profile has been specified"
+                    Write-Verbose -Message "Exiting gracefully"
+                    return
+
                 }
+
+            } else {
+
+                # --- If the network path doesn't exist add it and also a network profile if passed
+
+                Write-Verbose -Message "Adding new Network Path to reservation"
+
+                $ReservationNetworkTemplate = @"
+
+                    {
+                        "type": "complex",
+                        "componentTypeId": "com.vmware.csp.iaas.blueprint.service",
+                        "componentId": null,
+                        "classId": "Infrastructure.Reservation.Network",
+                        "typeFilter": null,
+                        "values": {
+                            "entries": [
+                                {
+                                    "key": "networkPath",
+                                    "value": {
+                                        "type": "entityRef",
+                                        "componentId": null,
+                                        "classId": "Network",
+                                        "id": "$($NetworkPathId)",
+                                        "label": "$($NetworkPath)"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+
+"@
+
+                $ReservationNetworkObject = $ReservationNetworkTemplate | ConvertFrom-Json
+
+                if ($PSBoundParameters.ContainsKey("NetworkProfile")) {
+
+                    Write-Verbose -Message "Assigning a Network Profile to new Network Path"
+
+                    $NetworkProfileObject = getNetworkProfileByName $NetworkProfile
+
+                    $ReservationNetworkProfileTemplate = @"
+
+                        {
+                            "key": "networkProfile",
+                            "value": {
+                                "type": "entityRef",
+                                "componentId": null,
+                                "classId": "networkProfile",
+                                "id": "$($NetworkProfileObject.id)",
+                                "label": "$($NetworkProfileObject.name)"
+                            }
+                        }
+
+"@
+
+                        $ReservationNetworkObject.values.entries += $ReservationNetworkProfileTemplate | ConvertFrom-Json
+
+                }
+
+                $ReservationNetworks = $Reservation.extensionData.entries | Where-Object {$_.key -eq "reservationNetworks"}
+
+                $ReservationNetworks.value.items += $ReservationNetworkObject
 
             }
 
@@ -163,9 +215,7 @@
                 Write-Verbose -Message "Preparing PUT to $($URI)"  
 
                 # --- Run vRA REST Request
-                $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body ($Reservation | ConvertTo-Json -Depth 500)
-
-                Write-Verbose -Message "SUCCESS"
+                Invoke-vRARestMethod -Method PUT -URI $URI -Body ($Reservation | ConvertTo-Json -Depth 100) -Verbose:$VerbosePreference | Out-Null
 
             }
 
@@ -179,4 +229,46 @@
     end {
         
     }
+}
+
+function getNetworkProfileByName($Network) {
+
+<#
+
+    Internal helper fucntion to retrieve a network profile by it's name
+
+#>
+
+    $Response = (Invoke-vRARestMethod -Method GET -URI "/iaas-proxy-provider/api/network/profiles?`$filter=name%20eq%20'$($NetworkProfile)'").content
+
+    if (!$Response) {
+
+        throw "Could not find Network Profile with name $($NetworkProfile)"
+
+    }
+
+    return $Response
+
+}
+
+function getNetworkByPath ($ReservationNetworks, $NetworkPath) {
+
+<#
+
+    Internal helper function to retrieve an existing network path
+
+#>
+
+    foreach ($ReservationNetwork in $ReservationNetworks) {
+
+        $ExistingNetworkPath = $ReservationNetwork.values.entries | Where-Object  {$_.key -eq "networkPath"} 
+
+        if ($ExistingNetworkPath.value.label -eq $NetworkPath) {
+
+            return $ReservationNetwork
+
+        }
+        
+    }
+
 }
