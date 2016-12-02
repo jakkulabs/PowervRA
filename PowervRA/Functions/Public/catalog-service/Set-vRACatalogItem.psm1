@@ -154,12 +154,7 @@
                 # --- Build the URI string for the catalog item   
                 $URI = "/catalog-service/api/catalogItems/$($Id)"      
             
-<<<<<<< HEAD:PowervRA/Functions/Public/catalog-service/Set-vRACatalogItem.psm1
                 Invoke-vRARestMethod -Method PUT -URI $URI -Body ($CatalogItem | ConvertTo-Json -Depth 100) -Verbose:$VerbosePreference | Out-Null
-=======
-                $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body ($CatalogItem | ConvertTo-Json -Depth 100) -Verbose:$VerbosePreference
->>>>>>> master:PowervRA/Functions/Public/catalog-service/Set-vRACatalogItem.psm1
-
                 Get-vRACatalogItem -Id $($CatalogItem.id)
                 
             }

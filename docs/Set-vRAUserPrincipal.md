@@ -6,13 +6,8 @@ Update a vRA local user principal
 ## SYNTAX
 
 ```
-<<<<<<< HEAD
 Set-vRAUserPrincipal [-Id] <String> [[-Tenant] <String>] [[-FirstName] <String>] [[-LastName] <String>]
  [[-EmailAddress] <String>] [[-Description] <String>] [[-Password] <String>] [-DisableAccount] [-EnableAccount]
-=======
-Set-vRAUserPrincipal -Id <String> [-Tenant <String>] [-FirstName <String>] [-LastName <String>]
- [-EmailAddress <String>] [-Description <String>] [-Password <String>] [-DisableAccount] [-EnableAccount]
->>>>>>> master
  [-WhatIf] [-Confirm]
 ```
 
@@ -52,11 +47,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: True
-<<<<<<< HEAD
 Position: 1
-=======
-Position: Named
->>>>>>> master
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -71,11 +62,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-<<<<<<< HEAD
 Position: 2
-=======
-Position: Named
->>>>>>> master
 Default value: $Global:vRAConnection.Tenant
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -90,11 +77,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-<<<<<<< HEAD
 Position: 3
-=======
-Position: Named
->>>>>>> master
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -109,11 +92,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-<<<<<<< HEAD
 Position: 4
-=======
-Position: Named
->>>>>>> master
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -128,11 +107,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-<<<<<<< HEAD
 Position: 5
-=======
-Position: Named
->>>>>>> master
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -147,11 +122,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-<<<<<<< HEAD
 Position: 6
-=======
-Position: Named
->>>>>>> master
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -166,11 +137,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-<<<<<<< HEAD
 Position: 7
-=======
-Position: Named
->>>>>>> master
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

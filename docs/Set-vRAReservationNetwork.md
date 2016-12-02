@@ -4,7 +4,6 @@
 Set vRA reservation network properties
 
 ## SYNTAX
-<<<<<<< HEAD
 
 ```
 Set-vRAReservationNetwork [-Id] <String> [-NetworkPath] <String> [[-NetworkProfile] <String>] [-WhatIf]
@@ -41,28 +40,6 @@ Get-vRAReservation -Name "Reservation01" | Set-vRAReservationNetwork -NetworkPat
 
 ## PARAMETERS
 
-=======
-
-```
-Set-vRAReservationNetwork [-Id] <String> [-NetworkPath] <String> [[-NetworkProfile] <String>] [-WhatIf]
- [-Confirm]
-```
-
-## DESCRIPTION
-Set vRA reservation network properties.
-This cmdlet can be used to set the Network Profile for a
-Network Path in a reservation.
-
-## EXAMPLES
-
-### -------------------------- EXAMPLE 1 --------------------------
-```
-Get-vRAReservation -Name "Reservation01" | Set-vRAReservationNetwork -NetworkPath "VM Network" -NetworkProfile "Test Profile 1"
-```
-
-## PARAMETERS
-
->>>>>>> master
 ### -Id
 The Id of the reservation
 
@@ -100,7 +77,6 @@ The network profile
 Type: String
 Parameter Sets: (All)
 Aliases: 
-<<<<<<< HEAD
 
 Required: False
 Position: 3
@@ -133,40 +109,6 @@ Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: cf
 
-=======
-
-Required: False
-Position: 3
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
->>>>>>> master
 Required: False
 Position: Named
 Default value: None
@@ -176,19 +118,11 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-<<<<<<< HEAD
 ### System.String
 
 ## OUTPUTS
 
 ### None
-=======
-### System.String.
-
-## OUTPUTS
-
-### System.Management.Automation.PSObject
->>>>>>> master
 
 ## NOTES
 
