@@ -41,6 +41,8 @@
 
     begin {
 
+        Write-Warning -Message "This command is deprecated and will be removed in a future release. Please use Import-vRAPackage instead."
+
         # --- Set Set Line Feed
         $LF = "`r`n"
    

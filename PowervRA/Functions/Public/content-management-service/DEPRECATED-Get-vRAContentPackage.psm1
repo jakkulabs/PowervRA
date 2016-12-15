@@ -49,6 +49,8 @@
 
     # --- Test for vRA API version
     xRequires -Version 7.0
+
+    Write-Warning -Message "This command is deprecated and will be removed in a future release. Please use Get-vRAPackage instead."
     
     try {                
         switch ($PsCmdlet.ParameterSetName) 
