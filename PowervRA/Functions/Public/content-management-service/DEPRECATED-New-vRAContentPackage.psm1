@@ -70,6 +70,9 @@
     )    
 
     begin {
+
+        Write-Warning -Message "This command is deprecated and will be removed in a future release. Please use New-vRAPackage instead."
+
         # --- Test for vRA API version
         xRequires -Version 7.0
     }
@@ -136,7 +139,7 @@
             $URI = "/content-management-service/api/packages"
 
             # --- Run vRA REST Request
-            $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body
+            Invoke-vRARestMethod -Method POST -URI $URI -Body $Body | Out-Null
 
             # --- Output the Successful Result
             Get-vRAContentPackage -Name $Name

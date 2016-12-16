@@ -1,4 +1,4 @@
-﻿function Remove-vRAContentPackage {
+﻿function Remove-vRAPackage {
 <#
     .SYNOPSIS
     Remove a vRA Content Package
@@ -19,13 +19,13 @@
     None
 
     .EXAMPLE
-    Remove-vRAContentPackage -Id "f8e0d99e-c567-4031-99cb-d8410c841ed7"
+    Remove-vRAPackage -Id "f8e0d99e-c567-4031-99cb-d8410c841ed7"
 
     .EXAMPLE
-    Remove-vRAContentPackage -Name "ContentPackage01","ContentPackage02"
+    Remove-vRAPackage -Name "Package01","Package02"
     
     .EXAMPLE
-    Get-vRAContentPackage -Name "ContentPackage01","ContentPackage02" | Remove-vRAContentPackage -Confirm:$false
+    Get-vRAPackage -Name "Package01","Package02" | Remove-vRAPackage -Confirm:$false
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High",DefaultParameterSetName="Id")]
 
@@ -41,8 +41,9 @@
     )    
 
     begin {
-        # --- Test for vRA API version
+
         xRequires -Version 7.0
+
     }
     
     process {    
@@ -51,15 +52,16 @@
         { 
             "Id"  {
 
-                foreach ($ContentPackageId in $Id){
+                foreach ($PackageId in $Id){
                 
                     try {
-                        if ($PSCmdlet.ShouldProcess($ContentPackageId)){
+                        if ($PSCmdlet.ShouldProcess($PackageId)){
 
                             $URI = "/content-management-service/api/packages/$($id)"  
 
                             # --- Run vRA REST Request
-                            $Response = Invoke-vRARestMethod -Method DELETE -URI $URI
+                            Invoke-vRARestMethod -Method DELETE -URI $URI -Verbose:$VerbosePreference | Out-NUll
+
                         }
                     }
                     catch [Exception]{
@@ -73,19 +75,19 @@
 
             "Name"  {
 
-                foreach ($ContentPackageName in $Name){
+                foreach ($PackageName in $Name){
                 
                     try {
-                        if ($PSCmdlet.ShouldProcess($ContentPackageName)){
+                        if ($PSCmdlet.ShouldProcess($PackageName)){
 
                             # --- Find the Content Package
-                            $ContentPackage = Get-vRAContentPackage -Name $ContentPackageName
-                            $Id = $ContentPackage.ID
+                            $Package = Get-vRAPackage -Name $PackageName
+                            $Id = $Package.ID
 
                             $URI = "/content-management-service/api/packages/$($Id)"  
 
                             # --- Run vRA REST Request
-                            $Response = Invoke-vRARestMethod -Method DELETE -URI $URI
+                            Invoke-vRARestMethod -Method DELETE -URI $URI -Verbose:$VerbosePreference | Out-Null
                         }
                     }
                     catch [Exception]{

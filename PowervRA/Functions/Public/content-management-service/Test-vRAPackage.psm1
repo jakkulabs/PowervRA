@@ -1,4 +1,4 @@
-﻿function Test-vRAContentPackage {
+﻿function Test-vRAPackage {
 <#
     .SYNOPSIS
     Validates a vRA Content Package    
@@ -16,23 +16,25 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    Test-vRAContentPackage -File C:\Packages\ContentPackage100.zip
+    Test-vRAPackage -File C:\Packages\Package100.zip
 
     .EXAMPLE
-    Get-ChildItem -Path C:\Packages\ContentPackage100.zip| Test-vRAContentPackage
+    Get-ChildItem -Path C:\Packages\Package100.zip| Test-vRAPackage
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
-    [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelinebyPropertyName=$true)]
-    [ValidateNotNullOrEmpty()]
-    [String[]]$File
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelinebyPropertyName=$true)]
+        [ValidateNotNullOrEmpty()]
+        [String[]]$File
 
     )
 
     begin {
+
+        xRequires -Version 7.0
 
         # --- Set Set Line Feed
         $LF = "`r`n"
