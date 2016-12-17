@@ -12,8 +12,8 @@
     .PARAMETER Description
     Content Package Description
 
-    .PARAMETER ContentId
-    A list content Ids to include in the Package
+    .PARAMETER Id
+    A list of content Ids to include in the Package
 
     .PARAMETER ContentName
     A list of content names to include in the Package
@@ -28,11 +28,14 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    New-vRAPackage -Name Package01 -Description "This is Content Package 01" -ContentId "58e10956-172a-48f6-9373-932f99eab37a","0c74b085-dbc1-4fea-9cbf-a1601f668a1f"
+    New-vRAPackage -Name Package01 -Description "This is Content Package 01" -Id "58e10956-172a-48f6-9373-932f99eab37a","0c74b085-dbc1-4fea-9cbf-a1601f668a1f"
 
     .EXAMPLE
     New-vRAPackage -Name Package01 -Description "This is Content Package 01" -ContentName "Blueprint01","Blueprint02"
     
+    .EXAMPLE
+    Get-vRAContent | New-vRAPackage -Name Package01 - Description "This is Content Package 01"
+
     .EXAMPLE
     $JSON = @"
     {
@@ -56,9 +59,10 @@
         [ValidateNotNullOrEmpty()]
         [String]$Description,
 
-        [Parameter(Mandatory=$true,ParameterSetName="ById")]
+        [Parameter(Mandatory=$true,ParameterSetName="ById", ValueFromPipelineByPropertyName=$true)]
         [ValidateNotNullOrEmpty()]
-        [String[]]$ContentId,
+        [Alias("ContentId")]
+        [String[]]$Id,
 
         [Parameter(Mandatory=$true,ParameterSetName="ByName")]
         [ValidateNotNullOrEmpty()]
@@ -74,50 +78,40 @@
 
         xRequires -Version 7.0
 
+        $Object = [PSCustomObject] @{
+
+            name = $Name
+            description = $Description
+            contents = @()
+        }
+
     }
     
     process {
 
         switch ($PsCmdlet.ParameterSetName) 
         { 
-            "ById"  {                
+            "ById"  { 
 
-                $Object = [pscustomObject] @{
+                foreach ($CId in $Id) {
 
-                    name = $Name
-                    description = $Description
-                    contents = @()
-                }
-
-                foreach ($Id in $ContentId) {
-
-                    $Object.contents += $Id
+                    Write-Verbose -Message "Adding content with id $($CId) to package"
+                    $Object.contents += $CId
 
                 }
-
-                $Body = $Object | ConvertTo-Json                    
 
                 break
             }
 
             "ByName"  {
-                
-                $Object = [pscustomObject] @{
-
-                    name = $Name
-                    description = $Description
-                    contents = @()
-                }
 
                 foreach ($CName in $ContentName) {
 
+                    Write-Verbose -Message "Adding content with id $($CName) to package"
                     $Id = (Get-vRAContent -Name $CName).Id
-
                     $Object.contents += $Id
 
                 }
-
-                $Body = $Object | ConvertTo-Json 
                 
                 break
             }
@@ -132,6 +126,11 @@
                 break
             }
         }
+    }
+    end {
+
+        # --- Convert PSCustomObject to a string
+        $Body = $Object | ConvertTo-Json                    
 
         if ($PSCmdlet.ShouldProcess($Name)){
 
@@ -141,10 +140,7 @@
             Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference | Out-Null
 
             # --- Output the Successful Result
-            Get-vRAPackage -Name $Name
-        } 
-    }
-    end {
-        
+            Get-vRAPackage -Name $Name -Verbose:$VerbosePreference
+        }   
     }
 }
