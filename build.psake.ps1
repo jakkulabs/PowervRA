@@ -112,15 +112,14 @@ Task UpdateDocumentation {
         return
     }
 
-    if (!(Test-Path -LiteralPath $DocsDirectory)) {
-        New-Item $DocsDirectory -ItemType Directory | Out-Null
+    if (Test-Path -LiteralPath $DocsDirectory) {
+
+        Remove-Item -Path $DocsDirectory -Recurse -Force
+
     }
 
-    if (Get-ChildItem -LiteralPath $DocsDirectory -Filter *.md -Recurse) {
-        Get-ChildItem -LiteralPath $DocsDirectory -Directory | ForEach-Object {
-            Update-MarkdownHelp -Path $_.FullName -Verbose:$VerbosePreference | Out-Null
-        }
-    }
+
+    New-Item $DocsDirectory -ItemType Directory | Out-Null
 
     # --- ErrorAction set to SilentlyContinue so this command will not overwrite an existing MD file.
     New-MarkdownHelp -Module $ModuleName -Locale $DefaultLocale -OutputFolder $DocsDirectory -NoMetadata `
