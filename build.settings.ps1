@@ -18,11 +18,6 @@ Properties {
     [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
     $ModuleCopyright = '(c) 2016 Jakku Labs. All rights reserved.'
 
-    # --- Setting to use when calling the BumpVersion task. This can either be Major, Minor or Patch.
-    # --- This setting should eventually be parameterised
-    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
-    $BumpVersion = "Patch"
-
 # ----------------------- Basic properties --------------------------------
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
