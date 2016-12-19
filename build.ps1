@@ -21,7 +21,7 @@
     The build task that needs to be executed. The value of this parameter can be:
 
     - Build
-    - Release
+    - PrepareRelease
     - Analyze
     - UpdateModuleManifest
     - UpdateDocumentation
@@ -35,6 +35,16 @@
     The BumpVersion will increment the version of the Module Manifest based on the $BumpVersion setting provided in build.settings.ps1.
     By default this is patch.
 
+    .PARAMETER Version
+    The part of the version you wish to bump for this release.
+
+    Possible values are:
+
+    - NONE
+    - PATCH
+    - MINOR
+    - MAJOR
+
     .INPUTS
     System.String
 
@@ -45,7 +55,7 @@
     .\build.ps1
 
     .Example 
-    .\build.ps1 -Task Release
+    .\build.ps1 -Task PrepareRelease
 
     .Example 
     .\build.ps1 -Task Analyze
@@ -69,12 +79,16 @@
 Param (
 
     [Parameter()]    
-    [ValidateSet("Build", "Release", "Analyze", "UpdateModuleManifest", "UpdateDocumentation", "BumpVersion", "Test")]
-    [String]$Task = "Build"
+    [ValidateSet("Build", "PrepareRelease", "Analyze", "UpdateModuleManifest", "UpdateDocumentation", "BumpVersion", "Test")]
+    [String]$Task = "Build",
+
+    [Parameter()]
+    [ValidateSet("PATCH", "MINOR", "MAJOR")]
+    [String]$Version
 
 )
 
 # --- Start Build
-Invoke-psake -buildFile "$($PSScriptRoot)\build.psake.ps1" -taskList $Task -nologo -Verbose:$VerbosePreference
+Invoke-psake -buildFile "$($PSScriptRoot)\build.psake.ps1" -taskList $Task  -parameters @{"Version"=$Version} -nologo -Verbose:$VerbosePreference
 
 exit ( [int]( -not $psake.build_success ) )

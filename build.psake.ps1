@@ -1,10 +1,17 @@
 # --- Dot source build.settings.ps1
 . $PSScriptRoot\build.settings.ps1
 
+# --- Add any parameters from build.ps1
+properties {
+
+  $BumpVersion = $Version
+
+}
+
 # --- Define the build tasks
 Task Default -depends Build
 Task Build -depends Analyze, UpdateModuleManifest, UpdateDocumentation
-Task Release -depends Build, Test, BumpVersion
+Task PrepareRelease -depends Build, BumpVersion
 
 Task Analyze {
 
@@ -203,7 +210,7 @@ Task BumpVersion {
 
     switch ($BumpVersion) {
 
-        'Major' {
+        'MAJOR' {
 
             Write-Verbose -Message "Bumping module major release number"
 
@@ -215,7 +222,7 @@ Task BumpVersion {
 
         }
 
-        'Minor' {
+        'MINOR' {
 
             Write-Verbose -Message "Bumping module minor release number"
 
@@ -226,7 +233,7 @@ Task BumpVersion {
 
         }
 
-        'Patch' {
+        'PATCH' {
 
             Write-Verbose -Message "Bumping module patch release number"
 
@@ -235,16 +242,30 @@ Task BumpVersion {
             break
         }
 
+        default {
+
+            Write-Verbose -Message "Not bumping module version"
+            break
+
+        }
+
     }
 
     # --- Build the new version string
     $ModuleVersion = "$($MajorVersion).$($MinorVersion).$($PatchVersion)"
 
-    if ($ModuleVersion -gt $CurrentModuleVersion) {
+    if ([version]$ModuleVersion -gt [version]$CurrentModuleVersion) {
 
         # --- Fix taken from: https://github.com/RamblingCookieMonster/BuildHelpers/blob/master/BuildHelpers/Public/Step-ModuleVersion.ps1
         New-ModuleManifest -Path $ModuleManifestPath -ModuleVersion $ModuleVersion @ModuleManifest -Verbose:$VerbosePreference
         Write-Verbose -Message "Module version updated to $($ModuleVersion)"
+
+        # --- Update appveyor build version
+        $AppveyorYMLPath = "$($PSScriptRoot)\appveyor.yml"
+        $AppveyorVersion = "$($ModuleVersion).{build}"
+        $NewAppveyorYML = Get-Content -Path $AppveyorYMLPath | ForEach-Object { $_ -replace '^version: .+$', "version: $($AppveyorVersion)";} 
+        $NewAppveyorYML | Set-Content -Path $AppveyorYMLPath -Force
+        Write-Verbose -Message "Appveyor build version set to $($AppveyorVersion)"
 
     }
 
