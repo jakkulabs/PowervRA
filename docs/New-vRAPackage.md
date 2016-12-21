@@ -7,7 +7,7 @@ Create a vRA Content Package
 
 ### ById (Default)
 ```
-New-vRAPackage -Name <String> [-Description <String>] -ContentId <String[]> [-WhatIf] [-Confirm]
+New-vRAPackage -Name <String> [-Description <String>] -Id <String[]> [-WhatIf] [-Confirm]
 ```
 
 ### ByName
@@ -27,7 +27,7 @@ Create a vRA Package
 
 ### -------------------------- EXAMPLE 1 --------------------------
 ```
-New-vRAPackage -Name Package01 -Description "This is Content Package 01" -ContentId "58e10956-172a-48f6-9373-932f99eab37a","0c74b085-dbc1-4fea-9cbf-a1601f668a1f"
+New-vRAPackage -Name Package01 -Description "This is Content Package 01" -Id "58e10956-172a-48f6-9373-932f99eab37a","0c74b085-dbc1-4fea-9cbf-a1601f668a1f"
 ```
 
 ### -------------------------- EXAMPLE 2 --------------------------
@@ -36,6 +36,11 @@ New-vRAPackage -Name Package01 -Description "This is Content Package 01" -Conten
 ```
 
 ### -------------------------- EXAMPLE 3 --------------------------
+```
+Get-vRAContent | New-vRAPackage -Name Package01 - Description "This is Content Package 01"
+```
+
+### -------------------------- EXAMPLE 4 --------------------------
 ```
 $JSON = @"
 ```
@@ -80,18 +85,18 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ContentId
-A list content Ids to include in the Package
+### -Id
+A list of content Ids to include in the Package
 
 ```yaml
 Type: String[]
 Parameter Sets: ById
-Aliases: 
+Aliases: ContentId
 
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
