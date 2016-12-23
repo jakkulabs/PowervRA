@@ -15,4 +15,4 @@ $ExecutionContext.SessionState.Module.OnRemove = {
 
     Remove-Variable -Name vRAConnection -Force -ErrorAction SilentlyContinue
 
-}s
+}
