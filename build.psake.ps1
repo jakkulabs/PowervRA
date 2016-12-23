@@ -15,8 +15,8 @@ Task PrepareRelease -depends Build, BumpVersion
 
 Task Analyze {
 
-    $Results = Invoke-ScriptAnalyzer -Path $ModuleDirectory -Recurse  -Settings $ScriptAnalyzerSettingsPath -Verbose:$VerbosePreference
-    $Results | Select RuleName, Severity, ScriptName, Line, Message | Format-List
+    $Results = Invoke-ScriptAnalyzer -Path $ModuleDirectory -Recurse -Settings $ScriptAnalyzerSettingsPath -Verbose:$VerbosePreference
+    $Results | Select-Object RuleName, Severity, ScriptName, Line, Message | Format-List
 
     switch ($ScriptAnalysisFailBuildOnSeverityLevel) {
 
@@ -54,7 +54,7 @@ Task UpdateModuleManifest {
 
     try {
 
-        $PublicFunctions = Get-ChildItem -Path "$($ModuleDirectory)\Functions\Public" -Filter "*.psm1" -Recurse | Sort-Object
+        $PublicFunctions = Get-ChildItem -Path "$($ModuleDirectory)\Functions\Public" -Filter "*.ps1" -Recurse | Sort-Object
 
         $ModuleManifest = Import-PowerShellDataFile -Path $ModuleManifestPath -Verbose:$VerbosePreference
 
@@ -116,7 +116,6 @@ Task UpdateDocumentation {
 
     }
 
-
     New-Item $DocsDirectory -ItemType Directory | Out-Null
 
     # --- ErrorAction set to SilentlyContinue so this command will not overwrite an existing MD file.
@@ -137,7 +136,7 @@ Task UpdateDocumentation {
 
     }
 
-    $Functions = $ModuleInfo.ExportedCommands.Keys | % {"    - $($_) : $($_).md"}
+    $Functions = $ModuleInfo.ExportedCommands.Keys | ForEach-Object {"    - $($_) : $($_).md"}
 
     $Template = @"
 ---
@@ -168,11 +167,7 @@ Task BumpVersion {
     [Int]$MinorVersion = $CurrentModuleVersion.Split(".")[1]
     [Int]$PatchVersion = $CurrentModuleVersion.Split(".")[2]
 
-    $ModuleManifest.ScriptsToProcess = $ModuleManifest.ScriptsToProcess | ForEach-Object {$_}
     $ModuleManifest.FunctionsToExport = $ModuleManifest.FunctionsToExport | ForEach-Object {$_}
-    $ModuleManifest.NestedModules = $ModuleManifest.NestedModules | ForEach-Object {$_}
-    $ModuleManifest.RequiredModules = $ModuleManifest.RequiredModules | ForEach-Object {$_}
-    $ModuleManifest.ModuleList = $ModuleManifest.ModuleList | ForEach-Object {$_}
 
     if ($ModuleManifest.ContainsKey("PrivateData") -and $ModuleManifest.PrivateData.ContainsKey("PSData")) {
 
@@ -197,7 +192,6 @@ Task BumpVersion {
 
         $ModuleManifest.Remove("PrivateData")
     }
-
 
     switch ($BumpVersion) {
 
