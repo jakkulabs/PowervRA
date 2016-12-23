@@ -4,20 +4,6 @@
 
 Properties {
 
-# ----------------------- Module properties --------------------------------
-
-    # --- Author of this module
-    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
-    $ModuleAuthor = 'Jakku Labs'
-
-    # --- Company or vendor of this module
-    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
-    $ModuleCompanyName = 'Jakku Labs'
-
-    # --- Copyright statement for this module
-    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
-    $ModuleCopyright = '(c) 2016 Jakku Labs. All rights reserved.'
-
 # ----------------------- Basic properties --------------------------------
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
@@ -60,5 +46,4 @@ Properties {
     [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
     $ResultsFile = "$($PSScriptRoot)\Pester.Results-$(Get-Date -Format ddMMyyyHHMMSS).json"
 
-    
 }
