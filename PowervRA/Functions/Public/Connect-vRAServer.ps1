@@ -42,102 +42,120 @@
 
     Param (
 
-    [parameter(Mandatory=$true)]
-    [ValidateNotNullOrEmpty()]
-    [String]$Server,
+        [parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
+        [String]$Server,
 
-    [parameter(Mandatory=$false)]
-    [ValidateNotNullOrEmpty()]
-    [String]$Tenant = "vsphere.local",  
-    
-    [parameter(Mandatory=$true,ParameterSetName="Username")]
-    [ValidateNotNullOrEmpty()]
-    [String]$Username,
+        [parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [String]$Tenant = "vsphere.local",  
 
-    [parameter(Mandatory=$true,ParameterSetName="Username")]
-    [ValidateNotNullOrEmpty()]
-    [String]$Password,
+        [parameter(Mandatory=$true,ParameterSetName="Username")]
+        [ValidateNotNullOrEmpty()]
+        [String]$Username,
 
-    [Parameter(Mandatory=$true,ParameterSetName="Credential")]
-	[ValidateNotNullOrEmpty()]
-	[Management.Automation.PSCredential]$Credential,
+        [parameter(Mandatory=$true,ParameterSetName="Username")]
+        [ValidateNotNullOrEmpty()]
+        [String]$Password,
 
-    [parameter(Mandatory=$false)]
-    [Switch]$IgnoreCertRequirements
-    )       
+        [Parameter(Mandatory=$true,ParameterSetName="Credential")]
+        [ValidateNotNullOrEmpty()]
+        [Management.Automation.PSCredential]$Credential,
 
-# --- Work with Untrusted Certificates
-if ($PSBoundParameters.ContainsKey("IgnoreCertRequirements")){
+        [parameter(Mandatory=$false)]
+        [Switch]$IgnoreCertRequirements
 
-    if ( -not ("TrustAllCertsPolicy" -as [type])) {
+    )
 
-    Add-Type @"
-    using System.Net;
-    using System.Security.Cryptography.X509Certificates;
-    public class TrustAllCertsPolicy : ICertificatePolicy {
-        public bool CheckValidationResult(
-            ServicePoint srvPoint, X509Certificate certificate,
-            WebRequest request, int certificateProblem) {
-            return true;
-        }
-    }
-"@
-    }
-    [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
-    $SignedCertificates = $false
-}
-else {
-
+    # --- Default Signed Certificates to true
     $SignedCertificates = $true
-}
 
-if ($PSBoundParameters.ContainsKey("Credential")){
-
-    $Username = $Credential.UserName
-    $Password = $Credential.GetNetworkCredential().Password
-}          
-       
-try {
-
-    # --- Create Invoke-RestMethod Parameters
-    $JSON = @"
-    {
-        "username":"$($Username)",
-        "password":"$($Password)",
-        "tenant":"$($Tenant)"
-    }
-"@
-    $Method = "POST"
-    $URI = "https://$($Server)/identity/api/tokens"
-    $Headers = @{
-
-        "Accept"="application/json";
-        "Content-Type" = "application/json";
-    }
-    $Body = $JSON
-
-    # --- Run vRA REST Request
-    $Response = Invoke-RestMethod -Method $Method -Uri $URI -Headers $Headers -Body $Body -ErrorAction Stop
+    if ($PSBoundParameters.ContainsKey("IgnoreCertRequirements") ){
         
-    # --- Create Output Object
-                
-    $Global:vRAConnection = [pscustomobject]@{                        
-                    
-        Server = "https://$($Server)"
-        Token = $Response.id
-        Tenant = $Null
-        Username = $Username
-        APIVersion = $Null
-        SignedCertificates = $SignedCertificates
+        if ($PSVersionTable.PSEdition -eq "Desktop") {
+
+            if ( -not ("TrustAllCertsPolicy" -as [type])) {
+
+                Add-Type @"
+                using System.Net;
+                using System.Security.Cryptography.X509Certificates;
+                public class TrustAllCertsPolicy : ICertificatePolicy {
+                    public bool CheckValidationResult(
+                        ServicePoint srvPoint, X509Certificate certificate,
+                        WebRequest request, int certificateProblem) {
+                        return true;
+                    }
+                }
+"@
+            }
+            [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
+
+        }
+
+        $SignedCertificates = $false
+
     }
 
-    # --- Update vRAConnection with tenant and api version
-    $Global:vRAConnection.Tenant = (Get-vRATenant -Id $Tenant).id
-    $Global:vRAConnection.APIVersion = (Get-vRAVersion).APIVersion
-}
-catch [Exception]{
+    if ($PSBoundParameters.ContainsKey("Credential")){
 
-    throw
-}
-    Write-Output $vRAConnection  
+        $Username = $Credential.UserName
+        $Password = $Credential.GetNetworkCredential().Password
+    }          
+       
+    try {
+
+        # --- Create Invoke-RestMethod Parameters
+        $JSON = @"
+        {
+            "username":"$($Username)",
+            "password":"$($Password)",
+            "tenant":"$($Tenant)"
+        }
+"@
+
+        $Params = @{
+
+            Method = "POST"
+            URI = "https://$($Server)/identity/api/tokens"
+            Headers = @{
+                "Accept"="application/json";
+                "Content-Type" = "application/json";
+            }
+            Body = $JSON
+
+        }
+
+        if ((!$SignedCertificate) -and ($PSVersionTable.PSEdition -eq "Core")) {
+
+            $Params.Add("SkipCertificateCheck", $true)
+
+        }
+
+        $Response = Invoke-RestMethod @Params
+            
+        # --- Create Output Object
+        $Global:vRAConnection = [PSCustomObject] @{                        
+                        
+            Server = "https://$($Server)"
+            Token = $Response.id
+            Tenant = $Null
+            Username = $Username
+            APIVersion = $Null
+            SignedCertificates = $SignedCertificates
+
+        }
+
+        # --- Update vRAConnection with tenant and api version
+        $Global:vRAConnection.Tenant = (Get-vRATenant -Id $Tenant).id
+        $Global:vRAConnection.APIVersion = (Get-vRAVersion).APIVersion
+
+    }
+    catch [Exception]{
+
+        throw
+
+    }
+
+    Write-Output $vRAConnection
+
 }
