@@ -7,10 +7,10 @@ function Disconnect-vRAVAMIServer {
     Disconnect from a vRA appliance by removing the authorization token and the global vRAConnection variable from PowerShell
  
     .EXAMPLE
-    Disconnect-vRAVAMIServer
+    Disconnect-vRAVAMI
    
     .EXAMPLE
-    Disconnect-vRAVAMIServer -Confirm:$false
+    Disconnect-vRAVAMI -Confirm:$false
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")]
  
@@ -19,7 +19,7 @@ function Disconnect-vRAVAMIServer {
     # --- Test for existing connection to vRA
     if (-not $Global:vRAVAMIConnection){
  
-        throw "vRA Connection variable does not exist. Please run Connect-vRAServer first to create it"
+        throw "vRA VAMI Connection variable does not exist. Please run Connect-vRAVAMI first to create it"
     }
 
     if ($PSCmdlet.ShouldProcess($Global:vRAVAMIConnection.Server)){ 
@@ -38,8 +38,6 @@ function Disconnect-vRAVAMIServer {
  
         }
         finally {
-    
-
     
         }
 
