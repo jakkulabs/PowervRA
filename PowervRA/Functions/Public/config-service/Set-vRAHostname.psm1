@@ -1,9 +1,3 @@
-configure hostname
-
-get the node id of the appliance
-
-name is mandatory
-
 function Set-vRAHostname {
 <#
     .SYNOPSIS
@@ -28,7 +22,7 @@ function Set-vRAHostname {
     Set-vRAHostname -Name vra-01a.lab.local -Hostname vra.lab.local
 
 #>
-[CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
     
@@ -65,11 +59,13 @@ process {
 
             $Body = $JSON | ConvertFrom-Json
 
-            # --- Run vRA REST Request to get Appliance NodeId        
+            # --- Run vRA REST Request to get Appliance NodeId    
 
-            $Response = Invoke-vRAVAMIRestMethod -Method PUT -URI $URI -Body $Body
+            if ($PSCmdlet.ShouldProcess($Name)){
+
+                Invoke-vRAVAMIRestMethod -Method PUT -URI $URI -Body $Body -Verbose:$VerbosePreference | Out-Null
                 
-        }
+            }
 
         catch [Exception]{
 
