@@ -6,7 +6,7 @@ function Connect-vRAVAMI {
     .DESCRIPTION
     Connect to a vRA Appliance and generate a connection object with Servername, Token etc
     
-    .PARAMETER Appliance
+    .PARAMETER Server
     vRA Appliance to connect to
 
     .PARAMETER Username
@@ -30,10 +30,10 @@ function Connect-vRAVAMI {
     System.Management.Automation.PSObject.
 
     .EXAMPLE
-    Connect-vRAAppliance -Appliance vraappliance01.domain.local -Username root -Password P@ssword -IgnoreCertRequirements
+    Connect-vRAVAMI -Server vraappliance01.domain.local -Username root -Password P@ssword -IgnoreCertRequirements
 
     .EXAMPLE
-    Connect-vRAAppliance -Appliance vraappliance01.domain.local -Credential (Get-Credential)
+    Connect-vRAVAMI -Server vraappliance01.domain.local -Credential (Get-Credential)
 #>
 [CmdletBinding(DefaultParametersetName="Username")][OutputType('System.Management.Automation.PSObject')]
 
@@ -41,7 +41,7 @@ function Connect-vRAVAMI {
 
     [parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
-    [String]$Appliance,
+    [String]$Server,
     
     [parameter(Mandatory=$true,ParameterSetName="Username")]
     [ValidateNotNullOrEmpty()]
@@ -59,31 +59,6 @@ function Connect-vRAVAMI {
     [Switch]$IgnoreCertRequirements
     )       
 
-# --- Work with Untrusted Certificates
-if ($PSBoundParameters.ContainsKey("IgnoreCertRequirements")){
-
-    if ( -not ("TrustAllCertsPolicy" -as [type])) {
-
-    Add-Type @"
-    using System.Net;
-    using System.Security.Cryptography.X509Certificates;
-    public class TrustAllCertsPolicy : ICertificatePolicy {
-        public bool CheckValidationResult(
-            ServicePoint srvPoint, X509Certificate certificate,
-            WebRequest request, int certificateProblem) {
-            return true;
-        }
-    }
-"@
-    }
-    [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
-    $SignedCertificates = $false
-}
-else {
-
-    $SignedCertificates = $true
-}
-
 if ($PSBoundParameters.ContainsKey("Credential")){
 
     $Username = $Credential.UserName
@@ -99,7 +74,7 @@ try {
         )
     )
     $Method = "GET"
-    $URI = "https://$($Appliance):5480/config/version"
+    $URI = "https://$($Server):5480/config/version"
     $Headers = @{
         "Authorization"="Basic $($base64cred)";
         "Accept"="application/json";
@@ -108,15 +83,14 @@ try {
 
  
     # --- Run vRA REST Request
-    Write-Output $Method $URI $Headers
+
     $Response = Invoke-RestMethod -Method $Method -Uri $URI -Headers $Headers -ErrorAction Stop
-    Write-Output $Response
       
     # --- Create Output Object
                 
     $Global:vRAVAMIConnection = [pscustomobject]@{                        
         Token = $base64cred          
-        Appliance = "https://$($Appliance):5480/config"
+        Appliance = "https://$($Server):5480/config"
         Username = $Username
         APIVersion = $Response
         SignedCertificates = $SignedCertificates
@@ -126,5 +100,4 @@ catch [Exception]{
 
     throw
 }
-    Write-Output $vRAVAMIConnection  
 }
