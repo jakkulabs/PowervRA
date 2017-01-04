@@ -83,7 +83,7 @@ process {
 
                     # --- Run vRA REST Request
                     $Response = Invoke-vRAVAMIRestMethod -Method GET -URI $URI -Verbose:$VerbosePreference | ConvertFrom-Json
-                    $Response
+
                     $Nodes = $Response | Where-Object { $_.components.NodeType -contains $Role }
                 
                         if (!$Nodes) {
