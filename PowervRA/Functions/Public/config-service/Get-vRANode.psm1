@@ -31,7 +31,7 @@ function Get-vRANode {
     
     [parameter(Mandatory=$false,ParameterSetName="ByName")]
     [ValidateNotNullOrEmpty()]
-    [String]$Name,
+    [String[]]$Name,
     
     [parameter(Mandatory=$false,ParameterSetName="ByRole")]
     [ValidateSet("vRA","vRO","Database","Website","ModelManagerData","ModelManagerWeb","WAPI","ManagerService","DemOrchestrator","DemWorker","vSphereAgent")]
@@ -48,27 +48,32 @@ process {
 
             switch ($PsCmdlet.ParameterSetName) {
             
-                'ByName' {            
-                    $URI = "/nodes/list?json=true&components=true"
+                'ByName' {      
 
-                    # --- Run vRA REST Request
-                    $Response = Invoke-vRAVAMIRestMethod -Method GET -URI $URI
+                    foreach ($NodeName in $Name) {    
 
-                    $Node = $Response | Where-Object { $_.nodeHost -eq $Name }
-                
-                    if (!$Node) { 
+                        $URI = "/nodes/list?json=true&components=true"
+
+                        # --- Run vRA REST Request
+                        $Response = Invoke-vRAVAMIRestMethod -Method GET -URI $URI
+
+                        $Node = $Response | Where-Object { $_.nodeHost -eq $NodeName }
                     
-                        throw "Unable to find node $($Name)." 
-                
-                    }
-
-                    [pscustomobject]@{
-
-                        Name = $Node.NodeHost
-                        ID = $Node.NodeId
-                        Role = $Node.components.NodeType
-                        Version = $Node.components.version
+                        if (!$Node) { 
                         
+                            throw "Unable to find node $($Name)." 
+                    
+                        }
+
+                        [pscustomobject]@{
+
+                            Name = $Node.NodeHost
+                            ID = $Node.NodeId
+                            Role = $Node.components.NodeType
+                            Version = $Node.components.version
+                            
+                        }
+
                     }
   
                 }
@@ -108,7 +113,7 @@ process {
                     $URI = "/nodes/list?json=true&components=true"
 
                     # --- Run vRA REST Request
-                    $Response = Invoke-vRAVAMIRestMethod -Method GET -URI $URI
+                    $Response = Invoke-vRAVAMIRestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
                     foreach ($Node in $Response) { 
                    
