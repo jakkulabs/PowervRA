@@ -110,16 +110,16 @@ if (-not ($Global:vRAVAMIConnection.SignedCertificates)){
     try { 
         if ($PSBoundParameters.ContainsKey("Body")) {
             
-            $Response = Invoke-RestMethod -Method $Method -Headers $Headers -Uri $FullURI -Body $Body
+            $Response = Invoke-WebRequest -Method $Method -Headers $Headers -Uri $FullURI -Body $Body
         }
         elseif ($PSBoundParameters.ContainsKey("OutFile")) {
 
-            $Response = Invoke-RestMethod -Method $Method -Headers $Headers -Uri $FullURI -OutFile $OutFile
+            $Response = Invoke-WebRequest -Method $Method -Headers $Headers -Uri $FullURI -OutFile $OutFile
 
         }
         else {
 
-            $Response = Invoke-RestMethod -Method $Method -Headers $Headers -Uri $FullURI
+            $Response = Invoke-WebRequest -Method $Method -Headers $Headers -Uri $FullURI
         }
     }
     catch {
