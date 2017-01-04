@@ -128,11 +128,6 @@ if (-not ($Global:vRAVAMIConnection.SignedCertificates)){
     }
     finally {
 
-        # Workaround for bug in Invoke-RestMethod. Thanks to the PowerNSX guys for pointing this one out
-        # https://bitbucket.org/nbradford/powernsx/src
-
-        $ServicePoint = [System.Net.ServicePointManager]::FindServicePoint($FullURI)
-        $ServicePoint.CloseConnectionGroup("") | Out-Null
     }
 
     Write-Output $Response
