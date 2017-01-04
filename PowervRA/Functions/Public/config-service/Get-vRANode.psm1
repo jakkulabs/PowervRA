@@ -19,7 +19,7 @@ function Get-vRANode {
     System.Management.Automation.PSObject.
 
     .EXAMPLE 
-    Get-vRANode -Name vra-01a.lab.local
+    Get-vRANode -Name vra-01a.lab.local,web-01a.lab.local
 
     .EXAMPLE
     Get-vRANode -Role Website
@@ -55,13 +55,13 @@ process {
                         $URI = "/nodes/list?json=true&components=true"
 
                         # --- Run vRA REST Request
-                        $Response = Invoke-vRAVAMIRestMethod -Method GET -URI $URI
+                        $Response = Invoke-vRAVAMIRestMethod -Method GET -URI $URI -Verbose:$VerbosePreference | ConvertFrom-Json
 
                         $Node = $Response | Where-Object { $_.nodeHost -eq $NodeName }
                     
                         if (!$Node) { 
                         
-                            throw "Unable to find node $($Name)." 
+                            throw "Unable to find node $($NodeName)." 
                     
                         }
 
@@ -82,8 +82,8 @@ process {
                     $URI = "/nodes/list?json=true&components=true"
 
                     # --- Run vRA REST Request
-                    $Response = Invoke-vRAVAMIRestMethod -Method GET -URI $URI
-
+                    $Response = Invoke-vRAVAMIRestMethod -Method GET -URI $URI -Verbose:$VerbosePreference | ConvertFrom-Json
+                    $Response
                     $Nodes = $Response | Where-Object { $_.components.NodeType -contains $Role }
                 
                         if (!$Nodes) {
@@ -113,15 +113,15 @@ process {
                     $URI = "/nodes/list?json=true&components=true"
 
                     # --- Run vRA REST Request
-                    $Response = Invoke-vRAVAMIRestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
-
+                    $Response = Invoke-vRAVAMIRestMethod -Method GET -URI $URI -Verbose:$VerbosePreference | ConvertFrom-Json
+            
                     foreach ($Node in $Response) { 
                    
                         [pscustomobject]@{
 
-                            Name = $Node.NodeHost
-                            ID = $Node.NodeId
-                            Role = $Node.components.NodeType
+                            Name = $Node.nodeHost
+                            ID = $Node.nodeId
+                            Role = $Node.components.nodeType
                             Version = $Node.components.version
                         
                         }
