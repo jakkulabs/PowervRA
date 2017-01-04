@@ -59,6 +59,8 @@ function Connect-vRAVAMI {
     [Switch]$IgnoreCertRequirements
     )       
 
+    xRequiresVAMI -version 7.2
+
 if ($PSBoundParameters.ContainsKey("Credential")){
 
     $Username = $Credential.UserName
