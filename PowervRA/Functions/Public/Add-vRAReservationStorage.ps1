@@ -91,7 +91,7 @@
                 Write-Verbose -Message "Preparing PUT to $($URI)"  
 
                 # --- Run vRA REST Request
-                $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body ($Reservation | ConvertTo-Json -Depth 500)
+                $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body ($Reservation | ConvertTo-Json -Depth 100)
 
                 Write-Verbose -Message "SUCCESS"
 
