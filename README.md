@@ -9,11 +9,21 @@ Note: this module is not in any way developed or supported by anyone officially 
 
 **vRA: version 6.2.4, 7.0, 7.0.1 and 7.1** - Note: support for 6.2.4 is limited given API restrictions. Functions which don't support 6.2.4 will exit early and cleanly.
 
-**PowerShell: version 4 and 5**
+### PowerShell Editions
+
+#### Desktop
+
+* 4.0
+* 5.0
+* 5.1
+
+#### Core
+
+* 6.0.0-alpha.14
 
 ## Download
 
-PowerShell v5 users: You grab the latest version of the module from the PowerShell Gallery by running the following command:
+PowerShell v5 & v6 users: You grab the latest version of the module from the PowerShell Gallery by running the following command:
 
 ```
 Install-Module -Name PowervRA
@@ -24,6 +34,21 @@ PowerShell v4 users: Try this handy one liner to download and install the module
 ```
 (new-object Net.WebClient).DownloadString("https://raw.githubusercontent.com/jakkulabs/PowervRA/master/Get-PowervRA.ps1") | iex
 ```
+
+## Quick Start
+
+Once you have installed and imported PowervRA, use Connect-vRAServer to connect to your vRA instance:
+
+```
+Connect-vRAServer -Server cg-vra-app-01.virtlab.local -Tenant tenant01 -Credential (Get-Credential) 
+```
+
+If your instance has a self signed certificate you must use the **IgnoreCertRequirements** switch:
+
+```
+Connect-vRAServer -Server cg-vra-app-01.virtlab.local -Tenant tenant01 -Credential (Get-Credential) -IgnoreCertRequirements
+```
+
 ## Documentation
 
 Documentation for each command can be viewed with Get-Help, e.g.:
