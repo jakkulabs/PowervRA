@@ -4,10 +4,11 @@ $JSON = Get-Content .\Variables.json -Raw | ConvertFrom-JSON
 # --- Tests
 Describe -Name 'Connectivity Tests' -Fixture {
 
-    It -Name "Attempting to ping the vRA Appliance $($JSON.Connection.vRAAppliance)" -Test {
+    It -Name "Attempting to connect to the vRA Appliance $($JSON.Connection.vRAAppliance) on port 443" -Test {
 
-        $ping = Test-Connection -ComputerName $JSON.Connection.vRAAppliance -Quiet
-        $ping | Should be $true
+        $Connection = New-Object Net.Sockets.TcpClient
+        $Connection.ConnectASync($JSON.Connection.vRAAppliance,443) | Out-Null
+        $Connection | Should Be $true
     }
 
     It -Name 'Connects to a vRA Appliance and generates a token' -Test {
@@ -25,5 +26,4 @@ Describe -Name 'Disconnectivity Tests' -Fixture {
         Disconnect-vRAServer -Confirm:$false
         $($Global:vRAConnection.Token) | Should Be $null
     }
-
 }
