@@ -47,13 +47,13 @@ PowerShell v4 users: Try this handy one liner to download and install the module
 Once you have installed and imported PowervRA, use Connect-vRAServer to connect to your vRA instance:
 
 ```
-Connect-vRAServer -Server cg-vra-app-01.virtlab.local -Tenant tenant01 -Credential (Get-Credential) 
+Connect-vRAServer -Server vra.corp.local -Tenant tenant01 -Credential (Get-Credential) 
 ```
 
 If your instance has a self signed certificate you must use the **IgnoreCertRequirements** switch:
 
 ```
-Connect-vRAServer -Server cg-vra-app-01.virtlab.local -Tenant tenant01 -Credential (Get-Credential) -IgnoreCertRequirements
+Connect-vRAServer -Server vra.corp.local -Tenant tenant01 -Credential (Get-Credential) -IgnoreCertRequirements
 ```
 
 ## Documentation
