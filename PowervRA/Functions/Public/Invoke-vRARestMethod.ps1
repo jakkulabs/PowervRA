@@ -2,7 +2,7 @@
 <#
     .SYNOPSIS
     Wrapper for Invoke-RestMethod with vRA specifics
-    
+
     .DESCRIPTION
     Wrapper for Invoke-RestMethod with vRA specifics
 
@@ -60,8 +60,8 @@
 
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-        [String]$Body,  
-        
+        [String]$Body,
+
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [System.Collections.IDictionary]$Headers,
@@ -69,8 +69,8 @@
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [String]$OutFile
-    
-    )   
+
+    )
 
     # --- Test for existing connection to vRA
     if (-not $Global:vRAConnection){
@@ -92,8 +92,8 @@
         }
 
     }
-    
-    try { 
+
+    try {
 
         # --- Set up default parmaeters
         $Params = @{
@@ -107,7 +107,7 @@
         if ($PSBoundParameters.ContainsKey("Body")) {
 
             $Params.Add("Body", $Body)
-            
+
         } elseif ($PSBoundParameters.ContainsKey("OutFile")) {
 
             $Params.Add("OutFile", $OutFile)
@@ -121,18 +121,18 @@
 
         }
 
-        # --- Invoke native rest mothod 
+        # --- Invoke native REST method
         $Response = Invoke-RestMethod @Params
 
     }
     catch {
-        
+
         throw
 
     }
     finally {
 
-        if ($PSVersionTable.PSEdition -eq "Desktop") {
+        if ($PSVersionTable.PSEdition -eq "Desktop" -or $PSVersionTable.PSEdition -eq $null) {
 
             # Workaround for bug in Invoke-RestMethod. Thanks to the PowerNSX guys for pointing this one out
             # https://bitbucket.org/nbradford/powernsx/src

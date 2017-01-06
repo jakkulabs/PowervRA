@@ -2,10 +2,10 @@
 <#
     .SYNOPSIS
     Connect to a vRA Server
-    
+
     .DESCRIPTION
     Connect to a vRA Server and generate a connection object with Servername, Token etc
-    
+
     .PARAMETER Server
     vRA Server to connect to
 
@@ -48,7 +48,7 @@
 
         [parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-        [String]$Tenant = "vsphere.local",  
+        [String]$Tenant = "vsphere.local",
 
         [parameter(Mandatory=$true,ParameterSetName="Username")]
         [ValidateNotNullOrEmpty()]
@@ -71,8 +71,8 @@
     $SignedCertificates = $true
 
     if ($PSBoundParameters.ContainsKey("IgnoreCertRequirements") ){
-        
-        if ($PSVersionTable.PSEdition -eq "Desktop") {
+
+        if ($PSVersionTable.PSEdition -eq "Desktop" -or $PSVersionTable.PSEdition -eq $null) {
 
             if ( -not ("TrustAllCertsPolicy" -as [type])) {
 
@@ -100,8 +100,8 @@
 
         $Username = $Credential.UserName
         $Password = $Credential.GetNetworkCredential().Password
-    }          
-       
+    }
+
     try {
 
         # --- Create Invoke-RestMethod Parameters
@@ -132,10 +132,10 @@
         }
 
         $Response = Invoke-RestMethod @Params
-            
+
         # --- Create Output Object
-        $Global:vRAConnection = [PSCustomObject] @{                        
-                        
+        $Global:vRAConnection = [PSCustomObject] @{
+
             Server = "https://$($Server)"
             Token = $Response.id
             Tenant = $Null
