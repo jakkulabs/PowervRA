@@ -61,7 +61,7 @@ Task UpdateModuleManifest {
         # --- Functions To Export
         Write-Verbose -Message "Processing FunctionsToExport"
         $FunctionsToExportRaw  = $PublicFunctions | Select-Object -ExpandProperty BaseName | Sort-Object
-        $ModuleManifest.FunctionsToExport = $FunctionsToExportRaw | ForEach-Object {if ($_.StartsWith("DEPRECATED-")) { $_.SubString("DEPRECATED-".length)}else{$_} }
+        $ModuleManifest.FunctionsToExport = $FunctionsToExportRaw | ForEach-Object {if ($_.StartsWith("DEPRECATED-")) { $_.Trim("DEPRECATED-")}else{$_} }
 
         # --- Private Data
         Write-Verbose -Message "Processing PrivateData"
