@@ -23,9 +23,11 @@ Actual behavior
 Environment data
 ----------------
 
-<!-- provide the output of $PSVersionTable -->
+<!-- provide the output of $PSVersionTable and $vRAConnection removing any sensitive data -->
 
 ```powershell
 > $PSVersionTable
+
+> $vRAConnection
 
 ```
