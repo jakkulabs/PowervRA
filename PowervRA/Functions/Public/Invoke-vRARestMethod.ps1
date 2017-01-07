@@ -2,7 +2,7 @@
 <#
     .SYNOPSIS
     Wrapper for Invoke-RestMethod with vRA specifics
-    
+
     .DESCRIPTION
     Wrapper for Invoke-RestMethod with vRA specifics
 
@@ -50,53 +50,33 @@
 
     Param (
 
-    [parameter(Mandatory=$true)]
-    [ValidateSet("GET","POST","PUT","DELETE")]
-    [String]$Method,
+        [Parameter(Mandatory=$true)]
+        [ValidateSet("GET","POST","PUT","DELETE")]
+        [String]$Method,
 
-    [parameter(Mandatory=$true)]
-    [ValidateNotNullOrEmpty()]
-    [String]$URI,
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
+        [String]$URI,
 
-    [parameter(Mandatory=$false)]
-    [ValidateNotNullOrEmpty()]
-    [String]$Body,  
-    
-    [parameter(Mandatory=$false)]
-    [ValidateNotNullOrEmpty()]
-    [System.Collections.IDictionary]$Headers,
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [String]$Body,
 
-    [parameter(Mandatory=$false)]
-    [ValidateNotNullOrEmpty()]
-    [String]$OutFile
-    
-    )   
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [System.Collections.IDictionary]$Headers,
 
-# --- Test for existing connection to vRA
-if (-not $Global:vRAConnection){
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [String]$OutFile
 
-    throw "vRA Connection variable does not exist. Please run Connect-vRAServer first to create it"
-}
+    )
 
-# --- Work with Untrusted Certificates
-if (-not ($Global:vRAConnection.SignedCertificates)){
+    # --- Test for existing connection to vRA
+    if (-not $Global:vRAConnection){
 
-    if ( -not ("TrustAllCertsPolicy" -as [type])) {
-
-    Add-Type @"
-    using System.Net;
-    using System.Security.Cryptography.X509Certificates;
-    public class TrustAllCertsPolicy : ICertificatePolicy {
-        public bool CheckValidationResult(
-            ServicePoint srvPoint, X509Certificate certificate,
-            WebRequest request, int certificateProblem) {
-            return true;
-        }
+        throw "vRA Connection variable does not exist. Please run Connect-vRAServer first to create it"
     }
-"@
-    }
-    [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
-}
 
     # --- Create Invoke-RestMethod Parameters
     $FullURI = "$($Global:vRAConnection.Server)$($URI)"
@@ -108,35 +88,60 @@ if (-not ($Global:vRAConnection.SignedCertificates)){
             "Accept"="application/json";
             "Content-Type" = "application/json";
             "Authorization" = "Bearer $($Global:vRAConnection.Token)";
+
         }
+
     }
-    
-    try { 
+
+    try {
+
+        # --- Set up default parmaeters
+        $Params = @{
+
+            Method = $Method
+            Headers = $Headers
+            Uri = $FullURI
+
+        }
+
         if ($PSBoundParameters.ContainsKey("Body")) {
-            
-            $Response = Invoke-RestMethod -Method $Method -Headers $Headers -Uri $FullURI -Body $Body
-        }
-        elseif ($PSBoundParameters.ContainsKey("OutFile")) {
 
-            $Response = Invoke-RestMethod -Method $Method -Headers $Headers -Uri $FullURI -OutFile $OutFile
+            $Params.Add("Body", $Body)
+
+        } elseif ($PSBoundParameters.ContainsKey("OutFile")) {
+
+            $Params.Add("OutFile", $OutFile)
 
         }
-        else {
 
-            $Response = Invoke-RestMethod -Method $Method -Headers $Headers -Uri $FullURI
+        # --- Support for PowerShell Core certificate checking
+        if (!($Global:vRAConnection.SignedCertificates) -and ($PSVersionTable.PSEdition -eq "Core")) {
+
+            $Params.Add("SkipCertificateCheck", $true);
+
         }
+
+        # --- Invoke native REST method
+        $Response = Invoke-RestMethod @Params
+
     }
     catch {
-        
+
         throw
+
     }
     finally {
 
-        # Workaround for bug in Invoke-RestMethod. Thanks to the PowerNSX guys for pointing this one out
-        # https://bitbucket.org/nbradford/powernsx/src
+        if ($PSVersionTable.PSEdition -eq "Desktop" -or $PSVersionTable.PSEdition -eq $null) {
 
-        $ServicePoint = [System.Net.ServicePointManager]::FindServicePoint($FullURI)
-        $ServicePoint.CloseConnectionGroup("") | Out-Null
+            # Workaround for bug in Invoke-RestMethod. Thanks to the PowerNSX guys for pointing this one out
+            # https://bitbucket.org/nbradford/powernsx/src
+
+            $ServicePoint = [System.Net.ServicePointManager]::FindServicePoint($FullURI)
+            $ServicePoint.CloseConnectionGroup("") | Out-Null
+
+        }
+
     }
 
     Write-Output $Response
