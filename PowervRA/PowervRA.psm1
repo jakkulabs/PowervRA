@@ -7,7 +7,17 @@ foreach ($PrivateFunction in Get-ChildItem -Path "$($PSScriptRoot)\Functions\Pri
 foreach ($Publicfunction in Get-ChildItem -Path "$($PSScriptRoot)\Functions\Public\*.ps1" -Recurse -Verbose:$VerbosePreference) {
 
     . $PublicFunction.FullName
-    Export-ModuleMember -Function ([System.IO.Path]::GetFileNameWithoutExtension($PublicFunction))
+
+    $BaseName = [System.IO.Path]::GetFileNameWithoutExtension($PublicFunction)
+    
+    # --- Support DEPRECATED functions. Ensure that we are exporting only the function name
+    $DepricatedKeyword = "DEPRECATED-"
+    if ($BaseName.StartsWith($DepricatedKeyword)) {
+
+        $BaseName = $BaseName.Trim($DepricatedKeyword)
+    }
+
+    Export-ModuleMember -Function ($BaseName)
 }
 
 # --- Clean up variables on module removal
