@@ -1,5 +1,8 @@
 docs/ export-ignore
 tests/ export-ignore
+.github/ export-ignore
+docker/ export-ignore
+CHANGELOG.md export-ignore
 README.md export-ignore
 mkdocs.yml export-ignore
 Get-PowervRA.ps1 export-ignore
