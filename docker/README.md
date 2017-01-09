@@ -3,7 +3,7 @@
 
 This docker image is built using PhotonOS 1.0 and PowerShell Core 6.0.0-alpha.14
 
-## Running the image from Docker registry
+## Getting Started
 
 Getting started is easy, just run the following commands:
 
