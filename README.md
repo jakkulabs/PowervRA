@@ -55,7 +55,7 @@ docker pull jakkulabs/powervra
 docker run --rm -it jakkulabs/powervra
 ```
 
-For more information see [this readme](docker/READNE.md).
+For more information see [this readme](docker/README.md).
 
 ## Quick Start
 
