@@ -44,6 +44,19 @@ PowerShell v4 users: Try this handy one liner to download and install the module
 (new-object Net.WebClient).DownloadString("https://raw.githubusercontent.com/jakkulabs/PowervRA/master/Get-PowervRA.ps1") | iex
 ```
 
+## Docker
+
+As of version 2.0.0 we now have our own [docker image](https://hub.docker.com/r/jakkulabs/powervra/).
+
+Getting started is easy, just run the following commands:
+
+```
+docker pull jakkulabs/powervra
+docker run --rm -it jakkulabs/powervra
+```
+
+For more information see [this readme](docker/READNE.md).
+
 ## Quick Start
 
 Once you have installed and imported PowervRA, use Connect-vRAServer to connect to your vRA instance:
