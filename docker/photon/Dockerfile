@@ -3,8 +3,7 @@
 # the base for this Dockerfile public
 FROM photon:1.0
 
-MAINTAINER @_chelnak
-LABEL PSVersion="v6.0.0-alpha.14"
+MAINTAINER Jakku Labs
 
 # Add PowerShell repository location to Photon OS
 RUN echo $'[powershell]\n\
@@ -16,30 +15,20 @@ enabled=1\n\
 skip_if_unavailable=True\n '\
 >> /etc/yum.repos.d/powershell.repo
 
-# Set the working directory 
-WORKDIR /tmp
-
 # Install PowerShell on Photon 
-RUN tdnf install -y unzip powershell curl openssl
+RUN tdnf install -y powershell openssl
 
 # Prepare directories
 RUN mkdir -p /root/.config/powershell/
-RUN mkdir -p ~/.local/share/powershell/Modules
+RUN mkdir -p /root/.local/share/powershell/Modules
 
-# Grab PowervRA
-ADD https://github.com/jakkulabs/PowervRA/archive/development.zip .
-RUN mkdir ~/.local/share/powershell/Modules/PowervRA
-RUN unzip development.zip
-RUN cp -R PowervRA-development/PowervRA/* ~/.local/share/powershell/Modules/PowervRA/
-
-# Add Startup script
-ADD profile.ps1 .
+# Bootstrap the image with PowervRA
+ADD bootstrap.ps1 /tmp
+RUN powershell ./tmp/bootstrap.ps1
+RUN rm -f /tmp/bootstrap.ps1
 
 # Change the default PowerShell profile to include the new profile
-RUN mv profile.ps1 /root/.config/powershell/Microsoft.PowerShell_profile.ps1
-
-# Reset workdir
-WORKDIR /
+ADD profile.ps1 /root/.config/powershell
 
 # Start PowerShell
 CMD powershell -NoLogo

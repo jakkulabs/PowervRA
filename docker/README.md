@@ -28,13 +28,22 @@ git clone https://github.com/jakkulabs/PowervRA.git
 cd PowervRA\docker
 ```
 
-### Build a named image
+### Building images
+
+#### Build a quick image for testing
 
 ```
-docker build t jakkulabs/powervra .
+docker build -f photon/Dockerfile .
+
 ```
 
-### Publish the image
+#### Build a named image for publishing
+
+```
+docker build  -f photon/Dockerfile -t jakkulabs/powervra .
+```
+
+#### Publish the image
 
 ```
 docker push jakkulabs/powervra
