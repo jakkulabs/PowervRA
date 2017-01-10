@@ -28,7 +28,7 @@ RUN powershell ./tmp/bootstrap.ps1
 RUN rm -f /tmp/bootstrap.ps1
 
 # Change the default PowerShell profile to include the new profile
-ADD profile.ps1 /root/.config/powershell
+ADD profile.ps1 /root/.config/powershell/Microsoft.PowerShell_profile.ps1
 
 # Start PowerShell
 CMD powershell -NoLogo
