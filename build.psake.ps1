@@ -15,8 +15,8 @@ Task PrepareRelease -depends Build, BumpVersion
 
 Task Analyze {
 
-    $Results = Invoke-ScriptAnalyzer -Path $ModuleDirectory -Recurse  -Settings $ScriptAnalyzerSettingsPath -Verbose:$VerbosePreference
-    $Results | Select RuleName, Severity, ScriptName, Line, Message | Format-List
+    $Results = Invoke-ScriptAnalyzer -Path $ModuleDirectory -Recurse -Settings $ScriptAnalyzerSettingsPath -Verbose:$VerbosePreference
+    $Results | Select-Object RuleName, Severity, ScriptName, Line, Message | Format-List
 
     switch ($ScriptAnalysisFailBuildOnSeverityLevel) {
 
@@ -30,7 +30,7 @@ Task Analyze {
             Assert -conditionToCheck (
                 ($analysisResult | Where-Object Severity -eq 'Error').Count -eq 0
                 ) -failureMessage 'One or more ScriptAnalyzer errors were found. Build cannot continue!'
-                
+
         }
         'Warning' {
 
@@ -54,25 +54,16 @@ Task UpdateModuleManifest {
 
     try {
 
-        $PublicFunctions = Get-ChildItem -Path "$($ModuleDirectory)\Functions\Public" -Filter "*.psm1" -Recurse | Sort-Object
-        $PrivateFunctions = Get-ChildItem -Path "$($ModuleDirectory)\Functions\Private" -Filter "*.ps1" -Recurse | Sort-Object
+        $PublicFunctions = Get-ChildItem -Path "$($ModuleDirectory)\Functions\Public" -Filter "*.ps1" -Recurse | Sort-Object
 
         $ModuleManifest = Import-PowerShellDataFile -Path $ModuleManifestPath -Verbose:$VerbosePreference
-
-        # --- Scripts To Process
-        Write-Verbose -Message "Processing ScriptsToProcess"
-        $ModuleManifest.ScriptsToProcess = $PrivateFunctions | ForEach-Object {$_.FullName.Substring($_.FullName.LastIndexOf($ModuleName)+$ModuleName.Length).Trim("\")}
 
         # --- Functions To Export
         Write-Verbose -Message "Processing FunctionsToExport"
         $FunctionsToExportRaw  = $PublicFunctions | Select-Object -ExpandProperty BaseName | Sort-Object
-        $ModuleManifest.FunctionsToExport = $FunctionsToExportRaw | ForEach-Object {if ($_.StartsWith("DEPRECATED-")) { $_.SubString("DEPRECATED-".length)}else{$_} }
-        
-        # --- Nested Modules   
-        Write-Verbose -Message "Processing NestedModules"
-        $ModuleManifest.NestedModules = $PublicFunctions | ForEach-Object {$_.FullName.Substring($_.FullName.LastIndexOf($ModuleName)+$ModuleName.Length).Trim("\")}
+        $ModuleManifest.FunctionsToExport = $FunctionsToExportRaw | ForEach-Object {if ($_.StartsWith("DEPRECATED-")) { $_.Trim("DEPRECATED-")}else{$_} }
 
-        # --- Private Data  
+        # --- Private Data
         Write-Verbose -Message "Processing PrivateData"
         if ($ModuleManifest.ContainsKey("PrivateData") -and $ModuleManifest.PrivateData.ContainsKey("PSData")) {
 
@@ -87,10 +78,10 @@ Task UpdateModuleManifest {
                 }
                 else {
 
-                    $value = $node.Value    
+                    $value = $node.Value
 
                 }
-                
+
                 $ModuleManifest[$key] = $value
             }
 
@@ -125,7 +116,6 @@ Task UpdateDocumentation {
 
     }
 
-
     New-Item $DocsDirectory -ItemType Directory | Out-Null
 
     # --- ErrorAction set to SilentlyContinue so this command will not overwrite an existing MD file.
@@ -139,22 +129,22 @@ Task UpdateDocumentation {
     $Mkdocs = "$($PSScriptRoot)\mkdocs.yml"
 
     if (!(Test-Path -Path $Mkdocs)) {
-        
+
         Write-Verbose -Message "Creating MKDocs.yml"
-        
-        New-Item -Path $Mkdocs -ItemType File -Force | Out-Null           
+
+        New-Item -Path $Mkdocs -ItemType File -Force | Out-Null
 
     }
-        
-    $Functions = $ModuleInfo.ExportedCommands.Keys | % {"    - $($_) : $($_).md"}
-    
+
+    $Functions = $ModuleInfo.ExportedCommands.Keys | ForEach-Object {"    - $($_) : $($_).md"}
+
     $Template = @"
 ---
 
 site_name: $($ModuleName)
 pages:
 - 'Home' : 'index.md'
-- 'Functions': 
+- 'Functions':
 $($Functions -join "`r`n")
 "@
 
@@ -177,12 +167,8 @@ Task BumpVersion {
     [Int]$MinorVersion = $CurrentModuleVersion.Split(".")[1]
     [Int]$PatchVersion = $CurrentModuleVersion.Split(".")[2]
 
-    $ModuleManifest.ScriptsToProcess = $ModuleManifest.ScriptsToProcess | ForEach-Object {$_}
     $ModuleManifest.FunctionsToExport = $ModuleManifest.FunctionsToExport | ForEach-Object {$_}
-    $ModuleManifest.NestedModules = $ModuleManifest.NestedModules | ForEach-Object {$_}
-    $ModuleManifest.RequiredModules = $ModuleManifest.RequiredModules | ForEach-Object {$_}
-    $ModuleManifest.ModuleList = $ModuleManifest.ModuleList | ForEach-Object {$_}
-    
+
     if ($ModuleManifest.ContainsKey("PrivateData") -and $ModuleManifest.PrivateData.ContainsKey("PSData")) {
 
         foreach ($node in $ModuleManifest.PrivateData["PSData"].GetEnumerator()) {
@@ -199,14 +185,13 @@ Task BumpVersion {
                 $value = $node.Value
 
             }
-            
+
             $ModuleManifest[$key] = $value
 
         }
 
         $ModuleManifest.Remove("PrivateData")
     }
-
 
     switch ($BumpVersion) {
 
@@ -263,7 +248,7 @@ Task BumpVersion {
         # --- Update appveyor build version
         $AppveyorYMLPath = "$($PSScriptRoot)\appveyor.yml"
         $AppveyorVersion = "$($ModuleVersion).{build}"
-        $NewAppveyorYML = Get-Content -Path $AppveyorYMLPath | ForEach-Object { $_ -replace '^version: .+$', "version: $($AppveyorVersion)";} 
+        $NewAppveyorYML = Get-Content -Path $AppveyorYMLPath | ForEach-Object { $_ -replace '^version: .+$', "version: $($AppveyorVersion)";}
         $NewAppveyorYML | Set-Content -Path $AppveyorYMLPath -Force
         Write-Verbose -Message "Appveyor build version set to $($AppveyorVersion)"
 

@@ -1,4 +1,4 @@
-function Global:xRequires {
+function xRequires {
 <#
     .SYNOPSIS
     Checks the required API Version for the current function

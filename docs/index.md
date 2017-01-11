@@ -7,13 +7,32 @@ Note: this module is not in any way developed or supported by anyone officially 
 
 ## Compatibility
 
-**vRA: version 6.2.4, 7.0, 7.0.1 and 7.1** - Note: support for 6.2.4 is limited given API restrictions. Functions which don't support 6.2.4 will exit early and cleanly.
+### vRealize Automation
 
-**PowerShell: version 4 and 5**
+* 6.2.4**
+* 7.0
+* 7.0.1
+* 7.1
+
+** Support for 6.2.4 is limited given API restrictions. Functions which don't support 6.2.4 will exit early and cleanly.
+
+### PowerShell Editions
+
+#### Desktop
+
+* 4.0
+* 5.0
+* 5.1
+
+#### Core
+
+* 6.0.0-alpha.14**
+
+** To get up and running with PowerShell Core follow the instructions for your operating system [here](https://github.com/PowerShell/PowerShell/blob/master/README.md#get-powershell).
 
 ## Download
 
-PowerShell v5 users: You grab the latest version of the module from the PowerShell Gallery by running the following command:
+PowerShell v5 & v6 users: You grab the latest version of the module from the PowerShell Gallery by running the following command:
 
 ```
 Install-Module -Name PowervRA
@@ -24,6 +43,21 @@ PowerShell v4 users: Try this handy one liner to download and install the module
 ```
 (new-object Net.WebClient).DownloadString("https://raw.githubusercontent.com/jakkulabs/PowervRA/master/Get-PowervRA.ps1") | iex
 ```
+
+## Quick Start
+
+Once you have installed and imported PowervRA, use Connect-vRAServer to connect to your vRA instance:
+
+```
+Connect-vRAServer -Server vra.corp.local -Tenant tenant01 -Credential (Get-Credential) 
+```
+
+If your instance has a self signed certificate you must use the **IgnoreCertRequirements** switch:
+
+```
+Connect-vRAServer -Server vra.corp.local -Tenant tenant01 -Credential (Get-Credential) -IgnoreCertRequirements
+```
+
 ## Documentation
 
 Documentation for each command can be viewed with Get-Help, e.g.:
