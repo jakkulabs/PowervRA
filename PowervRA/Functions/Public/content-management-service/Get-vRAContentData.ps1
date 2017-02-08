@@ -42,16 +42,6 @@
     Begin {
 
         xRequires -Version 7.0
-
-        # --- Bug that stops this function working in CORE :-( 
-        # --- https://github.com/PowerShell/PowerShell/issues/2245
-
-        if ($PSVersionTable.PSEdition -eq "core") {
-
-            throw "This function does not support PowerShell Core Edition"
-
-        }
-
     }
 
     Process {
