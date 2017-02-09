@@ -33,7 +33,7 @@ Properties {
     # --- "Any" will fail the build on any diagnostic record, regardless of severity.
     [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
     [ValidateSet('Error', 'Warning', 'Any', 'None')]
-    $ScriptAnalysisFailBuildOnSeverityLevel = 'Error'
+    $ScriptAnalysisFailBuildOnSeverityLevel = 'Warning'
 
     # Path to the PSScriptAnalyzer settings file.
     [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
