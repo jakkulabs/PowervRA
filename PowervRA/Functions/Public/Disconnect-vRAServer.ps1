@@ -27,11 +27,8 @@
         try {                        
  
             # --- Remove the token from vRA and remove the global PowerShell variable
-            $URI = "/identity/api/tokens/$($Global:vRAConnection.Token)"
-           
-            Write-Verbose -Message "Preparing DELETE to $($URI)"             
- 
-            $Response = Invoke-vRARestMethod -Method DELETE -URI $URI
+            $URI = "/identity/api/tokens/$($Global:vRAConnection.Token)" 
+            Invoke-vRARestMethod -Method DELETE -URI $URI -Verbose:$VerbosePreference
            
         }
         catch [Exception]{

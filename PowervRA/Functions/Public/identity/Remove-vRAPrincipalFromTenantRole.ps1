@@ -59,7 +59,7 @@ process {
                 $URI = "/identity/api/authorization/tenants/$($TenantId)/principals/$($Principal)/roles/$($Roleid)"
 
                 # --- Run vRA REST Request
-                $Response = Invoke-vRARestMethod -Method DELETE -URI $URI
+                Invoke-vRARestMethod -Method DELETE -URI $URI -Verbose:$VerbosePreference | Out-Null
             }
         }
         catch [Exception]{

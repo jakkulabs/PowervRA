@@ -59,7 +59,7 @@ process {
                 $URI = "/identity/api/authorization/tenants/$($TenantId)/principals/$($Principal)/roles/$($Roleid)"
 
                 # --- Run vRA REST Request
-                $Response = Invoke-vRARestMethod -Method PUT -URI $URI
+                Invoke-vRARestMethod -Method PUT -URI $URI -Verbose:$VerbosePreference | Out-Null
         
                 # --- Output the Successful Result
                 Get-vRATenantRole -TenantId $TenantId -PrincipalId $Principal | Where-Object {$_.Id -eq $RoleId} | Select-Object Principal,Id,Name

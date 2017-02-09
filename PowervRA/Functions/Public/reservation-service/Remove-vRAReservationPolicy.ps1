@@ -58,7 +58,7 @@
                             $URI = "/reservation-service/api/reservations/policies/$($ReservationPolicyId)"  
 
                             # --- Run vRA REST Request
-                            $Response = Invoke-vRARestMethod -Method DELETE -URI $URI
+                            Invoke-vRARestMethod -Method DELETE -URI $URI -Verbose:$VerbosePreference | Out-Null
                         }
                     }
                     catch [Exception]{
@@ -86,7 +86,7 @@
                             $URI = "/reservation-service/api/reservations/policies/$($Id)"  
 
                             # --- Run vRA REST Request
-                            $Response = Invoke-vRARestMethod -Method DELETE -URI $URI
+                            Invoke-vRARestMethod -Method DELETE -URI $URI -Verbose:$VerbosePreference | Out-Null
                         }
                     }
                     catch [Exception]{

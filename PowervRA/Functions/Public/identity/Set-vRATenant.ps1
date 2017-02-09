@@ -143,7 +143,7 @@
                 $URI = "/identity/api/tenants/$($ID)"  
 
                 # --- Run vRA REST Request
-                $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body $Body
+                Invoke-vRARestMethod -Method PUT -URI $URI -Body $Body -Verbose:$VerbosePreferences | Out-Null
 
                 # --- Output the Successful Result
                 Get-vRATenant -Id $ID

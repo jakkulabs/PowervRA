@@ -52,7 +52,7 @@
                     $URI = "/identity/api/tenants/$($ID)/directories/$($Domain)"  
 
                     # --- Run vRA REST Request
-                    $Response = Invoke-vRARestMethod -Method DELETE -URI $URI
+                    Invoke-vRARestMethod -Method DELETE -URI $URI -Verbose:$VerbosePreference | Out-Null
                 }
             }
             catch [Exception]{
