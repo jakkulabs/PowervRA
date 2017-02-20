@@ -2,7 +2,8 @@
 $JSON = Get-Content .\Variables.json -Raw | ConvertFrom-JSON
 
 # --- Startup
-$Connection = Connect-vRAServer -Server $JSON.DefaultTenantConnection.vRAAppliance -Tenant $JSON.DefaultTenantConnection.Tenant -Username $JSON.DefaultTenantConnection.Username -Password $JSON.DefaultTenantConnection.Password -IgnoreCertRequirements
+$ConnectionPassword = ConvertTo-SecureString $JSON.DefaultTenantConnection.Password -AsPlainText -Force
+$Connection = Connect-vRAServer -Server $JSON.DefaultTenantConnection.vRAAppliance -Tenant $JSON.DefaultTenantConnection.Tenant -Username $JSON.DefaultTenantConnection.Username -Password $ConnectionPassword -IgnoreCertRequirements
 
 # --- Tests
 Describe -Name 'Tenant Tests' -Fixture {
