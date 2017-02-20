@@ -107,7 +107,7 @@
 
     if ($PSBoundParameters.ContainsKey("Password")){
 
-        $JSONPassword = (New-Object System.Management.Automation.PSCredential (“username”, $Password)).GetNetworkCredential().Password
+        $JSONPassword = (New-Object System.Management.Automation.PSCredential(“username”, $Password)).GetNetworkCredential().Password
     }
 
     try {
