@@ -191,11 +191,11 @@
 
         if ($PSBoundParameters.ContainsKey("Password")){
 
-            $JSONPassword = (New-Object System.Management.Automation.PSCredential (“username”, $Password)).GetNetworkCredential().Password
+            $JSONPassword = (New-Object System.Management.Automation.PSCredential(“username”, $Password)).GetNetworkCredential().Password
         }
         if ($PSBoundParameters.ContainsKey("DomainAdminPassword")){
 
-            $JSONDomainAdminPassword = (New-Object System.Management.Automation.PSCredential (“username”, $DomainAdminPassword)).GetNetworkCredential().Password
+            $JSONDomainAdminPassword = (New-Object System.Management.Automation.PSCredential(“username”, $DomainAdminPassword)).GetNetworkCredential().Password
         }
         if ($PSBoundParameters.ContainsKey("GroupBaseSearchDNs")){
 
