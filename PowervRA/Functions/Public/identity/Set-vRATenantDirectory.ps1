@@ -64,13 +64,15 @@
     Body text to send in JSON format
 
     .INPUTS
-    System.String.
+    System.String
+    System.SecureString
 
     .OUTPUTS
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    Set-vRATenantDirectory -ID Tenant01 -Domain vrademo.local -GroupBaseSearchDNs "OU=Groups,OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -userBaseSearchDNs "OU=Users,OU=Tenant01,OU=Tenants,DC=vrademo,DC=local"
+    $SecurePassword = ConvertTo-SecureString “P@ssword” -AsPlainText -Force
+    Set-vRATenantDirectory -ID Tenant01 -Domain vrademo.local -GroupBaseSearchDNs "OU=Groups,OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -userBaseSearchDNs "OU=Users,OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -Password $SecurePassword -Confirm:$false
     
     .EXAMPLE
     $JSON = @"
@@ -131,7 +133,7 @@
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [String]$Password,
+    [SecureString]$Password,
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
@@ -163,7 +165,7 @@
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [String]$DomainAdminPassword,
+    [SecureString]$DomainAdminPassword,
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
@@ -183,7 +185,15 @@
     begin {
         # --- Test for vRA API version
         xRequires -Version 7.0
-    
+
+        if ($PSBoundParameters.ContainsKey("Password")){
+
+            $JSONPassword = (New-Object System.Management.Automation.PSCredential (“username”, $Password)).GetNetworkCredential().Password
+        }
+        if ($PSBoundParameters.ContainsKey("DomainAdminPassword")){
+
+            $JSONDomainAdminPassword = (New-Object System.Management.Automation.PSCredential (“username”, $DomainAdminPassword)).GetNetworkCredential().Password
+        }
         if ($PSBoundParameters.ContainsKey("GroupBaseSearchDNs")){
 
             if ($GroupBaseSearchDNs.Count -gt 1){
@@ -305,7 +315,7 @@
 
                 if ($TenantDirectory.Password){
 
-                    $Password = $TenantDirectory.Password
+                    $JSONPassword = $TenantDirectory.Password
                 }
             }
             if (-not($PSBoundParameters.ContainsKey("URL"))){
@@ -385,7 +395,7 @@
 
                 if ($TenantDirectory.DomainAdminPassword){
 
-                    $DomainAdminPassword = $TenantDirectory.DomainAdminPassword
+                    $JSONDomainAdminPassword = $TenantDirectory.DomainAdminPassword
                 }
             }
             if (-not($PSBoundParameters.ContainsKey("Certificate"))){
@@ -419,12 +429,12 @@
                   "type" : "$($Type)",
                   "userNameDn" : "$($UserNameDN)",
                   "groupBaseSearchDn" : "$($GroupBaseSearchDN)",
-                  "password" : "$($Password)",
+                  "password" : "$($JSONPassword)",
                   "url" : "$($URL)",
                   "userBaseSearchDn" : "$($UserBaseSearchDN)",
                   "domain" : "$($Domain)",
                   "domainAdminUsername" : "$($DomainAdminUsername)",
-                  "domainAdminPassword" : "$($DomainAdminPassword)",
+                  "domainAdminPassword" : "$($JSONDomainAdminPassword)",
                   "subdomains" : [ "$($Subdomains)" ],
                   "groupBaseSearchDns" : [ $($GroupBaseSearchDNs) ],
                   "userBaseSearchDns" : [ $($UserBaseSearchDNs) ],

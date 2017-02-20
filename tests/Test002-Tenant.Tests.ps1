@@ -22,7 +22,8 @@ Describe -Name 'Tenant Tests' -Fixture {
 
     It -Name "Create named Tenant Directory $($JSON.TenantDirectory.Name)" -Test {
 
-        $TenantDirectoryA = New-vRATenantDirectory -ID $JSON.TenantDirectory.ID -Name $JSON.TenantDirectory.Name -Description $JSON.TenantDirectory.Description -Type $JSON.TenantDirectory.Type -Domain $JSON.TenantDirectory.Domain -UserNameDN $JSON.TenantDirectory.UserNameDN -Password $JSON.TenantDirectory.Password -URL $JSON.TenantDirectory.URL -GroupBaseSearchDN $JSON.TenantDirectory.GroupBaseSearchDN -UserBaseSearchDN $JSON.TenantDirectory.UserBaseSearchDN -GroupBaseSearchDNs $JSON.TenantDirectory.GroupBaseSearchDNs -UserBaseSearchDNs $JSON.TenantDirectory.UserBaseSearchDNs -TrustAll
+        $SecurePassword = ConvertTo-SecureString $JSON.TenantDirectory.Password -AsPlainText -Force
+        $TenantDirectoryA = New-vRATenantDirectory -ID $JSON.TenantDirectory.ID -Name $JSON.TenantDirectory.Name -Description $JSON.TenantDirectory.Description -Type $JSON.TenantDirectory.Type -Domain $JSON.TenantDirectory.Domain -UserNameDN $JSON.TenantDirectory.UserNameDN -Password $SecurePassword -URL $JSON.TenantDirectory.URL -GroupBaseSearchDN $JSON.TenantDirectory.GroupBaseSearchDN -UserBaseSearchDN $JSON.TenantDirectory.UserBaseSearchDN -GroupBaseSearchDNs $JSON.TenantDirectory.GroupBaseSearchDNs -UserBaseSearchDNs $JSON.TenantDirectory.UserBaseSearchDNs -TrustAll
         $TenantDirectoryA.Name | Should Be $JSON.TenantDirectory.Name
     }
 

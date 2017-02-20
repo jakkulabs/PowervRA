@@ -67,14 +67,16 @@
     Body text to send in JSON format
 
     .INPUTS
-    System.String.
+    System.String
+    System.SecureString
 
     .OUTPUTS
     System.Management.Automation.PSObject
 
     .EXAMPLE
+    $SecurePassword = ConvertTo-SecureString “P@ssword” -AsPlainText -Force
     New-vRATenantDirectory -ID Tenant01 -Name Tenant01 -Description "This is the Tenant01 Directory" -Type AD -Domain "vrademo.local" -UserNameDN "CN=vrasvc,OU=Service Accounts,OU=HQ,DC=vrademo,DC=local" `
-      -Password "P@ssw0rd" -URL "ldap://dc01.vrademo.local:389" -GroupBaseSearchDN "OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -UserBaseSearchDN "OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" `
+      -Password $SecurePassword -URL "ldap://dc01.vrademo.local:389" -GroupBaseSearchDN "OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -UserBaseSearchDN "OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" `
      -GroupBaseSearchDNs "OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -UserBaseSearchDNs "OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -TrustAll
     
     .EXAMPLE
@@ -136,7 +138,7 @@
 
     [parameter(Mandatory=$true,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [String]$Password,
+    [SecureString]$Password,
 
     [parameter(Mandatory=$true,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
@@ -168,7 +170,7 @@
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [String]$DomainAdminPassword,
+    [SecureString]$DomainAdminPassword,
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
@@ -186,7 +188,15 @@
     )    
 
     begin {
-    
+
+        if ($PSBoundParameters.ContainsKey("Password")){
+
+            $JSONPassword = (New-Object System.Management.Automation.PSCredential (“username”, $Password)).GetNetworkCredential().Password
+        }
+        if ($PSBoundParameters.ContainsKey("DomainAdminPassword")){
+
+            $JSONDomainAdminPassword = (New-Object System.Management.Automation.PSCredential (“username”, $DomainAdminPassword)).GetNetworkCredential().Password
+        }
         if ($PSBoundParameters.ContainsKey("GroupBaseSearchDNs")){
 
             if ($GroupBaseSearchDNs.Count -gt 1){
@@ -255,12 +265,12 @@
                   "type" : "$($Type)",
                   "userNameDn" : "$($UserNameDN)",
                   "groupBaseSearchDn" : "$($GroupBaseSearchDN)",
-                  "password" : "$($Password)",
+                  "password" : "$($JSONPassword)",
                   "url" : "$($URL)",
                   "userBaseSearchDn" : "$($UserBaseSearchDN)",
                   "domain" : "$($Domain)",
                   "domainAdminUsername" : "$($DomainAdminUsername)",
-                  "domainAdminPassword" : "$($DomainAdminPassword)",
+                  "domainAdminPassword" : "$($JSONDomainAdminPassword)",
                   "subdomains" : [ "$($Subdomains)" ],
                   "groupBaseSearchDns" : [ $($GroupBaseSearchDNs) ],
                   "userBaseSearchDns" : [ $($UserBaseSearchDNs) ],
