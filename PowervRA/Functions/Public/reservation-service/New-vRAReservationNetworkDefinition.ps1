@@ -60,7 +60,7 @@
 
         try {
 
-            if ($PSCmdlet.ShouldContinue("ReservationNetworkDefinition")) {
+            if ($PSCmdlet.ShouldProcess("ReservationNetworkDefinition")) {
 
                 # --- Define object
                 $NetworkDefinitionJSON = @"
