@@ -241,7 +241,7 @@
                         $URI = "/reservation-service/api/reservations/policies/$($Id)"  
 
                         # --- Run vRA REST Request
-                        $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body $Body
+                        Invoke-vRARestMethod -Method PUT -URI $URI -Body $Body -Verbose:$VerbosePreference | Out-Null
 
                         # --- Output the Successful Result
                         Get-vRAReservationPolicy -Id $Id

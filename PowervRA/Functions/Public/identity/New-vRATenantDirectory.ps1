@@ -287,7 +287,7 @@
                 $URI = "/identity/api/tenants/$($ID)/directories"  
 
                 # --- Run vRA REST Request
-                $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body
+                Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference | Out-Null
 
                 # --- Output the Successful Result
                 Get-vRATenantDirectory -Id $ID | Where-Object {$_.Name -eq $Name}

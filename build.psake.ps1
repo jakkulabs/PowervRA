@@ -28,14 +28,14 @@ Task Analyze {
         'Error' {
 
             Assert -conditionToCheck (
-                ($analysisResult | Where-Object Severity -eq 'Error').Count -eq 0
+                ($Results | Where-Object Severity -eq 'Error').Count -eq 0
                 ) -failureMessage 'One or more ScriptAnalyzer errors were found. Build cannot continue!'
 
         }
         'Warning' {
 
             Assert -conditionToCheck (
-                ($analysisResult | Where-Object {
+                ($Results | Where-Object {
                     $_.Severity -eq 'Warning' -or $_.Severity -eq 'Error'
                 }).Count -eq 0) -failureMessage 'One or more ScriptAnalyzer warnings were found. Build cannot continue!'
 

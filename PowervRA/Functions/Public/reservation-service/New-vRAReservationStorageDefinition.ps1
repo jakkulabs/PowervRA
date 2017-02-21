@@ -29,7 +29,7 @@
     $StorageDefinitionArray += $Storage1
 
 #>
-[CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
@@ -63,71 +63,74 @@
 
         try {
 
-            # --- Get storage information
-            $Storage = Get-vRAReservationComputeResourceStorage -Type $Type -ComputeResourceId $ComputeResourceId -Name $Path
+            if ($PSCmdlet.ShouldProcess("ReservationStorageDefinition") {
 
-            $StoragePath = ($Storage.values.entries | Where-Object {$_.key -eq "storagePath"}).value
+                # --- Get storage information
+                $Storage = Get-vRAReservationComputeResourceStorage -Type $Type -ComputeResourceId $ComputeResourceId -Name $Path
 
-            $StorageTotalSize = ($Storage.values.entries | Where-Object {$_.key -eq "computeResourceStorageTotalSizeGB"}).value.value.ToInt32($null)
+                $StoragePath = ($Storage.values.entries | Where-Object {$_.key -eq "storagePath"}).value
 
-            # --- Validate the requested reservation size
-            if ($ReservedSizeGB -gt $StorageTotalSize) {
+                $StorageTotalSize = ($Storage.values.entries | Where-Object {$_.key -eq "computeResourceStorageTotalSizeGB"}).value.value.ToInt32($null)
 
-            throw "Reserved size is greater than the total size of the storage ($($ReservedSizeGB) -> $($StorageTotalSize))"
+                # --- Validate the requested reservation size
+                if ($ReservedSizeGB -gt $StorageTotalSize) {
 
-            }
-
-            $StorageDefinitionJSON = @"
-    
-                {
-                    "type": "complex",
-                    "componentTypeId": "com.vmware.csp.iaas.blueprint.service",
-                    "componentId": null,
-                    "classId": "Infrastructure.Reservation.Storage",
-                    "typeFilter": null,
-                    "values": {
-                        "entries": [
-                            {
-                                "key": "storageReservationPriority",
-                                "value": {
-                                    "type": "integer",
-                                    "value": $($Priority)
-                                }
-                            },
-                            {
-                                "key": "storageReservedSizeGB",
-                                "value": {
-                                    "type": "integer",
-                                    "value": $($ReservedSizeGB)
-                                }
-                            },
-                            {
-                                "key": "storagePath",
-                                "value": {
-                                    "type": "entityRef",
-                                    "componentId": null,
-                                    "classId": "Storage",
-                                    "id": "$($StoragePath.id)",
-                                    "label": "$($StoragePath.label)"
-                                }
-                            },
-                            {
-                                "key": "storageEnabled",
-                                "value": {
-                                    "type": "boolean",
-                                    "value": true
-                                }
-                            }
-                        ]
-
-                    }
+                throw "Reserved size is greater than the total size of the storage ($($ReservedSizeGB) -> $($StorageTotalSize))"
 
                 }
 
+                $StorageDefinitionJSON = @"
+        
+                    {
+                        "type": "complex",
+                        "componentTypeId": "com.vmware.csp.iaas.blueprint.service",
+                        "componentId": null,
+                        "classId": "Infrastructure.Reservation.Storage",
+                        "typeFilter": null,
+                        "values": {
+                            "entries": [
+                                {
+                                    "key": "storageReservationPriority",
+                                    "value": {
+                                        "type": "integer",
+                                        "value": $($Priority)
+                                    }
+                                },
+                                {
+                                    "key": "storageReservedSizeGB",
+                                    "value": {
+                                        "type": "integer",
+                                        "value": $($ReservedSizeGB)
+                                    }
+                                },
+                                {
+                                    "key": "storagePath",
+                                    "value": {
+                                        "type": "entityRef",
+                                        "componentId": null,
+                                        "classId": "Storage",
+                                        "id": "$($StoragePath.id)",
+                                        "label": "$($StoragePath.label)"
+                                    }
+                                },
+                                {
+                                    "key": "storageEnabled",
+                                    "value": {
+                                        "type": "boolean",
+                                        "value": true
+                                    }
+                                }
+                            ]
+
+                        }
+
+                    }
+
 "@
 
-            # --- Return the reservation storage definition
-            $StorageDefinitionJSON | ConvertFrom-Json
+                # --- Return the reservation storage definition
+                $StorageDefinitionJSON | ConvertFrom-Json
+            }
 
         }
         catch [Exception]{

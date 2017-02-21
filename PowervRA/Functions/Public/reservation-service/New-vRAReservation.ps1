@@ -788,12 +788,8 @@
 
                 $URI = "/reservation-service/api/reservations"
                 
-                Write-Verbose -Message "Preparing POST to $($URI)"  
-
                 # --- Run vRA REST Request
-                $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body
-
-                Write-Verbose -Message "Success"
+                Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference | Out-Null
 
                 # --- Output the Successful Result
                 Get-vRAReservation -Name $Name
