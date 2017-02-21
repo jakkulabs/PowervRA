@@ -63,7 +63,7 @@
 
         try {
 
-            if ($PSCmdlet.ShouldProcess("ReservationStorageDefinition") {
+            if ($PSCmdlet.ShouldProcess("ReservationStorageDefinition")) {
 
                 # --- Get storage information
                 $Storage = Get-vRAReservationComputeResourceStorage -Type $Type -ComputeResourceId $ComputeResourceId -Name $Path
