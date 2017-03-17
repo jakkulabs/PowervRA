@@ -107,8 +107,11 @@ PUT /api/propertydefinitions/costcenter
     [parameter(Mandatory=$false,ParameterSetName="Property")]    
     [ValidateNotNullOrEmpty()]
     [Int]$DisplayIndex,
-    
-    
+
+    [parameter(Mandatory=$false,ParameterSetName="Property")] 
+    [ValidateNotNullOrEmpty()]
+    [Boolean]$Required = $false,
+
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="JSON")]
     [ValidateNotNullOrEmpty()]
     [String]$JSON
@@ -130,7 +133,8 @@ PUT /api/propertydefinitions/costcenter
                 
             }
             else {                     
-                $multiValued = if($IsMultiValued) { "true" } else { "false" }
+                $MultiValued = if($IsMultiValued) { "true" } else { "false" }
+                $Mandatory = if($Required) { "true" } else { "false" }
                 $Body = @"
                 {
                     "id" : "$($Id)",
@@ -140,7 +144,7 @@ PUT /api/propertydefinitions/costcenter
                         "type" : "primitive",
                         "typeId" : "$($DataType)"
                     },
-                    "isMultiValued" : $($multiValued),
+                    "isMultiValued" : $($MultiValued),
                     "displayAdvice" : "$($Display)",
                     "tenantId" : "$($Tenant)",
                     "orderIndex": $($DisplayIndex),
@@ -163,21 +167,27 @@ PUT /api/propertydefinitions/costcenter
                             "label": "SecondValueLabel"
                         }
                         ]
+                    },
+                    "facets": {
+                        "mandatory": {
+                            "type": "constant",
+                            "value": {
+                                "type": "boolean",
+                                "value": $($Mandatory)
+                            }
+                        }
                     }
                 }
 "@
 
             }
-            $Body
-            
-            ConvertFrom-Json $Body
 
             $URI = "/properties-service/api/propertydefinitions"  
 
             Write-Verbose -Message "Preparing POST to $($URI)"     
 
             # --- Run vRA REST Request           
-            Invoke-vRARestMethod -Method POST -URI $URI -Body $Body | Out-Null
+            $Result = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body | Out-Null
 
             Get-vRAPropertyDefinition -Id $Id
 
