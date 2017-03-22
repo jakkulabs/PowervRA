@@ -88,17 +88,14 @@ PUT /api/propertydefinitions/costcenter
     [ValidateNotNullOrEmpty()]
     [String]$Description,
 
-    [parameter(Mandatory=$false,ParameterSetName="Property")]
+    [parameter(Mandatory=$true,Position=0,ParameterSetName="Property")]
     [ValidateNotNullOrEmpty()]
+    [ValidateSet("BOOLEAN","STRING","INTEGER","DECIMAL","DATE_TIME")]
     [String]$DataType,
 
     [parameter(Mandatory=$false,ParameterSetName="Property")] 
     [ValidateNotNullOrEmpty()]
     [Boolean]$IsMultiValued = $false,
-
-    [parameter(Mandatory=$false,ParameterSetName="Property")] 
-    [ValidateNotNullOrEmpty()]
-    [String]$Display,
     
     [parameter(Mandatory=$false,ParameterSetName="Property")]    
     [ValidateNotNullOrEmpty()]
@@ -106,17 +103,50 @@ PUT /api/propertydefinitions/costcenter
     
     [parameter(Mandatory=$false,ParameterSetName="Property")]    
     [ValidateNotNullOrEmpty()]
-    [Int]$DisplayIndex,
+    [Int]$Index,
 
     [parameter(Mandatory=$false,ParameterSetName="Property")] 
     [ValidateNotNullOrEmpty()]
     [Boolean]$Required = $false,
 
+    [parameter(Mandatory=$false,ParameterSetName="Property")] 
+    [ValidateNotNullOrEmpty()]
+    [Boolean]$AllowCustomValues = $false,
+
+    [parameter(Mandatory=$false,ParameterSetName="Property")] 
+    [ValidateNotNullOrEmpty()]
+    [Hashtable]$StaticValues,
+
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="JSON")]
     [ValidateNotNullOrEmpty()]
     [String]$JSON
     
-    )    
+    )
+
+    DynamicParam {
+        if($DataType) {
+            switch($DataType) {
+                "BOOLEAN" { $ValidateSet = "CHECKBOX","YES_NO" }
+                "STRING" { $ValidateSet = "DROPDOWN","EMAIL","HYPERLINK","TEXTBOX","TEXTAREA" }
+                "INTEGER" { $ValidateSet = "DROPDOWN","SLIDER","TEXTBOX" }
+                "DECIMAL" { $ValidateSet = "DROPDOWN","SLIDER","TEXTBOX" }
+                "DATE_TIME" { $ValidateSet = "DATE_TIME_PICKER" }
+            }
+            $Dictionary = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
+            New-DynamicParam -Name "Display" -ValidateSet $ValidateSet -Mandatory -ParameterSet "Property" -DPDictionary $Dictionary
+            
+            if($Display) {
+                switch($Display) {
+                    "DROPDOWN" {
+                        $ValueTypeValidateSet = "Static","Dynamic"
+                        New-DynamicParam -Name "ValueType" -ValidateSet $ValueTypeValidateSet -Mandatory -ParameterSet "Property" -DPDictionary $Dictionary
+                    }
+                }
+            }
+            
+            return $Dictionary
+        }
+    } 
 
     begin {
 
@@ -132,9 +162,25 @@ PUT /api/propertydefinitions/costcenter
                 $Body = $JSON
                 
             }
-            else {                     
+            else {
                 $MultiValued = if($IsMultiValued) { "true" } else { "false" }
                 $Mandatory = if($Required) { "true" } else { "false" }
+                $CustomValues = if($AllowCustomValues) { "true" } else { "false" }
+
+                # $DataType BOOLEAN cannot be Required
+                if($DataType -ne "BOOLEAN") {
+                    $facets = @"
+                        "mandatory": {
+                            "type": "constant",
+                            "value": {
+                                "type": "boolean",
+                                "value": $($Mandatory)
+                            }
+                        }
+"@
+                }
+
+
                 $Body = @"
                 {
                     "id" : "$($Id)",
@@ -147,14 +193,14 @@ PUT /api/propertydefinitions/costcenter
                     "isMultiValued" : $($MultiValued),
                     "displayAdvice" : "$($Display)",
                     "tenantId" : "$($Tenant)",
-                    "orderIndex": $($DisplayIndex),
+                    "orderIndex": $($Index),
                     "permissibleValues": {
                         "type": "static",
-                        "customAllowed": false,
+                        "customAllowed": $($CustomValues),
                         "values": [
                         {
                             "underlyingValue": {
-                                "type": "string",
+                                "type": "$($DataType)",
                                 "value": "FirstValueValue"
                             },
                             "label": "FirstValueLabel"
@@ -169,13 +215,7 @@ PUT /api/propertydefinitions/costcenter
                         ]
                     },
                     "facets": {
-                        "mandatory": {
-                            "type": "constant",
-                            "value": {
-                                "type": "boolean",
-                                "value": $($Mandatory)
-                            }
-                        }
+$($facets)
                     }
                 }
 "@
@@ -187,9 +227,9 @@ PUT /api/propertydefinitions/costcenter
             Write-Verbose -Message "Preparing POST to $($URI)"     
 
             # --- Run vRA REST Request           
-            $Result = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body | Out-Null
-
-            Get-vRAPropertyDefinition -Id $Id
+            #$Result = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body | Out-Null
+            $Body
+            #Get-vRAPropertyDefinition -Id $Id
 
         }
         catch [Exception]{
