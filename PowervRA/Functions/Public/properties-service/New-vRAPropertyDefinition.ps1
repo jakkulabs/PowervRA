@@ -60,6 +60,10 @@
     # Create a boolean checkbox
     New-vRAPropertyDefinition -Name BooleanName -Label "Check this box" -Boolean -BooleanDisplay CHECKBOX
 
+    .EXAMPLE
+    # Create a new decimal slider with min, max and increment
+    New-vRAPropertyDefinition -Name DecimalTest -Decimal -DecimalDisplay SLIDER -MinimumValue 0 -MaximumValue 10 -Increment 0.5
+
 #> 
 [CmdletBinding(ConfirmImpact="Low")][OutputType('System.Management.Automation.PSObject')]
 
@@ -91,6 +95,10 @@
     [parameter(Mandatory=$false)] 
     [ValidateNotNullOrEmpty()]
     [Switch]$Encrypted,
+
+    [parameter(Mandatory=$false)] 
+    [ValidateNotNullOrEmpty()]
+    [Switch]$ExecuteAPICall, # In here for testing only
 
 
     [parameter(Mandatory=$false,ParameterSetName="String")] 
@@ -156,22 +164,45 @@
                 New-DynamicParam -Name "ValueType" -Mandatory -ValidateSet $ValueTypes -ParameterSet "String" -DPDictionary $Dictionary
                 New-DynamicParam -Name "Values" -Type hashtable -Mandatory -ParameterSet "String" -DPDictionary $Dictionary
             }
-            if($IntegerDisplay -eq "DROPDOWN") {
-                $ValueTypes = "Static","Dynamic"
-                New-DynamicParam -Name "EnableCustomValues" -Type switch -ParameterSet "Integer" -DPDictionary $Dictionary
-                New-DynamicParam -Name "ValueType" -Mandatory -ValidateSet $ValueTypes -ParameterSet "Integer" -DPDictionary $Dictionary
-                New-DynamicParam -Name "Values" -Type hashtable -Mandatory -ParameterSet "Integer" -DPDictionary $Dictionary
+
+            if($Integer) {
+                if($IntegerDisplay -eq "DROPDOWN") {
+                    # Dropdown should have value type (static or dynamic) and a hashtable of values
+                    $ValueTypes = "Static","Dynamic"
+                    New-DynamicParam -Name "EnableCustomValues" -Type switch -ParameterSet "Integer" -DPDictionary $Dictionary
+                    New-DynamicParam -Name "ValueType" -Mandatory -ValidateSet $ValueTypes -ParameterSet "Integer" -DPDictionary $Dictionary
+                    New-DynamicParam -Name "Values" -Type hashtable -Mandatory -ParameterSet "Integer" -DPDictionary $Dictionary
+                } elseif($IntegerDisplay -eq "SLIDER") {
+                    # Min/Max value are mandatory for a slider
+                    New-DynamicParam -Name "MinimumValue" -Mandatory -Type int -ParameterSet "Integer" -DPDictionary $Dictionary
+                    New-DynamicParam -Name "MaximumValue" -Mandatory -Type int -ParameterSet "Integer" -DPDictionary $Dictionary
+                    New-DynamicParam -Name "Increment" -Type decimal -ParameterSet "Integer" -DPDictionary $Dictionary
+                } else { 
+                    # Otherwise add some optional for Integers
+                    New-DynamicParam -Name "MinimumValue" -Type int -ParameterSet "Integer" -DPDictionary $Dictionary
+                    New-DynamicParam -Name "MaximumValue" -Type int -ParameterSet "Integer" -DPDictionary $Dictionary
+                    New-DynamicParam -Name "Increment" -Type decimal -ParameterSet "Integer" -DPDictionary $Dictionary
+                }
             }
 
-            if($Integer) { 
-                New-DynamicParam -Name "MinimumValue" -Type int -ParameterSet "Integer" -DPDictionary $Dictionary
-                New-DynamicParam -Name "MaximumValue" -Type int -ParameterSet "Integer" -DPDictionary $Dictionary
-                New-DynamicParam -Name "Increment" -Type int -ParameterSet "Integer" -DPDictionary $Dictionary
-            }
             if($Decimal) {
-                New-DynamicParam -Name "MinimumValue" -Type Decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
-                New-DynamicParam -Name "MaximumValue" -Type Decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
-                New-DynamicParam -Name "Increment" -Type Decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
+                if($DecimalDisplay -eq "DROPDOWN") {
+                    # Dropdown should have value type (static or dynamic) and a hashtable of values
+                    $ValueTypes = "Static","Dynamic"
+                    New-DynamicParam -Name "EnableCustomValues" -Type switch -ParameterSet "Decimal" -DPDictionary $Dictionary
+                    New-DynamicParam -Name "ValueType" -Mandatory -ValidateSet $ValueTypes -ParameterSet "Decimal" -DPDictionary $Dictionary
+                    New-DynamicParam -Name "Values" -Type hashtable -Mandatory -ParameterSet "Decimal" -DPDictionary $Dictionary
+                } elseif($IntegerDisplay -eq "SLIDER") {
+                    # Min/Max value are mandatory for a slider
+                    New-DynamicParam -Name "MinimumValue" -Mandatory -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
+                    New-DynamicParam -Name "MaximumValue" -Mandatory -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
+                    New-DynamicParam -Name "Increment" -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
+                } else { 
+                    # Otherwise add some optional for Decimal
+                    New-DynamicParam -Name "MinimumValue" -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
+                    New-DynamicParam -Name "MaximumValue" -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
+                    New-DynamicParam -Name "Increment" -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
+                }
             }
             if($Datetime) {
                 New-DynamicParam -Name "MinimumValue" -Type DateTime -ParameterSet "Datetime" -DPDictionary $Dictionary
@@ -192,7 +223,7 @@
             }
         }
         #Appropriate variables should now be defined and accessible
-        #Get-Variable -scope 0
+        Get-Variable -scope 0
     }
     
     process {
@@ -243,6 +274,7 @@
                                 "value": $($Mandatory)
                             }
                         },
+
 "@
                 }
                      $facets += @"
@@ -253,6 +285,7 @@
                                 "value": $($Encrypted.ToString().ToLower())
                             }
                         },
+
 "@
                if($MinimumValue) {
                     $facets += @"
@@ -370,11 +403,14 @@ $($facets.Trim(","))
 
             Write-Verbose -Message "Preparing POST to $($URI)"     
 
-            # --- Run vRA REST Request           
-            #$Result = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body | Out-Null
             $Body
             ConvertFrom-Json $Body
-            #Get-vRAPropertyDefinition -Id $Name
+
+            # --- Run vRA REST Request  
+            if($ExecuteAPICall) {
+                $Result = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body | Out-Null
+                Get-vRAPropertyDefinition -Id $Name
+            }
 
         }
         catch [Exception]{
