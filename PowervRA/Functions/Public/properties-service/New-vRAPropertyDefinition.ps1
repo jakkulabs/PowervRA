@@ -68,87 +68,87 @@
 [CmdletBinding(ConfirmImpact="Low")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
-    [parameter(Mandatory=$true)]
-    [ValidateNotNullOrEmpty()]
-    [String]$Name,
-    
-    [parameter(Mandatory=$false)]    
-    [ValidateNotNullOrEmpty()]
-    [String]$Label = $Name,
+        [parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
+        [String]$Name,
+        
+        [parameter(Mandatory=$false)]    
+        [ValidateNotNullOrEmpty()]
+        [String]$Label = $Name,
 
-    [parameter(Mandatory=$false)]
-    [ValidateNotNullOrEmpty()]
-    [String]$Description,
+        [parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [String]$Description,
 
-    [parameter(Mandatory=$false)]    
-    [ValidateNotNullOrEmpty()]
-    [String]$Tenant = $Global:vRAConnection.Tenant,
-    
-    [parameter(Mandatory=$false)]    
-    [ValidateNotNullOrEmpty()]
-    [Int]$Index,
+        [parameter(Mandatory=$false)]    
+        [ValidateNotNullOrEmpty()]
+        [String]$Tenant = $Global:vRAConnection.Tenant,
+        
+        [parameter(Mandatory=$false)]    
+        [ValidateNotNullOrEmpty()]
+        [Int]$Index,
 
-    [parameter(Mandatory=$false)] 
-    [ValidateNotNullOrEmpty()]
-    [Switch]$Required,
+        [parameter(Mandatory=$false)] 
+        [ValidateNotNullOrEmpty()]
+        [Switch]$Required,
 
-    [parameter(Mandatory=$false)] 
-    [ValidateNotNullOrEmpty()]
-    [Switch]$Encrypted,
+        [parameter(Mandatory=$false)] 
+        [ValidateNotNullOrEmpty()]
+        [Switch]$Encrypted,
 
-    [parameter(Mandatory=$false)] 
-    [ValidateNotNullOrEmpty()]
-    [Switch]$ExecuteAPICall, # In here for testing only
+        [parameter(Mandatory=$false)] 
+        [ValidateNotNullOrEmpty()]
+        [Switch]$ExecuteAPICall, # In here for testing only
 
 
-    [parameter(Mandatory=$false,ParameterSetName="String")] 
-    [ValidateNotNullOrEmpty()]
-    [Switch]$String,
+        [parameter(Mandatory=$false,ParameterSetName="String")] 
+        [ValidateNotNullOrEmpty()]
+        [Switch]$String,
 
-    [parameter(Mandatory=$true,ParameterSetName="String")] 
-    [ValidateNotNullOrEmpty()]
-    [ValidateSet("DROPDOWN","TEXTBOX","EMAIL","HYPERLINK","TEXTAREA")]
-    [String]$StringDisplay,
+        [parameter(Mandatory=$true,ParameterSetName="String")] 
+        [ValidateNotNullOrEmpty()]
+        [ValidateSet("DROPDOWN","TEXTBOX","EMAIL","HYPERLINK","TEXTAREA")]
+        [String]$StringDisplay,
 
-    [parameter(Mandatory=$false,ParameterSetName="Boolean")] 
-    [ValidateNotNullOrEmpty()]
-    [Switch]$Boolean,
+        [parameter(Mandatory=$false,ParameterSetName="Boolean")] 
+        [ValidateNotNullOrEmpty()]
+        [Switch]$Boolean,
 
-    [parameter(Mandatory=$true,ParameterSetName="Boolean")] 
-    [ValidateNotNullOrEmpty()]
-    [ValidateSet("CHECKBOX","YES_NO")]
-    [String]$BooleanDisplay,
+        [parameter(Mandatory=$true,ParameterSetName="Boolean")] 
+        [ValidateNotNullOrEmpty()]
+        [ValidateSet("CHECKBOX","YES_NO")]
+        [String]$BooleanDisplay,
 
-    [parameter(Mandatory=$false,ParameterSetName="Integer")] 
-    [ValidateNotNullOrEmpty()]
-    [Switch]$Integer,
+        [parameter(Mandatory=$false,ParameterSetName="Integer")] 
+        [ValidateNotNullOrEmpty()]
+        [Switch]$Integer,
 
-    [parameter(Mandatory=$true,ParameterSetName="Integer")] 
-    [ValidateNotNullOrEmpty()]
-    [ValidateSet("DROPDOWN","SLIDER","TEXTBOX")]
-    [String]$IntegerDisplay,
+        [parameter(Mandatory=$true,ParameterSetName="Integer")] 
+        [ValidateNotNullOrEmpty()]
+        [ValidateSet("DROPDOWN","SLIDER","TEXTBOX")]
+        [String]$IntegerDisplay,
 
-    [parameter(Mandatory=$false,ParameterSetName="Decimal")] 
-    [ValidateNotNullOrEmpty()]
-    [Switch]$Decimal,
+        [parameter(Mandatory=$false,ParameterSetName="Decimal")] 
+        [ValidateNotNullOrEmpty()]
+        [Switch]$Decimal,
 
-    [parameter(Mandatory=$true,ParameterSetName="Decimal")] 
-    [ValidateNotNullOrEmpty()]
-    [ValidateSet("DROPDOWN","SLIDER","TEXTBOX")]
-    [String]$DecimalDisplay,
+        [parameter(Mandatory=$true,ParameterSetName="Decimal")] 
+        [ValidateNotNullOrEmpty()]
+        [ValidateSet("DROPDOWN","SLIDER","TEXTBOX")]
+        [String]$DecimalDisplay,
 
-    [parameter(Mandatory=$false,ParameterSetName="Datetime")] 
-    [ValidateNotNullOrEmpty()]
-    [Switch]$Datetime,
+        [parameter(Mandatory=$false,ParameterSetName="Datetime")] 
+        [ValidateNotNullOrEmpty()]
+        [Switch]$Datetime,
 
-    [parameter(Mandatory=$true,ParameterSetName="Datetime")] 
-    [ValidateNotNullOrEmpty()]
-    [ValidateSet("DATE_TIME_PICKER")]
-    [String]$DatetimeDisplay, # This is redundant, only one option
+        [parameter(Mandatory=$true,ParameterSetName="Datetime")] 
+        [ValidateNotNullOrEmpty()]
+        [ValidateSet("DATE_TIME_PICKER")]
+        [String]$DatetimeDisplay, # This is redundant, only one option
 
-    [parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="JSON")]
-    [ValidateNotNullOrEmpty()]
-    [String]$JSON
+        [parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="JSON")]
+        [ValidateNotNullOrEmpty()]
+        [String]$JSON
 
     )
 
