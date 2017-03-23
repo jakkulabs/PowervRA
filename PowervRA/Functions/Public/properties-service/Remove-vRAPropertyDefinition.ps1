@@ -23,7 +23,7 @@
     Remove-vRAPropertyDefinition -Id Hostname
     
     .EXAMPLE
-    # Remove the property "Hostname" from the tenant "Development" only
+    # Remove the property "Hostname" from the tenant "Development"
     Get-vRAPropertyDefinition -Id "Hostname" -Tenant Development
 
 #>
