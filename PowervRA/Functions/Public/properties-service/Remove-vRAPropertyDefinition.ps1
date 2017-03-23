@@ -1,37 +1,31 @@
 ﻿function Remove-vRAPropertyDefinition {
 <#
     .SYNOPSIS
-    Get a property that the user is allowed to review.
+    Removes a Property Definiton from the specified tenant
     
     .DESCRIPTION
-    API for property definitions that a system administrator can interact with. It allows the user to interact 
-    with property definitions that the user is permitted to review.
+    Uses the REST API to delete a property definiton based on the Id supplied. If the Tenant is supplied it will delete the property for that tenant only.
 
     .PARAMETER Id
-    The id of the property definition
+    The id of the property definition to delete
 
-    .PARAMETER Limit
-    The number of entries returned per page from the API. This has a default value of 100
-
-    .PARAMETER Page
-    The index of the page to display.
+    .PARAMETER Tenant
+    The tenant of the property definition to delete
 
     .INPUTS
     System.String
-    System.Int
 
     .OUTPUTS
-    System.Management.Automation.PSObject
+    None
 
     .EXAMPLE
-    Get-vRAPropertyDefinition
+    # Remove the property "Hostname"
+    Remove-vRAPropertyDefinition -Id Hostname
     
     .EXAMPLE
-    Get-vRAPropertyDefinition -Limit 200
+    # Remove the property "Hostname" from the tenant "Development" only
+    Get-vRAPropertyDefinition -Id "Hostname" -Tenant Development
 
-    .EXAMPLE
-    Get-vRAPropertyDefinition -Id Hostname
-    
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")]
 
@@ -43,7 +37,7 @@
 
         [parameter(Mandatory=$false)]    
         [ValidateNotNullOrEmpty()]
-        [String]$Tenant = $Global:vRAConnection.Tenant
+        [String]$Tenant
 
     )
 
@@ -59,7 +53,11 @@
                 
                 if ($PSCmdlet.ShouldProcess($Id)){
 
-                    $URI = "/properties-service/api/propertydefinitions/$($Id)?tenantId=$($Tenant)"
+                    $URI = "/properties-service/api/propertydefinitions/$($Id)"
+
+                    if($Tenant) { 
+                        $URI += "?tenantId=$($Tenant)"
+                    }
 
                     $EscapedURI = [uri]::EscapeUriString($URI)
 
