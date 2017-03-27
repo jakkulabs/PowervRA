@@ -58,6 +58,7 @@ function Set-vRAUserPrincipal {
 
     Param (
 
+        [Alias("PrincipalId")]
         [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [String]$Id,
