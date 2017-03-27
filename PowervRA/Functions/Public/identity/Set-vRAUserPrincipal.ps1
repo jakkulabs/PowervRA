@@ -34,7 +34,8 @@ function Set-vRAUserPrincipal {
     Enable or unlock the user principal
 
     .INPUTS
-    System.String.
+    System.String
+    System.SecureString
     System.Diagnostics.Switch
 
     .OUTPUTS
@@ -50,7 +51,8 @@ function Set-vRAUserPrincipal {
     Set-vRAUserPrincipal -Id user@vsphere.local -DisableAccount
     
     .EXAMPLE
-    Set-vRAUserPrincipal -Id user@vsphere.local -Password s3cur3p@ss!   
+    $SecurePassword = ConvertTo-SecureString “P@ssword” -AsPlainText -Force
+    Set-vRAUserPrincipal -Id user@vsphere.local -Password SecurePassword   
 #> 
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low")][OutputType('System.Management.Automation.PSObject')]
 
@@ -82,7 +84,7 @@ function Set-vRAUserPrincipal {
 
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-        [String]$Password,
+        [SecureString]$Password,
         
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
@@ -164,9 +166,11 @@ function Set-vRAUserPrincipal {
                 } 
                 
                 if ($PSBoundParameters.ContainsKey("Password")) {
-                    
+
+                    $InsecurePassword = (New-Object System.Management.Automation.PSCredential("username", $Password)).GetNetworkCredential().Password
+
                     Write-Verbose -Message "Updating Password"
-                    $PrincipalObject.Password = $Password
+                    $PrincipalObject.Password = $InsecurePassword
                     $ShouldUpdate = $true
                                                        
                 }                                                     
