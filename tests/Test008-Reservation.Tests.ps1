@@ -2,7 +2,7 @@
 $JSON = Get-Content .\Variables.json -Raw | ConvertFrom-JSON
 
 # --- Startup
-$ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password-AsPlainText -Force
+$ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password -AsPlainText -Force
 $Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Tenant $JSON.Connection.Tenant -Username $JSON.Connection.Username -Password $ConnectionPassword -IgnoreCertRequirements
 
 # --- Tests
