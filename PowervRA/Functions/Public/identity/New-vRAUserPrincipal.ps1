@@ -35,13 +35,19 @@ function New-vRAUserPrincipal {
 
     .INPUTS
     System.String.
+    System.SecureString
+    Management.Automation.PSCredential
 
     .OUTPUTS
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    New-vRAUserPrincipal -Tenant vsphere.local -FirstName "Test" -LastName "User" -EmailAddress "user@company.com" -Description "a description" -Password "password" -PrincipalId "user@vsphere.local"
-    
+    $SecurePassword = ConvertTo-SecureString “P@ssword” -AsPlainText -Force
+    New-vRAUserPrincipal -Tenant vsphere.local -FirstName "Test" -LastName "User" -EmailAddress "user@company.com" -Description "a description" -Password $SecurePassword -PrincipalId "user@vsphere.local"
+
+    .EXAMPLE
+    New-vRAUserPrincipal -Tenant vsphere.local -FirstName "Test" -LastName "User" -EmailAddress "user@company.com" -Description "a description" -Credential (Get-Credential)
+
     .EXAMPLE
     $JSON = @"
         {
@@ -99,7 +105,7 @@ function New-vRAUserPrincipal {
 
     [parameter(Mandatory=$true,ParameterSetName="Password")]
     [ValidateNotNullOrEmpty()]
-    [String]$Password,
+    [SecureString]$Password,
     
     [Parameter(Mandatory=$true,ParameterSetName="Credential")]
 	[ValidateNotNullOrEmpty()]
@@ -132,8 +138,14 @@ function New-vRAUserPrincipal {
                 if ($PSBoundParameters.ContainsKey("Credential")){
 
                     $PrincipalId = $Credential.UserName
-                    $Password = $Credential.GetNetworkCredential().Password
+                    $JSONPassword = $Credential.GetNetworkCredential().Password
                     
+                }
+
+                if ($PSBoundParameters.ContainsKey("Password")) {
+
+                    $JSONPassword = (New-Object System.Management.Automation.PSCredential("username", $Password)).GetNetworkCredential().Password
+
                 }
                 
                 $Name = ($PrincipalId -split "@")[0]
@@ -147,7 +159,7 @@ function New-vRAUserPrincipal {
                     "lastName" : "$($LastName)",
                     "emailAddress" : "$($EmailAddress)",
                     "description" : "$($Description)",
-                    "password" : "$($Password)",
+                    "password" : "$($JSONPassword)",
                     "principalId": { "domain": "$($Domain)", "name": "$($Name)"} ,
                     "tenantName" : "$($Tenant)",
                     "name" : "$($FirstName) $($LastName)"
