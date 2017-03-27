@@ -74,7 +74,7 @@
 
     if ($PSBoundParameters.ContainsKey("IgnoreCertRequirements") ){
 
-        if ($PSVersionTable.PSEdition -eq "Desktop" -or $PSVersionTable.PSEdition -eq $null) {
+        if ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
 
             if ( -not ("TrustAllCertsPolicy" -as [type])) {
 
