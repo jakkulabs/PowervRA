@@ -1,4 +1,4 @@
-function New-vRAUserPrincipal {
+﻿function New-vRAUserPrincipal {
 <#
     .SYNOPSIS
     Create a vRA local user principal

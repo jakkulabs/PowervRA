@@ -1,4 +1,4 @@
-function Set-vRAUserPrincipal {
+﻿function Set-vRAUserPrincipal {
 <#
     .SYNOPSIS
     Update a vRA local user principal
