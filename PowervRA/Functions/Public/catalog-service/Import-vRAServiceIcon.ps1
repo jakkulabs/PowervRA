@@ -21,8 +21,17 @@
     .EXAMPLE
     Import-vRAServiceIcon -Id "cafe_default_icon_genericAllServices" -File C:\Icons\NewIcon.png
 
+    Update the default All Services Service Icon with a new image file. Note: admin permissions for the default vRA Tenant are required for this action.
+
     .EXAMPLE
     Get-ChildItem -Path C:\Icons\NewIcon.png | Import-vRAServiceIcon -Id "cafe_default_icon_genericAllServices" -Confirm:$false
+
+    Update the default All Services Service Icon with a new image file via the pipeline. Note: admin permissions for the default vRA Tenant are required for this action.
+
+    .EXAMPLE
+    Import-vRAServiceIcon -Id "cafe_icon_Service01" -File C:\Icons\Service01Icon.png -Confirm:$false
+
+    Create a new Service Icon named cafe_icon_Service01
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")][OutputType('System.Management.Automation.PSObject')]

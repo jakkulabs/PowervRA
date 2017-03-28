@@ -17,6 +17,13 @@
 
     .EXAMPLE
     Get-vRAServiceIcon -Id "cafe_default_icon_genericAllServices"
+
+    Get the default All Services Service Icon. Note: admin permissions for the default vRA Tenant are required for this action.
+
+    .EXAMPLE
+    Get-vRAServiceIcon -Id "cafe_icon_Service01"
+
+    Get the Service Icon named cafe_icon_Service01
 #>
 [CmdletBinding()][OutputType('System.Management.Automation.PSObject')]
 
@@ -60,6 +67,6 @@
         }
     }
     end {
-        
+
     }
 }

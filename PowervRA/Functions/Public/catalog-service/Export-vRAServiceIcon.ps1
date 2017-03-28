@@ -17,6 +17,8 @@
 
     .EXAMPLE
     Export-vRAServiceIcon -Id "cafe_default_icon_genericAllServices" -Path C:\Icons\AllServicesIcon.png
+
+    Export the default All Services Service Icon to a local file. Note: admin permissions for the default vRA Tenant are required for this action.
 #>
 [CmdletBinding()][OutputType('System.IO.FileInfo')]
 
