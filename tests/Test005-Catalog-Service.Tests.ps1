@@ -242,6 +242,39 @@ Describe -Name 'Catalog-Service Tests' -Fixture {
 
     }
 
+    Context -Name "Service Icons" -Fixture {
+
+        It -Name "Create named Service Icon $($JSON.CatalogService.ServiceIcon.Id)" -Test {
+
+            $ServiceIconA = Import-vRAServiceIcon -Id $JSON.CatalogService.ServiceIcon.Id -File $JSON.CatalogService.ServiceIcon.ImportFile -Confirm:$false
+            $ServiceIconA.Id | Should Be $JSON.CatalogService.ServiceIcon.Id
+        }
+
+        It -Name "Return named Service Icon $($JSON.CatalogService.ServiceIcon.Id)" -Test {
+
+            $ServiceIconB = Get-vRAServiceIcon -Id $JSON.CatalogService.ServiceIcon.Id
+            $ServiceIconB.Id | Should Be $JSON.CatalogService.ServiceIcon.Id
+        }
+
+        It -Name "Export named Service Icon $($JSON.CatalogService.ServiceIcon.Id)" -Test {
+
+            $ServiceIconC = Export-vRAServiceIcon -Id $JSON.CatalogService.ServiceIcon.Id -File $JSON.CatalogService.ServiceIcon.ExportFile
+            $ServiceIconC.FullName | Should Be $JSON.CatalogService.ServiceIcon.ExportFile
+        }
+
+        It -Name "Remove named Service Icon $($JSON.CatalogService.ServiceIcon.Id)" -Test {
+
+            Remove-vRAServiceIcon -Id $JSON.CatalogService.ServiceIcon.Id -Confirm:$false
+
+            try {
+                $ServiceIconD = Get-vRAServiceIcon -Id $JSON.CatalogService.ServiceIcon.Id
+            }
+            catch [Exception]{
+
+            }
+            $ServiceIconD | Should Be $null
+        }
+    }
 }
 
 # --- Cleanup

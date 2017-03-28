@@ -87,8 +87,10 @@
 
                     # --- Run vRA REST request
                     Invoke-vRARestMethod -Method POST -Uri $URI -Body $Body -Verbose:$VerbosePreference
-                }
 
+                    # --- Output the result
+                    Get-vRAServiceIcon -Id $Id
+                }
             }
             catch [Exception]{
 

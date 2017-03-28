@@ -9,6 +9,9 @@
     .PARAMETER Id
     Specify the ID of a Service Icon
 
+    .PARAMETER File
+    Specify the file to output the icon to
+
     .INPUTS
     System.String
 
@@ -16,7 +19,7 @@
     System.IO.FileInfo
 
     .EXAMPLE
-    Export-vRAServiceIcon -Id "cafe_default_icon_genericAllServices" -Path C:\Icons\AllServicesIcon.png
+    Export-vRAServiceIcon -Id "cafe_default_icon_genericAllServices" -File C:\Icons\AllServicesIcon.png
 
     Export the default All Services Service Icon to a local file. Note: admin permissions for the default vRA Tenant are required for this action.
 #>
@@ -30,7 +33,7 @@
 
     [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
-    [String]$Path
+    [String]$File
     )
 
     # --- Test for vRA API version
@@ -43,10 +46,10 @@
             $URI = "/catalog-service/api/icons/$($IconId)/download"
 
             # --- Run vRA REST Request
-            Invoke-vRARestMethod -Method GET -URI $URI -OutFile $Path -Verbose:$VerbosePreference
+            Invoke-vRARestMethod -Method GET -URI $URI -OutFile $File -Verbose:$VerbosePreference
 
             # --- Output the result
-            Get-ChildItem -Path $Path
+            Get-ChildItem -Path $File
         }
     }
     catch [Exception]{
