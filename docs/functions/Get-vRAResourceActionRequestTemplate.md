@@ -33,7 +33,7 @@ Get-vRAResourceActionRequestTemplate -ActionId "fae08c75-3506-40f6-9c9b-35966fe9
 ## PARAMETERS
 
 ### -ActionId
-{{Fill ActionId Description}}
+The id resource action
 
 ```yaml
 Type: String
@@ -48,7 +48,7 @@ Accept wildcard characters: False
 ```
 
 ### -ResourceId
-{{Fill ResourceId Description}}
+The id of the resource
 
 ```yaml
 Type: String[]
@@ -63,7 +63,7 @@ Accept wildcard characters: False
 ```
 
 ### -ResourceName
-{{Fill ResourceName Description}}
+The name of the resource
 
 ```yaml
 Type: String[]

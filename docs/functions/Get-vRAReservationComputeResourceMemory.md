@@ -37,7 +37,7 @@ Accept wildcard characters: False
 ```
 
 ### -ComputeResourceId
-{{Fill ComputeResourceId Description}}
+The id of the compute resource
 
 ```yaml
 Type: String

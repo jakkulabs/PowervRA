@@ -91,7 +91,7 @@ Accept wildcard characters: False
 ```
 
 ### -Enabled
-{{Fill Enabled Description}}
+Enable or disable the reservation
 
 ```yaml
 Type: SwitchParameter

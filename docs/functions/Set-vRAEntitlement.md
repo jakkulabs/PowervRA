@@ -156,7 +156,8 @@ Accept wildcard characters: False
 ```
 
 ### -LocalScopeForActions
-{{Fill LocalScopeForActions Description}}
+Determines if the entitled actions are entitled for all applicable service catalog items or only
+items in this entitlement
 
 ```yaml
 Type: Boolean

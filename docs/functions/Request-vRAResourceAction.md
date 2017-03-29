@@ -110,7 +110,7 @@ Accept wildcard characters: False
 ```
 
 ### -JSON
-{{Fill JSON Description}}
+A JSON payload for the request
 
 ```yaml
 Type: String

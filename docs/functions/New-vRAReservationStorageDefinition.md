@@ -29,7 +29,7 @@ $StorageDefinitionArray += $Storage1
 ## PARAMETERS
 
 ### -Type
-{{Fill Type Description}}
+The reservation type
 
 ```yaml
 Type: String
@@ -44,7 +44,7 @@ Accept wildcard characters: False
 ```
 
 ### -ComputeResourceId
-{{Fill ComputeResourceId Description}}
+The id of the compute resource
 
 ```yaml
 Type: String
@@ -74,7 +74,7 @@ Accept wildcard characters: False
 ```
 
 ### -ReservedSizeGB
-{{Fill ReservedSizeGB Description}}
+The size in GB of this reservation
 
 ```yaml
 Type: Int32

@@ -93,7 +93,7 @@ Accept wildcard characters: False
 ```
 
 ### -Description
-{{Fill Description Description}}
+A description for the directory
 
 ```yaml
 Type: String

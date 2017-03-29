@@ -58,7 +58,7 @@ Get-vRAEntitledCatalogItem -Name Centos_Template
 ## PARAMETERS
 
 ### -Id
-{{Fill Id Description}}
+The id of the catalog item
 
 ```yaml
 Type: String[]

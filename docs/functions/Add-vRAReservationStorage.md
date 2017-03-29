@@ -55,7 +55,7 @@ Accept wildcard characters: False
 ```
 
 ### -ReservedSizeGB
-{{Fill ReservedSizeGB Description}}
+The size in GB of this reservation
 
 ```yaml
 Type: Int32
