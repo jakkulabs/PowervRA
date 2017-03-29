@@ -27,14 +27,8 @@
     - UpdateModuleManifest
     - UpdateDocumentation
     - BumpVersion
-    - Test
 
     The default value is Build which will execute the following tasks: Analyze, UpdateModuleManifest, UpdateDocumentation
-
-    Chosing release will execute the following tasks: All tasks in Build, Test, BumpVersion.
-
-    The BumpVersion will increment the version of the Module Manifest based on the $BumpVersion setting provided in build.settings.ps1.
-    By default this is patch.
 
     .PARAMETER Version
     The part of the version you wish to bump for this release.
@@ -80,7 +74,7 @@
 Param (
 
     [Parameter()]    
-    [ValidateSet("Build", "PrepareRelease", "Analyze", "UpdateModuleManifest", "UpdateDocumentation", "BumpVersion", "Test")]
+    [ValidateSet("Build", "PrepareRelease", "Analyze", "UpdateModuleManifest", "UpdateDocumentation", "BumpVersion")]
     [String]$Task = "Build",
 
     [Parameter()]
