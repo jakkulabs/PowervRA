@@ -1,4 +1,4 @@
-#Requires -Modules Psake, Pester, PSScriptAnalyzer, PlatyPS
+#Requires -Modules Psake, Pester, PSScriptAnalyzer, PlatyPS, BuildHelpers
 #Requires -Version 5
 
 <#
@@ -12,6 +12,7 @@
     - Pester
     - PSScriptAnalyzer
     - PlatyPS
+    - BuildHelpers
 
     Each task in build.psake.ps1 relies on settings provided in build.settings.ps1
 
@@ -87,6 +88,9 @@ Param (
     [String]$Version
 
 )
+
+# --- Set Build Environment
+Set-BuildEnvironment
 
 # --- Start Build
 Invoke-psake -buildFile "$($PSScriptRoot)\build.psake.ps1" -taskList $Task  -parameters @{"Version"=$Version} -nologo -Verbose:$VerbosePreference

@@ -52,103 +52,64 @@ Task Analyze {
 
 Task UpdateModuleManifest {
 
-    try {
+    $PublicFunctions = Get-ChildItem -Path "$($ModuleDirectory)\Functions\Public" -Filter "*.ps1" -Recurse | Sort-Object
 
-        $PublicFunctions = Get-ChildItem -Path "$($ModuleDirectory)\Functions\Public" -Filter "*.ps1" -Recurse | Sort-Object
+    $ExportFunctions = @()
 
-        $ModuleManifest = Import-PowerShellDataFile -Path $ModuleManifestPath -Verbose:$VerbosePreference
-
-        # --- Functions To Export
-        Write-Verbose -Message "Processing FunctionsToExport"
-        $FunctionsToExportRaw  = $PublicFunctions | Select-Object -ExpandProperty BaseName | Sort-Object
-        $ModuleManifest.FunctionsToExport = $FunctionsToExportRaw | ForEach-Object {if ($_.StartsWith("DEPRECATED-")) { $_.Trim("DEPRECATED-")}else{$_} }
-
-        # --- Private Data
-        Write-Verbose -Message "Processing PrivateData"
-        if ($ModuleManifest.ContainsKey("PrivateData") -and $ModuleManifest.PrivateData.ContainsKey("PSData")) {
-
-            foreach ($node in $ModuleManifest.PrivateData["PSData"].GetEnumerator()) {
-
-                $key = $node.Key
-
-                if ($node.Value.GetType().Name -eq "Object[]") {
-
-                    $value = $node.Value | ForEach-Object {$_}
-
-                }
-                else {
-
-                    $value = $node.Value
-
-                }
-
-                $ModuleManifest[$key] = $value
-            }
-
-            $ModuleManifest.Remove("PrivateData")
-
-        }
-
-        New-ModuleManifest -Path $ModuleManifestPath @ModuleManifest -Verbose:$VerbosePreference
-
+    foreach ($FunctionFile in $PublicFunctions) {
+        $AST = [System.Management.Automation.Language.Parser]::ParseFile($FunctionFile.FullName, [ref]$null, [ref]$null)        
+        $Functions = $AST.FindAll({
+                $args[0] -is [System.Management.Automation.Language.FunctionDefinitionAst]
+            }, $true)
+        if ($Functions.Name) {
+            $ExportFunctions += $Functions.Name
+        }        
     }
-    catch [System.Exception] {
 
-        Write-Error -Message "An error occured when updating manifest functions: $_.Message"
-
-    }
+    Set-ModuleFunctions -Name $ENV:BHPSModuleManifest -FunctionsToExport $ExportFunctions
 
 }
 
 Task UpdateDocumentation {
 
-    $ModuleInfo = Import-Module $ModuleManifestPath -Global -Force -PassThru
+    $ModuleInfo = Import-Module $ENV:BHPSModuleManifest -Global -Force -PassThru
+    $FunctionsPath = "$DocsDirectory\functions"
 
-    # --- Create or update existing MD documentation
-    if ($ModuleInfo.ExportedCommands.Count -eq 0) {
-        "No commands have been exported. Skipping $($psake.context.currentTaskName) task."
-        return
+    Remove-Item -Path $FunctionsPath -Recurse -Force
+    New-Item $FunctionsPath -ItemType Directory | Out-Null
+
+    $PlatyPSParameters = @{
+        Module = $ModuleName
+        OutputFolder = $FunctionsPath
+        NoMetadata = $true
     }
 
-    if (Test-Path -LiteralPath $DocsDirectory) {
-
-        Remove-Item -Path $DocsDirectory -Recurse -Force
-
-    }
-
-    New-Item $DocsDirectory -ItemType Directory | Out-Null
-
-    # --- ErrorAction set to SilentlyContinue so this command will not overwrite an existing MD file.
-    New-MarkdownHelp -Module $ModuleName -Locale $DefaultLocale -OutputFolder $DocsDirectory -NoMetadata `
-                    -ErrorAction SilentlyContinue -Verbose:$VerbosePreference | Out-Null
+    New-MarkdownHelp @PlatyPSParameters -ErrorAction SilentlyContinue -Verbose:$VerbosePreference | Out-Null
 
     # --- Ensure that index.md is present and up to date
     Copy-Item -Path "$($PSScriptRoot)\README.md" -Destination "$($DocsDirectory)\index.md" -Force -Verbose:$VerbosePreference | Out-Null
 
     # --- Update mkdocs.yml with new functions
     $Mkdocs = "$($PSScriptRoot)\mkdocs.yml"
-
-    if (!(Test-Path -Path $Mkdocs)) {
-
-        Write-Verbose -Message "Creating MKDocs.yml"
-
-        New-Item -Path $Mkdocs -ItemType File -Force | Out-Null
-
-    }
-
-    $Functions = $ModuleInfo.ExportedCommands.Keys | ForEach-Object {"    - $($_) : $($_).md"}
+    $Functions = $ModuleInfo.ExportedCommands.Keys | ForEach-Object {"    - $($_) : functions/$($_).md"}
 
     $Template = @"
 ---
 
 site_name: $($ModuleName)
+repo_url: $($RepoUrl)
+site_author: $($ModuleAuthor)
+edit_uri: edit/master/docs/
+theme: readthedocs
+copyright: "PowervRA is licenced under the <a href='$($RepoUrl)/raw/master/LICENSE'>MIT license" license"
 pages:
 - 'Home' : 'index.md'
+- 'Change log' : 'CHANGELOG.md'
 - 'Functions':
 $($Functions -join "`r`n")
 "@
 
-    $Template | Out-File -FilePath $Mkdocs -Force
+    $Template | Set-Content -Path $Mkdocs -Force
 
 }
 
@@ -251,19 +212,6 @@ Task BumpVersion {
         $NewAppveyorYML = Get-Content -Path $AppveyorYMLPath | ForEach-Object { $_ -replace '^version: .+$', "version: $($AppveyorVersion)";}
         $NewAppveyorYML | Set-Content -Path $AppveyorYMLPath -Force
         Write-Verbose -Message "Appveyor build version set to $($AppveyorVersion)"
-
-    }
-
-}
-
-Task Test {
-
-    $Result = Invoke-Pester -Verbose:$VerbosePreference -PassThru
-
-    if ($Result) {
-
-        $Result | ConvertTo-Json -Depth 100 | Out-File -FilePath $ResultsFile
-        Write-Error -Message "Pester Tests Failed. See $($ResultsFile) for more information"
 
     }
 
