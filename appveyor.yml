@@ -12,5 +12,3 @@ install:
   - ps: Install-Module -Name Psake, Pester, PSScriptAnalyzer, PlatyPS, BuildHelpers -Force
 build_script:
   - ps: .\build.ps1
-test_script:
-  - ps: .\build.ps1 -Task Test

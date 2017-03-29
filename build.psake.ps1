@@ -10,7 +10,7 @@ properties {
 
 # --- Define the build tasks
 Task Default -depends Build
-Task Build -depends Analyze, UpdateModuleManifest, UpdateDocumentation, CommitChanges
+Task Build -depends Analyze, Test, UpdateModuleManifest, UpdateDocumentation, CommitChanges
 Task PrepareRelease -depends Build, BumpVersion
 
 Task Analyze {
@@ -163,13 +163,18 @@ Task Test {
     $Timestamp = Get-date -uformat "%Y%m%d-%H%M%S"
     $TestFile = "TestResults_PS$PSVersion`_$TimeStamp.xml"
     $Parameters = @{
-        Script = "$ENV:BHProjectPath\tests"
+        Script = "$ENV:BHProjectPath\tests\Test000-Module.Tests.ps1"
         Tag = 'Help'
+        PassThru = $true
         OutputFormat = 'NUnitXml'
         OutputFile = "$ENV:BHProjectPath\$TestFile"
     }
 
     $TestResults = Invoke-Pester @Parameters
+
+    if ($TestResults.FailedCount -gt 0) {
+        Write-Error "Failed '$($TestResults.FailedCount)' tests, build failed"
+    }
 
     If ($ENV:BHBuildSystem -eq 'AppVeyor') {
         "Uploading $ENV:BHProjectPath\$TestFile to AppVeyor"
