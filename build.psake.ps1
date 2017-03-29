@@ -101,7 +101,7 @@ repo_url: $($RepoUrl)
 site_author: $($ModuleAuthor)
 edit_uri: edit/master/docs/
 theme: readthedocs
-copyright: "PowervRA is licenced under the <a href='$($RepoUrl)/raw/master/LICENSE'>MIT license" license"
+copyright: "PowervRA is licenced under the <a href='$($RepoUrl)/raw/master/LICENSE'>MIT license"
 pages:
 - 'Home' : 'index.md'
 - 'Change log' : 'CHANGELOG.md'
