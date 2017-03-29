@@ -10,12 +10,12 @@ properties {
 
 # --- Define the build tasks
 Task Default -depends Build
-Task Build -depends Analyze, UpdateModuleManifest, UpdateDocumentation
+Task Build -depends Analyze, UpdateModuleManifest, UpdateDocumentation, CommitChanges
 Task PrepareRelease -depends Build, BumpVersion
 
 Task Analyze {
 
-    $Results = Invoke-ScriptAnalyzer -Path $ModuleDirectory -Recurse -Settings $ScriptAnalyzerSettingsPath -Verbose:$VerbosePreference
+    $Results = Invoke-ScriptAnalyzer -Path $ENV:BHPSModulePath -Recurse -Settings $ScriptAnalyzerSettingsPath -Verbose:$VerbosePreference
     $Results | Select-Object RuleName, Severity, ScriptName, Line, Message | Format-List
 
     switch ($ScriptAnalysisFailBuildOnSeverityLevel) {
@@ -52,7 +52,7 @@ Task Analyze {
 
 Task UpdateModuleManifest {
 
-    $PublicFunctions = Get-ChildItem -Path "$($ModuleDirectory)\Functions\Public" -Filter "*.ps1" -Recurse | Sort-Object
+    $PublicFunctions = Get-ChildItem -Path "$($ENV:BHPSModulePath)\Functions\Public" -Filter "*.ps1" -Recurse | Sort-Object
 
     $ExportFunctions = @()
 
@@ -110,6 +110,50 @@ $($Functions -join "`r`n")
 "@
 
     $Template | Set-Content -Path $Mkdocs -Force
+
+}
+
+Task CommitChanges {
+
+    if ($ENV:BHBuildSystem -eq "Unknown"){
+        Write-Output "Could not detect build system. Skipping task"
+        return
+    }
+
+    if ($ENV:APPVEYOR_REPO_PROVIDER -notlike 'github') {
+        Write-Output "Repo provider '$ENV:APPVEYOR_REPO_PROVIDER'. Skipping task"
+        return
+    }
+    If ($ENV:BHBuildSystem -eq 'AppVeyor') {
+        Write-Output "git config --global credential.helper store"
+        cmd /c "git config --global credential.helper store 2>&1"
+        
+        Add-Content "$ENV:USERPROFILE\.git-credentials" "https://$($ENV:Access_Token):x-oauth-basic@github.com`n"
+        
+        Write-Output "git config --global user.email"
+        cmd /c "git config --global user.email ""$($ENV:BHProjectName)-$($ENV:BHBranchName)-$($ENV:BHBuildSystem)@jakkulabs.com"" 2>&1"
+        
+        Write-Output "git config --global user.name"
+        cmd /c "git config --global user.name ""AppVeyor"" 2>&1"
+        
+        Write-Output "git config --global core.autocrlf true"
+        cmd /c "git config --global core.autocrlf true 2>&1"
+    }
+    
+    Write-Output "git checkout $ENV:BHBranchName"
+    cmd /c "git checkout $ENV:BHBranchName 2>&1"
+    
+    Write-Output "git add -A"
+    cmd /c "git add -A 2>&1"
+    
+    Write-Output "git commit -m"
+    cmd /c "git commit -m ""AppVeyor post-build commit[ci skip]"" 2>&1"
+    
+    Write-Output "git status"
+    cmd /c "git status 2>&1"
+    
+    Write-Output "git push origin $ENV:BHBranchName"
+    cmd /c "git push origin $ENV:BHBranchName 2>&1"
 
 }
 

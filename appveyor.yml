@@ -1,13 +1,12 @@
 version: 2.0.0.{build}
 branches:
   only:
-  - master
   - development
 image: WMF 5
 build: off
 init:
   - ps: Install-PackageProvider NuGet -Force | Out-Null
 install:
-  - ps: Install-Module -Name Psake, Pester, PSScriptAnalyzer, PlatyPS -Force
+  - ps: Install-Module -Name Psake, Pester, PSScriptAnalyzer, PlatyPS, BuildHelpers -Force
 test_script:
-  - ps: .\build.ps1 -Task Analyze
+  - ps: .\build.ps1

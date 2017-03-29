@@ -1,6 +1,13 @@
 @{
-    ExcludeRules=@("PSAvoidUsingUserNameAndPassWordParams","PSAvoidGlobalVars")
-    Severity=@("Warning","Error")
+    ExcludeRules=@(
+        "PSAvoidUsingUserNameAndPassWordParams",
+        "PSAvoidGlobalVars"
+    )
+    
+    Severity=@(
+        "Warning",
+        "Error"
+    )
 
     #Rules = @{
     #    Check if your script uses cmdlets that are compatible on PowerShell Core,
