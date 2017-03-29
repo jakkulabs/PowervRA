@@ -98,16 +98,16 @@ PrivateData = @{
         # Tags = @()
 
         # A URL to the license for this module.
-        LicenseUri = 'https://github.com/jakkulabs/PowervRA/blob/master/LICENSE'
+        LicenseUri = 'https://raw.githubusercontent.com/jakkulabs/PowervRA/blob/master/LICENSE'
 
         # A URL to the main website for this project.
         ProjectUri = 'https://github.com/jakkulabs/PowervRA'
 
         # A URL to an icon representing this module.
-        # IconUri = ''
+        IconUri = 'https://raw.githubusercontent.com/jakkulabs/PowervRA/blob/master/PowervRA-icon.png'
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'https://raw.githubusercontent.com/jakkulabs/PowervRA/master/CHANGELOG.md'
+        ReleaseNotes = 'https://raw.githubusercontent.com/jakkulabs/PowervRA/master/docs/CHANGELOG.md'
 
     } # End of PSData hashtable
 
@@ -120,6 +120,7 @@ PrivateData = @{
 # DefaultCommandPrefix = ''
 
 }
+
 
 
 
