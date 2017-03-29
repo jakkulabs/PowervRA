@@ -1,13 +1,13 @@
-﻿function Remove-vRAServiceIcon {
+﻿function Remove-vRAIcon {
 <#
     .SYNOPSIS
-    Remove a vRA Service Icon
+    Remove a vRA Icon
     
     .DESCRIPTION
-    Remove a vRA Service Icon Icon from the service catalog. If the icon is one of the default system icons, it will be reverted to its default state instead of being deleted.
+    Remove a vRA Icon from the service catalog. If the icon is one of the default system icons, it will be reverted to its default state instead of being deleted.
 
     .PARAMETER Id
-    The id of the Service Icon
+    The id of the Icon
 
     .INPUTS
     System.String
@@ -16,14 +16,14 @@
     None
 
     .EXAMPLE
-    Remove-vRAServiceIcon -Id "cafe_default_icon_genericAllServices"
+    Remove-vRAIcon -Id "cafe_default_icon_genericAllServices"
 
-    Set the default All Services Service Icon back to the original icon. Note: admin permissions for the default vRA Tenant are required for this action.
+    Set the default All Services Icon back to the original icon. Note: admin permissions for the default vRA Tenant are required for this action.
 
     .EXAMPLE
-    Get-vRAServiceIcon -Id "cafe_icon_Service01" | Remove-vRAServiceIcon -Confirm:$false
+    Get-vRAIcon -Id "cafe_icon_Service01" | Remove-vRAIcon -Confirm:$false
 
-    Delete the Service Icon named cafe_icon_Service01
+    Delete the Icon named cafe_icon_Service01
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")]
 

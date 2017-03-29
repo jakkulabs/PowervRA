@@ -20,6 +20,9 @@
     
     .PARAMETER NewAndNoteworthy
     Mark the catalog item as New and noteworthy in the UI
+
+    .PARAMETER IconId
+    The Icon Id of the catalog item. This must already exist in the Service Catalog. Typically it would have already been created via Import-vRAServiceIcon
     
     .INPUTS
     System.Int
@@ -39,7 +42,10 @@
     Set-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e -Service "Default Service" 
     
     .EXAMPLE    
-    Set-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e -NewAndNoteworthy $false             
+    Set-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e -NewAndNoteworthy $false
+
+    .EXAMPLE    
+    Get-vRACatalogItem  -Name "Create cluster" | Set-vRACatalogItem -IconId "cafe_icon_CatalogItem01" -Confirm:$false           
     
     TODO:
     - Investigate / fix authorization error 
@@ -67,7 +73,11 @@
         
         [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
-        [Bool]$NewAndNoteworthy 
+        [Bool]$NewAndNoteworthy,
+
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [String]$IconId
     
     )    
 
@@ -144,6 +154,13 @@
                 Write-Verbose -Message "Updating isNoteworthy: $($CatalogItem.isNoteworthy) >> $($NewAndNoteworthy)"
 
                 $CatalogItem.isNoteworthy = $NewAndNoteworthy
+
+            }
+
+        if ($PSBoundParameters.ContainsKey("IconId")){
+
+                Write-Verbose -Message "Updating IconId: $($CatalogItem.iconId) >> $($IconId)"
+                $CatalogItem.iconId = $IconId
 
             }
 

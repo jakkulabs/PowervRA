@@ -1,13 +1,13 @@
-﻿function Get-vRAServiceIcon {
+﻿function Get-vRAIcon {
 <#
     .SYNOPSIS
-    Retrieve a vRA Service Icon
+    Retrieve a vRA Icon
     
     .DESCRIPTION
-    Retrieve a vRA Service Icon
+    Retrieve a vRA Icon
     
     .PARAMETER Id
-    Specify the ID of a Service Icon
+    Specify the ID of an Icon
 
     .INPUTS
     System.String
@@ -16,14 +16,14 @@
     System.Management.Automation.PSObject.
 
     .EXAMPLE
-    Get-vRAServiceIcon -Id "cafe_default_icon_genericAllServices"
+    Get-vRAIcon -Id "cafe_default_icon_genericAllServices"
 
-    Get the default All Services Service Icon. Note: admin permissions for the default vRA Tenant are required for this action.
+    Get the default All Services Icon. Note: admin permissions for the default vRA Tenant are required for this action.
 
     .EXAMPLE
-    Get-vRAServiceIcon -Id "cafe_icon_Service01"
+    Get-vRAIcon -Id "cafe_icon_Service01"
 
-    Get the Service Icon named cafe_icon_Service01
+    Get the vRA Icon named cafe_icon_Service01
 #>
 [CmdletBinding()][OutputType('System.Management.Automation.PSObject')]
 

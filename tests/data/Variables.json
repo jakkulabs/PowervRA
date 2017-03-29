@@ -126,7 +126,7 @@
       "Name" : "vm701-02"
 
     },
-    "ServiceIcon" :{
+    "Icon" :{
       
       "Id": "cafe_icon_Service01",
       "ImportFile": "C:\\Icons\\Service01Icon.png",

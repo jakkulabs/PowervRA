@@ -1,13 +1,13 @@
-﻿function Export-vRAServiceIcon {
+﻿function Export-vRAIcon {
 <#
     .SYNOPSIS
-    Export a vRA Service Icon
+    Export a vRA Icon
     
     .DESCRIPTION
-    Export a vRA Service Icon
+    Export a vRA Icon
     
     .PARAMETER Id
-    Specify the ID of a Service Icon
+    Specify the ID of an Icon
 
     .PARAMETER File
     Specify the file to output the icon to
@@ -19,9 +19,9 @@
     System.IO.FileInfo
 
     .EXAMPLE
-    Export-vRAServiceIcon -Id "cafe_default_icon_genericAllServices" -File C:\Icons\AllServicesIcon.png
+    Export-vRAIcon -Id "cafe_default_icon_genericAllServices" -File C:\Icons\AllServicesIcon.png
 
-    Export the default All Services Service Icon to a local file. Note: admin permissions for the default vRA Tenant are required for this action.
+    Export the default All Services Icon to a local file. Note: admin permissions for the default vRA Tenant are required for this action.
 #>
 [CmdletBinding()][OutputType('System.IO.FileInfo')]
 

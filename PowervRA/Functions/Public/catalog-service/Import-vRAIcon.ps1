@@ -1,16 +1,16 @@
-﻿function Import-vRAServiceIcon {
+﻿function Import-vRAIcon {
 <#
     .SYNOPSIS
-    Imports a vRA Service Icon   
+    Imports a vRA Icon   
 
     .DESCRIPTION
-    Imports a vRA Service Icon
+    Imports a vRA Icon
 
     .PARAMETER Id
-    Specify the ID of a Service Icon
+    Specify the ID of an Icon
 
     .PARAMETER File
-    The Service Icon file
+    The Icon file
 
     .INPUTS
     System.String
@@ -19,19 +19,19 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    Import-vRAServiceIcon -Id "cafe_default_icon_genericAllServices" -File C:\Icons\NewIcon.png
+    Import-vRAIcon -Id "cafe_default_icon_genericAllServices" -File C:\Icons\NewIcon.png
 
-    Update the default All Services Service Icon with a new image file. Note: admin permissions for the default vRA Tenant are required for this action.
-
-    .EXAMPLE
-    Get-ChildItem -Path C:\Icons\NewIcon.png | Import-vRAServiceIcon -Id "cafe_default_icon_genericAllServices" -Confirm:$false
-
-    Update the default All Services Service Icon with a new image file via the pipeline. Note: admin permissions for the default vRA Tenant are required for this action.
+    Update the default All Services Icon with a new image file. Note: admin permissions for the default vRA Tenant are required for this action.
 
     .EXAMPLE
-    Import-vRAServiceIcon -Id "cafe_icon_Service01" -File C:\Icons\Service01Icon.png -Confirm:$false
+    Get-ChildItem -Path C:\Icons\NewIcon.png | Import-vRAIcon -Id "cafe_default_icon_genericAllServices" -Confirm:$false
 
-    Create a new Service Icon named cafe_icon_Service01
+    Update the default All Services Icon with a new image file via the pipeline. Note: admin permissions for the default vRA Tenant are required for this action.
+
+    .EXAMPLE
+    Import-vRAIcon -Id "cafe_icon_Service01" -File C:\Icons\Service01Icon.png -Confirm:$false
+
+    Create a new Icon named cafe_icon_Service01
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")][OutputType('System.Management.Automation.PSObject')]
@@ -89,7 +89,7 @@
                     Invoke-vRARestMethod -Method POST -Uri $URI -Body $Body -Verbose:$VerbosePreference
 
                     # --- Output the result
-                    Get-vRAServiceIcon -Id $Id
+                    Get-vRAIcon -Id $Id
                 }
             }
             catch [Exception]{

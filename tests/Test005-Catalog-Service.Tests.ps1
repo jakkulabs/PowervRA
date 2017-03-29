@@ -242,37 +242,37 @@ Describe -Name 'Catalog-Service Tests' -Fixture {
 
     }
 
-    Context -Name "Service Icons" -Fixture {
+    Context -Name "vRA Icons" -Fixture {
 
-        It -Name "Create named Service Icon $($JSON.CatalogService.ServiceIcon.Id)" -Test {
+        It -Name "Create named vRA Icon $($JSON.CatalogService.Icon.Id)" -Test {
 
-            $ServiceIconA = Import-vRAServiceIcon -Id $JSON.CatalogService.ServiceIcon.Id -File $JSON.CatalogService.ServiceIcon.ImportFile -Confirm:$false
-            $ServiceIconA.Id | Should Be $JSON.CatalogService.ServiceIcon.Id
+            $IconA = Import-vRAIcon -Id $JSON.CatalogService.Icon.Id -File $JSON.CatalogService.Icon.ImportFile -Confirm:$false
+            $IconA.Id | Should Be $JSON.CatalogService.Icon.Id
         }
 
-        It -Name "Return named Service Icon $($JSON.CatalogService.ServiceIcon.Id)" -Test {
+        It -Name "Return named vRA Icon $($JSON.CatalogService.Icon.Id)" -Test {
 
-            $ServiceIconB = Get-vRAServiceIcon -Id $JSON.CatalogService.ServiceIcon.Id
-            $ServiceIconB.Id | Should Be $JSON.CatalogService.ServiceIcon.Id
+            $IconB = Get-vRAIcon -Id $JSON.CatalogService.Icon.Id
+            $IconB.Id | Should Be $JSON.CatalogService.Icon.Id
         }
 
-        It -Name "Export named Service Icon $($JSON.CatalogService.ServiceIcon.Id)" -Test {
+        It -Name "Export named vRA Icon $($JSON.CatalogService.Icon.Id)" -Test {
 
-            $ServiceIconC = Export-vRAServiceIcon -Id $JSON.CatalogService.ServiceIcon.Id -File $JSON.CatalogService.ServiceIcon.ExportFile
-            $ServiceIconC.FullName | Should Be $JSON.CatalogService.ServiceIcon.ExportFile
+            $IconC = Export-vRAIcon -Id $JSON.CatalogService.Icon.Id -File $JSON.CatalogService.Icon.ExportFile
+            $IconC.FullName | Should Be $JSON.CatalogService.Icon.ExportFile
         }
 
-        It -Name "Remove named Service Icon $($JSON.CatalogService.ServiceIcon.Id)" -Test {
+        It -Name "Remove named vRA Icon $($JSON.CatalogService.Icon.Id)" -Test {
 
-            Remove-vRAServiceIcon -Id $JSON.CatalogService.ServiceIcon.Id -Confirm:$false
+            Remove-vRAIcon -Id $JSON.CatalogService.Icon.Id -Confirm:$false
 
             try {
-                $ServiceIconD = Get-vRAServiceIcon -Id $JSON.CatalogService.ServiceIcon.Id
+                $IconD = Get-vRAIcon -Id $JSON.CatalogService.Icon.Id
             }
             catch [Exception]{
 
             }
-            $ServiceIconD | Should Be $null
+            $IconD | Should Be $null
         }
     }
 }
