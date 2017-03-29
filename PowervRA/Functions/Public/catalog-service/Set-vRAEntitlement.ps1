@@ -80,7 +80,11 @@
 
         [Parameter(Mandatory=$false)]
         [ValidateSet("ACTIVE","INACTIVE")]
-        [String]$Status
+        [String]$Status,
+
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [bool]$LocalScopeForActions
 
     )    
 
@@ -231,6 +235,13 @@
 
             }
 
+            # --- Update LocalScopeForActions
+            if ($PSBoundParameters.ContainsKey("LocalScopeForActions")) {
+
+                Write-Verbose -Message "Updating LocalScopeForActions: $($Entitlement.localScopeForActions) >> $($LocalScopeForActions)"
+                $Entitlement.localScopeForActions = $LocalScopeForActions
+
+            }
             # --- Convert the modified entitlement to json 
             $Body = $Entitlement | ConvertTo-Json -Depth 50 -Compress
 

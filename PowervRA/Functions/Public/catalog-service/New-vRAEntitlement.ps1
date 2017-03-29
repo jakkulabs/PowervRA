@@ -27,7 +27,13 @@
     The externalId of one or more entitled resource operation (e.g. Infrastructure.Machine.Action.PowerOn)
 
     .PARAMETER EntitledServices
-    One or more entitled service 
+    One or more entitled service
+
+    .PARAMETER LocalScopeForActions
+    Determines if the entitled actions are entitled for all applicable service catalog items or only
+    items in this entitlement
+
+    The default value for this parameter is True.
 
     .PARAMETER JSON
     Body text to send in JSON format
@@ -110,6 +116,10 @@
         [ValidateNotNullOrEmpty()]
         [String[]]$EntitledServices,
 
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [ValidateNotNullOrEmpty()]
+        [bool]$LocalScopeForActions = $true,        
+
         [Parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="JSON")]
         [ValidateNotNullOrEmpty()]
         [String]$JSON
@@ -161,7 +171,7 @@
                       "priorityOrder": null,
                       "status": "DRAFT",
                       "statusName": "Draft",
-                      "localScopeForActions": true,
+                      "localScopeForActions": "$($LocalScopeForActions.ToString().ToLower())",
                       "version": null
                     }
 "@
