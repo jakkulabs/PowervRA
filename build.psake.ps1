@@ -142,6 +142,9 @@ Task CommitChanges {
     
     Write-Output "git checkout $ENV:BHBranchName"
     cmd /c "git checkout $ENV:BHBranchName 2>&1"
+
+    Write-Output "git pull recent commits from $ENV:BHBranchName"
+    cmd /c "git pull 2>&1"
     
     Write-Output "git add -A"
     cmd /c "git add -A 2>&1"
@@ -172,10 +175,6 @@ Task Test {
 
     $TestResults = Invoke-Pester @Parameters
 
-    if ($TestResults.FailedCount -gt 0) {
-        Write-Error "Failed '$($TestResults.FailedCount)' tests, build failed"
-    }
-
     If ($ENV:BHBuildSystem -eq 'AppVeyor') {
         "Uploading $ENV:BHProjectPath\$TestFile to AppVeyor"
         "JobID: $env:APPVEYOR_JOB_ID"
@@ -183,6 +182,10 @@ Task Test {
     }
     
     Remove-Item "$ENV:BHProjectPath\$TestFile" -Force -ErrorAction SilentlyContinue
+
+    if ($TestResults.FailedCount -gt 0) {
+        Write-Error "Failed '$($TestResults.FailedCount)' tests, build failed"
+    }
 
 }
 
