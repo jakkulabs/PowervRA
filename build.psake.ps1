@@ -75,7 +75,7 @@ Task UpdateDocumentation {
     $ModuleInfo = Import-Module $ENV:BHPSModuleManifest -Global -Force -PassThru
     $FunctionsPath = "$DocsDirectory\functions"
 
-    Remove-Item -Path $FunctionsPath -Recurse -Force
+    Remove-Item -Path $FunctionsPath -Recurse -Force -ErrorAction SilentlyContinue
     New-Item $FunctionsPath -ItemType Directory | Out-Null
 
     $PlatyPSParameters = @{
