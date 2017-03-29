@@ -12,6 +12,9 @@
     .PARAMETER Name
     Tenant Directory Name
 
+    .PARAMETER Description
+    A description for the directory
+
     .PARAMETER Alias
     Tenant Directory Alias
 

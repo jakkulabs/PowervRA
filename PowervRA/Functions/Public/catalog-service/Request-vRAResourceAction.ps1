@@ -16,6 +16,9 @@ function Request-vRAResourceAction {
     .PARAMETER ResourceName
     The name of the resource that the resourceAction will execute against
 
+    .PARAMETER JSON
+    A JSON payload for the request
+
     .INPUTS
     System.String
 

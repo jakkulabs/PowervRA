@@ -9,6 +9,9 @@
     .PARAMETER Type
     The reservation type
 
+    .PARAMETER ComputeResourceId
+    The id of the compute resource
+
     .INPUTS
     System.String
 

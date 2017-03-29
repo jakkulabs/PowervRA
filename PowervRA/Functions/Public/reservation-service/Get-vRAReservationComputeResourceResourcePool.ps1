@@ -8,7 +8,10 @@
 
     .PARAMETER Type
     The reservation type
-    
+
+    .PARAMETER ComputeResourceId
+    The id of the compute resource
+
     .PARAMETER Name
     The name of the resource pool
 

@@ -6,11 +6,17 @@
     .DESCRIPTION
     Creates a new storage definition for a reservation. This cmdlet is used to create a custom
     complex storage object. One or more of these can be added to an array and passed to New-vRAReservation.
-        
+
+    .PARAMETER Type
+    The reservation type
+
+    .PARAMETER ComputeResourceId
+    The id of the compute resource
+
     .PARAMETER Path
     The storage path
     
-    .PARAMETER ReservationSizeGB
+    .PARAMETER ReservedSizeGB
     The size in GB of this reservation
     
     .PARAMETER Priority

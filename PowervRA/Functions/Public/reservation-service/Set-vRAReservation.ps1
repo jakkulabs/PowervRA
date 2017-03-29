@@ -18,6 +18,9 @@
     .PARAMETER Priority
     The priority of the reservation
 
+    .PARAMETER Enabled
+    Enable or disable the reservation
+
     .PARAMETER Quota
     The number of machines that can be provisioned in the reservation
 

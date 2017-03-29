@@ -30,6 +30,10 @@
     .PARAMETER Status
     The status of the entitlement. Accepted values are ACTIVE and INACTIVE
 
+    .PARAMETER LocalScopeForActions
+    Determines if the entitled actions are entitled for all applicable service catalog items or only
+    items in this entitlement
+
     .INPUTS
     System.String.
 

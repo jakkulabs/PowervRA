@@ -13,7 +13,7 @@
     .PARAMETER Path
     The storage path
     
-    .PARAMETER ReservationSizeGB
+    .PARAMETER ReservedSizeGB
     The size in GB of this reservation
     
     .PARAMETER Priority
