@@ -157,6 +157,30 @@ Task CommitChanges {
 
 }
 
+Task Test {
+
+    # --- Run Tests. Currently limited to help tests
+    $Timestamp = Get-date -uformat "%Y%m%d-%H%M%S"
+    $TestFile = "TestResults_PS$PSVersion`_$TimeStamp.xml"
+    $Parameters = @{
+        Script = "$ENV:BHProjectPath\tests"
+        Tag = 'Help'
+        OutputFormat = 'NUnitXml'
+        OutputFile = "$ENV:BHProjectPath\$TestFile"
+    }
+
+    $TestResults = Invoke-Pester @Parameters
+
+    If ($ENV:BHBuildSystem -eq 'AppVeyor') {
+        "Uploading $ENV:BHProjectPath\$TestFile to AppVeyor"
+        "JobID: $env:APPVEYOR_JOB_ID"
+        (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "$ENV:BHProjectPath\$TestFile"))
+    }
+    
+    Remove-Item "$ENV:BHProjectPath\$TestFile" -Force -ErrorAction SilentlyContinue
+
+}
+
 Task BumpVersion {
 
     # --- Get the current version of the module

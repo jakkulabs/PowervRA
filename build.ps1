@@ -27,6 +27,7 @@
     - UpdateModuleManifest
     - UpdateDocumentation
     - BumpVersion
+    - Test
 
     The default value is Build which will execute the following tasks: Analyze, UpdateModuleManifest, UpdateDocumentation
 
@@ -74,7 +75,7 @@
 Param (
 
     [Parameter()]    
-    [ValidateSet("Build", "PrepareRelease", "Analyze", "UpdateModuleManifest", "UpdateDocumentation", "BumpVersion")]
+    [ValidateSet("Build", "PrepareRelease", "Analyze", "UpdateModuleManifest", "UpdateDocumentation", "BumpVersion", "Test")]
     [String]$Task = "Build",
 
     [Parameter()]
