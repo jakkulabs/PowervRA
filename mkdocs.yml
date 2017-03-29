@@ -5,7 +5,7 @@ repo_url: https://github.com/jakkulabs/PowervRA
 site_author: JakkuLabs
 edit_uri: edit/master/docs/
 theme: readthedocs
-copyright: "PowervRA is licenced under the <a href='https://github.com/jakkulabs/PowervRA/raw/master/LICENSE'>MIT license" license"
+copyright: "PowervRA is licenced under the <a href='https://github.com/jakkulabs/PowervRA/raw/master/LICENSE'>MIT license"
 pages:
 - 'Home' : 'index.md'
 - 'Change log' : 'CHANGELOG.md'
