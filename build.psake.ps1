@@ -128,7 +128,7 @@ Task CommitChanges {
         Write-Output "git config --global credential.helper store"
         cmd /c "git config --global credential.helper store 2>&1"
         
-        Add-Content "$ENV:USERPROFILE\.git-credentials" "https://$($ENV:Access_Token):x-oauth-basic@github.com`n"
+        Add-Content "$ENV:USERPROFILE\.git-credentials" "https://$($ENV:access_token):x-oauth-basic@github.com`n"
         
         Write-Output "git config --global user.email"
         cmd /c "git config --global user.email ""$($ENV:BHProjectName)-$($ENV:BHBranchName)-$($ENV:BHBuildSystem)@jakkulabs.com"" 2>&1"
