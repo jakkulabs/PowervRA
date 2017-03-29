@@ -6,10 +6,10 @@ Properties {
 
 # ----------------- General -------------------------------------
     $DocsDirectory = "$ENV:BHProjectPath\docs"
-    [ValidateSet('Error', 'Warning', 'Any', 'None')]
 
 # ----------------- Script Analyzer ------------------------------
-    $ScriptAnalysisFailBuildOnSeverityLevel = 'Error'
+    [ValidateSet('Error', 'Warning', 'Any', 'None')]
+    $ScriptAnalysisFailBuildOnSeverityLevel = 'Warning'
     $ScriptAnalyzerSettingsPath = "$PSScriptRoot\PSScriptAnalyzerSettings.psd1"
 
 # ----------------- MKdocs ---------------------------------------
