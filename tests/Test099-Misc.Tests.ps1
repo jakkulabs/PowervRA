@@ -7,12 +7,6 @@ $Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Tenant $J
 # --- Tests
 Describe -Name 'Misc Tests' -Fixture {
 
-    It -Name "Return named Appliance Service Status for $($JSON.Misc.ApplianceServiceName)" -Test {
-
-        $ApplianceServiceStatusA = Get-vRAApplianceServiceStatus -Name $JSON.Misc.ApplianceServiceName
-        $ApplianceServiceStatusA.Name | Should Be $JSON.Misc.ApplianceServiceName
-    }
-
     It -Name "Return named Authorization Role $($JSON.Misc.AuthorizationRole)" -Test {
 
         $AuthorizationRoleA = Get-vRAAuthorizationRole -Id $JSON.Misc.AuthorizationRole
