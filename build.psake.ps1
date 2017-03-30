@@ -155,8 +155,20 @@ Task CommitChanges {
     Write-Output "git status"
     cmd /c "git status 2>&1"
     
-    Write-Output "git push origin $ENV:BHBranchName"
-    cmd /c "git push origin $ENV:BHBranchName 2>&1"
+    try {
+        
+        Write-Output "git push origin $ENV:BHBranchName"    
+        $SystemErrorActionPreference = $ErrorActionPreference
+        $ErrorActionPreference = "Stop"
+        cmd /c "git push origin $ENV:BHBranchName" 2>&1 
+    } catch {
+
+        Write-Error -Message "Error when pushing changes to repository: $_"
+    } finally {
+
+        # -- Reset Error Action to System default
+        $ErrorActionPreference = $SystemErrorActionPreference
+    }
 
 }
 
