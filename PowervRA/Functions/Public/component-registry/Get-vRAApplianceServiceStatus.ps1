@@ -3,12 +3,12 @@
     .SYNOPSIS
     Get information about vRA services
 
-    Depricated. Use Get-vRAComponentRegistryServiceStatus instead.
+    Deprecated. Use Get-vRAComponentRegistryServiceStatus instead.
     
     .DESCRIPTION
     Get information about vRA services. These are the same services that you will see via the service tab 
     
-    Depricated. Use Get-vRAComponentRegistryServiceStatus instead.
+    Deprecated. Use Get-vRAComponentRegistryServiceStatus instead.
     
     .PARAMETER Name
     The name of the service to query
@@ -47,7 +47,7 @@
 
     try {
 
-        Write-Warning -Message "This function is now depricated. Please use Get-vRAComponentRegsitryService instead"
+        Write-Warning -Message "This function is now deprecated. Please use Get-vRAComponentRegsitryService instead"
 
         # --- Build base URI with limit 
         $URI =  "/component-registry/services/status/current?limit=$($Limit)"
