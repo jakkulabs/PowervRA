@@ -12,10 +12,6 @@
     .PARAMETER Name
     The name of the service
 
-    .PARAMETER Current
-    Return the maximum amount of service information. Using this switch will make a connection to the defined
-    url of each endpoint and gather data from the ServiceRegistryStatus responses.
-
     .PARAMETER Limit
     The number of entries returned per page from the API. This has a default value of 100.
 
@@ -32,9 +28,6 @@
 
     .EXAMPLE
      Get-vRAComponentRegistryServiceStatus
-
-    .EXAMPLE
-     Get-vRAComponentRegistryServiceStatus -Current
 
     .EXAMPLE
      Get-vRAComponentRegistryServiceStatus -Limit 9999
@@ -60,10 +53,6 @@
         [parameter(Mandatory=$true, ParameterSetName="ByName")]
         [ValidateNotNullOrEmpty()]
         [String[]]$Name,
-
-        [parameter(Mandatory=$false, ParameterSetName="Standard")]
-        [ValidateNotNullOrEmpty()]
-        [System.Management.Automation.SwitchParameter]$Current,
 
         [Parameter(Mandatory=$false, ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
@@ -145,16 +134,7 @@
 
                 'Standard' {
 
-                    # --- Build up the URI string depending on switch
-                    if ($PSBoundParameters.ContainsKey("Current")) {
-
-                        Write-Verbose -Message "Current switch parameter passed. Retrieving detailed status information."
-                        $URI = "$($BaseURI)/current?limit=$($Limit)&page=$($Page)&`$orderby=name asc"
-                    } else {
-
-                        $URI = "$($BaseURI)?limit=$($Limit)&page=$($Page)&`$orderby=name asc"
-                    }
-
+                    $URI = "$($BaseURI)/current/?limit=$($Limit)&page=$($Page)&`$orderby=name asc"
                     $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
                     foreach ($Service in $Response.content) {
