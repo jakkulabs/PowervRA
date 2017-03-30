@@ -6,12 +6,23 @@ properties {
 
   $BumpVersion = $Version
 
+  if ($ENV:BHCommitMessage -match "!PSSAError") {
+      $ScriptAnalysisFailBuildOnSeverityLevel = "Error"
+  }
+
 }
 
 # --- Define the build tasks
 Task Default -depends Build
-Task Build -depends Analyze, Test, UpdateModuleManifest, UpdateDocumentation, CommitChanges
+Task Build -depends Init, Analyze, Test, UpdateModuleManifest, UpdateDocumentation, CommitChanges
 Task PrepareRelease -depends Build, BumpVersion
+
+Task Init {
+
+    Write-Output "Build System Details:"
+    Get-Item ENV:BH* | Format-List
+    Write-Output "ScriptAnalyzerSeverityLevel: $($ScriptAnalysisFailBuildOnSeverityLevel)"
+}
 
 Task Analyze {
 
