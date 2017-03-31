@@ -199,33 +199,11 @@
         }
         if ($PSBoundParameters.ContainsKey("GroupBaseSearchDNs")){
 
-            if ($GroupBaseSearchDNs.Count -gt 1){
-
-                $GroupBaseSearchDNs | ForEach-Object {
-
-                    $GroupBaseSearchDNsJoin += '"' + $_ + '"'
-                }
-                $GroupBaseSearchDNs = $GroupBaseSearchDNsJoin -replace '""', '","'
-            }
-            else {
-
-                $GroupBaseSearchDNs = '"' + $GroupBaseSearchDNs + '"'
-            }
+            $GroupBaseSearchDNsJSON = ($GroupBaseSearchDNs | ForEach-Object {'"' + $_ + '"'}) -join ','
         }
         if ($PSBoundParameters.ContainsKey("UserBaseSearchDNs")){
 
-            if ($UserBaseSearchDNs.Count -gt 1){
-
-                $UserBaseSearchDNs | ForEach-Object {
-
-                    $UserBaseSearchDNsJoin += '"' + $_ + '"'
-                }
-                $UserBaseSearchDNs = $UserBaseSearchDNsJoin -replace '""', '","'
-            }
-            else {
-
-                $UserBaseSearchDNs = '"' + $UserBaseSearchDNs + '"'
-            }
+            $UserBaseSearchDNsJSON = ($UserBaseSearchDNs | ForEach-Object {'"' + $_ + '"'}) -join ','
         }
         if ($PSBoundParameters.ContainsKey("$TrustAll")){
 
@@ -354,18 +332,7 @@
                if ($TenantDirectory.GroupBaseSearchDNs){
 
                     $GroupBaseSearchDNs = $TenantDirectory.GroupBaseSearchDNs
-                }
-               if ($GroupBaseSearchDNs.Count -gt 1){
-
-                    $GroupBaseSearchDNs | ForEach-Object {
-
-                        $GroupBaseSearchDNsJoin += '"' + $_ + '"'
-                    }
-                    $GroupBaseSearchDNs = $GroupBaseSearchDNsJoin -replace '""', '","'
-                }
-                else {
-
-                    $GroupBaseSearchDNs = '"' + $GroupBaseSearchDNs + '"'
+                    $GroupBaseSearchDNsJSON = ($GroupBaseSearchDNs | ForEach-Object {'"' + $_ + '"'}) -join ','
                 }
             }
             if (-not($PSBoundParameters.ContainsKey("UserBaseSearchDNs"))){
@@ -373,18 +340,7 @@
                 if ($TenantDirectory.UserBaseSearchDNs){
 
                     $UserBaseSearchDNs = $TenantDirectory.UserBaseSearchDNs
-                }
-                if ($UserBaseSearchDNs.Count -gt 1){
-
-                    $UserBaseSearchDNs | ForEach-Object {
-
-                        $UserBaseSearchDNsJoin += '"' + $_ + '"'
-                    }
-                    $UserBaseSearchDNs = $UserBaseSearchDNsJoin -replace '""', '","'
-                }
-                else {
-
-                    $UserBaseSearchDNs = '"' + $UserBaseSearchDNs + '"'
+                    $UserBaseSearchDNsJSON = ($UserBaseSearchDNs | ForEach-Object {'"' + $_ + '"'}) -join ','
                 }
             }
             if (-not($PSBoundParameters.ContainsKey("DomainAdminUsername"))){
@@ -439,8 +395,8 @@
                   "domainAdminUsername" : "$($DomainAdminUsername)",
                   "domainAdminPassword" : "$($JSONDomainAdminPassword)",
                   "subdomains" : [ "$($Subdomains)" ],
-                  "groupBaseSearchDns" : [ $($GroupBaseSearchDNs) ],
-                  "userBaseSearchDns" : [ $($UserBaseSearchDNs) ],
+                  "groupBaseSearchDns" : [ $($GroupBaseSearchDNsJSON) ],
+                  "userBaseSearchDns" : [ $($UserBaseSearchDNsJSON) ],
                   "certificate" : "$($Certificate)",
                   "trustAll" : $($TrustAllText),
                   "useGlobalCatalog" : $($UseGlobalCatalogText)
