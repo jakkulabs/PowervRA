@@ -3,26 +3,28 @@
 
 # --- Add any parameters from build.ps1
 properties {
-
-  $BumpVersion = $Version
-
-  if ($ENV:BHCommitMessage -match "!PSSAError") {
-      $ScriptAnalysisFailBuildOnSeverityLevel = "Error"
-  }
-
+    $CurrentVersion = [version](Get-Metadata -Path $env:BHPSModuleManifest)
 }
 
 # --- Define the build tasks
-Task Default -depends Build
-Task Build -depends Init, Analyze, Test, UpdateModuleManifest, UpdateDocumentation, CommitChanges
-Task PrepareRelease -depends Build, BumpVersion
+Task Default -depends Test
+Task Test -depends Init, Analyze, TestHelp
+Task Build -depends Test, UpdateModuleManifest, UpdateDocumentation, IncrementVersion, CommitChanges
 
 Task Init {
 
     Write-Output "Build System Details:"
-    Get-Item ENV:BH* | Format-List
+    foreach ($Item in (Get-Item -Path ENV:BH*)){
+        Write-Output "$($Item.Name): $($Item.Value)"
+    }
     Write-Output "ScriptAnalyzerSeverityLevel: $($ScriptAnalysisFailBuildOnSeverityLevel)"
+    Write-Output "Current Module Version: $($CurrentVersion)"
+    Write-Output "Increment: $($Increment)"
 }
+
+##############
+# Task: Test #
+##############
 
 Task Analyze {
 
@@ -61,6 +63,39 @@ Task Analyze {
 
 }
 
+Task TestHelp {
+
+    # --- Run Tests. Currently limited to help tests
+    $Timestamp = Get-date -uformat "%Y%m%d-%H%M%S"
+    $TestFile = "TestResults_PS$PSVersion`_$TimeStamp.xml"
+    $Parameters = @{
+        Script = "$ENV:BHProjectPath\tests\Test000-Module.Tests.ps1"
+        Tag = 'Help'
+        PassThru = $true
+        OutputFormat = 'NUnitXml'
+        OutputFile = "$ENV:BHProjectPath\$TestFile"
+    }
+
+    $TestResults = Invoke-Pester @Parameters
+
+    If ($ENV:BHBuildSystem -eq 'AppVeyor') {
+        "Uploading $ENV:BHProjectPath\$TestFile to AppVeyor"
+        "JobID: $env:APPVEYOR_JOB_ID"
+        (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "$ENV:BHProjectPath\$TestFile"))
+    }
+    
+    Remove-Item "$ENV:BHProjectPath\$TestFile" -Force -ErrorAction SilentlyContinue
+
+    if ($TestResults.FailedCount -gt 0) {
+        Write-Error "Failed '$($TestResults.FailedCount)' tests, build failed"
+    }
+
+}
+
+###############
+# Task: Build #
+###############
+
 Task UpdateModuleManifest {
 
     $PublicFunctions = Get-ChildItem -Path "$($ENV:BHPSModulePath)\Functions\Public" -Filter "*.ps1" -Recurse | Sort-Object
@@ -77,12 +112,12 @@ Task UpdateModuleManifest {
         }        
     }
 
-    Set-ModuleFunctions -Name $ENV:BHPSModuleManifest -FunctionsToExport $ExportFunctions
-
+    Set-ModuleFunctions -Name $ENV:BHPSModuleManifest -FunctionsToExport $ExportFunctions -Verbose:$VerbosePreference
 }
 
 Task UpdateDocumentation {
 
+    Write-Output "Updating Markdown help"
     $ModuleInfo = Import-Module $ENV:BHPSModuleManifest -Global -Force -PassThru
     $FunctionsPath = "$DocsDirectory\functions"
 
@@ -98,9 +133,11 @@ Task UpdateDocumentation {
     New-MarkdownHelp @PlatyPSParameters -ErrorAction SilentlyContinue -Verbose:$VerbosePreference | Out-Null
 
     # --- Ensure that index.md is present and up to date
+    Write-Output "Updating index.md"
     Copy-Item -Path "$($PSScriptRoot)\README.md" -Destination "$($DocsDirectory)\index.md" -Force -Verbose:$VerbosePreference | Out-Null
 
     # --- Update mkdocs.yml with new functions
+    Write-Output "Updating mkdocs.yml"
     $Mkdocs = "$($PSScriptRoot)\mkdocs.yml"
     $Functions = $ModuleInfo.ExportedCommands.Keys | ForEach-Object {"    - $($_) : functions/$($_).md"}
 
@@ -124,6 +161,36 @@ $($Functions -join "`r`n")
 
 }
 
+Task IncrementVersion {
+
+    if (!$Increment) {
+        Write-Output "Increment must be specified. Skipping task"
+        return
+    }
+
+    $StepVersion = [version](Step-Version $CurrentVersion -By $Increment)
+
+    if ([version]$StepVersion -gt [version]$CurrentVersion) {
+
+        # --- Update module manifest version
+        Update-Metadata -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -Value $StepVersion        
+        Write-Output "Module version updated to $($StepVersion)"
+
+        # --- Update appveyor build version
+        $AppveyorYMLPath = "$($PSScriptRoot)\appveyor.yml"
+        $AppveyorVersion = "$($StepVersion).{build}"
+        $NewAppveyorYML = Get-Content -Path $AppveyorYMLPath | ForEach-Object { $_ -replace '^version: .+$', "version: $($AppveyorVersion)";}
+        $NewAppveyorYML | Set-Content -Path $AppveyorYMLPath -Force
+        Write-Output "Appveyor build version set to $($AppveyorVersion)"
+
+        # --- Update change log
+        $ReleaseNotes = "$ENV:BHProjectPath\RELEASE.md"
+        $ChangeLog = "$DocsDirectory\CHANGELOG.md"
+        $Header = "# Version $($StepVersion)`r`n"
+        $Header, (Get-Content -Path $ReleaseNotes),"`r`n", (Get-Content $ChangeLog ) | Set-Content $ChangeLog
+    }
+}
+
 Task CommitChanges {
 
     if ($ENV:BHBuildSystem -eq "Unknown"){
@@ -135,6 +202,7 @@ Task CommitChanges {
         Write-Output "Repo provider '$ENV:APPVEYOR_REPO_PROVIDER'. Skipping task"
         return
     }
+
     If ($ENV:BHBuildSystem -eq 'AppVeyor') {
         Write-Output "git config --global credential.helper store"
         cmd /c "git config --global credential.helper store 2>&1"
@@ -166,152 +234,6 @@ Task CommitChanges {
     Write-Output "git status"
     cmd /c "git status 2>&1"
     
-    try {
-        
-        Write-Output "git push origin $ENV:BHBranchName"    
-        $SystemErrorActionPreference = $ErrorActionPreference
-        $ErrorActionPreference = "Stop"
-        cmd /c "git push origin $ENV:BHBranchName" 2>&1 
-    } catch {
-
-        Write-Error -Message "Error when pushing changes to repository: $_"
-    } finally {
-
-        # -- Reset Error Action to System default
-        $ErrorActionPreference = $SystemErrorActionPreference
-    }
-
-}
-
-Task Test {
-
-    # --- Run Tests. Currently limited to help tests
-    $Timestamp = Get-date -uformat "%Y%m%d-%H%M%S"
-    $TestFile = "TestResults_PS$PSVersion`_$TimeStamp.xml"
-    $Parameters = @{
-        Script = "$ENV:BHProjectPath\tests\Test000-Module.Tests.ps1"
-        Tag = 'Help'
-        PassThru = $true
-        OutputFormat = 'NUnitXml'
-        OutputFile = "$ENV:BHProjectPath\$TestFile"
-    }
-
-    $TestResults = Invoke-Pester @Parameters
-
-    If ($ENV:BHBuildSystem -eq 'AppVeyor') {
-        "Uploading $ENV:BHProjectPath\$TestFile to AppVeyor"
-        "JobID: $env:APPVEYOR_JOB_ID"
-        (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "$ENV:BHProjectPath\$TestFile"))
-    }
-    
-    Remove-Item "$ENV:BHProjectPath\$TestFile" -Force -ErrorAction SilentlyContinue
-
-    if ($TestResults.FailedCount -gt 0) {
-        Write-Error "Failed '$($TestResults.FailedCount)' tests, build failed"
-    }
-
-}
-
-Task BumpVersion {
-
-    # --- Get the current version of the module
-    $ModuleManifest = Import-PowerShellDataFile -Path $ModuleManifestPath -Verbose:$VerbosePreference
-
-    $CurrentModuleVersion = $ModuleManifest.ModuleVersion
-
-    $ModuleManifest.Remove("ModuleVersion")
-
-    Write-Verbose -Message "Current module version is $($CurrentModuleVersion)"
-
-    [Int]$MajorVersion = $CurrentModuleVersion.Split(".")[0]
-    [Int]$MinorVersion = $CurrentModuleVersion.Split(".")[1]
-    [Int]$PatchVersion = $CurrentModuleVersion.Split(".")[2]
-
-    $ModuleManifest.FunctionsToExport = $ModuleManifest.FunctionsToExport | ForEach-Object {$_}
-
-    if ($ModuleManifest.ContainsKey("PrivateData") -and $ModuleManifest.PrivateData.ContainsKey("PSData")) {
-
-        foreach ($node in $ModuleManifest.PrivateData["PSData"].GetEnumerator()) {
-
-            $key = $node.Key
-
-            if ($node.Value.GetType().Name -eq "Object[]") {
-
-                $value = $node.Value | ForEach-Object {$_}
-
-            }
-            else {
-
-                $value = $node.Value
-
-            }
-
-            $ModuleManifest[$key] = $value
-
-        }
-
-        $ModuleManifest.Remove("PrivateData")
-    }
-
-    switch ($BumpVersion) {
-
-        'MAJOR' {
-
-            Write-Verbose -Message "Bumping module major release number"
-
-            $MajorVersion++
-            $MinorVersion = 0
-            $PatchVersion = 0
-
-            break
-
-        }
-
-        'MINOR' {
-
-            Write-Verbose -Message "Bumping module minor release number"
-
-            $MinorVersion++
-            $PatchVersion = 0
-
-            break
-
-        }
-
-        'PATCH' {
-
-            Write-Verbose -Message "Bumping module patch release number"
-
-            $PatchVersion++
-
-            break
-        }
-
-        default {
-
-            Write-Verbose -Message "Not bumping module version"
-            break
-
-        }
-
-    }
-
-    # --- Build the new version string
-    $ModuleVersion = "$($MajorVersion).$($MinorVersion).$($PatchVersion)"
-
-    if ([version]$ModuleVersion -gt [version]$CurrentModuleVersion) {
-
-        # --- Fix taken from: https://github.com/RamblingCookieMonster/BuildHelpers/blob/master/BuildHelpers/Public/Step-ModuleVersion.ps1
-        New-ModuleManifest -Path $ModuleManifestPath -ModuleVersion $ModuleVersion @ModuleManifest -Verbose:$VerbosePreference
-        Write-Verbose -Message "Module version updated to $($ModuleVersion)"
-
-        # --- Update appveyor build version
-        $AppveyorYMLPath = "$($PSScriptRoot)\appveyor.yml"
-        $AppveyorVersion = "$($ModuleVersion).{build}"
-        $NewAppveyorYML = Get-Content -Path $AppveyorYMLPath | ForEach-Object { $_ -replace '^version: .+$', "version: $($AppveyorVersion)";}
-        $NewAppveyorYML | Set-Content -Path $AppveyorYMLPath -Force
-        Write-Verbose -Message "Appveyor build version set to $($AppveyorVersion)"
-
-    }
-
+    Write-Output "git push origin $ENV:BHBranchName"    
+    cmd /c "git push origin $ENV:BHBranchName 2>&1"
 }

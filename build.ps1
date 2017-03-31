@@ -75,19 +75,64 @@
 Param (
 
     [Parameter()]    
-    [ValidateSet("Build", "PrepareRelease", "Analyze", "UpdateModuleManifest", "UpdateDocumentation", "BumpVersion", "Test")]
-    [String]$Task = "Build",
+    [ValidateSet("Build", "PrepareRelease", "Analyze", "UpdateModuleManifest", "UpdateDocumentation", "UpdateChangelog", "IncrementVersion", "Test")]
+    [String]$Task,
 
     [Parameter()]
     [ValidateSet("PATCH", "MINOR", "MAJOR")]
-    [String]$Version
+    [String]$Increment
 
 )
 
 # --- Set Build Environment
 Set-BuildEnvironment
 
-# --- Start Build
-Invoke-psake -buildFile "$($PSScriptRoot)\build.psake.ps1" -taskList $Task  -parameters @{"Version"=$Version} -nologo -Verbose:$VerbosePreference
+# --- Set Psake parameters
+$PsakeBuildParameters = @{
+    BuildFile = "$($PSScriptRoot)\build.psake.ps1"
+    TaskList = $Task 
+    Parameters = @{"Increment"= $Increment} 
+    Nologo = $true   
+}
 
+# --- Determine the state of the build script
+if ($ENV:BHBuildSystem -eq "github") {
+
+    Switch -Regex ($ENV:BHCommitMessage) {
+
+        "\[Build\]" {
+            Write-Output "Build Phase: [Build]"
+            $PsakeBuildParameters.TaskList = "Build"
+            break
+        }      
+        "\[Build\.Major\]" {
+            Write-Output "Build Phase: [Build.Major]"
+            $PsakeBuildParameters.TaskList = "Build"
+            $PsakeBuildParameters.Parameters.Increment = "Major"
+            break
+        }
+        "\[Build\.Minor\]" {
+            Write-Output "Build Phase: [Build.Minor]"            
+            $PsakeBuildParameters.TaskList = "Build"            
+            $PsakeBuildParameters.Parameters.Increment = "Minor"
+            break
+        }       
+        "\[Build\.Patch\]" {
+            Write-Output "Build Phase: [Build.Patch]"            
+            $PsakeBuildParameters.TaskList = "Build"            
+            $PsakeBuildParameters.Parameters.Increment = "Patch"
+            break
+        }
+        "\[Release\]" {
+            $PsakeBuildParameters.TaskList = "Release"            
+            break
+        }
+        default {
+            Write-Output "Trigger not found in commit message, continuing with default task"
+        }
+    }
+}
+
+# --- Start Build
+Invoke-Psake @PsakeBuildParameters -Verbose:$VerbosePreference
 exit ( [int]( -not $psake.build_success ) )
