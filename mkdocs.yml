@@ -9,7 +9,7 @@ copyright: "PowervRA is licenced under the <a href='https://github.com/jakkulabs
 pages:
 - 'Home' : 'index.md'
 - 'Change log' : 'changelog.md'
-- 'Build' : 'build.md
+- 'Build' : 'build.md'
 - 'Functions':
     - Add-vRAPrincipalToTenantRole : functions/Add-vRAPrincipalToTenantRole.md
     - Add-vRAReservationNetwork : functions/Add-vRAReservationNetwork.md
