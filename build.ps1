@@ -34,7 +34,6 @@
 
     .Example 
     .\build.ps1 -Task Build
-
 #>
 
 [Cmdletbinding()]
