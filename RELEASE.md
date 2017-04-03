@@ -10,4 +10,3 @@
 * Introduction of CHANGELOG.md
 * Pester Test improvements
 * Build improvementss
-* Bugfixes and improvements
