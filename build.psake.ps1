@@ -153,7 +153,7 @@ copyright: "PowervRA is licenced under the <a href='$($RepoUrl)/raw/master/LICEN
 pages:
 - 'Home' : 'index.md'
 - 'Change log' : 'changelog.md'
-- 'Build' : ' build.md
+- 'Build' : 'build.md
 - 'Functions':
 $($Functions -join "`r`n")
 "@
