@@ -11,7 +11,7 @@ Properties {
     # Should be Warning by default. Can be overridden on demand by using
     # !PSSAError in your commit message
     [ValidateSet('Error', 'Warning', 'Any', 'None')]
-    $ScriptAnalysisFailBuildOnSeverityLevel = 'Warning'
+    $ScriptAnalysisFailBuildOnSeverityLevel = 'Error'
     $ScriptAnalyzerSettingsPath = "$PSScriptRoot\PSScriptAnalyzerSettings.psd1"
 
 # ----------------- MKdocs ---------------------------------------
