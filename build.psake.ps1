@@ -152,7 +152,7 @@ theme: readthedocs
 copyright: "PowervRA is licenced under the <a href='$($RepoUrl)/raw/master/LICENSE'>MIT license"
 pages:
 - 'Home' : 'index.md'
-- 'Change log' : 'changelog.md'
+- 'Change log' : 'CHANGELOG.md'
 - 'Build' : 'build.md'
 - 'Functions':
 $($Functions -join "`r`n")
@@ -186,7 +186,7 @@ Task IncrementVersion {
 
         # --- Update change log
         $ReleaseNotes = "$ENV:BHProjectPath\RELEASE.md"
-        $ChangeLog = "$DocsDirectory\changelog.md"
+        $ChangeLog = "$DocsDirectory\CHANGELOG.md"
         $Header = "# Version $($StepVersion)`r`n"
         $Header, (Get-Content -Path $ReleaseNotes),"`r`n", (Get-Content $ChangeLog ) | Set-Content $ChangeLog
     }
