@@ -96,7 +96,7 @@ $PsakeBuildParameters = @{
 }
 
 # --- Determine the state of the build script
-if ($ENV:BHBuildSystem -eq "github") {
+if ($ENV:BHBuildSystem -eq "AppVeyor") {
 
     Switch -Regex ($ENV:BHCommitMessage) {
 
