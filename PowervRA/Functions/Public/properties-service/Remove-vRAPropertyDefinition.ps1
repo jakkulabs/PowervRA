@@ -21,10 +21,14 @@
     .EXAMPLE
     # Remove the property "Hostname"
     Remove-vRAPropertyDefinition -Id Hostname
+
+    .EXAMPLE
+    # Remove the property "Hostname" using the pipeline
+    Get-vRAPropertyDefinition -Id Hostname | Remove-vRAPropertyDefinition -Confirm:$false
     
     .EXAMPLE
     # Remove the property "Hostname" from the tenant "Development"
-    Get-vRAPropertyDefinition -Id "Hostname" -Tenant Development
+    Remove-vRAPropertyDefinition -Id "Hostname" -Tenant Development
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")]
@@ -42,7 +46,8 @@
     )
 
     Begin {
-
+        # --- Test for vRA API version
+        xRequires -Version 7.0
     }
 
     Process {
@@ -61,7 +66,7 @@
 
                     $EscapedURI = [uri]::EscapeUriString($URI)
 
-                    $Response = Invoke-vRARestMethod -Method DELETE -URI $EscapedURI -Verbose:$VerbosePreference
+                    Invoke-vRARestMethod -Method DELETE -URI $EscapedURI -Verbose:$VerbosePreference
                 }
 
             }
@@ -72,11 +77,9 @@
             throw
 
         }
-
     }
 
     End {
 
     }
-
 }

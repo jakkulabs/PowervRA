@@ -1,4 +1,4 @@
-Function New-DynamicParam {
+Function NewDynamicParam {
 <#
     .SYNOPSIS
         Helper function to simplify creating dynamic parameters
@@ -16,6 +16,8 @@ Function New-DynamicParam {
            Alternatively, manually reference $PSBoundParameters for the dynamic parameter value
 
     .NOTES
+        Note: NewDynamicParam function from @PSCookieMonster https://github.com/RamblingCookieMonster/PowerShell/blob/master/New-DnamicParam.ps1
+        
         Credit to http://jrich523.wordpress.com/2013/05/30/powershell-simple-way-to-add-dynamic-parameters-to-advanced-function/
             Added logic to make option set optional
             Added logic to add RuntimeDefinedParameter to existing DPDictionary
@@ -64,7 +66,7 @@ Function New-DynamicParam {
             Param()
             DynamicParam {
                 $options = @( gwmi win32_volume | %{$_.driveletter} | sort )
-                New-DynamicParam -Name Drive -ValidateSet $options -Position 0 -Mandatory
+                NewDynamicParam -Name Drive -ValidateSet $options -Positin 0 -Mandatory
             }
             begin{
                 #have to manually populate
@@ -78,7 +80,7 @@ Function New-DynamicParam {
 
         Show-Free -Drive <tab>
 
-    # This example illustrates the use of New-DynamicParam to create a single dynamic parameter
+    # This example illustrates the use of NewDynamicParam to create a single dyamic parameter
     # The Drive parameter ValidateSet populates with all available volumes on the computer for handy tab completion / intellisense
 
     .EXAMPLE
@@ -97,20 +99,20 @@ Function New-DynamicParam {
                 #Create the RuntimeDefinedParameterDictionary
                 $Dictionary = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
         
-                New-DynamicParam -Name AlwaysParam -ValidateSet @( gwmi win32_volume | %{$_.driveletter} | sort ) -DPDictionary $Dictionary
+                NewDynamicParam -Name AlwaysParam -ValidateSet @( gwmi win32_volume | %{$_.driveletter} | sort ) -DPDictionry $Dictionary
 
                 #Add dynamic parameters to $dictionary
                 if($x -eq 1)
                 {
-                    New-DynamicParam -Name X1Param1 -ValidateSet 1,2 -mandatory -DPDictionary $Dictionary
-                    New-DynamicParam -Name X1Param2 -DPDictionary $Dictionary
-                    New-DynamicParam -Name X3Param3 -DPDictionary $Dictionary -Type DateTime
+                    NewDynamicParam -Name X1Param1 -ValidateSet 1,2 -mandatory -DPDictionry $Dictionary
+                    NewDynamicParam -Name X1Param2 -DPDictionry $Dictionary
+                    NewDynamicParam -Name X3Param3 -DPDictionary $Dictionary-Type DateTime
                 }
                 else
                 {
-                    New-DynamicParam -Name OtherParam1 -Mandatory -DPDictionary $Dictionary
-                    New-DynamicParam -Name OtherParam2 -DPDictionary $Dictionary
-                    New-DynamicParam -Name OtherParam3 -DPDictionary $Dictionary -Type DateTime
+                    NewDynamicParam -Name OtherParam1 -Mandatory -DPDictionry $Dictionary
+                    NewDynamicParam -Name OtherParam2 -DPDictionry $Dictionary
+                    NewDynamicParam -Name OtherParam3 -DPDictionary $Dictionary-Type DateTime
                 }
         
                 #return RuntimeDefinedParameterDictionary
@@ -137,9 +139,9 @@ Function New-DynamicParam {
             }
         }
 
-    # This example illustrates the creation of many dynamic parameters using New-DynamicParam
+    # This example illustrates the creation of many dynamic parameters using Nw-DynamicParam
         # You must create a RuntimeDefinedParameterDictionary object ($dictionary here)
-        # To each New-DynamicParam call, add the -DPDictionary parameter pointing to this RuntimeDefinedParameterDictionary
+        # To each NewDynamicParam call, add the -DPDictionary parameter pointing to this RuntimeDefinedParaeterDictionary
         # At the end of the DynamicParam block, return the RuntimeDefinedParameterDictionary
         # Initialize all bound parameters using the provided block or similar code
 

@@ -65,7 +65,7 @@
     New-vRAPropertyDefinition -Name DecimalTest -Decimal -DecimalDisplay SLIDER -MinimumValue 0 -MaximumValue 10 -Increment 0.5
 
 #> 
-[CmdletBinding(ConfirmImpact="Low")][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
         [parameter(Mandatory=$true)]
@@ -95,11 +95,6 @@
         [parameter(Mandatory=$false)] 
         [ValidateNotNullOrEmpty()]
         [Switch]$Encrypted,
-
-        [parameter(Mandatory=$false)] 
-        [ValidateNotNullOrEmpty()]
-        [Switch]$ExecuteAPICall, # In here for testing only
-
 
         [parameter(Mandatory=$false,ParameterSetName="String")] 
         [ValidateNotNullOrEmpty()]
@@ -160,28 +155,28 @@
             $Dictionary = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
             if($StringDisplay -eq "DROPDOWN") {
                 $ValueTypes = "Static","Dynamic"
-                New-DynamicParam -Name "EnableCustomValues" -Type switch -ParameterSet "String" -DPDictionary $Dictionary
-                New-DynamicParam -Name "ValueType" -Mandatory -ValidateSet $ValueTypes -ParameterSet "String" -DPDictionary $Dictionary
-                New-DynamicParam -Name "Values" -Type hashtable -Mandatory -ParameterSet "String" -DPDictionary $Dictionary
+                NewDynamicParam -Name "EnableCustomValues" -Type switch -ParameterSet "String" -DPDictionary $Dictionary
+                NewDynamicParam -Name "ValueType" -Mandatory -ValidateSet $ValueTypes -ParameterSet "String" -DPDictionary $Dictionary
+                NewDynamicParam -Name "Values" -Type hashtable -Mandatory -ParameterSet "String" -DPDictionary $Dictionary
             }
 
             if($Integer) {
                 if($IntegerDisplay -eq "DROPDOWN") {
                     # Dropdown should have value type (static or dynamic) and a hashtable of values
                     $ValueTypes = "Static","Dynamic"
-                    New-DynamicParam -Name "EnableCustomValues" -Type switch -ParameterSet "Integer" -DPDictionary $Dictionary
-                    New-DynamicParam -Name "ValueType" -Mandatory -ValidateSet $ValueTypes -ParameterSet "Integer" -DPDictionary $Dictionary
-                    New-DynamicParam -Name "Values" -Type hashtable -Mandatory -ParameterSet "Integer" -DPDictionary $Dictionary
+                    NewDynamicParam -Name "EnableCustomValues" -Type switch -ParameterSet "Integer" -DPDictionary $Dictionary
+                    NewDynamicParam -Name "ValueType" -Mandatory -ValidateSet $ValueTypes -ParameterSet "Integer" -DPDictionary $Dictionary
+                    NewDynamicParam -Name "Values" -Type hashtable -Mandatory -ParameterSet "Integer" -DPDictionary $Dictionary
                 } elseif($IntegerDisplay -eq "SLIDER") {
                     # Min/Max value are mandatory for a slider
-                    New-DynamicParam -Name "MinimumValue" -Mandatory -Type int -ParameterSet "Integer" -DPDictionary $Dictionary
-                    New-DynamicParam -Name "MaximumValue" -Mandatory -Type int -ParameterSet "Integer" -DPDictionary $Dictionary
-                    New-DynamicParam -Name "Increment" -Type decimal -ParameterSet "Integer" -DPDictionary $Dictionary
+                    NewDynamicParam -Name "MinimumValue" -Mandatory -Type int -ParameterSet "Integer" -DPDictionary $Dictionary
+                    NewDynamicParam -Name "MaximumValue" -Mandatory -Type int -ParameterSet "Integer" -DPDictionary $Dictionary
+                    NewDynamicParam -Name "Increment" -Type decimal -ParameterSet "Integer" -DPDictionary $Dictionary
                 } else { 
                     # Otherwise add some optional for Integers
-                    New-DynamicParam -Name "MinimumValue" -Type int -ParameterSet "Integer" -DPDictionary $Dictionary
-                    New-DynamicParam -Name "MaximumValue" -Type int -ParameterSet "Integer" -DPDictionary $Dictionary
-                    New-DynamicParam -Name "Increment" -Type decimal -ParameterSet "Integer" -DPDictionary $Dictionary
+                    NewDynamicParam -Name "MinimumValue" -Type int -ParameterSet "Integer" -DPDictionary $Dictionary
+                    NewDynamicParam -Name "MaximumValue" -Type int -ParameterSet "Integer" -DPDictionary $Dictionary
+                    NewDynamicParam -Name "Increment" -Type decimal -ParameterSet "Integer" -DPDictionary $Dictionary
                 }
             }
 
@@ -189,42 +184,44 @@
                 if($DecimalDisplay -eq "DROPDOWN") {
                     # Dropdown should have value type (static or dynamic) and a hashtable of values
                     $ValueTypes = "Static","Dynamic"
-                    New-DynamicParam -Name "EnableCustomValues" -Type switch -ParameterSet "Decimal" -DPDictionary $Dictionary
-                    New-DynamicParam -Name "ValueType" -Mandatory -ValidateSet $ValueTypes -ParameterSet "Decimal" -DPDictionary $Dictionary
-                    New-DynamicParam -Name "Values" -Type hashtable -Mandatory -ParameterSet "Decimal" -DPDictionary $Dictionary
+                    NewDynamicParam -Name "EnableCustomValues" -Type switch -ParameterSet "Decimal" -DPDictionary $Dictionary
+                    NewDynamicParam -Name "ValueType" -Mandatory -ValidateSet $ValueTypes -ParameterSet "Decimal" -DPDictionary $Dictionary
+                    NewDynamicParam -Name "Values" -Type hashtable -Mandatory -ParameterSet "Decimal" -DPDictionary $Dictionary
                 } elseif($IntegerDisplay -eq "SLIDER") {
                     # Min/Max value are mandatory for a slider
-                    New-DynamicParam -Name "MinimumValue" -Mandatory -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
-                    New-DynamicParam -Name "MaximumValue" -Mandatory -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
-                    New-DynamicParam -Name "Increment" -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
+                    NewDynamicParam -Name "MinimumValue" -Mandatory -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
+                    NewDynamicParam -Name "MaximumValue" -Mandatory -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
+                    NewDynamicParam -Name "Increment" -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
                 } else { 
                     # Otherwise add some optional for Decimal
-                    New-DynamicParam -Name "MinimumValue" -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
-                    New-DynamicParam -Name "MaximumValue" -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
-                    New-DynamicParam -Name "Increment" -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
+                    NewDynamicParam -Name "MinimumValue" -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
+                    NewDynamicParam -Name "MaximumValue" -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
+                    NewDynamicParam -Name "Increment" -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
                 }
             }
             if($Datetime) {
                 # TODO - Datetime needs to be a string as UniversalSortableDateTimePattern
-                New-DynamicParam -Name "MinimumValue" -Type DateTime -ParameterSet "Datetime" -DPDictionary $Dictionary
-                New-DynamicParam -Name "MaximumValue" -Type DateTime -ParameterSet "Datetime" -DPDictionary $Dictionary
+                NewDynamicParam -Name "MinimumValue" -Type DateTime -ParameterSet "Datetime" -DPDictionary $Dictionary
+                NewDynamicParam -Name "MaximumValue" -Type DateTime -ParameterSet "Datetime" -DPDictionary $Dictionary
             }
             return $Dictionary
         }
     } 
 
     begin {
+
+        # --- Test for vRA API version
+        xRequires -Version 7.0
+
         #Get common parameters, pick out bound parameters not in that set
         Function _temp { [cmdletbinding()] param() }
-        $BoundKeys = $PSBoundParameters.keys | Where-Object { (get-command _temp | select -ExpandProperty parameters).Keys -notcontains $_}
+        $BoundKeys = $PSBoundParameters.keys | Where-Object { (get-command _temp | Select-Object -ExpandProperty parameters).Keys -notcontains $_}
         foreach($param in $BoundKeys) {
             if (-not ( Get-Variable -name $param -scope 0 -ErrorAction SilentlyContinue ) ) {
                 New-Variable -Name $Param -Value $PSBoundParameters.$param
                 Write-Verbose "Adding variable for dynamic parameter '$param' with value '$($PSBoundParameters.$param)'"
             }
         }
-        #Appropriate variables should now be defined and accessible
-        Get-Variable -scope 0
     }
     
     process {
@@ -275,7 +272,6 @@
                                 "value": $($Mandatory)
                             }
                         },
-
 "@
                 }
                      $facets += @"
@@ -286,7 +282,6 @@
                                 "value": $($Encrypted.ToString().ToLower())
                             }
                         },
-
 "@
                if($MinimumValue) {
                     $facets += @"
@@ -329,7 +324,7 @@
                         $ValueJSON += @"
                         {
                             "underlyingValue": {
-                                "type": "$($DataType)",
+                                "type": "$($DataType.ToLower())",
                                 "value": "$($Value.Value)"
                             },
                             "label": "$($Value.Name)"
@@ -404,25 +399,19 @@ $($facets.Trim(","))
 
             Write-Verbose -Message "Preparing POST to $($URI)"     
 
-            $Body
-            ConvertFrom-Json $Body
-
             # --- Run vRA REST Request  
-            if($ExecuteAPICall) {
-                $Result = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body | Out-Null
+            if ($PSCmdlet.ShouldProcess($Id)) {
+
+                Invoke-vRARestMethod -Method POST -URI $URI -Body $Body | Out-Null
                 Get-vRAPropertyDefinition -Id $Name
             }
-
         }
         catch [Exception]{
 
-            throw
-            
-        }
-        
+            throw            
+        }        
     }
     end {
         
-    }
-    
+    }    
 }

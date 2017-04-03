@@ -52,7 +52,8 @@
     )
 
     Begin {
-
+        # --- Test for vRA API version
+        xRequires -Version 7.0
     }
 
     Process {
@@ -139,11 +140,9 @@
             throw
 
         }
-
     }
 
     End {
 
     }
-
 }
