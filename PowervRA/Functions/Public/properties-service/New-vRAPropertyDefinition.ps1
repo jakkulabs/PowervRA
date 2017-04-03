@@ -205,6 +205,7 @@
                 }
             }
             if($Datetime) {
+                # TODO - Datetime needs to be a string as UniversalSortableDateTimePattern
                 New-DynamicParam -Name "MinimumValue" -Type DateTime -ParameterSet "Datetime" -DPDictionary $Dictionary
                 New-DynamicParam -Name "MaximumValue" -Type DateTime -ParameterSet "Datetime" -DPDictionary $Dictionary
             }
