@@ -8,7 +8,8 @@ theme: readthedocs
 copyright: "PowervRA is licenced under the <a href='https://github.com/jakkulabs/PowervRA/raw/master/LICENSE'>MIT license"
 pages:
 - 'Home' : 'index.md'
-- 'Change log' : 'CHANGELOG.md'
+- 'Change log' : 'changelog.md'
+- 'Build' : 'build.md
 - 'Functions':
     - Add-vRAPrincipalToTenantRole : functions/Add-vRAPrincipalToTenantRole.md
     - Add-vRAReservationNetwork : functions/Add-vRAReservationNetwork.md
@@ -24,6 +25,9 @@ pages:
     - Get-vRACatalogItem : functions/Get-vRACatalogItem.md
     - Get-vRACatalogItemRequestTemplate : functions/Get-vRACatalogItemRequestTemplate.md
     - Get-vRACatalogPrincipal : functions/Get-vRACatalogPrincipal.md
+    - Get-vRAComponentRegistryService : functions/Get-vRAComponentRegistryService.md
+    - Get-vRAComponentRegistryServiceEndpoint : functions/Get-vRAComponentRegistryServiceEndpoint.md
+    - Get-vRAComponentRegistryServiceStatus : functions/Get-vRAComponentRegistryServiceStatus.md
     - Get-vRAContent : functions/Get-vRAContent.md
     - Get-vRAContentData : functions/Get-vRAContentData.md
     - Get-vRAContentType : functions/Get-vRAContentType.md

@@ -3,6 +3,9 @@
 ## SYNOPSIS
 Get information about vRA services
 
+Deprecated.
+Use Get-vRAComponentRegistryServiceStatus instead.
+
 ## SYNTAX
 
 ```
@@ -11,7 +14,10 @@ Get-vRAApplianceServiceStatus [[-Name] <String[]>] [[-Limit] <String>]
 
 ## DESCRIPTION
 Get information about vRA services.
-These are the same services that you will see via the service tab
+These are the same services that you will see via the service tab 
+
+Deprecated.
+Use Get-vRAComponentRegistryServiceStatus instead.
 
 ## EXAMPLES
 
