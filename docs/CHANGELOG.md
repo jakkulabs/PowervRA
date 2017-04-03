@@ -1,6 +1,5 @@
-# Changelog
+## Version 2.0.0
 
-## v2.0.0
 * PowerShell Core v6.0.0-alpha.14 Support
 * Module restructured to use ps1 files for functions instead of psm1 files
 * Private functions are now actually private

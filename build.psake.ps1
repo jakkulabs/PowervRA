@@ -155,7 +155,7 @@ pages:
 - 'Change log' : 'CHANGELOG.md'
 - 'Build' : 'build.md'
 - 'Functions':
-$($Functions -join "`r`n")
+$($Functions -join "`r")
 "@
 
     $Template | Set-Content -Path $Mkdocs -Force
@@ -187,8 +187,8 @@ Task IncrementVersion {
         # --- Update change log
         $ReleaseNotes = "$ENV:BHProjectPath\RELEASE.md"
         $ChangeLog = "$DocsDirectory\CHANGELOG.md"
-        $Header = "# Version $($StepVersion)`r`n"
-        $Header, (Get-Content -Path $ReleaseNotes),"`r`n", (Get-Content $ChangeLog ) | Set-Content $ChangeLog
+        $Header = "# Version $($StepVersion)`r"
+        $Header, (Get-Content -Path $ReleaseNotes -Raw),"`r", (Get-Content $ChangeLog -Raw) | Set-Content $ChangeLog
     }
 }
 
