@@ -26,7 +26,7 @@ git commit -m "Invoke a build [Build.Patch]"
 
 There can only be one task per commit and therefore only one tag specified in the commit message. Each build task is covered in more detail below.
 
-Upon a succesful build we automatically publish any new or changed documentation to our [ReadTheDocs.og](https://powervra.readthedocs.io/en/latest/) site. The build of the
+Upon a succesful build we automatically publish any new or changed documentation to our [ReadTheDocs](https://powervra.readthedocs.io/en/latest/) site. The build of the
 documentation site is external to the PowervRA build.
 
 ### Release
