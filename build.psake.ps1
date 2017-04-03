@@ -4,6 +4,11 @@
 # --- Add any parameters from build.ps1
 properties {
     $CurrentVersion = [version](Get-Metadata -Path $env:BHPSModuleManifest)
+
+    if ($ENV:BHCommitMessage -match "!PSAPassOnWarning") {
+
+        $ScriptAnalysisFailBuildOnSeverityLevel = "Error"
+    }
 }
 
 # --- Define the build tasks
