@@ -152,7 +152,8 @@ theme: readthedocs
 copyright: "PowervRA is licenced under the <a href='$($RepoUrl)/raw/master/LICENSE'>MIT license"
 pages:
 - 'Home' : 'index.md'
-- 'Change log' : 'CHANGELOG.md'
+- 'Change log' : 'changelog.md'
+- 'Build' : ' build.md
 - 'Functions':
 $($Functions -join "`r`n")
 "@
@@ -185,7 +186,7 @@ Task IncrementVersion {
 
         # --- Update change log
         $ReleaseNotes = "$ENV:BHProjectPath\RELEASE.md"
-        $ChangeLog = "$DocsDirectory\CHANGELOG.md"
+        $ChangeLog = "$DocsDirectory\changelog.md"
         $Header = "# Version $($StepVersion)`r`n"
         $Header, (Get-Content -Path $ReleaseNotes),"`r`n", (Get-Content $ChangeLog ) | Set-Content $ChangeLog
     }
@@ -229,7 +230,7 @@ Task CommitChanges {
     cmd /c "git add -A 2>&1"
     
     Write-Output "git commit -m"
-    cmd /c "git commit -m ""AppVeyor post-build commit[ci skip]"" 2>&1"
+    cmd /c "git commit -m ""AppVeyor post-build commit [ci skip]"" 2>&1"
     
     Write-Output "git status"
     cmd /c "git status 2>&1"
