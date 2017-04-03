@@ -6,28 +6,10 @@
     A wrapper script for build.psake.ps1
 
     .DESCRIPTION
-    This script is a wrapper for the processes defined in build.psake.ps1. For this process to be succesful the following modules are required:
-
-    - Psake
-    - Pester
-    - PSScriptAnalyzer
-    - PlatyPS
-    - BuildHelpers
-
-    Each task in build.psake.ps1 relies on settings provided in build.settings.ps1
-
-    By default the build task will be executed but it is possible to select individual tasks. See the Task parameter for more information.
+    This script is a wrapper for the processes defined in build.psake.ps1.
 
     .PARAMETER Task
-    The build task that needs to be executed. The value of this parameter can be:
-
-    - Build
-    - PrepareRelease
-    - Analyze
-    - UpdateModuleManifest
-    - UpdateDocumentation
-    - BumpVersion
-    - Test
+    The build task that needs to be executed.
 
     The default value is Build which will execute the following tasks: Analyze, UpdateModuleManifest, UpdateDocumentation
 
@@ -51,37 +33,19 @@
     .\build.ps1
 
     .Example 
-    .\build.ps1 -Task PrepareRelease
-
-    .Example 
-    .\build.ps1 -Task Analyze
-
-    .Example 
-    .\build.ps1 -Task UpdateModuleManifest
-
-    .Example 
-    .\build.ps1 -Task UpdateDocumentation
-
-    .Example 
-    .\build.ps1 -Task BumpVersion
-
-    .Example 
-    .\build.ps1 -Task Test
+    .\build.ps1 -Task Build
 
 #>
 
 [Cmdletbinding()]
-
 Param (
-
     [Parameter()]    
-    [ValidateSet("Build", "PrepareRelease", "Analyze", "UpdateModuleManifest", "UpdateDocumentation", "UpdateChangelog", "IncrementVersion", "Test")]
+    [ValidateSet("Test", "Build", "Release", "Analyze", "UpdateModuleManifest", "UpdateDocumentation", "IncrementVersion")]
     [String]$Task,
 
     [Parameter()]
     [ValidateSet("PATCH", "MINOR", "MAJOR")]
     [String]$Increment
-
 )
 
 # --- Set Build Environment
@@ -124,6 +88,7 @@ if ($ENV:BHBuildSystem -eq "AppVeyor") {
             break
         }
         "\[Release\]" {
+            Write-Output "Build Phase: [Release]"                        
             $PsakeBuildParameters.TaskList = "Release"            
             break
         }
@@ -131,8 +96,10 @@ if ($ENV:BHBuildSystem -eq "AppVeyor") {
             Write-Output "Trigger not found in commit message, continuing with default task"
         }
     }
+} else {
+    Write-Output "BuildSystem is not Appveyor, continuing with build using parameters"
 }
 
 # --- Start Build
 Invoke-Psake @PsakeBuildParameters -Verbose:$VerbosePreference
-exit ( [int]( -not $psake.build_success ) )
+exit ([int](-not $psake.build_success))
