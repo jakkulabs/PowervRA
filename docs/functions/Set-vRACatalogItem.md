@@ -7,13 +7,13 @@ Update a vRA catalog item
 
 ### Standard (Default)
 ```
-Set-vRACatalogItem -Id <String> [-Quota <Int32>] [-Service <String>] [-NewAndNoteworthy <Boolean>] [-WhatIf]
- [-Confirm]
+Set-vRACatalogItem -Id <String> [-Quota <Int32>] [-Service <String>] [-NewAndNoteworthy <Boolean>]
+ [-IconId <String>] [-WhatIf] [-Confirm]
 ```
 
 ### SetStatus
 ```
-Set-vRACatalogItem -Id <String> [-Status <String>] [-WhatIf] [-Confirm]
+Set-vRACatalogItem -Id <String> [-Status <String>] [-IconId <String>] [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -39,6 +39,11 @@ Set-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e -Service "Default Se
 ### -------------------------- EXAMPLE 4 --------------------------
 ```
 Set-vRACatalogItem -Id dab4e578-57c5-4a30-b3b7-2a5cefa52e9e -NewAndNoteworthy $false
+```
+
+### -------------------------- EXAMPLE 5 --------------------------
+```
+Get-vRACatalogItem  -Name "Create cluster" | Set-vRACatalogItem -IconId "cafe_icon_CatalogItem01" -Confirm:$false
 ```
 
 TODO:
@@ -118,6 +123,23 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IconId
+The Icon Id of the catalog item.
+This must already exist in the Service Catalog.
+Typically it would have already been created via Import-vRAServiceIcon
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -7,8 +7,8 @@ Create a vRA Service for the current tenant
 
 ### Standard (Default)
 ```
-New-vRAService -Name <String> [-Description <String>] [-Owner <String>] [-SupportTeam <String>] [-WhatIf]
- [-Confirm]
+New-vRAService -Name <String> [-Description <String>] [-Owner <String>] [-SupportTeam <String>]
+ [-IconId <String>] [-WhatIf] [-Confirm]
 ```
 
 ### JSON
@@ -36,7 +36,7 @@ New-vRAService -Name "New Service"
 
 ### -------------------------- EXAMPLE 2 --------------------------
 ```
-New-vRAService -Name "New Service" -Description "A new service" -Owner user@vsphere.local -SupportTeam customgroup@vsphere.local
+New-vRAService -Name "New Service" -Description "A new service" -Owner user@vsphere.local -SupportTeam customgroup@vsphere.local -IconId "cafe_icon_Service01"
 ```
 
 ### -------------------------- EXAMPLE 3 --------------------------
@@ -112,6 +112,23 @@ Accept wildcard characters: False
 
 ### -SupportTeam
 The support team of the service
+
+```yaml
+Type: String
+Parameter Sets: Standard
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IconId
+The Icon Id of the service.
+This must already exist in the Service Catalog.
+Typically it would have already been created via Import-vRAServiceIcon
 
 ```yaml
 Type: String

@@ -15,6 +15,7 @@ pages:
     - Add-vRAReservationStorage : functions/Add-vRAReservationStorage.md
     - Connect-vRAServer : functions/Connect-vRAServer.md
     - Disconnect-vRAServer : functions/Disconnect-vRAServer.md
+    - Export-vRAIcon : functions/Export-vRAIcon.md
     - Export-vRAPackage : functions/Export-vRAPackage.md
     - Get-vRAApplianceServiceStatus : functions/Get-vRAApplianceServiceStatus.md
     - Get-vRAAuthorizationRole : functions/Get-vRAAuthorizationRole.md
@@ -31,6 +32,7 @@ pages:
     - Get-vRAEntitlement : functions/Get-vRAEntitlement.md
     - Get-vRAExternalNetworkProfile : functions/Get-vRAExternalNetworkProfile.md
     - Get-vRAGroupPrincipal : functions/Get-vRAGroupPrincipal.md
+    - Get-vRAIcon : functions/Get-vRAIcon.md
     - Get-vRANATNetworkProfile : functions/Get-vRANATNetworkProfile.md
     - Get-vRANetworkProfileIPAddressList : functions/Get-vRANetworkProfileIPAddressList.md
     - Get-vRANetworkProfileIPRangeSummary : functions/Get-vRANetworkProfileIPRangeSummary.md
@@ -62,6 +64,7 @@ pages:
     - Get-vRATenantRole : functions/Get-vRATenantRole.md
     - Get-vRAUserPrincipal : functions/Get-vRAUserPrincipal.md
     - Get-vRAVersion : functions/Get-vRAVersion.md
+    - Import-vRAIcon : functions/Import-vRAIcon.md
     - Import-vRAPackage : functions/Import-vRAPackage.md
     - Invoke-vRARestMethod : functions/Invoke-vRARestMethod.md
     - New-vRABusinessGroup : functions/New-vRABusinessGroup.md
@@ -84,6 +87,7 @@ pages:
     - Remove-vRABusinessGroup : functions/Remove-vRABusinessGroup.md
     - Remove-vRAExternalNetworkProfile : functions/Remove-vRAExternalNetworkProfile.md
     - Remove-vRAGroupPrincipal : functions/Remove-vRAGroupPrincipal.md
+    - Remove-vRAIcon : functions/Remove-vRAIcon.md
     - Remove-vRANATNetworkProfile : functions/Remove-vRANATNetworkProfile.md
     - Remove-vRAPackage : functions/Remove-vRAPackage.md
     - Remove-vRAPrincipalFromTenantRole : functions/Remove-vRAPrincipalFromTenantRole.md

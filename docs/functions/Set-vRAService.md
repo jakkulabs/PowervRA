@@ -7,7 +7,7 @@ Set a vRA Service
 
 ```
 Set-vRAService [-Id] <String> [[-Name] <String>] [[-Description] <String>] [[-Status] <String>]
- [[-Owner] <String>] [[-SupportTeam] <String>] [-WhatIf] [-Confirm]
+ [[-Owner] <String>] [[-SupportTeam] <String>] [[-IconId] <String>] [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -51,6 +51,11 @@ Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Descr
 ### -------------------------- EXAMPLE 6 --------------------------
 ```
 Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Description "updated from posh" -Owner "user@vsphere.local" -SupportTeam "support@vsphere.local" -Status INACTIVE
+```
+
+### -------------------------- EXAMPLE 7 --------------------------
+```
+Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Description "updated from posh" -Owner "user@vsphere.local" -SupportTeam "support@vsphere.local" -Status INACTIVE -IconId "cafe_icon_Service01"
 ```
 
 ## PARAMETERS
@@ -140,6 +145,23 @@ Aliases:
 
 Required: False
 Position: 6
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IconId
+The Icon Id of the service.
+This must already exist in the Service Catalog.
+Typically it would have already been created via Import-vRAServiceIcon
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: 7
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
