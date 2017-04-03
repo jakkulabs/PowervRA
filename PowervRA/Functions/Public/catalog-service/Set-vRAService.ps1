@@ -32,6 +32,9 @@
     .PARAMETER SupportTeam
     The support team of the service
 
+    .PARAMETER IconId
+    The Icon Id of the service. This must already exist in the Service Catalog. Typically it would have already been created via Import-vRAServiceIcon
+
     .INPUTS
     System.String
 
@@ -56,6 +59,8 @@
     .EXAMPLE   
     Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Description "updated from posh" -Owner "user@vsphere.local" -SupportTeam "support@vsphere.local" -Status INACTIVE
     
+    .EXAMPLE   
+    Set-vRAService -Id 25c0f3db-5906-4d42-8633-7b05f695432c -Name "Default 1" -Description "updated from posh" -Owner "user@vsphere.local" -SupportTeam "support@vsphere.local" -Status INACTIVE -IconId "cafe_icon_Service01"
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")][OutputType('System.Management.Automation.PSObject')]
 
@@ -83,7 +88,11 @@
 
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-        [String]$SupportTeam              
+        [String]$SupportTeam,
+
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullOrEmpty()]
+        [String]$IconId          
         
     )    
 
@@ -171,6 +180,13 @@
 
             }
         }
+
+        if ($PSBoundParameters.ContainsKey("IconId")){
+
+                Write-Verbose -Message "Updating IconId: $($Service.iconId) >> $($IconId)"
+                $Service.iconId = $IconId
+
+            }
 
         # --- Update the existing service
         try {
