@@ -160,7 +160,7 @@ pages:
 - 'Change log' : 'CHANGELOG.md'
 - 'Build' : 'build.md'
 - 'Functions':
-$($Functions -join "`r")
+$($Functions -join "`r`n")
 "@
 
     $Template | Set-Content -Path $Mkdocs -Force
