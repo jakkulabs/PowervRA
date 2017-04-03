@@ -27,17 +27,35 @@
     .PARAMETER Encrypted
     Switch to flag the Property as Encrypted
     
-    .PARAMETER Switch
+    .PARAMETER String
     Switch to flag the Property type as String
 
-    .PARAMETER SwitchDisplay
+    .PARAMETER StringDisplay
+    The form display option for the Property
+
+    .PARAMETER Boolean
+    Switch to flag the Property type as Boolean
+
+    .PARAMETER BooleanDisplay
     The form display option for the Property
 
     .PARAMETER Integer
     Switch to flag the Property type as Integer
 
     .PARAMETER IntegerDisplay
-    The form display option for integer
+    The form display option for Integer
+
+    .PARAMETER Decimal
+    Switch to flag the Property type as Decimal
+
+    .PARAMETER DecimalDisplay
+    The form display option for Decimal
+
+    .PARAMETER Datetime
+    Switch to flag the Property type as Datetime
+
+    .PARAMETER DatetimeDisplay
+    The form display option for Datetime
     
     .PARAMETER JSON
     Property Definition to send in JSON format
