@@ -31,9 +31,7 @@ documentation site is external to the PowervRA build.
 
 ### Release
 
-**Not implemeneted**
-
-Releases always happen from the **master** branch of our repository. We control the changes to this branch by using pull requests. Once a PR has been approved adding the 
+Releases always happen from the **master** branch of our repository. We control the changes to this branch by using pull requests. Once a PR has been approved, adding the 
 [Release] tag to the commit message will instruct the build script to invoke the Release task. This task will only execute when the current branch is **master** and it's goal
 is to create a new GitHub release and publish the module to the PowerShell Gallery.
 
@@ -67,6 +65,7 @@ git commit -m "Skip ci build [ci skip]"
 * Update the Module Manifest FunctionsToExport section with any new functions
 * Update/Add any markdown documents
 * Commit any changes back to the repository
+* Creates an artifact and pushes it to appveyor
 
 #### Example
 ```
@@ -83,6 +82,7 @@ git commit -m "Invoke standard build [Build]"
 * Infremement the Major version of appveyor.yml
 * Update the CHANGELOG.md from RELEASE.md
 * Commit any changes back to the repository
+* Creates an artifact and pushes it to appveyor
 
 #### Example
 ```
@@ -99,6 +99,7 @@ git commit -m "Build and incremement the Major version of the module [Build.Majo
 * Infremement the Minor version of appveyor.yml
 * Update the CHANGELOG.md from RELEASE.md
 * Commit any changes back to the repository
+* Creates an artifact and pushes it to appveyor
 
 #### Example
 ```
@@ -115,6 +116,7 @@ git commit -m "Build and incremement the Minor version of the module [Build.Mino
 * Infremement the Patch version of appveyor.yml
 * Update the CHANGELOG.md from RELEASE.md
 * Commit any changes back to the repository
+* Creates an artifact and pushes it to appveyor
 
 #### Example
 ```
@@ -124,11 +126,11 @@ git commit -m "Build and incremement the Patch version of the module [Build.Patc
 
 ### [Release]
 
-**Not implemented**
-
 * Will only run on the Master branch
+* Creates an asset and pushes it to appveyor
 * Creates GitHub tag and release with an asset
 * Publish the module to the PowerShellGallery
+* Creates an artifact and pushes it to appveyor
 
 #### Example
 ```
