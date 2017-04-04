@@ -8,37 +8,37 @@ Create a custom Property Definition
 ### String
 ```
 New-vRAPropertyDefinition -Name <String> [-Label <String>] [-Description <String>] [-Tenant <String>]
- [-Index <Int32>] [-Required] [-Encrypted] [-ExecuteAPICall] [-String] -StringDisplay <String>
+ [-Index <Int32>] [-Required] [-Encrypted] [-String] -StringDisplay <String> [-WhatIf] [-Confirm]
 ```
 
 ### Boolean
 ```
 New-vRAPropertyDefinition -Name <String> [-Label <String>] [-Description <String>] [-Tenant <String>]
- [-Index <Int32>] [-Required] [-Encrypted] [-ExecuteAPICall] [-Boolean] -BooleanDisplay <String>
+ [-Index <Int32>] [-Required] [-Encrypted] [-Boolean] -BooleanDisplay <String> [-WhatIf] [-Confirm]
 ```
 
 ### Integer
 ```
 New-vRAPropertyDefinition -Name <String> [-Label <String>] [-Description <String>] [-Tenant <String>]
- [-Index <Int32>] [-Required] [-Encrypted] [-ExecuteAPICall] [-Integer] -IntegerDisplay <String>
+ [-Index <Int32>] [-Required] [-Encrypted] [-Integer] -IntegerDisplay <String> [-WhatIf] [-Confirm]
 ```
 
 ### Decimal
 ```
 New-vRAPropertyDefinition -Name <String> [-Label <String>] [-Description <String>] [-Tenant <String>]
- [-Index <Int32>] [-Required] [-Encrypted] [-ExecuteAPICall] [-Decimal] -DecimalDisplay <String>
+ [-Index <Int32>] [-Required] [-Encrypted] [-Decimal] -DecimalDisplay <String> [-WhatIf] [-Confirm]
 ```
 
 ### Datetime
 ```
 New-vRAPropertyDefinition -Name <String> [-Label <String>] [-Description <String>] [-Tenant <String>]
- [-Index <Int32>] [-Required] [-Encrypted] [-ExecuteAPICall] [-Datetime] -DatetimeDisplay <String>
+ [-Index <Int32>] [-Required] [-Encrypted] [-Datetime] -DatetimeDisplay <String> [-WhatIf] [-Confirm]
 ```
 
 ### JSON
 ```
 New-vRAPropertyDefinition -Name <String> [-Label <String>] [-Description <String>] [-Tenant <String>]
- [-Index <Int32>] [-Required] [-Encrypted] [-ExecuteAPICall] -JSON <String>
+ [-Index <Int32>] [-Required] [-Encrypted] -JSON <String> [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -181,23 +181,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ExecuteAPICall
-{{Fill ExecuteAPICall Description}}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: 
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -String
-{{Fill String Description}}
+Switch to flag the Property type as String
 
 ```yaml
 Type: SwitchParameter
@@ -212,7 +197,7 @@ Accept wildcard characters: False
 ```
 
 ### -StringDisplay
-{{Fill StringDisplay Description}}
+The form display option for the Property
 
 ```yaml
 Type: String
@@ -227,7 +212,7 @@ Accept wildcard characters: False
 ```
 
 ### -Boolean
-{{Fill Boolean Description}}
+Switch to flag the Property type as Boolean
 
 ```yaml
 Type: SwitchParameter
@@ -242,7 +227,7 @@ Accept wildcard characters: False
 ```
 
 ### -BooleanDisplay
-{{Fill BooleanDisplay Description}}
+The form display option for the Property
 
 ```yaml
 Type: String
@@ -272,7 +257,7 @@ Accept wildcard characters: False
 ```
 
 ### -IntegerDisplay
-The form display option for integer
+The form display option for Integer
 
 ```yaml
 Type: String
@@ -287,7 +272,7 @@ Accept wildcard characters: False
 ```
 
 ### -Decimal
-{{Fill Decimal Description}}
+Switch to flag the Property type as Decimal
 
 ```yaml
 Type: SwitchParameter
@@ -302,7 +287,7 @@ Accept wildcard characters: False
 ```
 
 ### -DecimalDisplay
-{{Fill DecimalDisplay Description}}
+The form display option for Decimal
 
 ```yaml
 Type: String
@@ -317,7 +302,7 @@ Accept wildcard characters: False
 ```
 
 ### -Datetime
-{{Fill Datetime Description}}
+Switch to flag the Property type as Datetime
 
 ```yaml
 Type: SwitchParameter
@@ -332,7 +317,7 @@ Accept wildcard characters: False
 ```
 
 ### -DatetimeDisplay
-{{Fill DatetimeDisplay Description}}
+The form display option for Datetime
 
 ```yaml
 Type: String
@@ -358,6 +343,37 @@ Required: True
 Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

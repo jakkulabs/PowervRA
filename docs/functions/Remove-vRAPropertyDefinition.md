@@ -24,10 +24,17 @@ Remove-vRAPropertyDefinition -Id Hostname
 
 ### -------------------------- EXAMPLE 2 --------------------------
 ```
+# Remove the property "Hostname" using the pipeline
+```
+
+Get-vRAPropertyDefinition -Id Hostname | Remove-vRAPropertyDefinition -Confirm:$false
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
 # Remove the property "Hostname" from the tenant "Development"
 ```
 
-Get-vRAPropertyDefinition -Id "Hostname" -Tenant Development
+Remove-vRAPropertyDefinition -Id "Hostname" -Tenant Development
 
 ## PARAMETERS
 
