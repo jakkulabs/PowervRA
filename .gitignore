@@ -1,3 +1,4 @@
 *.xml
+*.zip
 tests/*.json
 
