@@ -1,11 +1,15 @@
 version: 2.0.0.{build}
 environment:
-  access_token:
+  gh_token:
     secure: 3WtkOGm4k++uL56CWe9sJF6HzFAUs7BkM7mvbqdKhkwXOFDtZFIC0k7hM5eGmfLj
+  psg_token:
+    secure: g/oJpBtSPY2iV9FeothbxDMD+j11wA7ZHLrHLcd54mKhRzyEOcABk2+BKA1pU8ul
 branches:
   only:
   - development
-image: WMF 5
+  - master
+skip_branch_with_pr: true
+skip_tags: true
 init:
   - ps: Install-PackageProvider NuGet -Force | Out-Null
 install:
