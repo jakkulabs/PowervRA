@@ -133,6 +133,15 @@
       "ExportFile": "C:\\Icons\\Service01IconExport.png"
     }
   },
+   "PropertiesService":
+  {
+    "PropertyDefinition" : {
+
+      "Name" : "PropertyDefinition01",
+      "Label": "Check this box",
+      "BooleanDisplay": "CHECKBOX"
+    }
+  },
   "Principal":
   {
     "UserPrincipalId": "TeanantAdmin02@vsphere.local",
