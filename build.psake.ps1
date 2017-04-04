@@ -5,16 +5,16 @@
 properties {
     $CurrentVersion = [version](Get-Metadata -Path $env:BHPSModuleManifest)
 
-    if ($ENV:BHCommitMessage -match "!PSAPassOnWarning") {
-
-        $ScriptAnalysisFailBuildOnSeverityLevel = "Error"
+    if ($Increment) {
+        $StepVersion = [version](Step-Version $CurrentVersion -By $Increment)
     }
 }
 
 # --- Define the build tasks
 Task Default -depends Test
 Task Test -depends Init, Analyze, TestHelp
-Task Build -depends Test, UpdateModuleManifest, UpdateDocumentation, IncrementVersion, CommitChanges
+Task Build -depends Test, UpdateModuleManifest, UpdateDocumentation, IncrementVersion, CommitChanges, CreateArtifact
+Task Release -depends CreateArtifact, CreateGitHubRelease, PublishToPSGallery
 
 Task Init {
 
@@ -122,6 +122,10 @@ Task UpdateModuleManifest {
 
 Task UpdateDocumentation {
 
+    if ($ENV:BHBranchName -eq "master") {
+        Write-Output "This task cannot be executed on the master branch. Skpping task"
+    }
+
     Write-Output "Updating Markdown help"
     $ModuleInfo = Import-Module $ENV:BHPSModuleManifest -Global -Force -PassThru
     $FunctionsPath = "$DocsDirectory\functions"
@@ -150,11 +154,11 @@ Task UpdateDocumentation {
 ---
 
 site_name: $($ModuleName)
-repo_url: $($RepoUrl)
+repo_url: $($RepositoryUrl)
 site_author: $($ModuleAuthor)
 edit_uri: edit/master/docs/
 theme: readthedocs
-copyright: "PowervRA is licenced under the <a href='$($RepoUrl)/raw/master/LICENSE'>MIT license"
+copyright: "PowervRA is licenced under the <a href='$($RepositoryUrl)/raw/master/LICENSE'>MIT license"
 pages:
 - 'Home' : 'index.md'
 - 'Change log' : 'CHANGELOG.md'
@@ -169,12 +173,13 @@ $($Functions -join "`r`n")
 
 Task IncrementVersion {
 
-    if (!$Increment) {
-        Write-Output "Increment must be specified. Skipping task"
-        return
+    if ($ENV:BHBranchName -eq "master") {
+        Write-Output "This task cannot be executed on the master branch. Skpping task"
     }
 
-    $StepVersion = [version](Step-Version $CurrentVersion -By $Increment)
+    if (!$StepVersion) {
+        Write-Output "StepVersion not specified. Skipping task"
+    }
 
     if ([version]$StepVersion -gt [version]$CurrentVersion) {
 
@@ -193,7 +198,7 @@ Task IncrementVersion {
         $ReleaseNotes = "$ENV:BHProjectPath\RELEASE.md"
         $ChangeLog = "$DocsDirectory\CHANGELOG.md"
         $Header = "# Version $($StepVersion)`r"
-        $Header, (Get-Content -Path $ReleaseNotes -Raw),"`r", (Get-Content $ChangeLog -Raw) | Set-Content $ChangeLog
+        $Header, (Get-Content -Path $ReleaseNotes -Raw), "`r", (Get-Content $ChangeLog -Raw) | Set-Content $ChangeLog
     }
 }
 
@@ -209,11 +214,15 @@ Task CommitChanges {
         return
     }
 
+    if ($ENV:BHBranchName -eq "master") {
+        Write-Output "This task cannot be executed on the master branch. Skpping task"
+    }
+
     If ($ENV:BHBuildSystem -eq 'AppVeyor') {
         Write-Output "git config --global credential.helper store"
         cmd /c "git config --global credential.helper store 2>&1"
         
-        Add-Content "$ENV:USERPROFILE\.git-credentials" "https://$($ENV:access_token):x-oauth-basic@github.com`n"
+        Add-Content "$ENV:USERPROFILE\.git-credentials" "https://$($ENV:gh_token):x-oauth-basic@github.com`n"
         
         Write-Output "git config --global user.email"
         cmd /c "git config --global user.email ""$($ENV:BHProjectName)-$($ENV:BHBranchName)-$($ENV:BHBuildSystem)@jakkulabs.com"" 2>&1"
@@ -242,4 +251,76 @@ Task CommitChanges {
     
     Write-Output "git push origin $ENV:BHBranchName"    
     cmd /c "git push origin $ENV:BHBranchName 2>&1"
+}
+
+#################
+# Task: Release #
+#################
+
+Task CreateArtifact {
+
+    $ModuleManifestVersion = Get-Metadata -Path $ENV:BHPSModuleManifest -PropertyName "ModuleVersion"
+    $ArtifactDestination = "$($ENV:BHProjectPath)\$($ENV:BHProjectName).v$($ModuleManifestVersion).zip"  
+
+    if ((Test-Path -Path $ArtifactDestination)) {
+        Remove-Item -Path $ArtifactDestination -Force | Out-Null
+    }
+
+    Write-Output "Compressing module: $($ArtifactDestination)"
+    Compress-Archive -Path $ENV:BHPSModulePath -DestinationPath $ArtifactDestination -Force -Confirm:$false -Verbose:$VerbosePreference | Out-Null
+
+    if ($ENV:BHBuildSystem -eq "AppVeyor") {
+        Write-Output "Pushing asset to AppVeyor: $($ArtifactDestination)"
+        Push-AppveyorArtifact $ArtifactDestination
+    }
+}
+
+Task CreateGitHubRelease {
+
+    if ($ENV:BHBuildSystem -eq "Unknown"){
+        Write-Output "Could not detect build system. Skipping task"
+        return
+    }
+
+    if ($ENV:APPVEYOR_REPO_PROVIDER -notlike 'github') {
+        Write-Output "Repo provider '$ENV:APPVEYOR_REPO_PROVIDER'. Skipping task"
+        return
+    }
+
+    if ($ENV:BHBranchName -ne "master") {
+        Write-Output "Not in master branch. Skipping task"
+    }
+
+    Set-GitHubSessionInformation -UserName $OrgName -APIKey $ENV:gh_token -Verbose:$VerbosePreference | Out-Null
+
+    $ModuleManifestVersion = Get-Metadata -Path $ENV:BHPSModuleManifest -PropertyName "ModuleVersion"
+    $AssetPath = "$($ENV:BHProjectPath)\$($ENV:BHProjectName).v$($ModuleManifestVersion).zip"  
+    
+    $Asset = @{
+        "Path" = $AssetPath
+        "Content-Type" = "application/zip"
+    }
+
+    $GitHubReleaseManagerParameters = @{
+        Repository = $RepositoryName
+        Name = $ModuleName
+        Description = (Get-Content -Path "$ENV:BHProjectPath\RELEASE.md" -Raw)
+        Target = $ENV:BHBranchName
+        Tag = "v$($ModuleManifestVersion)"
+        Asset = $Asset
+    }
+
+    Write-Output "Creating GitHub release with the following parameters:"
+    Write-Output $GitHubReleaseManagerParameters
+
+    New-GitHubRelease @GitHubReleaseManagerParameters -Verbose:$VerbosePreference -Confirm:$false | Out-Null
+}
+
+Task PublishToPSGallery {
+
+    if ($ENV:BHBranchName -ne "master") {
+        Write-Output "Not in master branch. Skipping task"
+    }
+
+    Publish-Module -Path $ENV:BHPSModuleManifest -NuGetApiKey $ENV:psg_token -Confirm:$false -Verbose:$VerbosePreference | Out-Null
 }

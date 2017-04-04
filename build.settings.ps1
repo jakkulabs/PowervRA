@@ -6,6 +6,8 @@ Properties {
 
 # ----------------- General -------------------------------------
     $DocsDirectory = "$ENV:BHProjectPath\docs"
+    $ModuleName = "PowervRA"
+    $ModuleAuthor = "JakkuLabs"
 
 # ----------------- Script Analyzer ------------------------------
     # Should be Warning by default. Can be overridden on demand by using
@@ -14,9 +16,8 @@ Properties {
     $ScriptAnalysisFailBuildOnSeverityLevel = 'Warning'
     $ScriptAnalyzerSettingsPath = "$PSScriptRoot\PSScriptAnalyzerSettings.psd1"
 
-# ----------------- MKdocs ---------------------------------------
-    $RepoUrl = "https://github.com/jakkulabs/PowervRA"
-    $ModuleAuthor = "JakkuLabs"
-    $ModuleName = "PowervRA"
-
+# ----------------- GitHub ---------------------------------------
+    $OrgName = "JakkuLabs"
+    $RepositoryName = "PowervRA"
+    $RepositoryUrl = "https://github.com/jakkulabs/PowervRA"
 }
