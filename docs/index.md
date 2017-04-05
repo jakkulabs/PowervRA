@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/na25wbus68wb24y3?svg=true)](https://ci.appveyor.com/project/chelnak/powervra)
+[![Build status](https://ci.appveyor.com/api/projects/status/497h4hx78ng5tji0?svg=true)](https://ci.appveyor.com/project/JakkuLabs/powervra)
 
 # Welcome to PowervRA
 PowervRA is a PowerShell module built on top of the services exposed by the vRealize Automation 7 REST API.
@@ -26,7 +26,7 @@ Note: this module is not in any way developed or supported by anyone officially 
 
 #### Core
 
-* 6.0.0-alpha.14**
+* 6.0.0-alpha.15**
 
 ** To get up and running with PowerShell Core follow the instructions for your operating system [here](https://github.com/PowerShell/PowerShell/blob/master/README.md#get-powershell).
 
@@ -43,6 +43,19 @@ PowerShell v4 users: Try this handy one liner to download and install the module
 ```
 (new-object Net.WebClient).DownloadString("https://raw.githubusercontent.com/jakkulabs/PowervRA/master/Get-PowervRA.ps1") | iex
 ```
+
+## Docker
+
+As of version 2.0.0 we now have our own [docker image](https://hub.docker.com/r/jakkulabs/powervra/).
+
+Getting started is easy, just run the following commands:
+
+```
+docker pull jakkulabs/powervra
+docker run --rm -it jakkulabs/powervra
+```
+
+For more information see [this readme](docker/README.md).
 
 ## Quick Start
 

@@ -18,6 +18,9 @@
     .PARAMETER Priority
     The priority of the reservation
 
+    .PARAMETER Enabled
+    Enable or disable the reservation
+
     .PARAMETER Quota
     The number of machines that can be provisioned in the reservation
 
@@ -572,7 +575,7 @@
                 Write-Verbose -Message "Preparing PUT to $($URI)"  
 
                 # --- Run vRA REST Request
-                $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body ($Reservation | ConvertTo-Json -Depth 100)
+                Invoke-vRARestMethod -Method PUT -URI $URI -Body ($Reservation | ConvertTo-Json -Depth 100) -Verbose:$VerbosePreference | Out-Null
 
                 Write-Verbose -Message "SUCCESS"
 

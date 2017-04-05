@@ -55,12 +55,8 @@
 
                             $URI = "/reservation-service/api/reservations/$($ReservationId)"
             
-                            Write-Verbose -Message "Preparing DELETE to $($URI)"
-
-                            $Response = Invoke-vRARestMethod -Method DELETE -URI "$($URI)"
-
-                            Write-Verbose -Message "SUCCESS"
-
+                            Invoke-vRARestMethod -Method DELETE -URI "$($URI)" -Verbose:$VerbosePreference | Out-Null
+                            
                         }
 
                     }
@@ -79,11 +75,7 @@
 
                             $URI = "/reservation-service/api/reservations/$($ReservationId)"
             
-                            Write-Verbose -Message "Preparing DELETE to $($URI)"
-
-                            $Response = Invoke-vRARestMethod -Method DELETE -URI "$($URI)"
-
-                            Write-Verbose -Message "SUCCESS"
+                            Invoke-vRARestMethod -Method DELETE -URI "$($URI)"  -Verbose:$VerbosePreference | Out-Null
 
                         }
 

@@ -1,13 +1,18 @@
-version: 2.0.0.{build}
+version: 2.1.0.{build}
+environment:
+  gh_token:
+    secure: 3WtkOGm4k++uL56CWe9sJF6HzFAUs7BkM7mvbqdKhkwXOFDtZFIC0k7hM5eGmfLj
+  psg_token:
+    secure: g/oJpBtSPY2iV9FeothbxDMD+j11wA7ZHLrHLcd54mKhRzyEOcABk2+BKA1pU8ul
 branches:
   only:
-  - master
   - development
-image: WMF 5
-build: off
+  - master
+skip_branch_with_pr: true
+skip_tags: true
 init:
   - ps: Install-PackageProvider NuGet -Force | Out-Null
 install:
-  - ps: Install-Module -Name Psake, Pester, PSScriptAnalyzer, PlatyPS -Force
-test_script:
-  - ps: .\build.ps1 -Task Analyze
+  - ps: Install-Module -Name Psake, Pester, PSScriptAnalyzer, PlatyPS, BuildHelpers, GitHubReleaseManager -Force
+build_script:
+  - ps: .\build.ps1

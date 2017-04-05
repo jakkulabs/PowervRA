@@ -12,6 +12,9 @@
     .PARAMETER Name
     Tenant Directory Name
 
+    .PARAMETER Description
+    A description for the directory
+
     .PARAMETER Alias
     Tenant Directory Alias
 
@@ -64,13 +67,15 @@
     Body text to send in JSON format
 
     .INPUTS
-    System.String.
+    System.String
+    System.SecureString
 
     .OUTPUTS
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    Set-vRATenantDirectory -ID Tenant01 -Domain vrademo.local -GroupBaseSearchDNs "OU=Groups,OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -userBaseSearchDNs "OU=Users,OU=Tenant01,OU=Tenants,DC=vrademo,DC=local"
+    $SecurePassword = ConvertTo-SecureString “P@ssword” -AsPlainText -Force
+    Set-vRATenantDirectory -ID Tenant01 -Domain vrademo.local -GroupBaseSearchDNs "OU=Groups,OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -userBaseSearchDNs "OU=Users,OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -Password $SecurePassword -Confirm:$false
     
     .EXAMPLE
     $JSON = @"
@@ -131,7 +136,7 @@
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [String]$Password,
+    [SecureString]$Password,
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
@@ -163,7 +168,7 @@
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [String]$DomainAdminPassword,
+    [SecureString]$DomainAdminPassword,
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
@@ -183,36 +188,22 @@
     begin {
         # --- Test for vRA API version
         xRequires -Version 7.0
-    
+
+        if ($PSBoundParameters.ContainsKey("Password")){
+
+            $JSONPassword = (New-Object System.Management.Automation.PSCredential(“username”, $Password)).GetNetworkCredential().Password
+        }
+        if ($PSBoundParameters.ContainsKey("DomainAdminPassword")){
+
+            $JSONDomainAdminPassword = (New-Object System.Management.Automation.PSCredential(“username”, $DomainAdminPassword)).GetNetworkCredential().Password
+        }
         if ($PSBoundParameters.ContainsKey("GroupBaseSearchDNs")){
 
-            if ($GroupBaseSearchDNs.Count -gt 1){
-
-                $GroupBaseSearchDNs | ForEach-Object {
-
-                    $GroupBaseSearchDNsJoin += '"' + $_ + '"'
-                }
-                $GroupBaseSearchDNs = $GroupBaseSearchDNsJoin -replace '""', '","'
-            }
-            else {
-
-                $GroupBaseSearchDNs = '"' + $GroupBaseSearchDNs + '"'
-            }
+            $GroupBaseSearchDNsJSON = ($GroupBaseSearchDNs | ForEach-Object {'"' + $_ + '"'}) -join ','
         }
         if ($PSBoundParameters.ContainsKey("UserBaseSearchDNs")){
 
-            if ($UserBaseSearchDNs.Count -gt 1){
-
-                $UserBaseSearchDNs | ForEach-Object {
-
-                    $UserBaseSearchDNsJoin += '"' + $_ + '"'
-                }
-                $UserBaseSearchDNs = $UserBaseSearchDNsJoin -replace '""', '","'
-            }
-            else {
-
-                $UserBaseSearchDNs = '"' + $UserBaseSearchDNs + '"'
-            }
+            $UserBaseSearchDNsJSON = ($UserBaseSearchDNs | ForEach-Object {'"' + $_ + '"'}) -join ','
         }
         if ($PSBoundParameters.ContainsKey("$TrustAll")){
 
@@ -305,7 +296,7 @@
 
                 if ($TenantDirectory.Password){
 
-                    $Password = $TenantDirectory.Password
+                    $JSONPassword = $TenantDirectory.Password
                 }
             }
             if (-not($PSBoundParameters.ContainsKey("URL"))){
@@ -341,18 +332,7 @@
                if ($TenantDirectory.GroupBaseSearchDNs){
 
                     $GroupBaseSearchDNs = $TenantDirectory.GroupBaseSearchDNs
-                }
-               if ($GroupBaseSearchDNs.Count -gt 1){
-
-                    $GroupBaseSearchDNs | ForEach-Object {
-
-                        $GroupBaseSearchDNsJoin += '"' + $_ + '"'
-                    }
-                    $GroupBaseSearchDNs = $GroupBaseSearchDNsJoin -replace '""', '","'
-                }
-                else {
-
-                    $GroupBaseSearchDNs = '"' + $GroupBaseSearchDNs + '"'
+                    $GroupBaseSearchDNsJSON = ($GroupBaseSearchDNs | ForEach-Object {'"' + $_ + '"'}) -join ','
                 }
             }
             if (-not($PSBoundParameters.ContainsKey("UserBaseSearchDNs"))){
@@ -360,18 +340,7 @@
                 if ($TenantDirectory.UserBaseSearchDNs){
 
                     $UserBaseSearchDNs = $TenantDirectory.UserBaseSearchDNs
-                }
-                if ($UserBaseSearchDNs.Count -gt 1){
-
-                    $UserBaseSearchDNs | ForEach-Object {
-
-                        $UserBaseSearchDNsJoin += '"' + $_ + '"'
-                    }
-                    $UserBaseSearchDNs = $UserBaseSearchDNsJoin -replace '""', '","'
-                }
-                else {
-
-                    $UserBaseSearchDNs = '"' + $UserBaseSearchDNs + '"'
+                    $UserBaseSearchDNsJSON = ($UserBaseSearchDNs | ForEach-Object {'"' + $_ + '"'}) -join ','
                 }
             }
             if (-not($PSBoundParameters.ContainsKey("DomainAdminUsername"))){
@@ -385,7 +354,7 @@
 
                 if ($TenantDirectory.DomainAdminPassword){
 
-                    $DomainAdminPassword = $TenantDirectory.DomainAdminPassword
+                    $JSONDomainAdminPassword = $TenantDirectory.DomainAdminPassword
                 }
             }
             if (-not($PSBoundParameters.ContainsKey("Certificate"))){
@@ -419,15 +388,15 @@
                   "type" : "$($Type)",
                   "userNameDn" : "$($UserNameDN)",
                   "groupBaseSearchDn" : "$($GroupBaseSearchDN)",
-                  "password" : "$($Password)",
+                  "password" : "$($JSONPassword)",
                   "url" : "$($URL)",
                   "userBaseSearchDn" : "$($UserBaseSearchDN)",
                   "domain" : "$($Domain)",
                   "domainAdminUsername" : "$($DomainAdminUsername)",
-                  "domainAdminPassword" : "$($DomainAdminPassword)",
+                  "domainAdminPassword" : "$($JSONDomainAdminPassword)",
                   "subdomains" : [ "$($Subdomains)" ],
-                  "groupBaseSearchDns" : [ $($GroupBaseSearchDNs) ],
-                  "userBaseSearchDns" : [ $($UserBaseSearchDNs) ],
+                  "groupBaseSearchDns" : [ $($GroupBaseSearchDNsJSON) ],
+                  "userBaseSearchDns" : [ $($UserBaseSearchDNsJSON) ],
                   "certificate" : "$($Certificate)",
                   "trustAll" : $($TrustAllText),
                   "useGlobalCatalog" : $($UseGlobalCatalogText)
@@ -442,7 +411,7 @@
                 $URI = "/identity/api/tenants/$($ID)/directories/$($Domain)"  
 
                 # --- Run vRA REST Request
-                $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body $Body
+                Invoke-vRARestMethod -Method PUT -URI $URI -Body $Body -Verbose:$VerbosePreference | Out-Null
 
                 # --- Output the Successful Result
                 Get-vRATenantDirectory -Id $ID | Where-Object {$_.Domain -eq $Domain}

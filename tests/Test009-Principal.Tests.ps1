@@ -2,14 +2,16 @@
 $JSON = Get-Content .\Variables.json -Raw | ConvertFrom-JSON
 
 # --- Startup
-$Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Tenant $JSON.Connection.Tenant -Username $JSON.Connection.Username -Password $JSON.Connection.Password -IgnoreCertRequirements
+$ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password -AsPlainText -Force
+$Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Tenant $JSON.Connection.Tenant -Username $JSON.Connection.Username -Password $ConnectionPassword -IgnoreCertRequirements
 
 # --- Tests
 Describe -Name 'User Principal Tests' -Fixture {
 
     It -Name "Create named User Principal $($JSON.Principal.UserPrincipalId)" -Test {
 
-        $UserPrincipalA = New-vRAUserPrincipal -Tenant $JSON.Connection.Tenant -FirstName $JSON.Principal.UserPrincipalFirstName -LastName $JSON.Principal.UserPrincipalLastName -EmailAddress $JSON.Principal.UserPrincipalEmailAddress -Description $JSON.Principal.UserPrincipalDescription -Password $JSON.Principal.UserPrincipalPassword -PrincipalId $JSON.Principal.UserPrincipalId
+        $SecurePassword = ConvertTo-SecureString $JSON.Principal.UserPrincipalPassword -AsPlainText -Force
+        $UserPrincipalA = New-vRAUserPrincipal -Tenant $JSON.Connection.Tenant -FirstName $JSON.Principal.UserPrincipalFirstName -LastName $JSON.Principal.UserPrincipalLastName -EmailAddress $JSON.Principal.UserPrincipalEmailAddress -Description $JSON.Principal.UserPrincipalDescription -Password $SecurePassword -PrincipalId $JSON.Principal.UserPrincipalId
         $UserPrincipalA.FirstName | Should Be $Json.Principal.UserPrincipalFirstName
                 
     }
@@ -24,7 +26,9 @@ Describe -Name 'User Principal Tests' -Fixture {
     It -Name "Update named User Principal $($JSON.Principal.UserPrincipalId)" -Test {
 
         $Password = -join(33..126|%{[char]$_}|Get-Random -C 20)
-        $UserPrincipalC = Set-vRAUserPrincipal -Id $JSON.Principal.UserPrincipalId -FirstName $JSON.Principal.UserPrincipalFirstNameUpdated -Password $Password
+        $SecurePassword = ConvertTo-SecureString $Password -AsPlainText -Force
+
+        $UserPrincipalC = Set-vRAUserPrincipal -Id $JSON.Principal.UserPrincipalId -FirstName $JSON.Principal.UserPrincipalFirstNameUpdated -Password $SecurePassword
         $UserPrincipalC.FirstName | Should Be $JSON.Principal.UserPrincipalFirstNameUpdated
 
     }

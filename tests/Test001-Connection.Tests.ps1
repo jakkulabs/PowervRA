@@ -13,7 +13,8 @@ Describe -Name 'Connectivity Tests' -Fixture {
 
     It -Name 'Connects to a vRA Appliance and generates a token' -Test {
 
-        Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Tenant $JSON.Connection.Tenant -Username $JSON.Connection.Username -Password $JSON.Connection.Password -IgnoreCertRequirements
+        $ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password -AsPlainText -Force
+        Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Tenant $JSON.Connection.Tenant -Username $JSON.Connection.Username -Password $ConnectionPassword -IgnoreCertRequirements
         $($Global:vRAConnection.Token) | Should Be $true
     }
 

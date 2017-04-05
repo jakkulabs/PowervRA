@@ -26,6 +26,7 @@
 
     .INPUTS
     System.String
+    System.SecureString
     Management.Automation.PSCredential
     Switch
 
@@ -33,10 +34,11 @@
     System.Management.Automation.PSObject.
 
     .EXAMPLE
-    Connect-vRAServer -Server vraappliance01.domain.local -Tenant Tenant01 -Username TenantAdmin01 -Password P@ssword -IgnoreCertRequirements
+    Connect-vRAServer -Server vraappliance01.domain.local -Tenant Tenant01 -Credential (Get-Credential)
 
     .EXAMPLE
-    Connect-vRAServer -Server vraappliance01.domain.local -Tenant Tenant01 -Credential (Get-Credential)
+    $SecurePassword = ConvertTo-SecureString “P@ssword” -AsPlainText -Force
+    Connect-vRAServer -Server vraappliance01.domain.local -Tenant Tenant01 -Username TenantAdmin01 -Password $SecurePassword -IgnoreCertRequirements
 #>
 [CmdletBinding(DefaultParametersetName="Username")][OutputType('System.Management.Automation.PSObject')]
 
@@ -56,7 +58,7 @@
 
         [parameter(Mandatory=$true,ParameterSetName="Username")]
         [ValidateNotNullOrEmpty()]
-        [String]$Password,
+        [SecureString]$Password,
 
         [Parameter(Mandatory=$true,ParameterSetName="Credential")]
         [ValidateNotNullOrEmpty()]
@@ -72,7 +74,7 @@
 
     if ($PSBoundParameters.ContainsKey("IgnoreCertRequirements") ){
 
-        if ($PSVersionTable.PSEdition -eq "Desktop" -or $PSVersionTable.PSEdition -eq $null) {
+        if ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
 
             if ( -not ("TrustAllCertsPolicy" -as [type])) {
 
@@ -96,10 +98,16 @@
 
     }
 
+    # --- Convert Secure Credentials to a format for sending in the JSON payload
     if ($PSBoundParameters.ContainsKey("Credential")){
 
         $Username = $Credential.UserName
-        $Password = $Credential.GetNetworkCredential().Password
+        $JSONPassword = $Credential.GetNetworkCredential().Password
+    }
+
+    if ($PSBoundParameters.ContainsKey("Password")){
+
+        $JSONPassword = (New-Object System.Management.Automation.PSCredential(“username”, $Password)).GetNetworkCredential().Password
     }
 
     try {
@@ -108,7 +116,7 @@
         $JSON = @"
         {
             "username":"$($Username)",
-            "password":"$($Password)",
+            "password":"$($JSONPassword)",
             "tenant":"$($Tenant)"
         }
 "@

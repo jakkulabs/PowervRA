@@ -82,7 +82,7 @@
                 $URI = "/reservation-service/api/reservations/policies"  
 
                 # --- Run vRA REST Request
-                $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body
+                Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference | Out-Null
 
                 # --- Output the Successful Result
                 Get-vRAStorageReservationPolicy -Name $Name

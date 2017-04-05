@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/na25wbus68wb24y3?svg=true)](https://ci.appveyor.com/project/chelnak/powervra)
+[![Build status](https://ci.appveyor.com/api/projects/status/497h4hx78ng5tji0?svg=true)](https://ci.appveyor.com/project/JakkuLabs/powervra)
 
 # Welcome to PowervRA
 PowervRA is a PowerShell module built on top of the services exposed by the vRealize Automation 7 REST API.
@@ -26,7 +26,7 @@ Note: this module is not in any way developed or supported by anyone officially 
 
 #### Core
 
-* 6.0.0-alpha.14**
+* 6.0.0-alpha.15**
 
 ** To get up and running with PowerShell Core follow the instructions for your operating system [here](https://github.com/PowerShell/PowerShell/blob/master/README.md#get-powershell).
 

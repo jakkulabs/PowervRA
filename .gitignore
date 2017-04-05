@@ -1,3 +1,4 @@
-Utils/
+*.xml
+*.zip
 tests/*.json
 

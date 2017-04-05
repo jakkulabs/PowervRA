@@ -125,6 +125,21 @@
 
       "Name" : "vm701-02"
 
+    },
+    "Icon" :{
+      
+      "Id": "cafe_icon_Service01",
+      "ImportFile": "C:\\Icons\\Service01Icon.png",
+      "ExportFile": "C:\\Icons\\Service01IconExport.png"
+    }
+  },
+   "PropertiesService":
+  {
+    "PropertyDefinition" : {
+
+      "Name" : "PropertyDefinition01",
+      "Label": "Check this box",
+      "BooleanDisplay": "CHECKBOX"
     }
   },
   "Principal":

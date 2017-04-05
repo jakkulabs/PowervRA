@@ -132,7 +132,7 @@
     }
     finally {
 
-        if ($PSVersionTable.PSEdition -eq "Desktop" -or $PSVersionTable.PSEdition -eq $null) {
+        if ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
 
             # Workaround for bug in Invoke-RestMethod. Thanks to the PowerNSX guys for pointing this one out
             # https://bitbucket.org/nbradford/powernsx/src

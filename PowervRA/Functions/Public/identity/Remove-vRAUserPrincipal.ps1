@@ -57,7 +57,7 @@
                     Write-Verbose -Message "Preparing DELETE to $($URI)"                        
 
                     # --- Run vRA REST Request                    
-                    Invoke-vRARestMethod -Method DELETE -URI $URI | Out-Null
+                    Invoke-vRARestMethod -Method DELETE -URI $URI -Verbose:$VerbosePreference | Out-Null
                     
                 }
                 

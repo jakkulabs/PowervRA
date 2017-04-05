@@ -259,7 +259,7 @@
                 $URI = "/identity/api/tenants/$($TenantId)/subtenants/$($Id)"  
 
                 # --- Run vRA REST Request
-                $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body $Body
+                Invoke-vRARestMethod -Method PUT -URI $URI -Body $Body -Verbose:$VerbosePreference | Out-Null
 
                 # --- Output the Successful Result
                 Get-vRABusinessGroup -TenantId $TenantId | Where-Object {$_.id -eq $ID}

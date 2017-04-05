@@ -2,9 +2,13 @@
 <#
     .SYNOPSIS
     Get information about vRA services
+
+    Deprecated. Use Get-vRAComponentRegistryServiceStatus instead.
     
     .DESCRIPTION
     Get information about vRA services. These are the same services that you will see via the service tab 
+    
+    Deprecated. Use Get-vRAComponentRegistryServiceStatus instead.
     
     .PARAMETER Name
     The name of the service to query
@@ -31,17 +35,19 @@
 
     Param (
 
-    [parameter(Mandatory=$false,ValueFromPipeline=$false)]
-    [ValidateNotNullOrEmpty()]
-    [String[]]$Name,
-    
-    [parameter(Mandatory=$false,ValueFromPipeline=$false)]
-    [ValidateNotNullOrEmpty()]
-    [String]$Limit = "100"    
+        [Parameter(Mandatory=$false,ValueFromPipeline=$false)]
+        [ValidateNotNullOrEmpty()]
+        [String[]]$Name,
+        
+        [Parameter(Mandatory=$false,ValueFromPipeline=$false)]
+        [ValidateNotNullOrEmpty()]
+        [String]$Limit = "100"    
        
     )   
 
     try {
+
+        Write-Warning -Message "This function is now deprecated. Please use Get-vRAComponentRegsitryService instead"
 
         # --- Build base URI with limit 
         $URI =  "/component-registry/services/status/current?limit=$($Limit)"

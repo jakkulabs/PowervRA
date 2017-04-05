@@ -10,6 +10,9 @@
     - the current user is entitled to consume.
     - associated to a service.
     
+    .PARAMETER Id
+    The id of the catalog item
+
     .PARAMETER Name
     The name of the catalog item
 

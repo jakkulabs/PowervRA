@@ -22,12 +22,24 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
+    # Retrieve a list of compatible reservation types
+    Get-vRAReservationType | Select Name
+
+    # Retrieve associated compute resources for the desired reservation type
     Get-vRAReservationComputeResource -Type vSphere -Id 75ae3400-beb5-4b0b-895a-0484413c93b1
 
     .EXAMPLE
+    # Retrieve a list of compatible reservation types
+    Get-vRAReservationType | Select Name
+
+    # Retrieve associated compute resources for the desired reservation type
     Get-vRAReservationComputeResource -Type vSphere -Name "Cluster01"
 
     .EXAMPLE
+    # Retrieve a list of compatible reservation types
+    Get-vRAReservationType | Select Name
+
+    # Retrieve associated compute resources for the desired reservation type
     Get-vRAReservationComputeResource -Type vSphere
 
 #>

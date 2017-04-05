@@ -60,7 +60,8 @@ try {
 
         foreach ($BusinessGroupName in $Name){
 
-            $URI = "/identity/api/tenants/$($TenantId)/subtenants?`$filter=name%20eq%20'$($BusinessGroupName)'"
+            $EscapedBusinessGroupName = [URI]::EscapeDataString($BusinessGroupName)
+            $URI = "/identity/api/tenants/$($TenantId)/subtenants?`$filter=name%20eq%20'$($EscapedBusinessGroupName)'"
 
             # --- Run vRA REST Request
             $Response = Invoke-vRARestMethod -Method GET -URI $URI

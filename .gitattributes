@@ -14,3 +14,6 @@ PowervRA-icon.png export-ignore
 PSScriptAnalyzerSettings.psd1 export-ignore
 .gitignore export-ignore
 .gitattributes export-ignore
+
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto

@@ -5,12 +5,15 @@ function Get-vRAResourceActionRequestTemplate {
     
     .DESCRIPTION
     Get the request template of a resource action that the user is entitled to see
-    
-    .PARAMETER Id
-    The id of the resource action
 
-    .PARAMETER Name
-    The name of the resource action
+    .PARAMETER ActionId
+    The id resource action
+    
+    .PARAMETER ResourceId
+    The id of the resource
+
+    .PARAMETER ResourceName
+    The name of the resource
 
     .INPUTS
     System.String

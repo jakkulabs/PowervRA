@@ -26,8 +26,11 @@
     .PARAMETER SupportTeam
     The support team of the service
 
+    .PARAMETER IconId
+    The Icon Id of the service. This must already exist in the Service Catalog. Typically it would have already been created via Import-vRAServiceIcon
+
     .PARAMETER JSON
-    A json string of type service (catalog-service/api/docs/el_ns0_service.html)  
+    A json string of type service (catalog-service/api/docs/el_ns0_service.html)
     
     .INPUTS
     System.String
@@ -39,7 +42,7 @@
     New-vRAService -Name "New Service"
     
     .EXAMPLE
-    New-vRAService -Name "New Service" -Description "A new service" -Owner user@vsphere.local -SupportTeam customgroup@vsphere.local
+    New-vRAService -Name "New Service" -Description "A new service" -Owner user@vsphere.local -SupportTeam customgroup@vsphere.local -IconId "cafe_icon_Service01"
     
     .EXAMPLE
     $JSON = @"
@@ -84,6 +87,10 @@
         [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
         [String]$SupportTeam,
+
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [ValidateNotNullOrEmpty()]
+        [String]$IconId,
         
         [Parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="JSON")]
         [ValidateNotNullOrEmpty()]
@@ -125,7 +132,7 @@
 "@
 
                 # --- If certain parameters are specified, ConvertFrom-Json, update, then ConvertTo-Json
-                if ($PSBoundParameters.ContainsKey("Owner") -or $PSBoundParameters.ContainsKey("SupportTeam")){
+                if ($PSBoundParameters.ContainsKey("Owner") -or $PSBoundParameters.ContainsKey("SupportTeam") -or $PSBoundParameters.ContainsKey("IconId")){
 
                     $Object = $Body | ConvertFrom-Json
 
@@ -148,6 +155,14 @@
                         $CatalogPrincipal = Get-vRACatalogPrincipal -Id $SupportTeam   
 
                         $Object | Add-Member -MemberType NoteProperty -Name "supportTeam" -Value $CatalogPrincipal
+
+                    }
+
+                    if ($PSBoundParameters.ContainsKey("IconId")) {
+
+                        Write-Verbose -Message "Setting IconId: $($IconId)"
+
+                        $Object.iconId = $IconId
 
                     }
 

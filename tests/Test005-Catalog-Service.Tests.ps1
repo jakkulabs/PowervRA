@@ -2,7 +2,8 @@
 $JSON = Get-Content .\Variables.json -Raw | ConvertFrom-JSON
 
 # --- Startup
-$Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Tenant $JSON.Connection.Tenant -Username $JSON.Connection.Username -Password $JSON.Connection.Password -IgnoreCertRequirements
+$ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password -AsPlainText -Force
+$Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Tenant $JSON.Connection.Tenant -Username $JSON.Connection.Username -Password $ConnectionPassword -IgnoreCertRequirements
 
 # --- Tests
 Describe -Name 'Catalog-Service Tests' -Fixture {
@@ -241,6 +242,39 @@ Describe -Name 'Catalog-Service Tests' -Fixture {
 
     }
 
+    Context -Name "vRA Icons" -Fixture {
+
+        It -Name "Create named vRA Icon $($JSON.CatalogService.Icon.Id)" -Test {
+
+            $IconA = Import-vRAIcon -Id $JSON.CatalogService.Icon.Id -File $JSON.CatalogService.Icon.ImportFile -Confirm:$false
+            $IconA.Id | Should Be $JSON.CatalogService.Icon.Id
+        }
+
+        It -Name "Return named vRA Icon $($JSON.CatalogService.Icon.Id)" -Test {
+
+            $IconB = Get-vRAIcon -Id $JSON.CatalogService.Icon.Id
+            $IconB.Id | Should Be $JSON.CatalogService.Icon.Id
+        }
+
+        It -Name "Export named vRA Icon $($JSON.CatalogService.Icon.Id)" -Test {
+
+            $IconC = Export-vRAIcon -Id $JSON.CatalogService.Icon.Id -File $JSON.CatalogService.Icon.ExportFile
+            $IconC.FullName | Should Be $JSON.CatalogService.Icon.ExportFile
+        }
+
+        It -Name "Remove named vRA Icon $($JSON.CatalogService.Icon.Id)" -Test {
+
+            Remove-vRAIcon -Id $JSON.CatalogService.Icon.Id -Confirm:$false
+
+            try {
+                $IconD = Get-vRAIcon -Id $JSON.CatalogService.Icon.Id
+            }
+            catch [Exception]{
+
+            }
+            $IconD | Should Be $null
+        }
+    }
 }
 
 # --- Cleanup
