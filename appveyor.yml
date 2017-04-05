@@ -13,6 +13,6 @@ skip_tags: true
 init:
   - ps: Install-PackageProvider NuGet -Force | Out-Null
 install:
-  - ps: Install-Module -Name Psake, Pester, PSScriptAnalyzer, PlatyPS, BuildHelpers -Force
+  - ps: Install-Module -Name Psake, Pester, PSScriptAnalyzer, PlatyPS, BuildHelpers, GitHubReleaseManager -Force
 build_script:
   - ps: .\build.ps1

@@ -1,4 +1,4 @@
-#Requires -Modules Psake, Pester, PSScriptAnalyzer, PlatyPS, BuildHelpers
+#Requires -Modules Psake, Pester, PSScriptAnalyzer, PlatyPS, BuildHelpers, GitHubReleaseManager
 #Requires -Version 5
 
 <#
