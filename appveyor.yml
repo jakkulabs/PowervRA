@@ -3,7 +3,7 @@ environment:
   gh_token:
     secure: 3WtkOGm4k++uL56CWe9sJF6HzFAUs7BkM7mvbqdKhkwXOFDtZFIC0k7hM5eGmfLj
   psg_token:
-    secure: g/oJpBtSPY2iV9FeothbxDMD+j11wA7ZHLrHLcd54mKhRzyEOcABk2+BKA1pU8ul
+    secure: U6o+x81rGvkEWINVANEKAWw7AYWD/8zNHJ1Akc6adjxK0jIKB2CLx2sTdLUBjL9q
 branches:
   only:
   - development
