@@ -68,8 +68,7 @@
         [Switch]$TemplatesOnly,  
 
         [Parameter(Mandatory=$false,ParameterSetName="Standard")]
-        [Parameter(Mandatory=$false,ParameterSetName="Standard-Template")]     
- 
+        [Parameter(Mandatory=$false,ParameterSetName="Standard-Template")]
         [ValidateNotNullOrEmpty()]
         [Int]$Limit = 100,
     
