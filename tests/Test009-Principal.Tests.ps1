@@ -1,109 +1,107 @@
-﻿function Get-vRAUserPrincipalGroupMembership {
-<#
-    .SYNOPSIS
-    Retrieve a list of groups that a user is a member of
-    
-    .DESCRIPTION
-    Retrieve a list of groups that a user is a member of
-    
-    .PARAMETER Id
-    The Id of the user
-    
-    .PARAMETER Tenant
-    The tenant of the user
-    
-    .PARAMETER GroupType
-    Return either custom or sso groups
-    
-    .PARAMETER Limit
-    The number of entries returned per page from the API. This has a default value of 100.
+﻿# --- Get data for the tests
+$JSON = Get-Content .\Variables.json -Raw | ConvertFrom-JSON
 
-    .PARAMETER Page
-    The page of response to return. By default this is 1.
+# --- Startup
+$ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password -AsPlainText -Force
+$Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Tenant $JSON.Connection.Tenant -Username $JSON.Connection.Username -Password $ConnectionPassword -IgnoreCertRequirements
 
-    .INPUTS
-    System.String
-    System.Int
+# --- Tests
+Describe -Name 'User Principal Tests' -Fixture {
 
-    .OUTPUTS
-    System.Management.Automation.PSObject.
+    It -Name "Create named User Principal $($JSON.Principal.UserPrincipalId)" -Test {
 
-    .EXAMPLE
-    Get-vRAUserPrincipal -Id user@vsphere.local | Get-vRAUserPrincipalGroupMembership
-    
-    .EXAMPLE
-    Get-vRAUserPrincipal -Id user@vsphere.local | Get-vRAUserPrincipalGroupMembership -GroupType SSO
-
-    .EXAMPLE
-    Get-vRAUserPrincipalGroupMembership -Id user@vsphere.local
-    
-    .EXAMPLE
-    Get-vRAUserPrincipalGroupMembership -UserPrincipal user@vsphere.local
-
-#>
-[CmdletBinding()][OutputType('System.Management.Automation.PSObject')]
-
-    Param (
-        [parameter(Mandatory=$true, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true)]
-        [ValidateNotNullOrEmpty()]
-        [Alias("PrincipalId")]
-        [String[]]$Id,
-        
-        [parameter(Mandatory=$false)]  
-        [ValidateNotNullOrEmpty()]
-        [String]$Tenant = $Global:vRAConnection.Tenant,    
-        
-        [parameter(Mandatory=$false)]
-        [ValidateSet("SSO","CUSTOM")]
-        [String]$GroupType,   
-          
-        [Parameter(Mandatory=$false)]
-        [ValidateNotNullOrEmpty()]
-        [Int]$Limit = 100,
-    
-        [Parameter(Mandatory=$false)]
-        [ValidateNotNullOrEmpty()]
-        [Int]$Page = 1
-    )
-    
-    Begin {
-        # --- Test for vRA API version
-        xRequires -Version 7.0
-    }
-    
-    Process {
+        $SecurePassword = ConvertTo-SecureString $JSON.Principal.UserPrincipalPassword -AsPlainText -Force
+        $UserPrincipalA = New-vRAUserPrincipal -Tenant $JSON.Connection.Tenant -FirstName $JSON.Principal.UserPrincipalFirstName -LastName $JSON.Principal.UserPrincipalLastName -EmailAddress $JSON.Principal.UserPrincipalEmailAddress -Description $JSON.Principal.UserPrincipalDescription -Password $SecurePassword -PrincipalId $JSON.Principal.UserPrincipalId
+        $UserPrincipalA.FirstName | Should Be $Json.Principal.UserPrincipalFirstName
                 
-        try {
-  
-            foreach ($UserId in $Id){
-
-                $URI = "/identity/api/tenants/$($Tenant)/principals/$($UserId)/groups?limit=$($Limit)&page=$($Page)"
-
-                if ($PSBoundParameters.ContainsKey("GroupType")) {
-                    $URI = $URI + "&groupType=$($GroupType)"
-                }
-
-                # --- Run vRA REST Request
-                $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
-
-                foreach ($Group in $Response.content) {
-                    [PSCustomObject] @{
-                        GroupType = $Group.groupType
-                        Name = $Group.name
-                        Domain = $Group.domain
-                        Description = $Group.description
-                        PrincipalId = "$($Group.principalId.name)@$($Group.principalId.domain)"
-                    }
-                }
-            }
-        }
-        catch [Exception]{
-
-            throw $_        
-        }
     }
-    
-    End {
 
-    }   
+    It -Name "Return named User Principal $($JSON.Principal.UserPrincipalId)" -Test {
+        
+        $UserPrincipalB = Get-vRAUserPrincipal -Id $JSON.Principal.UserPrincipalId
+        $UserPrincipalB.FirstName | Should Be $JSON.Principal.UserPrincipalFirstName
+        
+    }
+
+    It -Name "Update named User Principal $($JSON.Principal.UserPrincipalId)" -Test {
+
+        $Password = -join(33..126|%{[char]$_}|Get-Random -C 20)
+        $SecurePassword = ConvertTo-SecureString $Password -AsPlainText -Force
+
+        $UserPrincipalC = Set-vRAUserPrincipal -Id $JSON.Principal.UserPrincipalId -FirstName $JSON.Principal.UserPrincipalFirstNameUpdated -Password $SecurePassword
+        $UserPrincipalC.FirstName | Should Be $JSON.Principal.UserPrincipalFirstNameUpdated
+
+    }
+
+    It -Name "Remove named User Principal $($JSON.Principal.UserPrincipalId)" -Test {
+
+        Remove-vRAUserPrincipal -Id $JSON.Principal.UserPrincipalId -Confirm:$false
+        
+        try {
+            
+            $UserPrincipalD = Get-vRAUserPrincipal -Id $JSON.Principal.UserPrincipalId            
+            
+        }
+        catch {}
+        
+        $UserPrincipalD | Should Be $null
+                
+    }
+
+    It -Name "Return User Principal Group Memberships" -Test {
+
+        $UserPrincipal = Get-vRAUserPrincipal -Id $JSON.Principal.UserPrincipalId
+        $GroupMemberships = $UserPrincipal | Get-vRAUserPrincipalGroupMembership | Select-Object -ExpandProperty Name
+        $GroupMemberships -contains "ALL USERS" | Should Be $true
+    } 
 }
+
+Describe -Name 'Group Principal Tests' -Fixture {
+
+    It -Name "Create named Custom Group $($JSON.Principal.GroupPrincipalName)" -Test {
+
+        $GroupPrincipalA = New-vRAGroupPrincipal -Tenant $JSON.Connection.Tenant -Name $JSON.Principal.GroupPrincipalName -Description $JSON.Principal.GroupPrincipalDescription
+        $GroupPrincipalA.Name | Should Be $JSON.Principal.GroupPrincipalName
+                        
+    }
+
+    It -Name "Return named Custom Group $($JSON.Principal.GroupPrincipalName)" -Test {
+        
+        $GroupPrincipalId = "$($JSON.Principal.GroupPrincipalName)@$($JSON.Connection.Tenant)"
+        $GroupPrincipalB = Get-vRAGroupPrincipal -Id $GroupPrincipalId
+        $GroupPrincipalB.Name | Should Be $JSON.Principal.GroupPrincipalName
+        
+    }
+
+    <#
+    It -Name "Update named Group Principal $($JSON.Principal.GroupPrincipalName)" -Test {
+
+        # --- API Method does not work.
+        $GroupPrincipalId = "$($JSON.Principal.GroupPrincipalName)@$($JSON.Connection.Tenant)"
+        $GroupPrincipalC = Set-vRAGroupPrincipal -Id $GroupPrincipalId -Description $JSON.Principal.GroupPrincipalDescriptionUpdated
+        $GroupPrincipalC.Description | Should Be $JSON.Principal.GroupPrincipalDescriptionUpdated
+
+    }
+    #>
+
+    It -Name "Remove named User Principal $($JSON.Principal.GroupPrincipalName)" -Test {
+        
+        $GroupPrincipalId = "$($JSON.Principal.GroupPrincipalName)@$($JSON.Connection.Tenant)"
+
+        Remove-vRAGroupPrincipal -Id $GroupPrincipalId -Confirm:$false
+        
+        try {
+            
+            $GroupPrincipalName = Get-vRAGroupPrincipal -Id  $GroupPrincipalId            
+            
+        }
+        catch {}
+        
+        $GroupPrincipalName | Should Be $null
+                
+    }
+       
+}
+
+# --- Cleanup
+Disconnect-vRAServer -Confirm:$false
