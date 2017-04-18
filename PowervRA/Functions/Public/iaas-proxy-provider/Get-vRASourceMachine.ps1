@@ -12,11 +12,11 @@
     .PARAMETER Name
     The name of the Source Macine
 
-    .PARAMETER Template
-    Only return machines that are marked as templates
-
-    .PARAMETER Managed
+    .PARAMETER ManagedOnly
     Only return machines that are managed
+
+    .PARAMETER TemplatesOnly
+    Only return machines that are marked as templates
 
     .PARAMETER Limit
     The number of entries returned per page from the API. This has a default value of 100.
@@ -57,21 +57,24 @@
         
         [Parameter(Mandatory=$true,ParameterSetName="ByName")]
         [ValidateNotNullOrEmpty()]
-        [String[]]$Name,    
-        
-        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
-        [ValidateNotNullOrEmpty()]
-        [Switch]$Template,    
+        [String[]]$Name,              
 
         [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
-        [Switch]$Managed,    
+        [Switch]$ManagedOnly,    
+
+        [Parameter(Mandatory=$false,ParameterSetName="Standard-Template")]
+        [ValidateNotNullOrEmpty()]
+        [Switch]$TemplatesOnly,  
 
         [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [Parameter(Mandatory=$false,ParameterSetName="Standard-Template")]     
+ 
         [ValidateNotNullOrEmpty()]
         [Int]$Limit = 100,
     
         [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [Parameter(Mandatory=$false,ParameterSetName="Standard-Template")]            
         [ValidateNotNullOrEmpty()]
         [Int]$Page = 1
        
@@ -81,19 +84,6 @@
 
         xRequires -Version 7.1
         $PlatformTypeId = "Infrastructure.CatalogItem.Machine.Virtual.vSphere"
-
-        function getSourceMachineById($I, $P) {
-            <#
-            .SYNOPSIS
-            Helper function to retrieve source machine by id
-            .PARAMETER I
-            The id of the source machine
-            .PARAMETER P
-            The PlatformTypeId
-            #>
-            $URI = "/iaas-proxy-provider/api/source-machines/$($I)?platformTypeId=$($P)"
-            Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
-        }
 
     }
 
@@ -176,14 +166,27 @@
                     break     
                 }
 
-                'Standard' {
+                'Standard-Template' {
 
-                    $LoadTemplates = $Template.IsPresent
+                    $LoadTemplates = $TemplatesOnly.IsPresent
                     Write-Verbose -Message "Loadtemplates: $LoadTemplates"
                     $URI = "/iaas-proxy-provider/api/source-machines?actionId=FullClone&platformTypeId=Infrastructure.CatalogItem.Machine.Virtual.vSphere&loadTemplates=$($LoadTemplates)&limit=$($Limit)&page=$($Page)"
 
-                    if ($PSBoundParameters.ContainsKey("Managed") -and !$PSBoundParameters.ContainsKey("Template")) {
-                        # --- Managed and Template can't work together so only allow this param if 
+                    $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$verbosePreference
+
+                    # -- Use helper function to process response from the endpoint
+                    processStandardOutput($Response)
+
+                    Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
+                    break
+                }
+
+                'Standard' {
+
+                    $URI = "/iaas-proxy-provider/api/source-machines?actionId=FullClone&platformTypeId=Infrastructure.CatalogItem.Machine.Virtual.vSphere&loadTemplates=false&limit=$($Limit)&page=$($Page)"
+
+                    # --- Managed and Template can't work together so only allow this param if
+                    if ($PSBoundParameters.ContainsKey("ManagedOnly")) {
                         Write-Verbose -Message "Filtering results for managed machines"
                         $URI = $URI + "&`$filter=status ne 'Unmanaged'"
                     }
@@ -191,37 +194,12 @@
                     $EscapedURI = [uri]::EscapeUriString($URI)
                     $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$verbosePreference
 
-                    foreach ($Record in $Response.content) {
-
-                        # --- GET by id returns more information
-                        $SourceMachine = getSourceMachineById $Record.id $PlatformTypeId
-
-                        [PSCustomObject] @{
-
-                            Id = $SourceMachine.id
-                            Name = $SourceMachine.name
-                            Description = $SourceMachine.description
-                            ReservationName = $SourceMachine.reservationName
-                            HostName = $SourceMachine.hostName
-                            ExternalId = $SourceMachine.externalId
-                            Status = $SourceMachine.status
-                            EndpointName = $SourceMachine.endpointName
-                            Region = $SourceMachine.region
-                            ParentTemplate = $SourceMachine.parentTemplate
-                            CPU = $SourceMachine.cpu
-                            MemoryMB = $SourceMachine.memoryMB
-                            StorageGB = $SourceMachine.storageGB
-                            IsTemplate = $SourceMachine.isTemplate
-                            GuestOsFamily = $SourceMachine.guestOSFamily
-                            InterfaceType = $SourceMachine.interfaceType
-                            Disks = $SourceMachine.disks
-                            Properties = $SourceMachine.properties
-                        }
-                    }
+                    # -- Use helper function to process response from the endpoint
+                    processStandardOutput($Response)
 
                     Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
                     break
-                }
+                }                
             }
         }
         catch [Exception]{
@@ -232,5 +210,55 @@
 
     End {
 
+    }
+}
+
+function getSourceMachineById($I, $P) {
+    <#
+    .SYNOPSIS
+    Helper function to retrieve source machine by id
+    .PARAMETER I
+    The id of the source machine
+    .PARAMETER P
+    The PlatformTypeId
+    #>
+    $URI = "/iaas-proxy-provider/api/source-machines/$($I)?platformTypeId=$($P)"
+    Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
+}
+
+
+function processStandardOutput([PSCustomObject[]]$Response){
+    <#
+    .SYNOPSIS
+    Helper function to process response records from the api endpoint
+    .PARAMETER Response
+    An array of PSCusomObject Responses
+    #>
+    foreach ($Record in $Response.content) {
+
+        # --- GET by id returns more information
+        $SourceMachine = getSourceMachineById $Record.id $PlatformTypeId
+
+        [PSCustomObject] @{
+
+            Id = $SourceMachine.id
+            Name = $SourceMachine.name
+            Description = $SourceMachine.description
+            ReservationName = $SourceMachine.reservationName
+            HostName = $SourceMachine.hostName
+            ExternalId = $SourceMachine.externalId
+            Status = $SourceMachine.status
+            EndpointName = $SourceMachine.endpointName
+            Region = $SourceMachine.region
+            ParentTemplate = $SourceMachine.parentTemplate
+            CPU = $SourceMachine.cpu
+            MemoryMB = $SourceMachine.memoryMB
+            StorageGB = $SourceMachine.storageGB
+            IsTemplate = $SourceMachine.isTemplate
+            GuestOsFamily = $SourceMachine.guestOSFamily
+            InterfaceType = $SourceMachine.interfaceType
+            Disks = $SourceMachine.disks
+            Properties = $SourceMachine.properties
+        }
     }
 }
