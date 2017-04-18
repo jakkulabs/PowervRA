@@ -1,4 +1,4 @@
-﻿function Get-vRAUserPrincipalGroupMembership {
+function Get-vRAUserPrincipalGroupMembership {
 <#
     .SYNOPSIS
     Retrieve a list of groups that a user is a member of
