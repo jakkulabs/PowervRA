@@ -62,6 +62,7 @@ pages:
     - Get-vRARoutedNetworkProfile : functions/Get-vRARoutedNetworkProfile.md
     - Get-vRAService : functions/Get-vRAService.md
     - Get-vRAServiceBlueprint : functions/Get-vRAServiceBlueprint.md
+    - Get-vRASourceMachine : functions/Get-vRASourceMachine.md
     - Get-vRAStorageReservationPolicy : functions/Get-vRAStorageReservationPolicy.md
     - Get-vRATenant : functions/Get-vRATenant.md
     - Get-vRATenantDirectory : functions/Get-vRATenantDirectory.md
