@@ -17,7 +17,7 @@ function Invoke-vRADataCollection {
     Invoke-vRADataCollection
 
 #>
-[CmdletBinding()][OutputType()]
+[CmdletBinding()]
 
     Param ()
 
