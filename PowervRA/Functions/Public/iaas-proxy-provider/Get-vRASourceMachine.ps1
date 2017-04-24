@@ -38,13 +38,13 @@
     Get-vRASourceMachine -Name vra-template-01
 
     .EXAMPLE
-    Get-vRAExternalNetworkProfile
+    Get-vRASourceMachine
 
     .EXAMPLE
-    Get-vRAExternalNetworkProfile -Template
+    Get-vRASourceMachine -Template
 
     .EXAMPLE
-    Get-vRAExternalNetworkProfile -Managed
+    Get-vRASourceMachine -Managed
 
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
