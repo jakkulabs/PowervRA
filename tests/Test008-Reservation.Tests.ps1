@@ -141,6 +141,13 @@ Describe -Name 'Reservation Tests' -Fixture {
         $UpdateNetworkError | Should Be $null
     }
 
+    It -Name "Remove a Network from named Reservation $($JSON.Reservation.Name)" -Test {
+
+        Get-vRAReservation -Name $JSON.Reservation.Name | Remove-vRAReservationNetwork -NetworkPath $JSON.Reservation.AdditionalNetworkPath -Confirm:$false
+        $ReservationE = Get-vRAReservation -Name $JSON.Reservation.Name
+        (($ReservationE.ExtensionData.entries | Where-Object {$_.key -eq 'reservationNetworks'}).value.items.values.entries | Where-Object {$_.key -eq 'networkPath'} | Select-Object -ExpandProperty value | Where-Object {$_.label -eq $JSON.Reservation.AdditionalNetworkPath}).label | Should BeNullOrEmpty
+    }    
+
     It -Name "Update named Reservation $($JSON.Reservation.Name)" -Test {
 
         $ReservationE = Get-vRAReservation -Name $JSON.Reservation.Name | Set-vRAReservation -Name $JSON.Reservation.UpdatedName -Confirm:$false

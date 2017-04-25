@@ -107,6 +107,9 @@
         if ($PSBoundParameters.ContainsKey("Body")) {
 
             $Params.Add("Body", $Body)
+            
+            # --- Log the payload being sent to the server
+            Write-Debug -Message $Body
 
         } elseif ($PSBoundParameters.ContainsKey("OutFile")) {
 

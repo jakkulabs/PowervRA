@@ -35,32 +35,24 @@ function xRequires {
 
 #>
 
-[CmdletBinding()]
-
+[CmdletBinding()][Alias("FunctionRequires")]
     Param (
-
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory=$true, Position=0)]
         [String]$Version
-
     )
-        # --- Test for vRA API version
-        if (-not $Global:vRAConnection){
 
-            throw "vRA Connection variable does not exist. Please run Connect-vRAServer first to create it"
-        }
+    # --- Test for vRA API version
+    if (-not $Global:vRAConnection){
+        throw "vRA Connection variable does not exist. Please run Connect-vRAServer first to create it"
+    }
 
-        # --- Convert version strings to [version] objects
-        $APIVersion = [version]$Global:vRAConnection.APIVersion
-        $RequiredVersion = [version]$Version
+    # --- Convert version strings to [version] objects
+    $APIVersion = [version]$Global:vRAConnection.APIVersion
+    $RequiredVersion = [version]$Version
 
-        if ($APIVersion -lt $RequiredVersion) {
-
-            $PSCallStack = Get-PSCallStack
-
-            throw "$($PSCallStack[1].Command) is not supported with vRA API version $($Global:vRAConnection.APIVersion)"
-
-        }
-
-
-
+    if ($APIVersion -lt $RequiredVersion) {
+        $PSCallStack = Get-PSCallStack
+        Write-Error -Message "$($PSCallStack[1].Command) is not supported with vRA API version $($Global:vRAConnection.APIVersion)"
+        break
+    }
 }

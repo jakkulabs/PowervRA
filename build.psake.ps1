@@ -294,6 +294,17 @@ Task CreateGitHubRelease {
     Set-GitHubSessionInformation -UserName $OrgName -APIKey $ENV:gh_token -Verbose:$VerbosePreference | Out-Null
 
     $ModuleManifestVersion = Get-Metadata -Path $ENV:BHPSModuleManifest -PropertyName "ModuleVersion"
+
+    try {
+        $GitHubRelease = Get-GitHubRelease -Repository $RepositoryName -Tag v$ModuleManifestVersion
+    }
+    catch {}
+
+    if ($GitHubRelease) {
+        Write-Output "A release with tag v$ModuleManifestVersion already exists. Skipping task"
+        return
+    }
+
     $AssetPath = "$($ENV:BHProjectPath)\$($ENV:BHProjectName).v$($ModuleManifestVersion).zip"  
     
     $Asset = @{
@@ -320,7 +331,16 @@ Task PublishToPSGallery {
 
     if ($ENV:BHBranchName -ne "master") {
         Write-Output "Not in master branch. Skipping task"
+        return
     }
 
-    Publish-Module -Path $ENV:BHPSModuleManifest -NuGetApiKey $ENV:psg_token -Confirm:$false -Verbose:$VerbosePreference | Out-Null
+    $ModuleManifestVersion = Get-Metadata -Path $ENV:BHPSModuleManifest -PropertyName "ModuleVersion"
+    $PSGalleryModule = Find-Module -Name $ModuleName -RequiredVersion $ModuleManifestVersion -ErrorAction SilentlyContinue
+
+    if ($PSGalleryModule) {
+        Write-Output "Version $ModuleManifestVersion already exists in the PowerShell Gallery. Skipping task"
+        return
+    }   
+
+    Publish-Module -Path $ENV:BHPSModulePath -NuGetApiKey $ENV:psg_token -Confirm:$false -Verbose:$VerbosePreference | Out-Null
 }
