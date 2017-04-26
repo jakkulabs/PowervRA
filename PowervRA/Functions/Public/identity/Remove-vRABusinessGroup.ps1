@@ -36,7 +36,7 @@
 
     [parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true)]
     [ValidateNotNullOrEmpty()]
-    [Alias(“Tenant”)]
+    [Alias("Tenant")]
     [String]$TenantId,
 
     [parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName="Id")]
