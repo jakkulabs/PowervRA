@@ -319,7 +319,7 @@ $($Content)
         #Add-Content -Path $PSM1.FullName -Value $Definition -Encoding UTF8
     }
 
-        Add-Content -Path $PSM1.FullName -Value $Body -Encoding UTF8
+    Add-Content -Path $PSM1.FullName -Value $Body -Encoding UTF8
 
     $ModuleManifestVersion = Get-Metadata -Path $ENV:BHPSModuleManifest -PropertyName "ModuleVersion"
     $ArtifactDestination = "$($ENV:BHProjectPath)\$($ENV:BHProjectName).v$($ModuleManifestVersion).zip"  
