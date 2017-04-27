@@ -351,6 +351,7 @@ Task CreateGitHubRelease {
 
     if ($ENV:BHBranchName -ne "master") {
         Write-Output "Not in master branch. Skipping task"
+        return
     }
 
     Set-GitHubSessionInformation -UserName $OrgName -APIKey $ENV:gh_token -Verbose:$VerbosePreference | Out-Null
