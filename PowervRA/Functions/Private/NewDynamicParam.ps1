@@ -123,8 +123,8 @@ Function NewDynamicParam {
                 #This standard block of code loops through bound parameters...
                 #If no corresponding variable exists, one is created
                     #Get common parameters, pick out bound parameters not in that set
-                    Function _temp { [cmdletbinding()] param() }
-                    $BoundKeys = $PSBoundParameters.keys | Where-Object { (get-command _temp | select -ExpandProperty parameters).Keys -notcontains $_}
+                    Function intTemp { [cmdletbinding()] param() }
+                    $BoundKeys = $PSBoundParameters.keys | Where-Object { (get-command intTemp | select -ExpandProperty parameters).Keys -notcontains $_}
                     foreach($param in $BoundKeys)
                     {
                         if (-not ( Get-Variable -name $param -scope 0 -ErrorAction SilentlyContinue ) )
