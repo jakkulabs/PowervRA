@@ -232,8 +232,8 @@
         xRequires -Version 7.0
 
         #Get common parameters, pick out bound parameters not in that set
-        Function _temp { [cmdletbinding()] param() }
-        $BoundKeys = $PSBoundParameters.keys | Where-Object { (get-command _temp | Select-Object -ExpandProperty parameters).Keys -notcontains $_}
+        Function intTemp { [cmdletbinding()] param() }
+        $BoundKeys = $PSBoundParameters.keys | Where-Object { (get-command intTemp | Select-Object -ExpandProperty parameters).Keys -notcontains $_}
         foreach($param in $BoundKeys) {
             if (-not ( Get-Variable -name $param -scope 0 -ErrorAction SilentlyContinue ) ) {
                 New-Variable -Name $Param -Value $PSBoundParameters.$param

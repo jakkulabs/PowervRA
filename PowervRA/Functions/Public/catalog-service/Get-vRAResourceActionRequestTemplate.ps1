@@ -50,6 +50,17 @@ function Get-vRAResourceActionRequestTemplate {
 
         xRequires -Version 7.0
 
+        function intRequestResourceActionTemplate($ResourceId, $ActionId) {
+        <#
+
+            Private function to invoke the resource action request template
+            request
+
+        #>
+            $URI = "/catalog-service/api/consumer/resources/$($ResourceId)/actions/$($ActionId)/requests/template"
+            $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
+            $Response | ConvertTo-Json -Depth 100
+        }        
     }
  
     Process {
@@ -63,7 +74,7 @@ function Get-vRAResourceActionRequestTemplate {
 
                     foreach ($Id in $ResourceId) {
 
-                        _requestResourceActionTemplate -ResourceId $Id -ActionId $ActionId
+                        intRequestResourceActionTemplate -ResourceId $Id -ActionId $ActionId
 
                     }
 
@@ -80,7 +91,7 @@ function Get-vRAResourceActionRequestTemplate {
                         $Resource = Get-vRAResource -Name $ResourceName
                         $ResourceId = $Resource.ResourceId
 
-                        _requestResourceActionTemplate -ResourceId $ResourceId -ActionId $ActionId
+                        intRequestResourceActionTemplate -ResourceId $ResourceId -ActionId $ActionId
 
                     }
 
@@ -102,21 +113,5 @@ function Get-vRAResourceActionRequestTemplate {
     End {
         
     }
-
-}
-
-function _requestResourceActionTemplate($ResourceId, $ActionId) {
-<#
-
-    Private function to invoke the resource action request template
-    request
-
-#>
-
-    $URI = "/catalog-service/api/consumer/resources/$($ResourceId)/actions/$($ActionId)/requests/template"
-
-    $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
-
-    $Response | ConvertTo-Json -Depth 100
 
 }
