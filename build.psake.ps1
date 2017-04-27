@@ -110,8 +110,11 @@ Task UpdateModuleManifest {
     foreach ($FunctionFile in $PublicFunctions) {
         $AST = [System.Management.Automation.Language.Parser]::ParseFile($FunctionFile.FullName, [ref]$null, [ref]$null)        
         $Functions = $AST.FindAll({
-                $args[0] -is [System.Management.Automation.Language.FunctionDefinitionAst]
-            }, $true)
+            # --- Only export functions that contain a "-" and do not start with "int"
+            $args[0] -is [System.Management.Automation.Language.FunctionDefinitionAst] -and `
+            $args[0].Name -match "-" -and `
+            !$args[0].Name.StartsWith("int")
+        },$true)
         if ($Functions.Name) {
             $ExportFunctions += $Functions.Name
         }        
