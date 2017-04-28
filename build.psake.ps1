@@ -270,7 +270,7 @@ Task CreateArtifact {
     # --- Copy accross the updated psd1 file
     Write-Verbose "Copying Module Manifest"
     $ModuleManifestSource = Get-Item -Path $ENV:BHPSModuleManifest
-    Copy-Item -Path $ModuleManifestSource.FullName -Destination "$($ReleaseDirectory.FullName)\$($ModuleManifestSource.Name)" -Force
+    Copy-Item -Path $ModuleManifestSource.FullName -Destination "$($ReleaseDirectory.FullName)\$($ModuleName).psd1" -Force
 
     # --- Create an empty psm1 file
     Write-Output "Creating base PSM1 file"
