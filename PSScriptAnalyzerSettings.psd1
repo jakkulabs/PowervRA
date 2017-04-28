@@ -1,7 +1,6 @@
 @{
     ExcludeRules=@(
         "PSAvoidUsingUserNameAndPassWordParams",
-        "PSAvoidUsingPlainTextForPassword",
         "PSAvoidGlobalVars"
     )
     
