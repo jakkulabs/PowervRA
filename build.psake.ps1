@@ -262,6 +262,65 @@ Task CommitChanges {
 
 Task CreateArtifact {
 
+    # --- Create release directory
+    Write-Output "Creating Release Directory:"
+    $ReleaseDirectory = New-Item -Path "$($ENV:BHProjectPath)\Release\$($ModuleName)" -ItemType Directory -Force
+    Write-Output "  - $($ReleaseDirectory.FullName)"
+
+    # --- Copy accross the updated psd1 file
+    Write-Verbose "Copying Module Manifest"
+    $ModuleManifestSource = Get-Item -Path $ENV:BHPSModuleManifest
+    Copy-Item -Path $ModuleManifestSource.FullName -Destination "$($ReleaseDirectory.FullName)\$($ModuleManifestSource.Name)" -Force
+
+    # --- Create an empty psm1 file
+    Write-Output "Creating base PSM1 file"
+    $PSM1 = New-Item -Path "$($ReleaseDirectory.FullName)\$($ModuleName).psm1" -ItemType File -Force
+
+    # --- Set psm1 content
+    $PSM1Header = @"
+<#
+     _____                             _____            
+    |  __ \                           |  __ \     /\    
+    | |__) |____      _____ _ ____   _| |__) |   /  \   
+    |  ___/ _ \ \ /\ / / _ \ '__\ \ / /  _  /   / /\ \  
+    | |  | (_) \ V  V /  __/ |   \ V /| | \ \  / ____ \ 
+    |_|   \___/ \_/\_/ \___|_|    \_/ |_|  \_\/_/    \_\                                                    
+
+#>
+
+# --- Clean up vRAConnection variable on module remove
+`$ExecutionContext.SessionState.Module.OnRemove = {
+
+    Remove-Variable -Name vRAConnection -Force -ErrorAction SilentlyContinue
+
+}
+
+"@  
+
+    Set-Content -Path $PSM1.FullName -Value $PSM1Header -Encoding UTF8
+
+    # --- Process Functions
+    $Functions = Get-ChildItem -Path .\PowervRA\Functions -File -Recurse
+    Write-Output "Processing function:"
+    foreach ($Function in $Functions) {
+
+        Write-Output "  - $($Function.BaseName)"
+        $Content = Get-Content -Path $Function.FullName -Raw
+        $Definition = @"
+<#
+    - Function: $($Function.BaseName)
+#>
+
+$($Content)
+`n
+"@
+
+        $Body += $Definition
+        #Add-Content -Path $PSM1.FullName -Value $Definition -Encoding UTF8
+    }
+
+    Add-Content -Path $PSM1.FullName -Value $Body -Encoding UTF8
+
     $ModuleManifestVersion = Get-Metadata -Path $ENV:BHPSModuleManifest -PropertyName "ModuleVersion"
     $ArtifactDestination = "$($ENV:BHProjectPath)\$($ENV:BHProjectName).v$($ModuleManifestVersion).zip"  
 
@@ -270,7 +329,7 @@ Task CreateArtifact {
     }
 
     Write-Output "Compressing module: $($ArtifactDestination)"
-    Compress-Archive -Path $ENV:BHPSModulePath -DestinationPath $ArtifactDestination -Force -Confirm:$false -Verbose:$VerbosePreference | Out-Null
+    Compress-Archive -Path $ReleaseDirectory.FullName -DestinationPath $ArtifactDestination -Force -Confirm:$false -Verbose:$VerbosePreference | Out-Null
 
     if ($ENV:BHBuildSystem -eq "AppVeyor") {
         Write-Output "Pushing asset to AppVeyor: $($ArtifactDestination)"
@@ -292,6 +351,7 @@ Task CreateGitHubRelease {
 
     if ($ENV:BHBranchName -ne "master") {
         Write-Output "Not in master branch. Skipping task"
+        return
     }
 
     Set-GitHubSessionInformation -UserName $OrgName -APIKey $ENV:gh_token -Verbose:$VerbosePreference | Out-Null
@@ -345,5 +405,5 @@ Task PublishToPSGallery {
         return
     }   
 
-    Publish-Module -Path $ENV:BHPSModulePath -NuGetApiKey $ENV:psg_token -Confirm:$false -Verbose:$VerbosePreference | Out-Null
+    Publish-Module -Path "$($ENV:BHProjectPath)\Release\$($ModuleName)" -NuGetApiKey $ENV:psg_token -Confirm:$false -Verbose:$VerbosePreference | Out-Null
 }
