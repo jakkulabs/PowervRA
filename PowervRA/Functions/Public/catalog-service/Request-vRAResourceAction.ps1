@@ -19,6 +19,9 @@ function Request-vRAResourceAction {
     .PARAMETER JSON
     A JSON payload for the request
 
+    .PARAMETER Wait
+    Wait for the request to complete
+    
     .INPUTS
     System.String
 
@@ -72,6 +75,9 @@ function Request-vRAResourceAction {
         [ValidateNotNullOrEmpty()]
         [String]$JSON
 
+        [Parameter(Mandatory=$false)]
+        [Switch]$Wait
+        
     )
 
     Begin {
@@ -124,7 +130,38 @@ function Request-vRAResourceAction {
 
                 $URI = "/catalog-service/api/consumer/resources/$($ResourceId)/actions/$($ActionId)/requests"
 
-                Invoke-vRARestMethod -Method POST -URI $URI -Body $JSON -Verbose:$VerbosePreference | Out-Null
+                $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $JSON -Verbose:$VerbosePreference
+
+                if ($PSBoundParameters.ContainsKey("Wait")) {
+
+                    While($true) {
+
+                        $URI = "/catalog-service/api/consumer/requests/$($Response.Id)"
+
+                        $Request = Invoke-vRARestMethod -Method Get -URI $URI -Verbose:$VerbosePreference
+
+                        Write-Verbose -Message "State: $($Request.state)"
+
+                        if ($Request.state -eq "SUCCESSFUL" -or $Request.state -Like "*FAILED") {
+
+                            if ($Request.state -Like "*FAILED") {
+
+                                throw "$($Request.requestCompletion.completionDetails)"
+
+                            }
+
+                            Write-Verbose -Message "Request $($Request.id) was successful"
+                            break
+                        }
+
+                        Start-Sleep -Seconds 5
+
+                    }
+
+                }
+
+                # --- Return the request
+                Get-vRARequest -Id $Response.Id
 
             }
 
