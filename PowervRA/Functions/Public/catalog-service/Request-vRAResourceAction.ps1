@@ -73,7 +73,7 @@ function Request-vRAResourceAction {
 
         [Parameter(Mandatory=$true,ValueFromPipeline=$true, ParameterSetName="JSON")]
         [ValidateNotNullOrEmpty()]
-        [String]$JSON
+        [String]$JSON,
 
         [Parameter(Mandatory=$false)]
         [Switch]$Wait
