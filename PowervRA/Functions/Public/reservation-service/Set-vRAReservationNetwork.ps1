@@ -59,6 +59,33 @@
  
     begin {
     
+        function intGetNetworkProfileByName($Network) {
+        <#
+
+            Internal helper fucntion to retrieve a network profile by it's name
+
+        #>
+            $Response = (Invoke-vRARestMethod -Method GET -URI "/iaas-proxy-provider/api/network/profiles?`$filter=name%20eq%20'$($NetworkProfile)'").content
+            if (!$Response) {
+                throw "Could not find Network Profile with name $($NetworkProfile)"
+            }
+            return $Response
+        }
+
+        function intGetNetworkByPath ($ReservationNetworks, $NetworkPath) {
+        <#
+
+            Internal helper function to retrieve an existing network path
+
+        #>
+            foreach ($ReservationNetwork in $ReservationNetworks) {
+                $ExistingNetworkPath = $ReservationNetwork.values.entries | Where-Object  {$_.key -eq "networkPath"} 
+                if ($ExistingNetworkPath.value.label -eq $NetworkPath) {
+                    return $ReservationNetwork
+                }
+            }
+        }
+
     }
     
     process {
@@ -90,7 +117,7 @@
             $SelectedReservationNetworks = ($Reservation.extensionData.entries | Where-Object {$_.key -eq "reservationNetworks"}).value.items
 
             # --- Check to see if the provided networkpath is currently selected in the reservation
-            $ExistingReservationNetwork = getNetworkByPath $SelectedReservationNetworks $NetworkPath
+            $ExistingReservationNetwork = intGetNetworkByPath $SelectedReservationNetworks $NetworkPath
 
             if ($ExistingReservationNetwork) {
 
@@ -99,7 +126,7 @@
 
                     Write-Verbose -Message "Network path exists in reservation and Network Profile has been specified"
                 
-                    $NetworkProfileObject = getNetworkProfileByName $NetworkProfile
+                    $NetworkProfileObject = intGetNetworkProfileByName $NetworkProfile
 
                     # --- Check to see if the network path already has a profile assigned, if one exists, update it, if not add it
                     $ExistingReservationNetworkProfile = $ExistingReservationNetwork | Where-Object{$_.key -eq "networkProfile"}
@@ -181,7 +208,7 @@
 
                     Write-Verbose -Message "Assigning a Network Profile to new Network Path"
 
-                    $NetworkProfileObject = getNetworkProfileByName $NetworkProfile
+                    $NetworkProfileObject = intGetNetworkProfileByName $NetworkProfile
 
                     $ReservationNetworkProfileTemplate = @"
 
@@ -229,46 +256,4 @@
     end {
         
     }
-}
-
-function getNetworkProfileByName($Network) {
-
-<#
-
-    Internal helper fucntion to retrieve a network profile by it's name
-
-#>
-
-    $Response = (Invoke-vRARestMethod -Method GET -URI "/iaas-proxy-provider/api/network/profiles?`$filter=name%20eq%20'$($NetworkProfile)'").content
-
-    if (!$Response) {
-
-        throw "Could not find Network Profile with name $($NetworkProfile)"
-
-    }
-
-    return $Response
-
-}
-
-function getNetworkByPath ($ReservationNetworks, $NetworkPath) {
-
-<#
-
-    Internal helper function to retrieve an existing network path
-
-#>
-
-    foreach ($ReservationNetwork in $ReservationNetworks) {
-
-        $ExistingNetworkPath = $ReservationNetwork.values.entries | Where-Object  {$_.key -eq "networkPath"} 
-
-        if ($ExistingNetworkPath.value.label -eq $NetworkPath) {
-
-            return $ReservationNetwork
-
-        }
-        
-    }
-
 }

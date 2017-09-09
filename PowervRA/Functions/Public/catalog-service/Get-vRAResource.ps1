@@ -48,16 +48,16 @@
     Get-vRAResource
 
     .EXAMPLE
-    Get-vRADeployment -WithExtendedData
+    Get-vRAResource -WithExtendedData
 
     .EXAMPLE
-    Get-vRADeployment -WithOperations
+    Get-vRAResource -WithOperations
     
     .EXAMPLE
-    Get-vRADeployment -Id "6195fd70-7243-4dc9-b4f3-4b2300e15ef8"
+    Get-vRAResource -Id "6195fd70-7243-4dc9-b4f3-4b2300e15ef8"
 
     .EXAMPLE
-    Get-vRADeployment -Name "CENTOS-555667"
+    Get-vRAResource -Name "CENTOS-555667"
 
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]

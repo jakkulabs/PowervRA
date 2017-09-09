@@ -23,9 +23,8 @@ RUN mkdir -p /root/.config/powershell/
 RUN mkdir -p /root/.local/share/powershell/Modules
 
 # Bootstrap the image with PowervRA
-ADD bootstrap.ps1 /tmp
-RUN powershell ./tmp/bootstrap.ps1
-RUN rm -f /tmp/bootstrap.ps1
+RUN powershell -Command 'Set-PSRepository -Name PSGallery -InstallationPolicy Trusted'
+RUN powershell -Command 'Install-Module -Name PowervRA -Confirm:$false'
 
 # Change the default PowerShell profile to include the new profile
 ADD profile.ps1 /root/.config/powershell/Microsoft.PowerShell_profile.ps1

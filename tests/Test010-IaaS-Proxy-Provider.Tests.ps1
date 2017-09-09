@@ -206,6 +206,31 @@ Describe -Name 'Iaas-Proxy-Provider Tests' -Fixture {
 
     }
 
+    Context -Name "Source Machines" -Fixture {
+
+        # --- Get a source machine for tests
+        It -Name "Return Source Machines" -Test {
+
+            $SourceMachines = Get-vRASourceMachine
+            $SourceMachines.Count | Should BeGreaterThan 0
+        }
+
+        It -Name "Return a Source Machine by Id" -Test {
+
+            $TestMachine = Get-vRASourceMachine | Select-Object -First 1
+            $SourceMachine = Get-vRASourceMachine -Id $TestMachine.Id
+            $SourceMachine.Id | Should Be $TestMachine.Id
+        }
+
+        It -Name "Return a Source Machine by Name" -Test {
+
+            $TestMachine = Get-vRASourceMachine | Select-Object -First 1
+            $SourceMachine = Get-vRASourceMachine -Name $TestMachine.Name
+            $SourceMachine.Name | Should Be $TestMachine.Name
+        }
+
+    }
+
 }
 
 # --- Cleanup

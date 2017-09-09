@@ -62,15 +62,18 @@ pages:
     - Get-vRARoutedNetworkProfile : functions/Get-vRARoutedNetworkProfile.md
     - Get-vRAService : functions/Get-vRAService.md
     - Get-vRAServiceBlueprint : functions/Get-vRAServiceBlueprint.md
+    - Get-vRASourceMachine : functions/Get-vRASourceMachine.md
     - Get-vRAStorageReservationPolicy : functions/Get-vRAStorageReservationPolicy.md
     - Get-vRATenant : functions/Get-vRATenant.md
     - Get-vRATenantDirectory : functions/Get-vRATenantDirectory.md
     - Get-vRATenantDirectoryStatus : functions/Get-vRATenantDirectoryStatus.md
     - Get-vRATenantRole : functions/Get-vRATenantRole.md
     - Get-vRAUserPrincipal : functions/Get-vRAUserPrincipal.md
+    - Get-vRAUserPrincipalGroupMembership : functions/Get-vRAUserPrincipalGroupMembership.md
     - Get-vRAVersion : functions/Get-vRAVersion.md
     - Import-vRAIcon : functions/Import-vRAIcon.md
     - Import-vRAPackage : functions/Import-vRAPackage.md
+    - Invoke-vRADataCollection : functions/Invoke-vRADataCollection.md
     - Invoke-vRARestMethod : functions/Invoke-vRARestMethod.md
     - New-vRABusinessGroup : functions/New-vRABusinessGroup.md
     - New-vRAEntitlement : functions/New-vRAEntitlement.md
@@ -99,6 +102,7 @@ pages:
     - Remove-vRAPrincipalFromTenantRole : functions/Remove-vRAPrincipalFromTenantRole.md
     - Remove-vRAPropertyDefinition : functions/Remove-vRAPropertyDefinition.md
     - Remove-vRAReservation : functions/Remove-vRAReservation.md
+    - Remove-vRAReservationNetwork : functions/Remove-vRAReservationNetwork.md
     - Remove-vRAReservationPolicy : functions/Remove-vRAReservationPolicy.md
     - Remove-vRARoutedNetworkProfile : functions/Remove-vRARoutedNetworkProfile.md
     - Remove-vRAService : functions/Remove-vRAService.md

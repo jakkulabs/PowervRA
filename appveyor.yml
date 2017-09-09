@@ -1,4 +1,4 @@
-version: 2.1.0.{build}
+version: 2.2.0.{build}
 environment:
   gh_token:
     secure: 3WtkOGm4k++uL56CWe9sJF6HzFAUs7BkM7mvbqdKhkwXOFDtZFIC0k7hM5eGmfLj

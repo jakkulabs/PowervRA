@@ -47,7 +47,13 @@ Describe -Name 'User Principal Tests' -Fixture {
         $UserPrincipalD | Should Be $null
                 
     }
-       
+
+    It -Name "Return User Principal Group Memberships" -Test {
+
+        $UserPrincipal = Get-vRAUserPrincipal -Id $JSON.Principal.UserPrincipalId
+        $GroupMemberships = $UserPrincipal | Get-vRAUserPrincipalGroupMembership | Select-Object -ExpandProperty Name
+        $GroupMemberships -contains "ALL USERS" | Should Be $true
+    } 
 }
 
 Describe -Name 'Group Principal Tests' -Fixture {
