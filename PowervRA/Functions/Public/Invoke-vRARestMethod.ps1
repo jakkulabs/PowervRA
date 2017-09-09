@@ -114,19 +114,17 @@
         Uri = $FullURI
     }
 
-    # --- Add Body or OutFile depending on parameter set
-    switch ($PSCmdlet.ParameterSetName) {
-        'Body' {
+    if ($PSBoundParameters.ContainsKey("Body")) {
 
-            $Params.Add("Body", $Body)
-            Write-Debug -Message $Body
-            break
-        }
-        'OutFile' {
+        $Params.Add("Body", $Body)
 
-            $Params.Add("OutFile", $OutFile)
-            break
-        }
+        # --- Log the payload being sent to the server
+        Write-Debug -Message $Body
+
+    } elseif ($PSBoundParameters.ContainsKey("OutFile")) {
+
+        $Params.Add("OutFile", $OutFile)
+
     }
 
     # --- Support for PowerShell Core certificate checking
