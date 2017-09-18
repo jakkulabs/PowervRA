@@ -16,10 +16,10 @@ function Get-vRAResourceAction {
     System.Management.Automation.PSObject.
 
     .EXAMPLE
-    Get-vRAConsumerResource -Name vm01 | Get-vRAResourceAction 
+    Get-vRAResource -Name vm01 | Get-vRAResourceAction 
     
     .EXAMPLE
-    Get-vRAConsumerResource -Name vm01 | Get-vRAResourceAction | Select Id, Name, BindingId
+    Get-vRAResource -Name vm01 | Get-vRAResourceAction | Select Id, Name, BindingId
 
 #>
 [CmdletBinding()][OutputType('System.Management.Automation.PSObject')]
