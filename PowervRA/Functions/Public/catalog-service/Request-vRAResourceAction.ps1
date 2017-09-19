@@ -26,7 +26,7 @@ function Request-vRAResourceAction {
     System.String
 
     .EXAMPLE
-    $ResourceActionId = (Get-vRAResource -Name vm01 | Get-vRAResourceAction "Reboot").id
+    $ResourceActionId = (Get-vRAResource -Name vm01 | Get-vRAResourceAction | Where-Object {$_.Name -eq "Reboot"}).id
     Request-vRAResourceAction -Id $ResourceActionId -ResourceName vm01
 
     .EXAMPLE
