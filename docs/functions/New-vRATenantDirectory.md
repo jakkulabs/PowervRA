@@ -27,17 +27,15 @@ Create a vRA Tenant Directory
 ### -------------------------- EXAMPLE 1 --------------------------
 ```
 $SecurePassword = ConvertTo-SecureString "P@ssword" -AsPlainText -Force
-```
 
 New-vRATenantDirectory -ID Tenant01 -Name Tenant01 -Description "This is the Tenant01 Directory" -Type AD -Domain "vrademo.local" -UserNameDN "CN=vrasvc,OU=Service Accounts,OU=HQ,DC=vrademo,DC=local" \`
   -Password $SecurePassword -URL "ldap://dc01.vrademo.local:389" -GroupBaseSearchDN "OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -UserBaseSearchDN "OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" \`
  -GroupBaseSearchDNs "OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -UserBaseSearchDNs "OU=Tenant01,OU=Tenants,DC=vrademo,DC=local" -TrustAll
+```
 
 ### -------------------------- EXAMPLE 2 --------------------------
 ```
 $JSON = @"
-```
-
 {
   "name" : "Tenant01",
   "description" : "Tenant01",
@@ -60,6 +58,7 @@ $JSON = @"
 }
 "@
 $JSON | New-vRATenantDirectory -ID Tenant01
+```
 
 ## PARAMETERS
 
