@@ -101,7 +101,7 @@
 
             "Standard"  {
 
-                $URI = "/reservation-service/api/reservations/policies?`$filter=reservationPolicyTypeId%20eq%20'Infrastructure.Reservation.Policy.ComputeResource'"
+                $URI = "/reservation-service/api/reservations/policies?`$filter=reservationPolicyTypeId%20eq%20'Infrastructure.Reservation.Policy.ComputeResource'&limit=$($Limit)"
 
                 # --- Run vRA REST Request
                 $Response = Invoke-vRARestMethod -Method GET -URI $URI
