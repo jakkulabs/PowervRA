@@ -1,16 +1,18 @@
 ﻿function Get-vRAReservationType {
 <#
     .SYNOPSIS
-    Get supported reservation types
+    Get supported Reservation Types
     
     .DESCRIPTION
-    Get supported reservation types
+    Get supported Reservation Types
 
     .PARAMETER Id
-    The id of the reservation type
+    The id of the Reservation Type
     
     .PARAMETER Name
-    The name of the reservation type
+    The name of the Reservation Type
+    Valid names vRA 7.1 and earlier: Amazon, Hyper-V, KVM, OpenStack, SCVMM, vCloud Air, vCloud Director, vSphere,XenServer
+    Valid names vRA 7.2 and later: Amazon EC2, Azure, Hyper-V (SCVMM), Hyper-V (Standalone), KVM (RHEV), OpenStack, vCloud Air, vCloud Director, vSphere (vCenter), XenServer
 
     .PARAMETER Limit
     The number of entries returned per page from the API. This has a default value of 100.
@@ -26,14 +28,22 @@
     System.Management.Automation.PSObject.
 
     .EXAMPLE
-    Get-vRAReservationType -Id "Infrastructure.Reservation.Cloud.vCloud"
+    # Get all available Reservation Types
+    Get-vRAReservationType
+
+    .EXAMPLE
+    # Get the vSphere Reservation Type in vRA 7.1
+    Get-vRAReservationType -Name "vSphere"
+
+    .EXAMPLE
+    # Get the vSphere Reservation Type in vRA 7.2 and later
+    Get-vRAReservationType -Name "vSphere (vCenter)"
 
     .EXAMPLE
     Get-vRAReservationType -Name "vCloud Director"
 
     .EXAMPLE
-    Get-vRAReservationType
-
+    Get-vRAReservationType -Id "Infrastructure.Reservation.Cloud.vCloud"
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject' , 'System.Object[]')]
 
