@@ -8,6 +8,8 @@
 
     .PARAMETER Type
     The reservation type
+    Valid types vRA 7.1 and earlier: Amazon, Hyper-V, KVM, OpenStack, SCVMM, vCloud Air, vCloud Director, vSphere, XenServer
+    Valid types vRA 7.2 and later: Amazon EC2, Azure, Hyper-V (SCVMM), Hyper-V (Standalone), KVM (RHEV), OpenStack, vCloud Air, vCloud Director, vSphere (vCenter), XenServer
 
     .PARAMETER ComputeResourceId
     The id of the compute resource
@@ -22,11 +24,25 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    Get-vRAReservationComputeResourceNetwork -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d -Name VMNetwork
+    # Retrieve associated compute resources for the desired reservation type in vRA 7.1
+    Get-vRAReservationComputeResource -Type 'vSphere' -Name 'Cluster01 (vCenter)' | Select-Object -ExpandProperty Id
+
+    # Retrieve all associated compute resource networks for the desired reservation type in vRA 7.1
+    Get-vRAReservationComputeResourceNetwork -Type 'vSphere' -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d
 
     .EXAMPLE
-    Get-vRAReservationComputeResourceNetwork -Type vSphere -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d
+    # Retrieve associated compute resources for the desired reservation type in vRA 7.1
+    Get-vRAReservationComputeResource -Type 'vSphere' -Name 'Cluster01 (vCenter)' | Select-Object -ExpandProperty Id
 
+    # Retrieve associated compute resource network for the desired reservation type in vRA 7.1
+    Get-vRAReservationComputeResourceNetwork -Type 'vSphere' -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d -Name VMNetwork
+
+    .EXAMPLE
+    # Retrieve associated compute resources for the desired reservation type in vRA 7.2 and later
+    Get-vRAReservationComputeResource -Type 'vSphere (vCenter)' -Name 'Cluster01 (vCenter)' | Select-Object -ExpandProperty Id
+
+    # Retrieve associated compute resource network for the desired reservation type in vRA 7.2 and later
+    Get-vRAReservationComputeResourceNetwork -Type 'vSphere (vCenter)' -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d -Name VMNetwork
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
