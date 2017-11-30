@@ -8,6 +8,8 @@
 
     .PARAMETER Type
     The reservation type
+    Valid types vRA 7.1 and earlier: Amazon, Hyper-V, KVM, OpenStack, SCVMM, vCloud Air, vCloud Director, vSphere, XenServer
+    Valid types vRA 7.2 and later: Amazon EC2, Azure, Hyper-V (SCVMM), Hyper-V (Standalone), KVM (RHEV), OpenStack, vCloud Air, vCloud Director, vSphere (vCenter), XenServer
 
     .PARAMETER Name
     The name of the reservation
@@ -82,33 +84,34 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
+    # --- Create a new Reservation in vRA 7.1
     # --- Get the compute resource id
-    $ComputeResource = Get-vRAReservationComputeResource -Type vSphere -Name "Cluster01 (vCenter)"
+    $ComputeResource = Get-vRAReservationComputeResource -Type 'vSphere' -Name 'Cluster01 (vCenter)'
 
     # --- Get the network definition
     $NetworkDefinitionArray = @()
-    $Network1 = New-vRAReservationNetworkDefinition -Type vSphere -ComputeResourceId $ComputeResource.Id -NetworkPath "VM Network" -NetworkProfile "Test-Profile"
+    $Network1 = New-vRAReservationNetworkDefinition -Type 'vSphere' -ComputeResourceId $ComputeResource.Id -NetworkPath 'VM Network' -NetworkProfile 'Test-Profile'
     $NetworkDefinitionArray += $Network1
 
     # --- Get the storage definition
     $StorageDefinitionArray = @()
-    $Storage1 = New-vRAReservationStorageDefinition -Type vSphere -ComputeResourceId $ComputeResource.Id -Path "Datastore1" -ReservedSizeGB 10 -Priority 0 
+    $Storage1 = New-vRAReservationStorageDefinition -Type 'vSphere' -ComputeResourceId $ComputeResource.Id -Path 'Datastore1' -ReservedSizeGB 10 -Priority 0 
     $StorageDefinitionArray += $Storage1
 
     # --- Set the parameters and create the reservation
     $Param = @{
 
-        Type = "vSphere"
-        Name = "Reservation01"
-        Tenant = "Tenant01"
-        BusinessGroup = "Default Business Group[Tenant01]"
-        ReservationPolicy = "ReservationPolicy1"
+        Type = 'vSphere'
+        Name = 'Reservation01'
+        Tenant = 'Tenant01'
+        BusinessGroup = 'Default Business Group[Tenant01]'
+        ReservationPolicy = 'ReservationPolicy1'
         Priority = 0
         ComputeResourceId = $ComputeResource.Id
         Quota = 0
         MemoryGB = 2048
         Storage = $StorageDefinitionArray
-        ResourcePool = "Resources"
+        ResourcePool = 'Resources'
         Network = $NetworkDefinitionArray
         EnableAlerts = $false
 
@@ -116,7 +119,41 @@
 
     New-vRAReservation @Param -Verbose
 
+    .EXAMPLE
+    # --- Create a new Reservation in vRA 7.2 and later
+    # --- Get the compute resource id
+    $ComputeResource = Get-vRAReservationComputeResource -Type 'vSphere (vCenter)' -Name 'Cluster01 (vCenter)'
 
+    # --- Get the network definition
+    $NetworkDefinitionArray = @()
+    $Network1 = New-vRAReservationNetworkDefinition -Type 'vSphere (vCenter)' -ComputeResourceId $ComputeResource.Id -NetworkPath 'VM Network' -NetworkProfile 'Test-Profile'
+    $NetworkDefinitionArray += $Network1
+
+    # --- Get the storage definition
+    $StorageDefinitionArray = @()
+    $Storage1 = New-vRAReservationStorageDefinition -Type 'vSphere (vCenter)' -ComputeResourceId $ComputeResource.Id -Path 'Datastore1' -ReservedSizeGB 10 -Priority 0 
+    $StorageDefinitionArray += $Storage1
+
+    # --- Set the parameters and create the reservation
+    $Param = @{
+
+        Type = 'vSphere (vCenter)'
+        Name = 'Reservation01'
+        Tenant = 'Tenant01'
+        BusinessGroup = 'Default Business Group[Tenant01]'
+        ReservationPolicy = 'ReservationPolicy1'
+        Priority = 0
+        ComputeResourceId = $ComputeResource.Id
+        Quota = 0
+        MemoryGB = 2048
+        Storage = $StorageDefinitionArray
+        ResourcePool = 'Resources'
+        Network = $NetworkDefinitionArray
+        EnableAlerts = $false
+
+    }
+
+    New-vRAReservation @Param -Verbose
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
@@ -333,7 +370,7 @@
 
                     switch ($PSBoundParameters.Type) {
 
-                        'vSphere' {
+                        {$_ -in 'vSphere','vSphere (vCenter)'} {
                             
                             # ---
                             # --- Alert Policy
@@ -726,7 +763,7 @@
 
                         }
 
-                        'Amazon' {
+                        {$_ -in 'Amazon','Amazon EC2'} {
                         
                             Write-Verbose -Message "Support for this reservation type has not been added"
                             break
@@ -740,28 +777,28 @@
 
                         }
 
-                        'vCloud' {
+                        'vCloud Director' {
                         
                             Write-Verbose -Message "Support for this reservation type has not been added"
                             break                        
                         
                         }
 
-                        'HyperV' {
+                        {$_ -in 'Hyper-V','Hyper-V (Standalone)'} {
                         
                             Write-Verbose -Message "Support for this reservation type has not been added"
                             break                        
                         
                         }
 
-                        'KVM' {
+                        {$_ -in 'KVM','KVM (RHEV)'} {
                         
                             Write-Verbose -Message "Support for this reservation type has not been added"
                             break                        
                         
                         }
 
-                        'SCVMM' {
+                        {$_ -in 'SCVMM','Hyper-V (SCVMM)'} {
                         
                             Write-Verbose -Message "Support for this reservation type has not been added"
                             break                        
