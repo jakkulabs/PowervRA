@@ -22,14 +22,14 @@
 
     .EXAMPLE
     # Retrieve associated compute resources for the desired reservation type in vRA 7.1
-    Get-vRAReservationComputeResource -Type 'vSphere' -Name "Cluster01 (vCenter)" | Select-Object -ExpandProperty Id
+    Get-vRAReservationComputeResource -Type 'vSphere' -Name 'Cluster01 (vCenter)' | Select-Object -ExpandProperty Id
 
     # Retrieve associated compute resource memory for the desired reservation type in vRA 7.1
     Get-vRAReservationComputeResourceMemory -Type 'vSphere' -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d
 
     .EXAMPLE
     # Retrieve associated compute resources for the desired reservation type in vRA 7.2 and later
-    Get-vRAReservationComputeResource -Type 'vSphere (vCenter)' -Name "Cluster01 (vCenter)" | Select-Object -ExpandProperty Id
+    Get-vRAReservationComputeResource -Type 'vSphere (vCenter)' -Name 'Cluster01 (vCenter)' | Select-Object -ExpandProperty Id
 
     # Retrieve associated compute resource memory for the desired reservation type in vRA 7.2 and later
     Get-vRAReservationComputeResourceMemory -Type 'vSphere (vCenter)' -ComputeResourceId 0c0a6d46-4c37-4b82-b427-c47d026bf71d
