@@ -9,6 +9,8 @@
 
     .PARAMETER Type
     The reservation type
+    Valid types vRA 7.1 and earlier: Amazon, Hyper-V, KVM, OpenStack, SCVMM, vCloud Air, vCloud Director, vSphere, XenServer
+    Valid types vRA 7.2 and later: Amazon EC2, Azure, Hyper-V (SCVMM), Hyper-V (Standalone), KVM (RHEV), OpenStack, vCloud Air, vCloud Director, vSphere (vCenter), XenServer
 
     .PARAMETER ComputeResourceId
     The id of the compute resource
@@ -30,10 +32,16 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
+    # Create a storage definition for type vSphere in vRA 7.1
     $StorageDefinitionArray = @()
-    $Storage1 = New-vRAReservationStorageDefinition -Type vSphere -ComputeResourceId 75ae3400-beb5-4b0b-895a-0484413c93b1 -Path "Datastore01" -ReservedSizeGB 10 -Priority 0 
+    $Storage1 = New-vRAReservationStorageDefinition -Type 'vSphere' -ComputeResourceId 75ae3400-beb5-4b0b-895a-0484413c93b1 -Path 'Datastore01' -ReservedSizeGB 10 -Priority 0 
     $StorageDefinitionArray += $Storage1
 
+    .EXAMPLE
+    # Create a storage definition for type vSphere in vRA 7.2 or later
+    $StorageDefinitionArray = @()
+    $Storage1 = New-vRAReservationStorageDefinition -Type 'vSphere (vCenter)' -ComputeResourceId 75ae3400-beb5-4b0b-895a-0484413c93b1 -Path 'Datastore01' -ReservedSizeGB 10 -Priority 0 
+    $StorageDefinitionArray += $Storage1
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
