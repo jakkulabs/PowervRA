@@ -26,7 +26,7 @@
 
 [Cmdletbinding()]
 Param (
-    [Parameter()]    
+    [Parameter()]
     [ValidateSet("Test", "Analyze", "Build", "UpdateModuleManifest", "UpdateDocumentation")]
     [String]$Task
 )

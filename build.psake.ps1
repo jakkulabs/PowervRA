@@ -118,7 +118,7 @@ Task CreateArtifact {
     }
 
     # --- Create release directory
-    Write-Output "Creating Release Directory:"
+    Write-Output "Creating Release Directory: $ReleaseDirectoryPath"
     $null = New-Item -Path $ReleaseDirectoryPath -ItemType Directory -Force
 
     # --- Copy across the updated psd1 file
