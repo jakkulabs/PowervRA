@@ -3,19 +3,12 @@
 
 # --- Add any parameters from build.ps1
 properties {
-    $CurrentVersion = [version](Get-Metadata -Path $env:BHPSModuleManifest)
-
-    if ($Increment) {
-        $StepVersion = [version](Step-Version $CurrentVersion -By $Increment)
-    }
 }
 
 # --- Define the build tasks
-Task Default -depends Test
+Task Default -depends Build
 Task Test -depends Init, Analyze, TestHelp
-Task Build -depends Test, UpdateModuleManifest, UpdateDocumentation, IncrementVersion, CommitChanges, CreateArtifact
-Task Release -depends CreateArtifact, CreateGitHubRelease, PublishToPSGallery
-
+Task Build -depends Test, UpdateModuleManifest, CreateArtifact, CreateArchive
 Task Init {
 
     Write-Output "Build System Details:"
@@ -23,8 +16,6 @@ Task Init {
         Write-Output "$($Item.Name): $($Item.Value)"
     }
     Write-Output "ScriptAnalyzerSeverityLevel: $($ScriptAnalysisFailBuildOnSeverityLevel)"
-    Write-Output "Current Module Version: $($CurrentVersion)"
-    Write-Output "Increment: $($Increment)"
 }
 
 ##############
@@ -72,7 +63,7 @@ Task TestHelp {
 
     # --- Run Tests. Currently limited to help tests
     $Timestamp = Get-date -uformat "%Y%m%d-%H%M%S"
-    $TestFile = "TestResults_PS$PSVersion`_$TimeStamp.xml"
+    $TestFile = "TEST_PS$PSVersion`_$TimeStamp.xml"
     $Parameters = @{
         Script = "$ENV:BHProjectPath\tests\Test000-Module.Tests.ps1"
         Tag = 'Help'
@@ -83,18 +74,9 @@ Task TestHelp {
 
     $TestResults = Invoke-Pester @Parameters
 
-    If ($ENV:BHBuildSystem -eq 'AppVeyor') {
-        "Uploading $ENV:BHProjectPath\$TestFile to AppVeyor"
-        "JobID: $env:APPVEYOR_JOB_ID"
-        (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "$ENV:BHProjectPath\$TestFile"))
-    }
-    
-    Remove-Item "$ENV:BHProjectPath\$TestFile" -Force -ErrorAction SilentlyContinue
-
     if ($TestResults.FailedCount -gt 0) {
         Write-Error "Failed '$($TestResults.FailedCount)' tests, build failed"
     }
-
 }
 
 ###############
@@ -121,14 +103,104 @@ Task UpdateModuleManifest {
     }
 
     Set-ModuleFunctions -Name $ENV:BHPSModuleManifest -FunctionsToExport $ExportFunctions -Verbose:$VerbosePreference
+
+}
+
+#################
+# Task: Release #
+#################
+
+Task CreateArtifact {
+
+    # --- Clean any existing directory with the same name
+    If (Test-Path -Path $ReleaseDirectoryPath) {
+        Remove-Item -Path $ReleaseDirectoryPath -Recurse -Force
+    }
+
+    # --- Create release directory
+    Write-Output "Creating Release Directory:"
+    $null = New-Item -Path $ReleaseDirectoryPath -ItemType Directory -Force
+
+    # --- Copy across the updated psd1 file
+    Write-Verbose "Copying Module Manifest"
+    $ModuleManifestSource = Get-Item -Path $ENV:BHPSModuleManifest
+    Copy-Item -Path $ModuleManifestSource.FullName -Destination "$($ReleaseDirectoryPath)\$($ModuleName).psd1" -Force
+
+    # --- Set the psd1 module version
+    if ($ENV:TF_BUILD){
+        $ModuleManifestVersion = $ENV:BUILD_BUILDNUMBER.Split("-")[0]
+    }
+    Update-Metadata -Path "$($ReleaseDirectoryPath)\$($ModuleName).psd1" -PropertyName ModuleVersion -Value $ModuleManifestVersion        
+
+    # --- Create an empty psm1 file
+    Write-Output "Creating base PSM1 file"
+    $PSM1 = New-Item -Path "$($ReleaseDirectoryPath)\$($ModuleName).psm1" -ItemType File -Force
+
+    # --- Set psm1 content
+    $PSM1Header = @"
+<#
+     _____                             _____            
+    |  __ \                           |  __ \     /\    
+    | |__) |____      _____ _ ____   _| |__) |   /  \   
+    |  ___/ _ \ \ /\ / / _ \ '__\ \ / /  _  /   / /\ \  
+    | |  | (_) \ V  V /  __/ |   \ V /| | \ \  / ____ \ 
+    |_|   \___/ \_/\_/ \___|_|    \_/ |_|  \_\/_/    \_\
+    Version: $($ModuleManifestVersion)
+
+#>
+
+# --- Clean up vRAConnection variable on module remove
+`$ExecutionContext.SessionState.Module.OnRemove = {
+
+    Remove-Variable -Name vRAConnection -Force -ErrorAction SilentlyContinue
+
+}
+
+"@  
+
+    Set-Content -Path $PSM1.FullName -Value $PSM1Header -Encoding UTF8
+
+    # --- Process Functions
+    $Functions = Get-ChildItem -Path .\$ModuleName\Functions -File -Recurse
+    Write-Output "Processing function:"
+    foreach ($Function in $Functions) {
+
+        Write-Output "  - $($Function.BaseName)"
+        $Content = Get-Content -Path $Function.FullName -Raw
+        $Definition = @"
+<#
+    - Function: $($Function.BaseName)
+#>
+
+$($Content)
+`n
+"@
+
+        $Body += $Definition
+    }
+
+    Add-Content -Path $PSM1.FullName -Value $Body -Encoding UTF8
+
+}
+
+Task CreateArchive {
+
+    $Destination = "$($ReleaseDirectoryPath).zip"    
+    
+    if ($ENV:TF_BUILD){
+        $Destination =     $Destination = "$($ReleaseDirectoryPath).$($ENV:BUILD_BUILDNUMBER).zip"    
+    }
+
+    if (Test-Path -Path $Destination) {
+        Remove-Item -Path $Destination -Force
+    }
+
+    Add-Type -assembly "System.IO.Compression.Filesystem"
+    [IO.Compression.ZipFile]::CreateFromDirectory($ReleaseDirectoryPath, $Destination)
 }
 
 Task UpdateDocumentation {
-
-    if ($ENV:BHBranchName -eq "master") {
-        Write-Output "This task cannot be executed on the master branch. Skpping task"
-    }
-
+    
     Write-Output "Updating Markdown help"
     $ModuleInfo = Import-Module $ENV:BHPSModuleManifest -Global -Force -PassThru
     $FunctionsPath = "$DocsDirectory\functions"
@@ -161,249 +233,14 @@ repo_url: $($RepositoryUrl)
 site_author: $($ModuleAuthor)
 edit_uri: edit/master/docs/
 theme: readthedocs
-copyright: "PowervRA is licenced under the <a href='$($RepositoryUrl)/raw/master/LICENSE'>MIT license"
+copyright: "PowervRA is licensed under the <a href='$($RepositoryUrl)/raw/master/LICENSE'>MIT license"
 pages:
 - 'Home' : 'index.md'
 - 'Change log' : 'CHANGELOG.md'
 - 'Build' : 'build.md'
-- 'Functions':
-$($Functions -join "`r`n")
+- 'Functions': $($Functions -join "`r`n")
 "@
-
+    
     $Template | Set-Content -Path $Mkdocs -Force
-
-}
-
-Task IncrementVersion {
-
-    if ($ENV:BHBranchName -eq "master") {
-        Write-Output "This task cannot be executed on the master branch. Skpping task"
-    }
-
-    if (!$StepVersion) {
-        Write-Output "StepVersion not specified. Skipping task"
-    }
-
-    if ([version]$StepVersion -gt [version]$CurrentVersion) {
-
-        # --- Update module manifest version
-        Update-Metadata -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -Value $StepVersion        
-        Write-Output "Module version updated to $($StepVersion)"
-
-        # --- Update appveyor build version
-        $AppveyorYMLPath = "$($PSScriptRoot)\appveyor.yml"
-        $AppveyorVersion = "$($StepVersion).{build}"
-        $NewAppveyorYML = Get-Content -Path $AppveyorYMLPath | ForEach-Object { $_ -replace '^version: .+$', "version: $($AppveyorVersion)";}
-        $NewAppveyorYML | Set-Content -Path $AppveyorYMLPath -Force
-        Write-Output "Appveyor build version set to $($AppveyorVersion)"
-
-        # --- Update change log
-        $ReleaseNotes = "$ENV:BHProjectPath\RELEASE.md"
-        $ChangeLog = "$DocsDirectory\CHANGELOG.md"
-        $Header = "# Version $($StepVersion)`r"
-        $Header, (Get-Content -Path $ReleaseNotes -Raw), "`r", (Get-Content $ChangeLog -Raw) | Set-Content $ChangeLog
-    }
-}
-
-Task CommitChanges {
-
-    if ($ENV:BHBuildSystem -eq "Unknown"){
-        Write-Output "Could not detect build system. Skipping task"
-        return
-    }
-
-    if ($ENV:APPVEYOR_REPO_PROVIDER -notlike 'github') {
-        Write-Output "Repo provider '$ENV:APPVEYOR_REPO_PROVIDER'. Skipping task"
-        return
-    }
-
-    if ($ENV:BHBranchName -eq "master") {
-        Write-Output "This task cannot be executed on the master branch. Skpping task"
-    }
-
-    If ($ENV:BHBuildSystem -eq 'AppVeyor') {
-        Write-Output "git config --global credential.helper store"
-        cmd /c "git config --global credential.helper store 2>&1"
-        
-        Add-Content "$ENV:USERPROFILE\.git-credentials" "https://$($ENV:gh_token):x-oauth-basic@github.com`n"
-        
-        Write-Output "git config --global user.email"
-        cmd /c "git config --global user.email ""$($ENV:BHProjectName)-$($ENV:BHBranchName)-$($ENV:BHBuildSystem)@jakkulabs.com"" 2>&1"
-        
-        Write-Output "git config --global user.name"
-        cmd /c "git config --global user.name ""AppVeyor"" 2>&1"
-        
-        Write-Output "git config --global core.autocrlf true"
-        cmd /c "git config --global core.autocrlf true 2>&1"
-    }
     
-    Write-Output "git checkout $ENV:BHBranchName"
-    cmd /c "git checkout $ENV:BHBranchName 2>&1"
-
-    Write-Output "git pull recent commits from $ENV:BHBranchName"
-    cmd /c "git pull 2>&1"
-    
-    Write-Output "git add -A"
-    cmd /c "git add -A 2>&1"
-    
-    Write-Output "git commit -m"
-    cmd /c "git commit -m ""AppVeyor post-build commit [ci skip]"" 2>&1"
-    
-    Write-Output "git status"
-    cmd /c "git status 2>&1"
-    
-    Write-Output "git push origin $ENV:BHBranchName"    
-    cmd /c "git push origin $ENV:BHBranchName 2>&1"
-}
-
-#################
-# Task: Release #
-#################
-
-Task CreateArtifact {
-
-    # --- Create release directory
-    Write-Output "Creating Release Directory:"
-    $ReleaseDirectory = New-Item -Path "$($ENV:BHProjectPath)\Release\$($ModuleName)" -ItemType Directory -Force
-    Write-Output "  - $($ReleaseDirectory.FullName)"
-
-    # --- Copy accross the updated psd1 file
-    Write-Verbose "Copying Module Manifest"
-    $ModuleManifestSource = Get-Item -Path $ENV:BHPSModuleManifest
-    Copy-Item -Path $ModuleManifestSource.FullName -Destination "$($ReleaseDirectory.FullName)\$($ModuleName).psd1" -Force
-
-    # --- Create an empty psm1 file
-    Write-Output "Creating base PSM1 file"
-    $PSM1 = New-Item -Path "$($ReleaseDirectory.FullName)\$($ModuleName).psm1" -ItemType File -Force
-
-    # --- Set psm1 content
-    $PSM1Header = @"
-<#
-     _____                             _____            
-    |  __ \                           |  __ \     /\    
-    | |__) |____      _____ _ ____   _| |__) |   /  \   
-    |  ___/ _ \ \ /\ / / _ \ '__\ \ / /  _  /   / /\ \  
-    | |  | (_) \ V  V /  __/ |   \ V /| | \ \  / ____ \ 
-    |_|   \___/ \_/\_/ \___|_|    \_/ |_|  \_\/_/    \_\                                                    
-
-#>
-
-# --- Clean up vRAConnection variable on module remove
-`$ExecutionContext.SessionState.Module.OnRemove = {
-
-    Remove-Variable -Name vRAConnection -Force -ErrorAction SilentlyContinue
-
-}
-
-"@  
-
-    Set-Content -Path $PSM1.FullName -Value $PSM1Header -Encoding UTF8
-
-    # --- Process Functions
-    $Functions = Get-ChildItem -Path .\PowervRA\Functions -File -Recurse
-    Write-Output "Processing function:"
-    foreach ($Function in $Functions) {
-
-        Write-Output "  - $($Function.BaseName)"
-        $Content = Get-Content -Path $Function.FullName -Raw
-        $Definition = @"
-<#
-    - Function: $($Function.BaseName)
-#>
-
-$($Content)
-`n
-"@
-
-        $Body += $Definition
-        #Add-Content -Path $PSM1.FullName -Value $Definition -Encoding UTF8
-    }
-
-    Add-Content -Path $PSM1.FullName -Value $Body -Encoding UTF8
-
-    $ModuleManifestVersion = Get-Metadata -Path $ENV:BHPSModuleManifest -PropertyName "ModuleVersion"
-    $ArtifactDestination = "$($ENV:BHProjectPath)\$($ENV:BHProjectName).v$($ModuleManifestVersion).zip"  
-
-    if ((Test-Path -Path $ArtifactDestination)) {
-        Remove-Item -Path $ArtifactDestination -Force | Out-Null
-    }
-
-    Write-Output "Compressing module: $($ArtifactDestination)"
-    Compress-Archive -Path $ReleaseDirectory.FullName -DestinationPath $ArtifactDestination -Force -Confirm:$false -Verbose:$VerbosePreference | Out-Null
-
-    if ($ENV:BHBuildSystem -eq "AppVeyor") {
-        Write-Output "Pushing asset to AppVeyor: $($ArtifactDestination)"
-        Push-AppveyorArtifact $ArtifactDestination
-    }
-}
-
-Task CreateGitHubRelease {
-
-    if ($ENV:BHBuildSystem -eq "Unknown"){
-        Write-Output "Could not detect build system. Skipping task"
-        return
-    }
-
-    if ($ENV:APPVEYOR_REPO_PROVIDER -notlike 'github') {
-        Write-Output "Repo provider '$ENV:APPVEYOR_REPO_PROVIDER'. Skipping task"
-        return
-    }
-
-    if ($ENV:BHBranchName -ne "master") {
-        Write-Output "Not in master branch. Skipping task"
-        return
-    }
-
-    Set-GitHubSessionInformation -UserName $OrgName -APIKey $ENV:gh_token -Verbose:$VerbosePreference | Out-Null
-
-    $ModuleManifestVersion = Get-Metadata -Path $ENV:BHPSModuleManifest -PropertyName "ModuleVersion"
-
-    try {
-        $GitHubRelease = Get-GitHubRelease -Repository $RepositoryName -Tag v$ModuleManifestVersion
-    }
-    catch {}
-
-    if ($GitHubRelease) {
-        Write-Output "A release with tag v$ModuleManifestVersion already exists. Skipping task"
-        return
-    }
-
-    $AssetPath = "$($ENV:BHProjectPath)\$($ENV:BHProjectName).v$($ModuleManifestVersion).zip"  
-    
-    $Asset = @{
-        "Path" = $AssetPath
-        "Content-Type" = "application/zip"
-    }
-
-    $GitHubReleaseManagerParameters = @{
-        Repository = $RepositoryName
-        Name = $ModuleName
-        Description = (Get-Content -Path "$ENV:BHProjectPath\RELEASE.md" -Raw)
-        Target = $ENV:BHBranchName
-        Tag = "v$($ModuleManifestVersion)"
-        Asset = $Asset
-    }
-
-    Write-Output "Creating GitHub release with the following parameters:"
-    Write-Output $GitHubReleaseManagerParameters
-
-    New-GitHubRelease @GitHubReleaseManagerParameters -Verbose:$VerbosePreference -Confirm:$false | Out-Null
-}
-
-Task PublishToPSGallery {
-
-    if ($ENV:BHBranchName -ne "master") {
-        Write-Output "Not in master branch. Skipping task"
-        return
-    }
-
-    $ModuleManifestVersion = Get-Metadata -Path $ENV:BHPSModuleManifest -PropertyName "ModuleVersion"
-    $PSGalleryModule = Find-Module -Name $ModuleName -RequiredVersion $ModuleManifestVersion -ErrorAction SilentlyContinue
-
-    if ($PSGalleryModule) {
-        Write-Output "Version $ModuleManifestVersion already exists in the PowerShell Gallery. Skipping task"
-        return
-    }   
-
-    Publish-Module -Path "$($ENV:BHProjectPath)\Release\$($ModuleName)" -NuGetApiKey $ENV:psg_token -Confirm:$false -Verbose:$VerbosePreference | Out-Null
 }
