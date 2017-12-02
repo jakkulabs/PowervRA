@@ -12,7 +12,7 @@
 RootModule = 'PowervRA.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.2.0'
+ModuleVersion = '0.0.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -104,7 +104,7 @@ PrivateData = @{
         ProjectUri = 'https://github.com/jakkulabs/PowervRA'
 
         # A URL to an icon representing this module.
-        IconUri = 'https://raw.githubusercontent.com/jakkulabs/PowervRA/master/PowervRA-icon.png'
+        IconUri = 'https://raw.githubusercontent.com/jakkulabs/PowervRA/master/media/PowervRA-icon.png'
                    
         # ReleaseNotes of this module
         ReleaseNotes = 'https://raw.githubusercontent.com/jakkulabs/PowervRA/master/docs/CHANGELOG.md'
