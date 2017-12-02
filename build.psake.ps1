@@ -126,6 +126,10 @@ Task CreateArtifact {
     $ModuleManifestSource = Get-Item -Path $ENV:BHPSModuleManifest
     Copy-Item -Path $ModuleManifestSource.FullName -Destination "$($ReleaseDirectoryPath)\$($ModuleName).psd1" -Force
 
+    # --- Copy accross RELEASE.md
+    $ReleaseNotes = Get-Item -Path $($ENV:BHProjectPath)\RELEASE.md
+    Copy-Item -Path $ReleaseNotes.FullName -Destination "$($ReleaseDirectoryPath)\RELEASE.md" -Force
+
     # --- Set the psd1 module version
     if ($ENV:TF_BUILD){
         $ModuleManifestVersion = $ENV:BUILD_BUILDNUMBER.Split("-")[0]
