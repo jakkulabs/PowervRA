@@ -72,7 +72,10 @@ Task TestHelp {
         OutputFile = "$ENV:BHProjectPath\$TestFile"
     }
 
+    Push-Location
+    Set-Location -Path $ENV:BHProjectPath
     $TestResults = Invoke-Pester @Parameters
+    Pop-Location
 
     if ($TestResults.FailedCount -gt 0) {
         Write-Error "Failed '$($TestResults.FailedCount)' tests, build failed"
@@ -141,32 +144,12 @@ Task CreateArtifact {
     Write-Output "Creating base PSM1 file"
     $PSM1 = New-Item -Path "$($ReleaseDirectoryPath)\$($ModuleName).psm1" -ItemType File -Force
 
-    # --- Set psm1 content
-    $PSM1Header = @"
-<#
-     _____                             _____            
-    |  __ \                           |  __ \     /\    
-    | |__) |____      _____ _ ____   _| |__) |   /  \   
-    |  ___/ _ \ \ /\ / / _ \ '__\ \ / /  _  /   / /\ \  
-    | |  | (_) \ V  V /  __/ |   \ V /| | \ \  / ____ \ 
-    |_|   \___/ \_/\_/ \___|_|    \_/ |_|  \_\/_/    \_\
-    Version: $($ModuleManifestVersion)
-
-#>
-
-# --- Clean up vRAConnection variable on module remove
-`$ExecutionContext.SessionState.Module.OnRemove = {
-
-    Remove-Variable -Name vRAConnection -Force -ErrorAction SilentlyContinue
-
-}
-
-"@  
+    $PSM1Header = Get-Content -Path $PSScriptRoot\template.psm1 -Raw
 
     Set-Content -Path $PSM1.FullName -Value $PSM1Header -Encoding UTF8
 
     # --- Process Functions
-    $Functions = Get-ChildItem -Path .\$ModuleName\Functions -File -Recurse
+    $Functions = Get-ChildItem -Path ..\src\Functions -File -Recurse
     Write-Output "Processing function:"
     foreach ($Function in $Functions) {
 
@@ -185,7 +168,6 @@ $($Content)
     }
 
     Add-Content -Path $PSM1.FullName -Value $Body -Encoding UTF8
-
 }
 
 Task CreateArchive {
@@ -193,7 +175,7 @@ Task CreateArchive {
     $Destination = "$($ReleaseDirectoryPath).zip"    
     
     if ($ENV:TF_BUILD){
-        $Destination =     $Destination = "$($ReleaseDirectoryPath).$($ENV:BUILD_BUILDNUMBER).zip"    
+        $Destination = "$($ReleaseDirectoryPath).$($ENV:BUILD_BUILDNUMBER).zip"
     }
 
     if (Test-Path -Path $Destination) {
@@ -238,7 +220,7 @@ repo_url: $($RepositoryUrl)
 site_author: $($ModuleAuthor)
 edit_uri: edit/master/docs/
 theme: readthedocs
-copyright: "PowervRA is licensed under the <a href='$($RepositoryUrl)/raw/master/LICENSE'>MIT license"
+copyright: "$($ModuleName) is licensed under the <a href='$($RepositoryUrl)/raw/master/LICENSE'>MIT license"
 pages:
 - 'Home' : 'index.md'
 - 'Change log' : 'CHANGELOG.md'
@@ -249,3 +231,5 @@ pages:
     $Template | Set-Content -Path $Mkdocs -Force
     
 }
+
+Task CreateGit
