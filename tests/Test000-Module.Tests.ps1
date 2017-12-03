@@ -1,8 +1,5 @@
-﻿$projectRoot = Resolve-Path "$PSScriptRoot\.."
-$moduleRoot = Split-Path (Resolve-Path "$projectRoot\*\*.psd1")
-$moduleName = Split-Path $moduleRoot -Leaf
-Import-Module (Join-Path $moduleRoot "$moduleName.psd1") -force
-
+﻿# --- Import Module
+Import-Module (Resolve-Path -Path .\src\*.psd1).Path -Force
 
 # --- Tests
 Describe -Name 'Module Tests' -Fixture {
