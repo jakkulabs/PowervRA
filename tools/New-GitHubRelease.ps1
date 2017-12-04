@@ -17,31 +17,41 @@ Param(
 
 )
 
-$null = Set-GitHubSessionInformation -UserName $AccountName -APIKey $ENV:GitHubApiKey
+Install-Module -Name GitHubReleaseManager -Scope CurrentUser -Confirm:$false
+Import-Module -Name GitHubReleaseManager
 
 try {
-    $GitHubRelease = Get-GitHubRelease -Repository $RepositoryName -Tag $Tag
-}
-catch {}
 
-if ($GitHubRelease) {
-    Write-Output "A release with tag $Tag already exists. Skipping task"
-    return
-}
+    $null = Set-GitHubSessionInformation -UserName $AccountName -APIKey $ENV:GitHubApiKey
 
-$Asset = @{
-    "Path" = $AssetPath
-    "Content-Type" = "application/zip"
-}
+    try {
+        $GitHubRelease = Get-GitHubRelease -Repository $RepositoryName -Tag $Tag
+    }
+    catch {}
+    
+    if ($GitHubRelease) {
+        Write-Output "A release with tag $Tag already exists. Skipping task"
+        return
+    }
 
-$GitHubReleaseManagerParameters = @{
-    Repository = $RepositoryName
-    Name = $ReleaseName
-    Description = (Get-Content -Path $ReleaseNotesPath -Raw)
-    Target = $Target
-    Tag = $Tag
-    Asset = $Asset
-}
+    $Asset = @{
+        "Path"         = $AssetPath
+        "Content-Type" = "application/zip"
+    }
 
-Write-Output "Creating GitHub release with the following parameters:`n $($GitHubReleaseManagerParameters | ConvertTo-Json)"
-$null = New-GitHubRelease @GitHubReleaseManagerParameters -Verbose:$VerbosePreference -Confirm:$false
+    $GitHubReleaseManagerParameters = @{
+        Repository  = $RepositoryName
+        Name        = $ReleaseName
+        Description = (Get-Content -Path $ReleaseNotesPath -Raw)
+        Target      = $Target
+        Tag         = $Tag
+        Asset       = $Asset
+    }
+
+    Write-Output "Creating GitHub release with the following parameters:`n $($GitHubReleaseManagerParameters | ConvertTo-Json)"
+    $null = New-GitHubRelease @GitHubReleaseManagerParameters -Verbose:$VerbosePreference -Confirm:$false
+
+}
+catch {
+    throw "An errlr occured while creating the release: $($_.Exception.Message)"
+}
