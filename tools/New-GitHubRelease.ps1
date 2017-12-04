@@ -17,7 +17,7 @@ Param(
 
 )
 
-Install-Module -Name GitHubReleaseManager -Scope CurrentUser -Confirm:$false
+Install-Module -Name GitHubReleaseManager -Scope CurrentUser -Confirm:$false -Force
 Import-Module -Name GitHubReleaseManager
 
 try {
