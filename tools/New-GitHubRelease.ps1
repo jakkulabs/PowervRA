@@ -1,3 +1,7 @@
+<#
+    .SYNOPSIS
+    A script used in releases to create a new release in GitHub and publish an artifact
+#>
 [CmdletBinding()]
 Param(
     [Parameter()]
@@ -50,7 +54,7 @@ try {
         Asset       = $Asset
     }
 
-    Write-Output "Creating GitHub release with the following parameters:`n $($GitHubReleaseManagerParameters | ConvertTo-Json)"
+    Write-Output "Creating GitHub release with the following parameters:`n $GitHubReleaseManagerParameters"
     $null = New-GitHubRelease @GitHubReleaseManagerParameters -Verbose:$VerbosePreference -Confirm:$false
 
 }
