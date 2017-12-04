@@ -39,10 +39,12 @@ try {
         "Content-Type" = "application/zip"
     }
 
+    $ReleaseNotes = Get-Content -Path $ReleaseNotesPath -Raw
+
     $GitHubReleaseManagerParameters = @{
         Repository  = $RepositoryName
-        Name        = $ReleaseName
-        Description = (Get-Content -Path $ReleaseNotesPath -Raw)
+        Name        = $Name
+        Description = $ReleaseNotes
         Target      = $Target
         Tag         = $Tag
         Asset       = $Asset
