@@ -4,7 +4,7 @@ Param(
     [String]$AccountName,
     [Parameter()]
     [String]$RepositoryName,
-    [Parametre()]
+    [Parameter()]
     [String]$Name,
     [Parameter()]
     [String]$Tag = "v$($ENV:Build_BuildNumber)",
