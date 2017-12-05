@@ -8,6 +8,8 @@ Properties {
     $DocsDirectory = "$ENV:BHProjectPath\docs"
     $ModuleName = "PowervRA"
     $ModuleAuthor = "JakkuLabs"
+    $ReleaseDirectoryPath = "$($ENV:BHProjectPath)\Release\$($ModuleName)"
+    $ModuleManifestVersion = "0.0.0"
 
 # ----------------- Script Analyzer ------------------------------
     # Should be Warning by default. Can be overridden on demand by using
