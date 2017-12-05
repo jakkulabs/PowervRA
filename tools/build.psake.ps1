@@ -205,11 +205,11 @@ Task UpdateDocumentation {
 
     # --- Ensure that index.md is present and up to date
     Write-Output "Updating index.md"
-    Copy-Item -Path "$($PSScriptRoot)\README.md" -Destination "$($DocsDirectory)\index.md" -Force -Verbose:$VerbosePreference | Out-Null
+    Copy-Item -Path "$ENV:BHProjectPath\README.md" -Destination "$($DocsDirectory)\index.md" -Force -Verbose:$VerbosePreference | Out-Null
 
     # --- Update mkdocs.yml with new functions
     Write-Output "Updating mkdocs.yml"
-    $Mkdocs = "$($PSScriptRoot)\mkdocs.yml"
+    $Mkdocs = "$ENV:BHProjectPath\mkdocs.yml"
     $Functions = $ModuleInfo.ExportedCommands.Keys | ForEach-Object {"    - $($_) : functions/$($_).md"}
 
     $Template = @"
@@ -231,5 +231,3 @@ pages:
     $Template | Set-Content -Path $Mkdocs -Force
     
 }
-
-Task CreateGit
