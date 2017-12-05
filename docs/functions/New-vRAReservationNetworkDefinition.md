@@ -20,16 +20,28 @@ One or more of these can be added to an array and passed to New-vRAReservation.
 
 ### -------------------------- EXAMPLE 1 --------------------------
 ```
-$NetworkDefinitionArray = @()
+# Create a network definition for type vSphere in vRA 7.1
 ```
 
-$Network1 = New-vRAReservationNetworkDefinition -Type vSphere -ComputeResourceId 75ae3400-beb5-4b0b-895a-0484413c93b1 -Path "VM Network" -Profile "Test"
-$NetworkDefinitionArray += $Networ1
+$NetworkDefinitionArray = @()
+$Network1 = New-vRAReservationNetworkDefinition -Type 'vSphere' -ComputeResourceId 75ae3400-beb5-4b0b-895a-0484413c93b1 -NetworkPath 'VM Network' -NetworkProfile 'Test'
+$NetworkDefinitionArray += $Network1
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+# Create a network definition for type vSphere in vRA 7.2 and later
+```
+
+$NetworkDefinitionArray = @()
+$Network1 = New-vRAReservationNetworkDefinition -Type 'vSphere (vCenter)' -ComputeResourceId 75ae3400-beb5-4b0b-895a-0484413c93b1 -NetworkPath 'VM Network' -NetworkProfile 'Test'
+$NetworkDefinitionArray += $Network1
 
 ## PARAMETERS
 
 ### -Type
 The reservation type
+Valid types vRA 7.1 and earlier: Amazon, Hyper-V, KVM, OpenStack, SCVMM, vCloud Air, vCloud Director, vSphere, XenServer
+Valid types vRA 7.2 and later: Amazon EC2, Azure, Hyper-V (SCVMM), Hyper-V (Standalone), KVM (RHEV), OpenStack, vCloud Air, vCloud Director, vSphere (vCenter), XenServer
 
 ```yaml
 Type: String

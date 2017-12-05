@@ -27,35 +27,75 @@ Create a new reservation
 
 ### -------------------------- EXAMPLE 1 --------------------------
 ```
-# --- Get the compute resource id
+# --- Create a new Reservation in vRA 7.1
 ```
 
-$ComputeResource = Get-vRAReservationComputeResource -Type vSphere -Name "Cluster01 (vCenter)"
+# --- Get the compute resource id
+$ComputeResource = Get-vRAReservationComputeResource -Type 'vSphere' -Name 'Cluster01 (vCenter)'
 
 # --- Get the network definition
 $NetworkDefinitionArray = @()
-$Network1 = New-vRAReservationNetworkDefinition -Type vSphere -ComputeResourceId $ComputeResource.Id -NetworkPath "VM Network" -NetworkProfile "Test-Profile"
+$Network1 = New-vRAReservationNetworkDefinition -Type 'vSphere' -ComputeResourceId $ComputeResource.Id -NetworkPath 'VM Network' -NetworkProfile 'Test-Profile'
 $NetworkDefinitionArray += $Network1
 
 # --- Get the storage definition
 $StorageDefinitionArray = @()
-$Storage1 = New-vRAReservationStorageDefinition -Type vSphere -ComputeResourceId $ComputeResource.Id -Path "Datastore1" -ReservedSizeGB 10 -Priority 0 
+$Storage1 = New-vRAReservationStorageDefinition -Type 'vSphere' -ComputeResourceId $ComputeResource.Id -Path 'Datastore1' -ReservedSizeGB 10 -Priority 0 
 $StorageDefinitionArray += $Storage1
 
 # --- Set the parameters and create the reservation
 $Param = @{
 
-    Type = "vSphere"
-    Name = "Reservation01"
-    Tenant = "Tenant01"
-    BusinessGroup = "Default Business Group\[Tenant01\]"
-    ReservationPolicy = "ReservationPolicy1"
+    Type = 'vSphere'
+    Name = 'Reservation01'
+    Tenant = 'Tenant01'
+    BusinessGroup = 'Default Business Group\[Tenant01\]'
+    ReservationPolicy = 'ReservationPolicy1'
     Priority = 0
     ComputeResourceId = $ComputeResource.Id
     Quota = 0
     MemoryGB = 2048
     Storage = $StorageDefinitionArray
-    ResourcePool = "Resources"
+    ResourcePool = 'Resources'
+    Network = $NetworkDefinitionArray
+    EnableAlerts = $false
+
+}
+
+New-vRAReservation @Param -Verbose
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+# --- Create a new Reservation in vRA 7.2 and later
+```
+
+# --- Get the compute resource id
+$ComputeResource = Get-vRAReservationComputeResource -Type 'vSphere (vCenter)' -Name 'Cluster01 (vCenter)'
+
+# --- Get the network definition
+$NetworkDefinitionArray = @()
+$Network1 = New-vRAReservationNetworkDefinition -Type 'vSphere (vCenter)' -ComputeResourceId $ComputeResource.Id -NetworkPath 'VM Network' -NetworkProfile 'Test-Profile'
+$NetworkDefinitionArray += $Network1
+
+# --- Get the storage definition
+$StorageDefinitionArray = @()
+$Storage1 = New-vRAReservationStorageDefinition -Type 'vSphere (vCenter)' -ComputeResourceId $ComputeResource.Id -Path 'Datastore1' -ReservedSizeGB 10 -Priority 0 
+$StorageDefinitionArray += $Storage1
+
+# --- Set the parameters and create the reservation
+$Param = @{
+
+    Type = 'vSphere (vCenter)'
+    Name = 'Reservation01'
+    Tenant = 'Tenant01'
+    BusinessGroup = 'Default Business Group\[Tenant01\]'
+    ReservationPolicy = 'ReservationPolicy1'
+    Priority = 0
+    ComputeResourceId = $ComputeResource.Id
+    Quota = 0
+    MemoryGB = 2048
+    Storage = $StorageDefinitionArray
+    ResourcePool = 'Resources'
     Network = $NetworkDefinitionArray
     EnableAlerts = $false
 
@@ -67,6 +107,8 @@ New-vRAReservation @Param -Verbose
 
 ### -Type
 The reservation type
+Valid types vRA 7.1 and earlier: Amazon, Hyper-V, KVM, OpenStack, SCVMM, vCloud Air, vCloud Director, vSphere, XenServer
+Valid types vRA 7.2 and later: Amazon EC2, Azure, Hyper-V (SCVMM), Hyper-V (Standalone), KVM (RHEV), OpenStack, vCloud Air, vCloud Director, vSphere (vCenter), XenServer
 
 ```yaml
 Type: String
