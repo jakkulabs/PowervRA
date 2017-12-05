@@ -26,7 +26,7 @@ Note: this module is not in any way developed or supported by anyone officially 
 
 #### Core
 
-* 6.0.0-alpha.15**
+* 6.0.0-rc**
 
 ** To get up and running with PowerShell Core follow the instructions for your operating system [here](https://github.com/PowerShell/PowerShell/blob/master/README.md#get-powershell).
 
