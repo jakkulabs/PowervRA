@@ -210,7 +210,7 @@ Task UpdateDocumentation {
     # --- Update mkdocs.yml with new functions
     Write-Output "Updating mkdocs.yml"
     $Mkdocs = "$ENV:BHProjectPath\mkdocs.yml"
-    $Functions = $ModuleInfo.ExportedCommands.Keys | ForEach-Object {"    - $($_) : functions/$($_).md"}
+    $Functions = $ModuleInfo.ExportedCommands.Keys | ForEach-Object {"`n    - $($_) : functions/$($_).md"}
 
     $Template = @"
 ---
@@ -225,7 +225,7 @@ pages:
 - 'Home' : 'index.md'
 - 'Change log' : 'CHANGELOG.md'
 - 'Build' : 'build.md'
-- 'Functions': $($Functions -join "`r`n")
+- 'Functions': $($Functions -join "`r")
 "@
     
     $Template | Set-Content -Path $Mkdocs -Force
