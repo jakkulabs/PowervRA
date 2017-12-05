@@ -16,12 +16,12 @@ A resourceAction is a specific type of ResourceOperation that is performed by su
 
 ### -------------------------- EXAMPLE 1 --------------------------
 ```
-Get-vRAConsumerResource -Name vm01 | Get-vRAResourceAction
+Get-vRAResource -Name vm01 | Get-vRAResourceAction
 ```
 
 ### -------------------------- EXAMPLE 2 --------------------------
 ```
-Get-vRAConsumerResource -Name vm01 | Get-vRAResourceAction | Select Id, Name, BindingId
+Get-vRAResource -Name vm01 | Get-vRAResourceAction | Select Id, Name, BindingId
 ```
 
 ## PARAMETERS

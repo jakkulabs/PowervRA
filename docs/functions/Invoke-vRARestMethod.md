@@ -1,17 +1,27 @@
 # Invoke-vRARestMethod
 
 ## SYNOPSIS
-Wrapper for Invoke-RestMethod with vRA specifics
+Wrapper for Invoke-RestMethod/Invoke-WebRequest with vRA specifics
 
 ## SYNTAX
 
+### Standard (Default)
 ```
-Invoke-vRARestMethod [-Method] <String> [-URI] <String> [[-Body] <String>] [[-Headers] <IDictionary>]
- [[-OutFile] <String>]
+Invoke-vRARestMethod -Method <String> -URI <String> [-Headers <IDictionary>] [-WebRequest]
+```
+
+### OutFile
+```
+Invoke-vRARestMethod -Method <String> -URI <String> [-Headers <IDictionary>] [-OutFile <String>] [-WebRequest]
+```
+
+### Body
+```
+Invoke-vRARestMethod -Method <String> -URI <String> [-Headers <IDictionary>] [-Body <String>] [-WebRequest]
 ```
 
 ## DESCRIPTION
-Wrapper for Invoke-RestMethod with vRA specifics
+Wrapper for Invoke-RestMethod/Invoke-WebRequest with vRA specifics
 
 ## EXAMPLES
 
@@ -36,12 +46,13 @@ $JSON = @"
     }
 "@
 
-Invoke-vRARestMethod -Method PUT -URI '/identity/api/tenants/Tenant02' -Body $JSON
+Invoke-vRARestMethod -Method PUT -URI '/identity/api/tenants/Tenant02' -Body $JSON -WebRequest
 
 ## PARAMETERS
 
 ### -Method
-REST Method: GET, POST, PUT or DELETE
+REST Method:
+Supported Methods: GET, POST, PUT,DELETE
 
 ```yaml
 Type: String
@@ -49,7 +60,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: True
-Position: 1
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -65,22 +76,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: True
-Position: 2
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Body
-REST Body in JSON format
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-
-Required: False
-Position: 3
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -95,7 +91,22 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 4
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Body
+REST Body in JSON format
+
+```yaml
+Type: String
+Parameter Sets: Body
+Aliases: 
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -106,12 +117,27 @@ Save the results to a file
 
 ```yaml
 Type: String
+Parameter Sets: OutFile
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WebRequest
+Use Invoke-WebRequest rather than the default Invoke-RestMethod
+
+```yaml
+Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 5
-Default value: None
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

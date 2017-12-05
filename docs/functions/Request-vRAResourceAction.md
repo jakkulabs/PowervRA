@@ -7,17 +7,17 @@ Request an available resourceAction for a catalog resource
 
 ### ByResourceId (Default)
 ```
-Request-vRAResourceAction -ActionId <String> -ResourceId <String> [-WhatIf] [-Confirm]
+Request-vRAResourceAction -ActionId <String> -ResourceId <String> [-Wait] [-WhatIf] [-Confirm]
 ```
 
 ### ByResourceName
 ```
-Request-vRAResourceAction -ActionId <String> -ResourceName <String> [-WhatIf] [-Confirm]
+Request-vRAResourceAction -ActionId <String> -ResourceName <String> [-Wait] [-WhatIf] [-Confirm]
 ```
 
 ### JSON
 ```
-Request-vRAResourceAction -JSON <String> [-WhatIf] [-Confirm]
+Request-vRAResourceAction -JSON <String> [-Wait] [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -28,7 +28,7 @@ Unlike ResourceExtensions, resource actions can be invoked via the Service Catal
 
 ### -------------------------- EXAMPLE 1 --------------------------
 ```
-$ResourceActionId = (Get-vRAResource -Name vm01 | Get-vRAResourceAction "Reboot").id
+$ResourceActionId = (Get-vRAResource -Name vm01 | Get-vRAResourceAction | Where-Object {$_.Name -eq "Reboot"}).id
 ```
 
 Request-vRAResourceAction -Id $ResourceActionId -ResourceName vm01
@@ -44,6 +44,11 @@ Request-vRAResourceAction -Id 6a301f8c-d868-4908-8348-80ad0eb35b00 -ResourceName
 ```
 
 ### -------------------------- EXAMPLE 4 --------------------------
+```
+Request-vRAResourceAction -Id 6a301f8c-d868-4908-8348-80ad0eb35b00 -ResourceName vm01 -Wait
+```
+
+### -------------------------- EXAMPLE 5 --------------------------
 ```
 $JSON = @"
 ```
@@ -121,6 +126,21 @@ Required: True
 Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -Wait
+Wait for the request to complete
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

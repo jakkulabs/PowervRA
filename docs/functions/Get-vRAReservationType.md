@@ -1,7 +1,7 @@
 # Get-vRAReservationType
 
 ## SYNOPSIS
-Get supported reservation types
+Get supported Reservation Types
 
 ## SYNTAX
 
@@ -21,29 +21,45 @@ Get-vRAReservationType -Name <String[]>
 ```
 
 ## DESCRIPTION
-Get supported reservation types
+Get supported Reservation Types
 
 ## EXAMPLES
 
 ### -------------------------- EXAMPLE 1 --------------------------
 ```
-Get-vRAReservationType -Id "Infrastructure.Reservation.Cloud.vCloud"
+# Get all available Reservation Types
 ```
 
+Get-vRAReservationType
+
 ### -------------------------- EXAMPLE 2 --------------------------
+```
+# Get the vSphere Reservation Type in vRA 7.1
+```
+
+Get-vRAReservationType -Name "vSphere"
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+# Get the vSphere Reservation Type in vRA 7.2 and later
+```
+
+Get-vRAReservationType -Name "vSphere (vCenter)"
+
+### -------------------------- EXAMPLE 4 --------------------------
 ```
 Get-vRAReservationType -Name "vCloud Director"
 ```
 
-### -------------------------- EXAMPLE 3 --------------------------
+### -------------------------- EXAMPLE 5 --------------------------
 ```
-Get-vRAReservationType
+Get-vRAReservationType -Id "Infrastructure.Reservation.Cloud.vCloud"
 ```
 
 ## PARAMETERS
 
 ### -Id
-The id of the reservation type
+The id of the Reservation Type
 
 ```yaml
 Type: String[]
@@ -58,7 +74,9 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-The name of the reservation type
+The name of the Reservation Type
+Valid names vRA 7.1 and earlier: Amazon, Hyper-V, KVM, OpenStack, SCVMM, vCloud Air, vCloud Director, vSphere,XenServer
+Valid names vRA 7.2 and later: Amazon EC2, Azure, Hyper-V (SCVMM), Hyper-V (Standalone), KVM (RHEV), OpenStack, vCloud Air, vCloud Director, vSphere (vCenter), XenServer
 
 ```yaml
 Type: String[]

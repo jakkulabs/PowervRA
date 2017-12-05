@@ -32,8 +32,8 @@ Get a compute resource for a reservation type
 
 Get-vRAReservationType | Select Name
 
-# Retrieve associated compute resources for the desired reservation type
-Get-vRAReservationComputeResource -Type vSphere -Id 75ae3400-beb5-4b0b-895a-0484413c93b1
+# Retrieve associated compute resources for the desired reservation type in vRA 7.1
+Get-vRAReservationComputeResource -Type 'vSphere'
 
 ### -------------------------- EXAMPLE 2 --------------------------
 ```
@@ -42,23 +42,43 @@ Get-vRAReservationComputeResource -Type vSphere -Id 75ae3400-beb5-4b0b-895a-0484
 
 Get-vRAReservationType | Select Name
 
-# Retrieve associated compute resources for the desired reservation type
-Get-vRAReservationComputeResource -Type vSphere -Name "Cluster01"
+# Retrieve associated compute resources for the desired reservation type in vRA 7.2 and later
+Get-vRAReservationComputeResource -Type 'vSphere (vCenter)'
 
 ### -------------------------- EXAMPLE 3 --------------------------
 ```
-# Retrieve a list of compatible reservation types
+# Retrieve associated compute resources for the vSphere reservation type in vRA 7.1
 ```
 
-Get-vRAReservationType | Select Name
+Get-vRAReservationComputeResource -Type 'vSphere' -Id 75ae3400-beb5-4b0b-895a-0484413c93b1
 
-# Retrieve associated compute resources for the desired reservation type
-Get-vRAReservationComputeResource -Type vSphere
+### -------------------------- EXAMPLE 4 --------------------------
+```
+# Retrieve associated compute resources for the vSphere reservation type in vRA 7.2 and later
+```
+
+Get-vRAReservationComputeResource -Type 'vSphere (vCenter)' -Id 75ae3400-beb5-4b0b-895a-0484413c93b1
+
+### -------------------------- EXAMPLE 5 --------------------------
+```
+# Retrieve associated compute resources for the desired reservation type in vRA 7.1
+```
+
+Get-vRAReservationComputeResource -Type 'vSphere' -Name "Cluster01 (vCenter)"
+
+### -------------------------- EXAMPLE 6 --------------------------
+```
+# Retrieve associated compute resources for the desired reservation type in vRA 7.2 and later
+```
+
+Get-vRAReservationComputeResource -Type 'vSphere (vCenter)' -Name "Cluster01 (vCenter)"
 
 ## PARAMETERS
 
 ### -Type
 The resource type
+Valid types vRA 7.1 and earlier: Amazon, Hyper-V, KVM, OpenStack, SCVMM, vCloud Air, vCloud Director, vSphere,XenServer
+Valid types vRA 7.2 and later: Amazon EC2, Azure, Hyper-V (SCVMM), Hyper-V (Standalone), KVM (RHEV), OpenStack, vCloud Air, vCloud Director, vSphere (vCenter), XenServer
 
 ```yaml
 Type: String

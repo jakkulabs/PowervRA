@@ -33,22 +33,22 @@ Get-vRAResource
 
 ### -------------------------- EXAMPLE 2 --------------------------
 ```
-Get-vRADeployment -WithExtendedData
+Get-vRAResource -WithExtendedData
 ```
 
 ### -------------------------- EXAMPLE 3 --------------------------
 ```
-Get-vRADeployment -WithOperations
+Get-vRAResource -WithOperations
 ```
 
 ### -------------------------- EXAMPLE 4 --------------------------
 ```
-Get-vRADeployment -Id "6195fd70-7243-4dc9-b4f3-4b2300e15ef8"
+Get-vRAResource -Id "6195fd70-7243-4dc9-b4f3-4b2300e15ef8"
 ```
 
 ### -------------------------- EXAMPLE 5 --------------------------
 ```
-Get-vRADeployment -Name "CENTOS-555667"
+Get-vRAResource -Name "CENTOS-555667"
 ```
 
 ## PARAMETERS
