@@ -20,8 +20,6 @@ Note: this module is not in any way developed or supported by anyone officially 
 
 #### Desktop
 
-* 4.0
-* 5.0
 * 5.1
 
 #### Core

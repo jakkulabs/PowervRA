@@ -1,4 +1,4 @@
-﻿function Invoke-vRARestMethod {
+function Invoke-vRARestMethod {
 <#
     .SYNOPSIS
     Wrapper for Invoke-RestMethod/Invoke-WebRequest with vRA specifics
@@ -131,6 +131,12 @@
     if (!($Global:vRAConnection.SignedCertificates) -and ($PSVersionTable.PSEdition -eq "Core")) {
 
         $Params.Add("SkipCertificateCheck", $true);
+    }
+
+    # --- Support for PowerShell Core SSL protocol checking
+    if (($Global:vRAConnection.SslProtocol -ne 'Default') -and ($PSVersionTable.PSEdition -eq "Core")) {
+        
+        $Params.Add("SslProtocol", $Global:vRAConnection.SslProtocol);
     }
 
     try {
