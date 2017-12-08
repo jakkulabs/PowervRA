@@ -1,4 +1,4 @@
-function Connect-vRAServer {
+﻿function Connect-vRAServer {
 <#
     .SYNOPSIS
     Connect to a vRA Server

@@ -1,4 +1,4 @@
-function Disconnect-vRAServer {
+﻿function Disconnect-vRAServer {
 <#
     .SYNOPSIS
     Disconnect from a vRA server

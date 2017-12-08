@@ -1,4 +1,4 @@
-function Invoke-vRARestMethod {
+﻿function Invoke-vRARestMethod {
 <#
     .SYNOPSIS
     Wrapper for Invoke-RestMethod/Invoke-WebRequest with vRA specifics
