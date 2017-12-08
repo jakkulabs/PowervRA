@@ -33,13 +33,7 @@ Note: this module is not in any way developed or supported by anyone officially 
 PowerShell v5 & v6 users: You grab the latest version of the module from the PowerShell Gallery by running the following command:
 
 ```
-Install-Module -Name PowervRA
-```
-
-PowerShell v4 users: Try this handy one liner to download and install the module:
-
-```
-(new-object Net.WebClient).DownloadString("https://raw.githubusercontent.com/jakkulabs/PowervRA/master/Get-PowervRA.ps1") | iex
+Install-Module -Name PowervRA -Scope CurrentUser
 ```
 
 ## Docker
@@ -77,4 +71,4 @@ Documentation for each command can be viewed with Get-Help, e.g.:
 Get-Help Get-vRAEntitlement
 ```
 
-Alternatively check out our [Read the Docs site](https://powervra.readthedocs.org/en/latest/ "Title")
+Alternatively check out our [Read the Docs site](https://powervra.readthedocs.org/en/latest/)
