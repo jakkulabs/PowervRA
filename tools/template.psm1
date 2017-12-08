@@ -9,7 +9,7 @@
 #>
 
 # --- Clean up vRAConnection variable on module remove
-`$ExecutionContext.SessionState.Module.OnRemove = {
+$ExecutionContext.SessionState.Module.OnRemove = {
 
     Remove-Variable -Name vRAConnection -Force -ErrorAction SilentlyContinue
 
