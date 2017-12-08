@@ -133,6 +133,12 @@
         $Params.Add("SkipCertificateCheck", $true);
     }
 
+    # --- Support for PowerShell Core SSL protocol checking
+    if (($Global:vRAConnection.SslProtocol -ne 'Default') -and ($PSVersionTable.PSEdition -eq "Core")) {
+        
+        $Params.Add("SslProtocol", $Global:vRAConnection.SslProtocol);
+    }
+
     try {
 
         # --- Use either Invoke-WebRequest or Invoke-RestMethod
