@@ -1,19 +1,15 @@
-docs/ export-ignore
-tests/ export-ignore
-.github/ export-ignore
-docker/ export-ignore
-CHANGELOG.md export-ignore
-README.md export-ignore
-mkdocs.yml export-ignore
-Get-PowervRA.ps1 export-ignore
-appveyor.yml export-ignore
-build.ps1 export-ignore
-build.psake.ps1 export-ignore
-build.settings.ps1 export-ignore
-PowervRA-icon.png export-ignore
-PSScriptAnalyzerSettings.psd1 export-ignore
 .gitignore export-ignore
 .gitattributes export-ignore
+.github/ export-ignore
+docs/ export-ignore
+tests/ export-ignore
+tools/ export-ignore
+docker/ export-ignore
+media/ export-ignore
+LICENCE export-ignore
+RELEASE.md export-ignore
+README.md export-ignore
+mkdocs.yml export-ignore
 
 # Set the default behavior, in case people don't have core.autocrlf set.
 * text=auto
