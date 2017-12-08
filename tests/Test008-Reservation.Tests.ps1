@@ -81,8 +81,6 @@ Describe -Name 'Reservation Tests' -Fixture {
 
         }
 
-        
-
         $ReservationA = New-vRAReservation @Param
         $ReservationA.Name | Should Be $JSON.Reservation.Name
     }
@@ -146,24 +144,31 @@ Describe -Name 'Reservation Tests' -Fixture {
         Get-vRAReservation -Name $JSON.Reservation.Name | Remove-vRAReservationNetwork -NetworkPath $JSON.Reservation.AdditionalNetworkPath -Confirm:$false
         $ReservationE = Get-vRAReservation -Name $JSON.Reservation.Name
         (($ReservationE.ExtensionData.entries | Where-Object {$_.key -eq 'reservationNetworks'}).value.items.values.entries | Where-Object {$_.key -eq 'networkPath'} | Select-Object -ExpandProperty value | Where-Object {$_.label -eq $JSON.Reservation.AdditionalNetworkPath}).label | Should BeNullOrEmpty
-    }    
+    }
+
+    It -Name "Remove a Storage from named Reservation $($JSON.Reservation.Name)" -Test {
+
+        Get-vRAReservation -Name $JSON.Reservation.Name | Remove-vRAReservationStorage -Path $JSON.Reservation.AdditionalDatastore -Confirm:$false
+        $ReservationF = Get-vRAReservation -Name $JSON.Reservation.Name
+        (($ReservationF.ExtensionData.entries | Where-Object {$_.key -eq 'reservationStorages'}).value.items.values.entries | Where-Object {$_.key -eq 'storagePath'} | Select-Object -ExpandProperty value | Where-Object {$_.label -eq $JSON.Reservation.AdditionalDatastore}).label | Should BeNullOrEmpty
+    }
 
     It -Name "Update named Reservation $($JSON.Reservation.Name)" -Test {
 
-        $ReservationE = Get-vRAReservation -Name $JSON.Reservation.Name | Set-vRAReservation -Name $JSON.Reservation.UpdatedName -Confirm:$false
-        $ReservationE.Name | Should Be $JSON.Reservation.UpdatedName
+        $ReservationG = Get-vRAReservation -Name $JSON.Reservation.Name | Set-vRAReservation -Name $JSON.Reservation.UpdatedName -Confirm:$false
+        $ReservationG.Name | Should Be $JSON.Reservation.UpdatedName
     }
 
     It -Name "Remove named Reservation $($JSON.Reservation.UpdatedName)" -Test {
 
         Remove-vRAReservation -Name $JSON.Reservation.UpdatedName -Confirm:$false
         try {
-            $ReservationF = Get-vRAReservation -Name $JSON.Reservation.UpdatedName
+            $ReservationH = Get-vRAReservation -Name $JSON.Reservation.UpdatedName
         }
         catch [Exception]{
 
         }
-        $ReservationF | Should Be $null
+        $ReservationH | Should Be $null
     }
 }
 # --- Cleanup
