@@ -7,6 +7,8 @@ Param(
     [Parameter()]
     [String]$AccountName,
     [Parameter()]
+    [String]$APIKey,
+    [Parameter()]
     [String]$RepositoryName,
     [Parameter()]
     [String]$Name,
@@ -22,13 +24,13 @@ Param(
 )
 
 if (!(Get-Module -Name GitHubReleaseManager -ListAvailable)){
-    Install-Module -Name GitHubReleaseManager -Scope CurrentUser -Confirm:$false -Force    
+    Install-Module -Name GitHubReleaseManager -Scope CurrentUser -Confirm:$false -Force
 }
 Import-Module -Name GitHubReleaseManager
 
 try {
 
-    $null = Set-GitHubSessionInformation -UserName $AccountName -APIKey $ENV:GitHubApiKey
+    $null = Set-GitHubSessionInformation -UserName $AccountName -APIKey $ApiKey
 
     try {
         $GitHubRelease = Get-GitHubRelease -Repository $RepositoryName -Tag $Tag
