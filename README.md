@@ -17,6 +17,7 @@ Note: this module is not in any way developed or supported by anyone officially 
 * 7.3***
 
 ** Support for 6.2.4 is limited given API restrictions. Functions which don't support 6.2.4 will exit early and cleanly.
+
 *** Support for 7.2 and 7.3 has only received minor testing and updates so far
 
 ### PowerShell Editions
