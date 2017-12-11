@@ -13,8 +13,11 @@ Note: this module is not in any way developed or supported by anyone officially 
 * 7.0
 * 7.0.1
 * 7.1
+* 7.2***
+* 7.3***
 
 ** Support for 6.2.4 is limited given API restrictions. Functions which don't support 6.2.4 will exit early and cleanly.
+*** Support for 7.2 and 7.3 has only received minor testing and updates so far
 
 ### PowerShell Editions
 
@@ -30,7 +33,7 @@ Note: this module is not in any way developed or supported by anyone officially 
 
 ## Download
 
-PowerShell v5 & v6 users: You grab the latest version of the module from the PowerShell Gallery by running the following command:
+PowerShell v5.1 & v6 users: You grab the latest version of the module from the PowerShell Gallery by running the following command:
 
 ```
 Install-Module -Name PowervRA -Scope CurrentUser
