@@ -2,7 +2,7 @@
     .SYNOPSIS
     A script used in releases to create a new release in GitHub and publish an artifact
 #>
-[CmdletBinding()]
+[CmdletBinding(SupportsShouldProcess=$true)]
 Param(
     [Parameter()]
     [String]$AccountName,
@@ -21,7 +21,9 @@ Param(
 
 )
 
-Install-Module -Name GitHubReleaseManager -Scope CurrentUser -Confirm:$false -Force
+if (!(Get-Module -Name GitHubReleaseManager -ListAvailable)){
+    Install-Module -Name GitHubReleaseManager -Scope CurrentUser -Confirm:$false -Force    
+}
 Import-Module -Name GitHubReleaseManager
 
 try {
@@ -34,8 +36,7 @@ try {
     catch {}
     
     if ($GitHubRelease) {
-        Write-Output "A release with tag $Tag already exists. Skipping task"
-        return
+        throw "A release with tag $Tag already exists!"
     }
 
     $Asset = @{
@@ -54,10 +55,11 @@ try {
         Asset       = $Asset
     }
 
-    Write-Output "Creating GitHub release with the following parameters:`n $GitHubReleaseManagerParameters"
-    $null = New-GitHubRelease @GitHubReleaseManagerParameters -Verbose:$VerbosePreference -Confirm:$false
-
+    Write-Output "Creating Release $Tag of $Name"
+    if ($PSCmdlet.ShouldProcess("$Name - Release $Tag","New-GithubRelease")){
+        $null = New-GitHubRelease @GitHubReleaseManagerParameters -Verbose:$VerbosePreference -Confirm:$false
+    }
 }
 catch {
-    throw "An errlr occured while creating the release: $($_.Exception.Message)"
+    throw "An error occurred while creating the release: $($_.Exception.Message)"
 }
