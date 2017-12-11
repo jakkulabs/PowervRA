@@ -50,15 +50,18 @@
 
     Param (
 
-        [parameter(Mandatory=$true)]
+        [parameter(Mandatory=$true,ParameterSetName="Username")]
+        [Parameter(Mandatory=$true,ParameterSetName="Credential")]        
         [ValidateNotNullOrEmpty()]
         [String]$Server,
 
-        [parameter(Mandatory=$false)]
+        [parameter(Mandatory=$true,ParameterSetName="Username")]
+        [Parameter(Mandatory=$true,ParameterSetName="Credential")]   
         [ValidateNotNullOrEmpty()]
         [String]$Tenant = "vsphere.local",
 
         [parameter(Mandatory=$true,ParameterSetName="Username")]
+        [Parameter(Mandatory=$true,ParameterSetName="Credential")]   
         [ValidateNotNullOrEmpty()]
         [String]$Username,
 
@@ -70,13 +73,40 @@
         [ValidateNotNullOrEmpty()]
         [Management.Automation.PSCredential]$Credential,
 
-        [parameter(Mandatory=$false)]
+        [parameter(Mandatory=$true,ParameterSetName="Username")]
+        [Parameter(Mandatory=$true,ParameterSetName="Credential")]   
         [Switch]$IgnoreCertRequirements,
 
-        [parameter(Mandatory=$false)]
+        [parameter(Mandatory=$true,ParameterSetName="Username")]
+        [Parameter(Mandatory=$true,ParameterSetName="Credential")]   
         [ValidateSet('Ssl3', 'Tls', 'Tls11', 'Tls12')]
-        [String]$SslProtocol
+        [String]$SslProtocol,
+
+        [Parameter(Mandatory=$true,ParameterSetName="Profile")]
+        [ValidateNotNullOrEmpty()]
+        [String]$Profile
     )
+
+    if ($PSCmdlet.ParameterSetName -eq "Profile"){
+
+        # --- Root is always going to be in the users profile
+        $ProfilePath = "$ENV:USERPROFILE\.PowervRA"
+        $ProfileConfigurationPath = "$ProfilePath\$($Profile)_profile.json"
+
+        # --- If profile exists, direct user to New-vRAConectionProfile
+        if (!(Test-Path -Path $ProfileConfigurationPath)) {
+            throw "A profile called $Profile does not exist. Try creating it first with New-vRAConnectionProfile"
+        }
+
+        $ProfileObject = Get-Content -Path $ProfileConfigurationPath | ConvertFrom-Json
+
+        $PSBoundParameters.Add("Server", $ProfileObject.Server)
+        $PSBoundParameters.Add("Tenant", $ProfileObject.Tenant)
+        $PSBoundParameters.Add("Credential", (Get-Credential -Message "Connect to $($ProfileObject.Server)" -UserName $ProfileObject.Username))
+        $PSBoundParameters.Add("IgnoreCertRequirements", $ProfileObject.IgnoreCertRequirements)
+        $PSBoundParameters.Add("SslProtocol", $ProfileObject.SslProtocol)        
+    }
+
 
     # --- Default Signed Certificates to true
     $SignedCertificates = $true
