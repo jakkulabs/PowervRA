@@ -1,44 +1,44 @@
-﻿# --- Import Module
-Import-Module (Resolve-Path -Path .\src\*.psd1).Path -Force
+﻿# --- Validate the module manifest
+$ModulePath = (Resolve-Path -Path .\src\*.psd1).Path
 
-# --- Tests
 Describe -Name 'Module Tests' -Fixture {
-
-    It -Name "Attempting to import the PowervRA Module" -Test {
-
-        $Module = Import-Module -Name PowervRA -PassThru | Where-Object {$_.Name -eq 'PowervRA'}
-        $Module.Name | Should be "PowervRA"
+    It -Name "The module has a valid manifest file" -Test {
+        {Test-ModuleManifest -Path $ModulePath} | Should Not Throw
     }
 }
 
-Describe "Help tests for $moduleName" -Tags Help {
-    
-    $functions = Get-Command -Module $moduleName -CommandType Function
+# --- Import Module once the manifest test has passed
+Import-Module $ModulePath -Force -Global
 
-    foreach($Function in $Functions){
+# --- Ensure that each function has valid help
+Describe "Help tests for PowervRA" -Tags Help {
 
-        $help = Get-Help $Function.name
+    $Functions = Get-Command -Module PowervRA -CommandType Function
 
-        Context $help.name {
+    foreach ($Function in $Functions) {
 
-            it "Has a Synopsis" {
-                $help.synopsis | Should Not BeNullOrEmpty
+        $Help = Get-Help $Function.name
+
+        Context $Help.name {
+
+            It "Has a Synopsis" {
+                $Help.synopsis | Should Not BeNullOrEmpty
             }
 
-            it "Has a description" {
-                $help.description | Should Not BeNullOrEmpty
+            It "Has a description" {
+                $Help.description | Should Not BeNullOrEmpty
             }
 
-            it "Has an example" {
-                 $help.examples | Should Not BeNullOrEmpty
+            It "Has an example" {
+                $Help.examples | Should Not BeNullOrEmpty
             }
 
-            foreach($parameter in $help.parameters.parameter) {
+            foreach ($Parameter in $Help.parameters.parameter) {
 
-                if($parameter -notmatch 'whatif|confirm') {
+                if ($Parameter -notmatch 'whatif|confirm') {
 
-                    it "Has a Parameter description for '$($parameter.name)'" {
-                        $parameter.Description.text | Should Not BeNullOrEmpty
+                    It "Has a Parameter description for '$($Parameter.name)'" {
+                        $Parameter.Description.text | Should Not BeNullOrEmpty
                     }
                 }
             }
