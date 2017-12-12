@@ -1,106 +1,83 @@
 ﻿function Remove-vRAReservationStorage {
 <#
     .SYNOPSIS
-    Remove vRA reservation storage
-
+    Remove a storage from a reservation
+    
     .DESCRIPTION
-    Remove vRA reservation storage
-
+    Remove a storage from a reservation
+    
     .PARAMETER Id
-    The Id of the reservation
+    The id of the reservation
 
-    .PARAMETER Path
+    .PARAMETER StoragePath
     The storage path
 
     .INPUTS
-    System.String.
-
-    .OUTPUTS
-    System.Management.Automation.PSObject
+    System.String
 
     .EXAMPLE
-    Get-vRAReservation -Name "Reservation01" | Remove-vRAReservationStorage -Path "Datastore01"
+    Get-vRAReservation -Name Reservation01 | Remove-vRAReservationStorage -StoragePath Datastore1
+
+    .EXAMPLE
+    Remove-vRAReservationStorage -Id 8731ceb3-01cd-4dd6-834e-49a9aa8057d8 -StoragePath Datastore1
 
 #>
-[CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")]
 
     Param (
 
-    [parameter(Mandatory=$true,ValueFromPipelineByPropertyName)]
-    [ValidateNotNullOrEmpty()]
-    [String]$Id,
+        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true, ValueFromPipeline=$true)]
+        [ValidateNotNullOrEmpty()]
+        [String]$Id,
 
-    [parameter(Mandatory=$true)]
-    [ValidateNotNullOrEmpty()]
-    [String]$Path
-
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
+        [String]$StoragePath          
     )
- 
-    begin {
     
-    }
+    Begin {}
     
-    process {
+    Process {    
 
         try {
+            # --- Retrieve the reservation
+            $URI = "/reservation-service/api/reservations/$($Id)"
+            $Reservation = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
-            # --- Get the reservation
-
-            $URI = "/reservation-service/api/reservations/$($id)"
-
-            $Reservation = Invoke-vRARestMethod -Method GET -URI $URI
-            
-            $ReservationTypeName = (Get-vRAReservationType -Id $Reservation.reservationTypeId).name
-
-            $ComputeResourceId = ($Reservation.extensionData.entries | Where-Object {$_.key -eq "computeResource"}).value.id
-
-            # ---
-            # --- Set Storage Properties
-            # ---
-
-            Write-Verbose -Message "Preparing Removing Storage From Reservation"
-
-            $ReservationStoragePath = (Get-vRAReservationComputeResourceStorage -Type $ReservationTypeName -ComputeResourceId $ComputeResourceId -Name $Path).values.entries | Where-Object {$_.key -eq "storagePath"}
-
-            $ReservationStoragePathId = $ReservationStoragePath.value.id
-
-            $Storage = $Reservation.extensionData.entries | Where-Object {$_.key -eq "reservationStorages"}  
-
-            $StorageItems = $Storage.value.items
-
-            foreach ($Item in $StorageItems) {
-
-                $StoragePath = $item.values.entries | Where-Object {$_.key -eq "StoragePath"}
-
-                if ($StoragePath.value.id -eq $ReservationStoragePathId) {
-
-                    Write-Verbose -Message "Removing Storage $($Path) From Reservation"
-
-                    $Storage.value.items = $Storage.value.items | Where-Object {$_ -ne $Item}
-
+            # --- Loop through the reservation object and attempt to find and remove the storage path
+            :outer foreach ($Entry in $Reservation.extensionData.entries) {
+                if ($Entry.key -eq "reservationStorages") {
+                    foreach ($Item in $Entry.value.items) {
+                        foreach ($Key in $Item.values.entries){
+                            if ($Key.key -eq "storagePath") {
+                                if ($Key.value.label -eq $StoragePath) {
+                                    Write-Verbose -Message "Found storage path $($StoragePath) in reservation $($Reservation.name)"
+                                    $List = [System.Collections.ArrayList]$Entry.value.items
+                                    $List.Remove($Item)
+                                    $Entry.value.items = $List
+                                    if ($Entry.value.items.Count -eq 0) {
+                                        throw "A reservation must have at least one storage path selected. Cannot remove $($StoragePath)"
+                                    }
+                                    break outer
+                                }
+                            }
+                        }
+                    }
+                    throw "Could not find storage path with name $($StoragePath)"                                            
                 }
-
             }
 
             if ($PSCmdlet.ShouldProcess($Id)){
 
-                $URI = "/reservation-service/api/reservations/$($Id)"
-                
-                Write-Verbose -Message "Preparing PUT to $($URI)"  
-
                 # --- Run vRA REST Request
                 Invoke-vRARestMethod -Method PUT -URI $URI -Body ($Reservation | ConvertTo-Json -Depth 100) -Verbose:$VerbosePreference | Out-Null
-
-            }
-
+            }            
         }
         catch [Exception]{
-
-            throw
-
-        }
-    }
-    end {
         
+            throw $_
+        } 
     }
+
+    End{}       
 }
