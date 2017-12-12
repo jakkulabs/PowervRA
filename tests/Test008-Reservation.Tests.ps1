@@ -99,7 +99,7 @@ Describe -Name 'Reservation Tests' -Fixture {
 
     It -Name "Add Storage to named Reservation $($JSON.Reservation.Name)" -Test {
 
-        Get-vRAReservation -Name $JSON.Reservation.Name | Add-vRAReservationStorage -StoragePath $JSON.Reservation.AdditionalDatastore -ReservedSizeGB $JSON.Reservation.AdditionalDatastoreReservedSizeGB -Priority $JSON.Reservation.AdditionalDatastorePriority
+        Get-vRAReservation -Name $JSON.Reservation.Name | Add-vRAReservationStorage -Path $JSON.Reservation.AdditionalDatastore -ReservedSizeGB $JSON.Reservation.AdditionalDatastoreReservedSizeGB -Priority $JSON.Reservation.AdditionalDatastorePriority
         $ReservationC = Get-vRAReservation -Name $JSON.Reservation.Name
         (($ReservationC.ExtensionData.entries | Where-Object {$_.key -eq 'reservationStorages'}).value.items.values.entries | Where-Object {$_.key -eq 'storagePath'} | Select-Object -ExpandProperty value | Where-Object {$_.label -eq $JSON.Reservation.AdditionalDatastore}).label | Should Be $JSON.Reservation.AdditionalDatastore
     }
@@ -148,7 +148,7 @@ Describe -Name 'Reservation Tests' -Fixture {
 
     It -Name "Remove a Storage from named Reservation $($JSON.Reservation.Name)" -Test {
 
-        Get-vRAReservation -Name $JSON.Reservation.Name | Remove-vRAReservationStorage -Path $JSON.Reservation.AdditionalDatastore -Confirm:$false
+        Get-vRAReservation -Name $JSON.Reservation.Name | Remove-vRAReservationStorage -StoragePath $JSON.Reservation.AdditionalDatastore -Confirm:$false
         $ReservationF = Get-vRAReservation -Name $JSON.Reservation.Name
         (($ReservationF.ExtensionData.entries | Where-Object {$_.key -eq 'reservationStorages'}).value.items.values.entries | Where-Object {$_.key -eq 'storagePath'} | Select-Object -ExpandProperty value | Where-Object {$_.label -eq $JSON.Reservation.AdditionalDatastore}).label | Should BeNullOrEmpty
     }
