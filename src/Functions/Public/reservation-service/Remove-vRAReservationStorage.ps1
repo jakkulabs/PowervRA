@@ -16,10 +16,10 @@
     System.String
 
     .EXAMPLE
-    Get-vRAReservation -Name Reservation01 | Remove-vRAReservationStorage -StoragePath Datastore1
+    Get-vRAReservation -Name Reservation01 | Remove-vRAReservationStorage -StoragePath Datastore01
 
     .EXAMPLE
-    Remove-vRAReservationStorage -Id 8731ceb3-01cd-4dd6-834e-49a9aa8057d8 -StoragePath Datastore1
+    Remove-vRAReservationStorage -Id 8731ceb3-01cd-4dd6-834e-49a9aa8057d8 -StoragePath Datastore01
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")]
