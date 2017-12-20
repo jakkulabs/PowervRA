@@ -78,7 +78,7 @@
         [String]$SslProtocol
     )
 
-    # --- Default Signed Certificates to true
+    # --- Handle untrusted certificates if necessary
     $SignedCertificates = $true
 
     if ($PSBoundParameters.ContainsKey("IgnoreCertRequirements") ){
