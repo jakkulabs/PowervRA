@@ -7,6 +7,7 @@
 ## Features
 * Feature - Add ability to select SSL Protocol (#159)
 * Feature - Single PSM1 file to speed up load times
+* Feature - Add -Wait Parameter to Request-vRAResourceAction (@Thitho007)
 
 ## Fixes
 * Fixed #134 - Issue with double quotes in some functions

@@ -7,7 +7,7 @@ properties {
 
 # --- Define the build tasks
 Task Default -depends Build
-Task Test -depends Init, Analyze, TestHelp
+Task Test -depends Init, Analyze, ExecuteTest
 Task Build -depends Test, UpdateModuleManifest, CreateArtifact, CreateArchive
 Task Init {
 
@@ -59,14 +59,13 @@ Task Analyze {
 
 }
 
-Task TestHelp {
+Task ExecuteTest {
 
     # --- Run Tests. Currently limited to help tests
     $Timestamp = Get-date -uformat "%Y%m%d-%H%M%S"
     $TestFile = "TEST_PS$PSVersion`_$TimeStamp.xml"
     $Parameters = @{
         Script = "$ENV:BHProjectPath\tests\Test000-Module.Tests.ps1"
-        Tag = 'Help'
         PassThru = $true
         OutputFormat = 'NUnitXml'
         OutputFile = "$ENV:BHProjectPath\$TestFile"

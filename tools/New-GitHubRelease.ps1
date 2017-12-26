@@ -4,29 +4,39 @@
 #>
 [CmdletBinding()]
 Param(
-    [Parameter()]
+    [Parameter(Mandatory=$true)]
     [String]$AccountName,
-    [Parameter()]
+    [Parameter(Mandatory=$true)]
+    [String]$APIKey,
+    [Parameter(Mandatory=$true)]
     [String]$RepositoryName,
-    [Parameter()]
+    [Parameter(Mandatory=$true)]
     [String]$Name,
-    [Parameter()]
-    [String]$Tag = "v$($ENV:Build_BuildNumber)",
-    [Parameter()]
+    [Parameter(Mandatory=$false)]
+    [String]$Tag,
+    [Parameter(Mandatory=$true)]
     [String]$ReleaseNotesPath,
-    [Parameter()]
+    [Parameter(Mandatory=$false)]
     [String]$Target = "master",
-    [Parameter()]
+    [Parameter(Mandatory=$true)]
     [String]$AssetPath
-
 )
 
-Install-Module -Name GitHubReleaseManager -Scope CurrentUser -Confirm:$false -Force
-Import-Module -Name GitHubReleaseManager
+# --- Install and import GithubReleaseManager
+if (!(Get-Module -Name GitHubReleaseManager -ListAvailable)){
+    Install-Module -Name GitHubReleaseManager -Scope CurrentUser -Confirm:$false -Force
+}
+Import-Module -Name GitHubReleaseManager -Force
 
+# --- Set the Tag
+if (!$PSBoundParameters.ContainsKey("Tag")){
+    $Tag = "v$($ENV:BUILD_BUILDNUMBER.Split("-")[0])"
+}
+
+# --- Attempt to create a new release
 try {
 
-    $null = Set-GitHubSessionInformation -UserName $AccountName -APIKey $ENV:GitHubApiKey
+    $null = Set-GitHubSessionInformation -UserName $AccountName -APIKey $ApiKey
 
     try {
         $GitHubRelease = Get-GitHubRelease -Repository $RepositoryName -Tag $Tag
@@ -34,7 +44,7 @@ try {
     catch {}
     
     if ($GitHubRelease) {
-        Write-Output "A release with tag $Tag already exists. Skipping task"
+        Write-Host "A release with tag $Tag already exists, skipping task."
         return
     }
 
@@ -54,10 +64,9 @@ try {
         Asset       = $Asset
     }
 
-    Write-Output "Creating GitHub release with the following parameters:`n $GitHubReleaseManagerParameters"
+    Write-Host "Creating Release $Tag of $Name"
     $null = New-GitHubRelease @GitHubReleaseManagerParameters -Verbose:$VerbosePreference -Confirm:$false
-
 }
 catch {
-    throw "An errlr occured while creating the release: $($_.Exception.Message)"
+    throw "An error occurred while creating the release: $($_.Exception.Message)"
 }
