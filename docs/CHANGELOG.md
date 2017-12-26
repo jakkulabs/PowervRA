@@ -1,4 +1,27 @@
-# Version 2.2.0
+# Version 3.0.0
+## Breaking Changes
+**WARNING: This release contains breaking changes**
+* The minmum supported PowerShell Versions have been raised to the following:
+  * Windows PowerShell: 5.1
+  * PowerShell Core: 6.0.0-rc**
+
+## Features
+* Feature - Add ability to select SSL Protocol (#159)
+* Feature - Single PSM1 file to speed up load times
+* Feature - Add -Wait Parameter to Request-vRAResourceAction (@Thitho007)
+
+## Fixes
+* Fixed #134 - Issue with double quotes in some functions
+* Fixed #135 - Some private functions are being exported
+* Fixed #137 - Help examples for Get-vRAResource are incorrect
+* Fixed #148 - Request-vRAResourceAction Example Correction
+* Fixed #149 - Support Reservation Type change from 'vSphere' to 'vSphere (vCenter)' in vRA 7.3
+* Fixed #151 - Get-vRAReservationPolicy
+* Fixed #153 - New-vRAReserveration Error
+* Fixed #130 - Unable to connect after removing SSLv3/TLSv1 ciphers from vRA Appliance
+
+# Version 2.2.0
+
 ## Features
 * Feature - Remove Network Path from reservation #43
 * Feature - Add -Debug capability for New / Set functions #78
@@ -8,8 +31,10 @@
 
 ## Fixes
 * Fixed #124 - xRequires does not work as expected when executed in a Begin block
-
-# Version 2.1.0
+
+
+# Version 2.1.0
+
 ## Breaking changes
 * Functions that take a Password parameter now require a SecureString #106
   * **Connect-vRAServer** - Now requires a **SecureString** for the Password parameter if you are using a Username/Password combination
@@ -40,7 +65,8 @@
 * Introduces Pester tests for function help
   * All functions are now required to have at least a synopsis, description, one or more example section(s) and every parameter must have a description.
 * Lots of other fun improvements to our CI and build process - See [here for more information](http://powervra.readthedocs.io/en/latest/build/)
-
+
+
 ## Version 2.0.0
 
 * PowerShell Core v6.0.0-alpha.14 Support
