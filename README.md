@@ -9,19 +9,20 @@ Note: this module is not in any way developed or supported by anyone officially 
 
 ### vRealize Automation
 
-|  |  |  |  |  |  |
-| -- | -- | -- | -- | -- | -- |
+|||||||
+| --- | --- | --- | --- | --- | --- |
 |6.2.4*|7.0|7.0.1|7.1|7.2*|7.3*|
+
 
 * Support for 6.2.4 is limited given API restrictions. Functions which don't support 6.2.4 will exit early and cleanly.
 * Support for 7.2 and 7.3 has only received minor testing and updates so far
 
 ### PowerShell Editions
 
-|               |               |
-| ------------- | ------------- |
-|**Desktop**|5.1|
-|**Core**|6.0.0-rc**|
+|Edition|Version|
+| --- | --- |
+|Desktop|5.1|
+|Core|6.0.0-rc**|
 
 To get up and running with PowerShell Core follow the instructions for your operating system [here](https://github.com/PowerShell/PowerShell/blob/master/README.md#get-powershell).
 
