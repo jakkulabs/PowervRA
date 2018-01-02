@@ -7,9 +7,9 @@
     Connect to a vRA Server and generate a connection object with Servername, Token etc
 
     The ProfileName parameter is a dynamic parameter and as a result will not show up in the default help.
-    See DYNAMIC PARAMETERS below for more information. 
+    See DYNAMIC PARAMETERS below for more information.
 
-    DYNAMIC PARAMETERS 
+    DYNAMIC PARAMETERS
     -ProfileName <String>
         The name of the connection profile
 
@@ -67,17 +67,17 @@
     Param (
 
         [parameter(Mandatory = $true, ParameterSetName = "Username")]
-        [Parameter(Mandatory = $true, ParameterSetName = "Credential")]        
+        [Parameter(Mandatory = $true, ParameterSetName = "Credential")]
         [ValidateNotNullOrEmpty()]
         [String]$Server,
 
         [parameter(Mandatory = $false, ParameterSetName = "Username")]
-        [Parameter(Mandatory = $false, ParameterSetName = "Credential")]   
+        [Parameter(Mandatory = $false, ParameterSetName = "Credential")]
         [ValidateNotNullOrEmpty()]
         [String]$Tenant = "vsphere.local",
 
         [parameter(Mandatory = $true, ParameterSetName = "Username")]
-        [Parameter(Mandatory = $true, ParameterSetName = "Credential")]   
+        [Parameter(Mandatory = $true, ParameterSetName = "Credential")]
         [ValidateNotNullOrEmpty()]
         [String]$Username,
 
@@ -90,18 +90,18 @@
         [Management.Automation.PSCredential]$Credential,
 
         [parameter(Mandatory = $true, ParameterSetName = "Username")]
-        [Parameter(Mandatory = $true, ParameterSetName = "Credential")]   
+        [Parameter(Mandatory = $true, ParameterSetName = "Credential")]
         [Switch]$IgnoreCertRequirements,
 
         [parameter(Mandatory = $true, ParameterSetName = "Username")]
-        [Parameter(Mandatory = $true, ParameterSetName = "Credential")]   
+        [Parameter(Mandatory = $true, ParameterSetName = "Credential")]
         [ValidateSet('Ssl3', 'Tls', 'Tls11', 'Tls12')]
         [String]$SslProtocol
     )
     DynamicParam {
         $Profiles = (Get-ChildItem -Path "$ENV:USERPROFILE\.PowervRA" -File -Filter "*_profile.json" -ErrorAction SilentlyContinue) | ForEach-Object {
             $_.BaseName.Split("_")[0]
-        } 
+        }
         NewDynamicParam -Name ProfileName -ValidateSet $Profiles -Type String -ParameterSetName "Profile" -Mandatory
     }
 
@@ -114,7 +114,7 @@
 
             Write-Verbose -Message "Retrieving profile $ProfileConfigurationPath"
 
-            # --- If profile exists, direct user to New-vRAConectionProfile
+            # --- If profile does not exist, direct user to New-vRAConectionProfile
             if (!(Test-Path -Path $ProfileConfigurationPath)) {
                 throw "A profile called $ProfileName does not exist. Try creating it first with New-vRAConnectionProfile"
             }
