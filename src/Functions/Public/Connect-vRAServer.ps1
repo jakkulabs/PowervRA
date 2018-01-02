@@ -83,7 +83,7 @@
 
     if ($PSBoundParameters.ContainsKey("IgnoreCertRequirements") ){
 
-        if ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
+        if (!$IsCoreCLR) {
 
             if ( -not ("TrustAllCertsPolicy" -as [type])) {
 
@@ -111,12 +111,12 @@
     $SslProtocolResult = 'Default'
 
     if ($PSBoundParameters.ContainsKey("SslProtocol") ){
-        
-        if ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
+
+        if (!$IsCoreCLR) {
 
             $CurrentProtocols = ([System.Net.ServicePointManager]::SecurityProtocol).toString() -split ', '
             if (!($SslProtocol -in $CurrentProtocols)){
-            
+
                 [System.Net.ServicePointManager]::SecurityProtocol += [System.Net.SecurityProtocolType]::$($SslProtocol)
             }
         }
@@ -158,14 +158,14 @@
 
         }
 
-        if ((!$SignedCertificate) -and ($PSVersionTable.PSEdition -eq "Core")) {
+        if ((!$SignedCertificate) -and ($IsCoreCLR)) {
 
             $Params.Add("SkipCertificateCheck", $true)
 
         }
 
-        if (($SslProtocolResult -ne 'Default') -and ($PSVersionTable.PSEdition -eq "Core")) {
-            
+        if (($SslProtocolResult -ne 'Default') -and ($IsCoreCLR)) {
+
             $Params.Add("SslProtocol", $SslProtocol)
 
         }

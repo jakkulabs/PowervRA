@@ -128,14 +128,14 @@
     }
 
     # --- Support for PowerShell Core certificate checking
-    if (!($Global:vRAConnection.SignedCertificates) -and ($PSVersionTable.PSEdition -eq "Core")) {
+    if (!($Global:vRAConnection.SignedCertificates) -and ($IsCoreCLR)) {
 
         $Params.Add("SkipCertificateCheck", $true);
     }
 
     # --- Support for PowerShell Core SSL protocol checking
-    if (($Global:vRAConnection.SslProtocol -ne 'Default') -and ($PSVersionTable.PSEdition -eq "Core")) {
-        
+    if (($Global:vRAConnection.SslProtocol -ne 'Default') -and ($IsCoreCLR)) {
+
         $Params.Add("SslProtocol", $Global:vRAConnection.SslProtocol);
     }
 
@@ -157,7 +157,7 @@
     }
     finally {
 
-        if ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
+        if (!$IsCoreCLR) {
 
             <#
                 Workaround for bug in Invoke-RestMethod. Thanks to the PowerNSX guys for pointing this one out
