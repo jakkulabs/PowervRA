@@ -83,6 +83,20 @@ Describe -Name 'Catalog-Service Tests' -Fixture {
 
         }
 
+        It -Name "Return detail of request by request number" -Test {
+
+            $RequestNumber = (Get-vRARequest -Limit 1).RequestNumber
+            { Get-vRARequestDetail -RequestNumber $RequestNumber } | Should -Not -Throw
+
+        }
+
+        It -Name "Return detail of request by request id" -Test {
+
+            $RequestId = (Get-vRARequest -Limit 1).Id
+            { Get-vRARequestDetail -Id $RequestId } | Should -Not -Throw
+
+        }
+
     }
 
     Context -Name "Catalog Principal" -Fixture {
