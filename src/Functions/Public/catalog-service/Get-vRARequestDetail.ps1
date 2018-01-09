@@ -1,5 +1,5 @@
 
-function Get-vRARequestResult {
+function Get-vRARequestDetail {
 <#
     .SYNOPSIS
     Get detailed information about vRA request
@@ -20,10 +20,13 @@ function Get-vRARequestResult {
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    Get-vRARequestResult -Id 972ab103-950a-4240-8a3d-97174ee07f35
+    Get-vRARequestDetail -Id 972ab103-950a-4240-8a3d-97174ee07f35
     
     .EXAMPLE
-    Get-vRARequestResult -RequestNumber 965299
+    Get-vRARequestDetail -RequestNumber 965299
+    
+    .EXAMPLE
+    Get-vRARequest -RequestNumber 965299 | Get-vRARequestDetail
 
 #>
 [CmdletBinding(DefaultParameterSetName="ById")][OutputType('System.Management.Automation.PSObject', 'System.Object[]')]
@@ -70,7 +73,7 @@ function Get-vRARequestResult {
 
                         $id = (Get-vRARequest -RequestNumber $RequestNumber).id
 
-                        Get-vRARequestResult -id $id
+                        Get-vRARequestDetail -id $id
 
                         break
 
