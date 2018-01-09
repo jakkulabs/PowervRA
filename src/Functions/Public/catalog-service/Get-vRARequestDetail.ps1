@@ -73,7 +73,11 @@ function Get-vRARequestDetail {
 
                         $id = (Get-vRARequest -RequestNumber $RequestNumber).id
 
-                        Get-vRARequestDetail -id $id
+                        $URI = "/catalog-service/api/consumer/requests/$($Id)/forms/details"
+
+                        $RequestDetail = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
+
+                        $RequestDetail.values.entries
 
                         break
 
