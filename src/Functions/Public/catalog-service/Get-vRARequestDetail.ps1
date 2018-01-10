@@ -24,6 +24,9 @@ function Get-vRARequestDetail {
     
     .EXAMPLE
     Get-vRARequestDetail -RequestNumber 965299
+
+    .EXAMPLE
+    Get-vRARequestDetail -RequestNumber 965299,965300
     
     .EXAMPLE
     Get-vRARequest -RequestNumber 965299 | Get-vRARequestDetail
@@ -59,11 +62,19 @@ function Get-vRARequestDetail {
                 # --- If the id parameter is passed returned detailed information about the request
                 'ById' { 
 
-                        $URI = "/catalog-service/api/consumer/requests/$($Id)/forms/details"
+                        foreach ($RequestId in $Id){
 
-                        $RequestDetail = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
-
-                        $RequestDetail.values.entries
+                            $RequestNumber = (Get-vRARequest -Id $RequestId).RequestNumber
+                            $URI = "/catalog-service/api/consumer/requests/$($RequestId)/forms/details"
+                            $RequestDetail = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
+                            
+                            [PSCustomObject] @{
+                                
+                                Id = $RequestId
+                                RequestNumber = $RequestNumber
+                                Detail = $RequestDetail.values.entries
+                            }                                
+                        }
 
                         break
 
@@ -71,13 +82,19 @@ function Get-vRARequestDetail {
                 # --- If the request number parameter is passed returned detailed information about the request
                 'ByRequestNumber' {
 
-                        $id = (Get-vRARequest -RequestNumber $RequestNumber).id
+                        foreach ($Number in $RequestNumber){                             
 
-                        $URI = "/catalog-service/api/consumer/requests/$($Id)/forms/details"
-
-                        $RequestDetail = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
-
-                        $RequestDetail.values.entries
+                            $RequestId = (Get-vRARequest -RequestNumber $Number).id
+                            $URI = "/catalog-service/api/consumer/requests/$($RequestId)/forms/details"
+                            $RequestDetail = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
+                            
+                            [PSCustomObject] @{
+                                
+                                Id = $RequestId
+                                RequestNumber = $Number
+                                Detail = $RequestDetail.values.entries
+                            }                            
+                        }
 
                         break
 
