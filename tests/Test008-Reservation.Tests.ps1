@@ -10,7 +10,7 @@ Describe -Name 'Reservation Tests' -Fixture {
 
     It -Name "Return Reservation Types" -Test {
 
-        Get-vRAReservationType | Where-Object {$_.Name -eq 'vSphere'} | Select-Object -ExpandProperty Id | Should Be 'Infrastructure.Reservation.Virtual.vSphere'
+        Get-vRAReservationType | Where-Object {$_.Name -like 'vSphere*'} | Select-Object -ExpandProperty Id | Should Be 'Infrastructure.Reservation.Virtual.vSphere'
     }
 
     It -Name "Return named vSphere Compute Resource $($JSON.Reservation.ComputeResourceName)" -Test {
@@ -112,9 +112,9 @@ Describe -Name 'Reservation Tests' -Fixture {
     }
 
     It -Name "Update Storage for named Reservation $($JSON.Reservation.Name)" -Test {
-        
+
         try {
-                        
+
             Get-vRAReservation -Name $JSON.Reservation.Name | Set-vRAReservationStorage -Path $JSON.Reservation.AdditionalDatastore -ReservedSizeGB $JSON.Reservation.AdditionalDatastoreReservedSizeGB -Priority $JSON.Reservation.AdditionalDatastorePriority -Confirm:$false
             $UpdateStorageError = $null
         }
@@ -126,9 +126,9 @@ Describe -Name 'Reservation Tests' -Fixture {
     }
 
     It -Name "Update Network for named Reservation $($JSON.Reservation.Name)" -Test {
-        
+
         try {
-            
+
             Get-vRAReservation -Name $JSON.Reservation.Name | Set-vRAReservationNetwork -NetworkPath $JSON.Reservation.AdditionalNetworkPath -NetworkProfile $JSON.Reservation.AdditionalNetworkProfile -Confirm:$false
             $UpdateNetworkError = $null
         }

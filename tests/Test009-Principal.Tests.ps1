@@ -13,14 +13,21 @@ Describe -Name 'User Principal Tests' -Fixture {
         $SecurePassword = ConvertTo-SecureString $JSON.Principal.UserPrincipalPassword -AsPlainText -Force
         $UserPrincipalA = New-vRAUserPrincipal -Tenant $JSON.Connection.Tenant -FirstName $JSON.Principal.UserPrincipalFirstName -LastName $JSON.Principal.UserPrincipalLastName -EmailAddress $JSON.Principal.UserPrincipalEmailAddress -Description $JSON.Principal.UserPrincipalDescription -Password $SecurePassword -PrincipalId $JSON.Principal.UserPrincipalId
         $UserPrincipalA.FirstName | Should Be $Json.Principal.UserPrincipalFirstName
-                
+
     }
 
     It -Name "Return named User Principal $($JSON.Principal.UserPrincipalId)" -Test {
-        
+
         $UserPrincipalB = Get-vRAUserPrincipal -Id $JSON.Principal.UserPrincipalId
         $UserPrincipalB.FirstName | Should Be $JSON.Principal.UserPrincipalFirstName
-        
+
+    }
+
+    It -Name "Return User Principal Group Memberships" -Test {
+
+        $UserPrincipal = Get-vRAUserPrincipal -Id $JSON.Principal.UserPrincipalId
+        $GroupMemberships = $UserPrincipal | Get-vRAUserPrincipalGroupMembership | Select-Object -ExpandProperty Name
+        $GroupMemberships -contains "ALL USERS" | Should Be $true
     }
 
     It -Name "Update named User Principal $($JSON.Principal.UserPrincipalId)" -Test {
@@ -36,24 +43,17 @@ Describe -Name 'User Principal Tests' -Fixture {
     It -Name "Remove named User Principal $($JSON.Principal.UserPrincipalId)" -Test {
 
         Remove-vRAUserPrincipal -Id $JSON.Principal.UserPrincipalId -Confirm:$false
-        
+
         try {
-            
-            $UserPrincipalD = Get-vRAUserPrincipal -Id $JSON.Principal.UserPrincipalId            
-            
+
+            $UserPrincipalD = Get-vRAUserPrincipal -Id $JSON.Principal.UserPrincipalId
+
         }
         catch {}
-        
+
         $UserPrincipalD | Should Be $null
-                
+
     }
-
-    It -Name "Return User Principal Group Memberships" -Test {
-
-        $UserPrincipal = Get-vRAUserPrincipal -Id $JSON.Principal.UserPrincipalId
-        $GroupMemberships = $UserPrincipal | Get-vRAUserPrincipalGroupMembership | Select-Object -ExpandProperty Name
-        $GroupMemberships -contains "ALL USERS" | Should Be $true
-    } 
 }
 
 Describe -Name 'Group Principal Tests' -Fixture {
@@ -62,15 +62,15 @@ Describe -Name 'Group Principal Tests' -Fixture {
 
         $GroupPrincipalA = New-vRAGroupPrincipal -Tenant $JSON.Connection.Tenant -Name $JSON.Principal.GroupPrincipalName -Description $JSON.Principal.GroupPrincipalDescription
         $GroupPrincipalA.Name | Should Be $JSON.Principal.GroupPrincipalName
-                        
+
     }
 
     It -Name "Return named Custom Group $($JSON.Principal.GroupPrincipalName)" -Test {
-        
+
         $GroupPrincipalId = "$($JSON.Principal.GroupPrincipalName)@$($JSON.Connection.Tenant)"
         $GroupPrincipalB = Get-vRAGroupPrincipal -Id $GroupPrincipalId
         $GroupPrincipalB.Name | Should Be $JSON.Principal.GroupPrincipalName
-        
+
     }
 
     <#
@@ -85,22 +85,22 @@ Describe -Name 'Group Principal Tests' -Fixture {
     #>
 
     It -Name "Remove named User Principal $($JSON.Principal.GroupPrincipalName)" -Test {
-        
+
         $GroupPrincipalId = "$($JSON.Principal.GroupPrincipalName)@$($JSON.Connection.Tenant)"
 
         Remove-vRAGroupPrincipal -Id $GroupPrincipalId -Confirm:$false
-        
+
         try {
-            
-            $GroupPrincipalName = Get-vRAGroupPrincipal -Id  $GroupPrincipalId            
-            
+
+            $GroupPrincipalName = Get-vRAGroupPrincipal -Id  $GroupPrincipalId
+
         }
         catch {}
-        
+
         $GroupPrincipalName | Should Be $null
-                
+
     }
-       
+
 }
 
 # --- Cleanup

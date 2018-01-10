@@ -1,5 +1,9 @@
-﻿# --- Startup
-$Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Tenant $JSON.Connection.Tenant -Username $JSON.Connection.Username -Password $JSON.Connection.Password -IgnoreCertRequirements
+﻿# --- Get data for the tests
+$JSON = Get-Content .\Variables.json -Raw | ConvertFrom-JSON
+
+# --- Startup
+$ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password-AsPlainText -Force
+$Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Tenant $JSON.Connection.Tenant -Username $JSON.Connection.Username -Password $ConnectionPassword -IgnoreCertRequirements
 
 # --- Tests
 Describe -Name 'Component-Registry Tests' -Fixture {
@@ -19,13 +23,13 @@ Describe -Name 'Component-Registry Tests' -Fixture {
             $Service = Get-vRAComponentRegistryService -Name $ServiceName
             $Service.Name | Should Be $ServiceName
         }
-        
+
         It -Name "Return Service by Id" -Test {
 
             $ServiceId = (Get-vRAComponentRegistryService -Name $ServiceName).Id
             $Service = Get-vRAComponentRegistryService -Id $ServiceId
             $Service.Id | Should Be $ServiceId
-        }              
+        }
 
         It -Name "Return all Service Status" -Test {
 
@@ -51,7 +55,7 @@ Describe -Name 'Component-Registry Tests' -Fixture {
             $ServiceId = (Get-vRAComponentRegistryService -Name $ServiceName).Id
             $ServiceEndpoints = Get-vRAComponentRegistryServiceEndpoint -Id $ServiceId
             $ServiceEndpoints.Count | Should BeGreaterThan 0
-        }            
+        }
     }
 }
 
