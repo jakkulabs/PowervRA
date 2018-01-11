@@ -8,12 +8,13 @@ Connect to a vRA Server
 ### Username (Default)
 ```
 Connect-vRAServer -Server <String> [-Tenant <String>] -Username <String> -Password <SecureString>
- [-IgnoreCertRequirements]
+ [-IgnoreCertRequirements] [-SslProtocol <String>]
 ```
 
 ### Credential
 ```
 Connect-vRAServer -Server <String> [-Tenant <String>] -Credential <PSCredential> [-IgnoreCertRequirements]
+ [-SslProtocol <String>]
 ```
 
 ## DESCRIPTION
@@ -121,6 +122,24 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SslProtocol
+Alternative Ssl protocol to use from the default
+Requires vRA 7.x and above
+Windows PowerShell: Ssl3, Tls, Tls11, Tls12
+PowerShell Core: Tls, Tls11, Tls12
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -104,6 +104,7 @@ pages:
     - Remove-vRAReservation : functions/Remove-vRAReservation.md
     - Remove-vRAReservationNetwork : functions/Remove-vRAReservationNetwork.md
     - Remove-vRAReservationPolicy : functions/Remove-vRAReservationPolicy.md
+    - Remove-vRAReservationStorage : functions/Remove-vRAReservationStorage.md
     - Remove-vRARoutedNetworkProfile : functions/Remove-vRARoutedNetworkProfile.md
     - Remove-vRAService : functions/Remove-vRAService.md
     - Remove-vRAStorageReservationPolicy : functions/Remove-vRAStorageReservationPolicy.md

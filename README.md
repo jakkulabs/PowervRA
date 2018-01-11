@@ -9,28 +9,22 @@ Note: this module is not in any way developed or supported by anyone officially 
 
 ### vRealize Automation
 
-* 6.2.4**
-* 7.0
-* 7.0.1
-* 7.1
-* 7.2***
-* 7.3***
+|||||||
+| --- | --- | --- | --- | --- | --- |
+|6.2.4*|7.0|7.0.1|7.1|7.2*|7.3*|
 
-** Support for 6.2.4 is limited given API restrictions. Functions which don't support 6.2.4 will exit early and cleanly.
 
-*** Support for 7.2 and 7.3 has only received minor testing and updates so far
+* Support for 6.2.4 is limited given API restrictions. Functions which don't support 6.2.4 will exit early and cleanly.
+* Support for 7.2 and 7.3 has only received minor testing and updates so far
 
 ### PowerShell Editions
 
-#### Desktop
+|Edition|Version|
+| --- | --- |
+|Desktop|5.1|
+|Core|6.0.0-rc**|
 
-* 5.1
-
-#### Core
-
-* 6.0.0-rc**
-
-** To get up and running with PowerShell Core follow the instructions for your operating system [here](https://github.com/PowerShell/PowerShell/blob/master/README.md#get-powershell).
+To get up and running with PowerShell Core follow the instructions for your operating system [here](https://github.com/PowerShell/PowerShell/blob/master/README.md#get-powershell).
 
 ## Download
 
@@ -40,32 +34,33 @@ PowerShell v5.1 & v6 users: You grab the latest version of the module from the P
 Install-Module -Name PowervRA -Scope CurrentUser
 ```
 
-## Docker
-
-As of version 2.0.0 we now have our own [docker image](https://hub.docker.com/r/jakkulabs/powervra/).
-
-Getting started is easy, just run the following commands:
-
-```
-docker pull jakkulabs/powervra
-docker run --rm -it jakkulabs/powervra
-```
-
-For more information see [this readme](docker/README.md).
-
 ## Quick Start
 
 Once you have installed and imported PowervRA, use Connect-vRAServer to connect to your vRA instance:
 
-```
+```PowerShell
 Connect-vRAServer -Server vra.corp.local -Tenant tenant01 -Credential (Get-Credential) 
 ```
 
 If your instance has a self signed certificate you must use the **IgnoreCertRequirements** switch:
 
-```
+```PowerShell
 Connect-vRAServer -Server vra.corp.local -Tenant tenant01 -Credential (Get-Credential) -IgnoreCertRequirements
 ```
+
+## Running Locally
+When developing, use the provided build script and import the module that is inside the Release directory. 
+
+You **do not** have to manually edit src\PowervRA.psd1 when adding new functions
+
+```PowerShell
+# --- Run the build script
+.\tools\build.ps1
+
+# --- Import release module
+Import-Module .\Release\PowervRA\PowervRA.psd1 -Force
+```
+The default build will run some quick tests to catch any errors before you push your changes.
 
 ## Documentation
 

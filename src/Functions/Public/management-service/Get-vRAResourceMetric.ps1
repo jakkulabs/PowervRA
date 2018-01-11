@@ -2,13 +2,13 @@
 <#
     .SYNOPSIS
     Retrieve metrics for a deployed resource
-    
+
     .DESCRIPTION
     Retrieve metrics for a deployed resource
-    
+
     .PARAMETER Id
     The id of the catalog resource
-    
+
     .PARAMETER Name
     The name of the catalog resource
 
@@ -32,7 +32,7 @@
 
     .EXAMPLE
     Get-vRAResourceMetric -Name vm01
-    
+
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
@@ -41,7 +41,7 @@
     [parameter(Mandatory=$false, ParameterSetName="ById")]
     [ValidateNotNullOrEmpty()]
     [String[]]$Id,
-    
+
     [parameter(Mandatory=$false, ValueFromPipelineByPropertyName, ParameterSetName="ByName")]
     [ValidateNotNullOrEmpty()]
     [String[]]$Name,
@@ -54,17 +54,17 @@
 
     # --- Test for vRA API version
     xRequires -Version 7.0
-                
+
     try {
 
         switch ($PsCmdlet.ParameterSetName) {
 
             # --- Get metrics by resource id
             'ById'{
-        
+
                 foreach ($ResoureId in $Id ) {
-                
-                    $Resource = Get-vRAConsumerResource -Id $ResoureId
+
+                    $Resource = Get-vRAResource -Id $ResoureId
 
                     $MachineId = $Resource.Data.machineId
 
@@ -76,7 +76,7 @@
                     Write-Verbose -Message "Preparing GET to $($URI)"
 
                     $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body "{}"
-                    
+
                     $Metric = $Response.Content | Where-Object {$_.iaasUuid -eq $MachineId}
 
                     Write-Verbose -Message "SUCCESS"
@@ -101,13 +101,13 @@
                 break
 
             }
-                
+
             # --- Get metrics by resource name
             'ByName' {
 
                 foreach ($ResourceName in $Name) {
 
-                    $Resource = Get-vRAConsumerResource -Name $ResourceName
+                    $Resource = Get-vRAResource -Name $ResourceName
 
                     $MachineId = $Resource.Data.machineId
 
@@ -119,7 +119,7 @@
                     Write-Verbose -Message "Preparing GET to $($URI)"
 
                     $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body "{}"
-                    
+
                     $Metric = $Response.Content | Where-Object {$_.iaasUuid -eq $MachineId}
 
                     Write-Verbose -Message "SUCCESS"
@@ -138,9 +138,9 @@
                         Strings = $Metric.strings
 
                     }
-                    
+
                 }
-                    
+
                 break
 
             }
