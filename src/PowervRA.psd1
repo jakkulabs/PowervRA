@@ -15,7 +15,7 @@ RootModule = 'PowervRA.psm1'
 ModuleVersion = '0.0.0'
 
 # Supported PSEditions
-# CompatiblePSEditions = @()
+CompatiblePSEditions  = 'Desktop', 'Core'
 
 # ID used to uniquely identify this module
 GUID = 'bbe31f5e-6a10-4859-8b71-2aaef94a8be5'
