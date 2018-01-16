@@ -2,10 +2,10 @@
 <#
     .SYNOPSIS
     Retrieve vRA Tenant Directories
-    
+
     .DESCRIPTION
     Retrieve vRA Tenant Directories
-    
+
     .PARAMETER Id
     Specify the ID of a Tenant
 
@@ -17,7 +17,7 @@
 
     .OUTPUTS
     System.Management.Automation.PSObject.
-    
+
     .EXAMPLE
     Get-vRATenantDirectory -Id Tenant01
 
@@ -30,15 +30,15 @@
 
     [parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
-    [String[]]$Id,    
-    
+    [String[]]$Id,
+
     [parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
     [String]$Limit = "100"
     )
-                
+
 try {
-        
+
     foreach ($TenantId in $Id){
 
         $URI = "/identity/api/tenants/$($TenantId)/directories?limit=$($Limit)"
@@ -47,29 +47,32 @@ try {
         $Response = Invoke-vRARestMethod -Method GET -URI $URI
 
         if ($Response.content){
-        
-            [pscustomobject]@{
 
-                Name = $Response.content.name
-                Description = $Response.content.description
-                Domain = $Response.content.domain
-                Alias = $Response.content.alias
-                Type = $Response.content.type
-                UserNameDN = $Response.content.userNameDn
-                Password = $Response.content.password
-                URL = $Response.content.url
-                GroupBaseSearchDN = $Response.content.groupBaseSearchDn
-                UserBaseSearchDN = $Response.content.userBaseSearchDn
-                Subdomains = $Response.content.subdomains
-                GroupBaseSearchDNs = $Response.content.groupBaseSearchDns
-                UserBaseSearchDNs = $Response.content.userBaseSearchDns
-                DomainAdminUsername = $Response.content.domainAdminUsername
-                DomainAdminPassword = $Response.content.domainAdminPassword
-                Certificate = $Response.content.certificate
-                TrustAll = $Response.content.trustAll
-                UseGlobalCatalog = $Response.content.useGlobalCatalog
-                New = $Response.content.new
-        }
+            foreach ($TenantDirectory in $Response.Content){
+
+                [pscustomobject]@{
+
+                    Name = $TenantDirectory.name
+                    Description = $TenantDirectory.description
+                    Domain = $TenantDirectory.domain
+                    Alias = $TenantDirectory.alias
+                    Type = $TenantDirectory.type
+                    UserNameDN = $TenantDirectory.userNameDn
+                    Password = $TenantDirectory.password
+                    URL = $TenantDirectory.url
+                    GroupBaseSearchDN = $TenantDirectory.groupBaseSearchDn
+                    UserBaseSearchDN = $TenantDirectory.userBaseSearchDn
+                    Subdomains = $TenantDirectory.subdomains
+                    GroupBaseSearchDNs = $TenantDirectory.groupBaseSearchDns
+                    UserBaseSearchDNs = $TenantDirectory.userBaseSearchDns
+                    DomainAdminUsername = $TenantDirectory.domainAdminUsername
+                    DomainAdminPassword = $TenantDirectory.domainAdminPassword
+                    Certificate = $TenantDirectory.certificate
+                    TrustAll = $TenantDirectory.trustAll
+                    UseGlobalCatalog = $TenantDirectory.useGlobalCatalog
+                    New = $TenantDirectory.new
+                }
+            }
         }
     }
 }
