@@ -1,7 +1,7 @@
 # Version 3.1.0
 ## Features
 * Feature - New function Remove-vRAReservationStorage (#157) (@skunkie)
-* Feature - New function Get-vRARequestResult (#167) (@otabut)
+* Feature - New function Get-vRARequestDetail (#167) (@otabut)
 * Feature - Listed as PS Core compatible module in PS Gallery
 * Feature - Supported on vRA 7.2 and 7.3
 
