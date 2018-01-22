@@ -120,7 +120,7 @@
 
                         $EscapedURI = [uri]::EscapeUriString($URI)
 
-                        $Resource = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
+                        $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
                         if ($Response.content.Count -ne 0) {
                             New-vRAObjectResource $Response.content
