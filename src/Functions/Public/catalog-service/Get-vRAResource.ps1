@@ -123,7 +123,7 @@
                         $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
                         if ($Response.content.Count -ne 0) {
-                            New-vRAObjectResource $Response.content
+                            intNewvRAObjectResource $Response.content
                         }
                         else {
                             Write-Verbose -Message "Could not find resource item with id: $($ResourceId)"
@@ -146,7 +146,7 @@
                         $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
                         if ($Response.content.Count -ne 0) {
-                            New-vRAObjectResource $Response.content
+                            intNewvRAObjectResource $Response.content
                         }
                         else {
                             Write-Verbose -Message "Could not find resource item with name: $($ResourceName)"
@@ -207,7 +207,7 @@
                             $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
                             
                             foreach ($Resource in $Response.content) {
-                               New-vRAObjectResource $Resource
+                               intNewvRAObjectResource $Resource
                             }
 
                             $TotalPages = $Response.metadata.totalPages
@@ -239,7 +239,7 @@
 
 }
 
-Function New-vRAObjectResource {
+Function intNewvRAObjectResource {
     Param (
         [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
