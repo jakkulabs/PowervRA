@@ -246,7 +246,7 @@ Function intNewvRAObjectResource {
         $Data
     )
 
-    $props += [ordered]@{
+    $props = [ordered]@{
         ResourceId = $Data.ResourceId
         BusinessGroupId = $Data.businessGroupId
         BusinessGroupName = $Data.data.MachineGroupName
