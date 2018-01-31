@@ -246,7 +246,7 @@ Function intNewvRAObjectResource {
         $Data
     )
 
-    $props = [ordered]@{
+    [PSCustomObject]@{
         ResourceId = $Data.ResourceId
         BusinessGroupId = $Data.businessGroupId
         BusinessGroupName = $Data.data.MachineGroupName
@@ -270,6 +270,4 @@ Function intNewvRAObjectResource {
         Links = $Data.links
         IconId = $Data.iconId
     }
-
-    New-Object -TypeName PSObject -Property $props
 }
