@@ -116,36 +116,17 @@
                 
                     foreach ($ResourceId in $Id) { 
                 
-                        $URI = "/catalog-service/api/consumer/resourceViews/$($ResourceId)?withExtendedData=true&withOperations=true"
+                        $URI = "/catalog-service/api/consumer/resourceViews?`$filter=id eq '$($ResourceId)'&withExtendedData=true&withOperations=true"
 
                         $EscapedURI = [uri]::EscapeUriString($URI)
 
-                        $Resource = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
+                        $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
-                        [PSCustomObject] @{
-
-                            ResourceId = $Resource.resourceId
-                            Name = $Resource.name
-                            Description = $Resource.description
-                            Status = $Resource.status
-                            CatalogItemLabel = $Resource.catalogItemLabel
-                            RequestId = $Resource.requestId
-                            ResourceType = $Resource.resourceType
-                            Owners = $Resource.owners
-                            BusinessGroupId = $Resource.businessGroupId
-                            TenantId = $Resource.tenantId
-                            DateCreated = $Resource.dateCreated
-                            LastUpdated = $Resource.lastUpdated
-                            Lease = $Resource.lease
-                            Costs = $Resource.costs
-                            CostToDate = $Resource.costToDate
-                            TotalCost = $Resource.totalCost
-                            ParentResourceId = $Resource.parentResourceId
-                            HasChildren = $Resource.hasChildren
-                            Data = $Resource.data
-                            Links = $Resource.links
-                            IconId = $Resource.iconId
-                            
+                        if ($Response.content.Count -ne 0) {
+                            intNewvRAObjectResource $Response.content
+                        }
+                        else {
+                            Write-Verbose -Message "Could not find resource item with id: $($ResourceId)"
                         }
 
                     }
@@ -158,44 +139,17 @@
 
                     foreach ($ResourceName in $Name) {
                 
-                        $URI = "/catalog-service/api/consumer/resourceViews?`$filter=name eq '$($ResourceName)'&withExtendedData=true&withOperations=true"
+                        $URI = "/catalog-service/api/consumer/resourceViews?`$filter=tolower(name) eq '$($ResourceName.ToLower())'&withExtendedData=true&withOperations=true"
 
                         $EscapedURI = [uri]::EscapeUriString($URI)
 
                         $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
 
-                        if ($Response.content.Count -eq 0) {
-
-                            throw "Could not find resource item with name: $($ResourceName)"
-
+                        if ($Response.content.Count -ne 0) {
+                            intNewvRAObjectResource $Response.content
                         }
-
-                        $Resource = $Response.content
-
-                        [PSCustomObject] @{
-
-                            ResourceId = $Resource.resourceId
-                            Name = $Resource.name
-                            Description = $Resource.description
-                            Status = $Resource.status
-                            CatalogItemLabel = $Resource.catalogItemLabel
-                            RequestId = $Resource.requestId
-                            ResourceType = $Resource.resourceType
-                            Owners = $Resource.owners
-                            BusinessGroupId = $Resource.businessGroupId
-                            TenantId = $Resource.tenantId
-                            DateCreated = $Resource.dateCreated
-                            LastUpdated = $Resource.lastUpdated
-                            Lease = $Resource.lease
-                            Costs = $Resource.costs
-                            CostToDate = $Resource.costToDate
-                            TotalCost = $Resource.totalCost
-                            ParentResourceId = $Resource.parentResourceId
-                            HasChildren = $Resource.hasChildren
-                            Data = $Resource.data
-                            Links = $Resource.links
-                            IconId = $Resource.iconId
-                            
+                        else {
+                            Write-Verbose -Message "Could not find resource item with name: $($ResourceName)"
                         }
                         
                     }
@@ -206,78 +160,64 @@
                 # --- No parameters passed so return all resources
                 'Standard' {
 
-                    # --- Set the default URI with no filtering to return all resource types
-                    $URI = "/catalog-service/api/consumer/resourceViews/?withExtendedData=$($WithExtendedData)&withOperations=$($WithOperations)&managedOnly=$($ManagedOnly)&`$orderby=name asc&limit=$($Limit)&page=$($page)"
+                    # vRA REST query is limited to only 100 items per page when extended data is requested. So the script must parse all pages returned
+                    $nbPage = 1
+                    $TotalPages = 99999 #Total pages is known after the 1st vRA REST query
+                    
+                    For ($nbPage=1; $nbPage -le $TotalPages; $nbPage++) {
+                        # --- Set the default URI with no filtering to return all resource types
+                        $URI = "/catalog-service/api/consumer/resourceViews/?withExtendedData=$($WithExtendedData)&withOperations=$($WithOperations)&managedOnly=$($ManagedOnly)&`$orderby=name asc&limit=$($Limit)&page=$($nbPage)"
 
-                    # --- If type is passed set the filter
-                    if ($PSBoundParameters.ContainsKey("Type")){
+                        # --- If type is passed set the filter
+                        if ($PSBoundParameters.ContainsKey("Type")){
 
-                        switch ($Type) {
+                            switch ($Type) {
 
-                            'Deployment' {
+                                'Deployment' {
 
-                                $Filter = "resourceType/id eq 'composition.resource.type.deployment'"
-                                $URI = "$($URI)&`$filter=$($filter)"
+                                    $Filter = "resourceType/id eq 'composition.resource.type.deployment'"
+                                    $URI = "$($URI)&`$filter=$($filter)"
 
-                                break
+                                    break
+
+                                }
+
+                                'Machine' {
+
+                                    $Filter = "resourceType/id eq 'Infrastructure.Machine' or `
+                                    resourceType/id eq 'Infrastructure.Virtual' or `
+                                    resourceType/id eq 'Infrastructure.Cloud' or `
+                                    resourceType/id eq 'Infrastructure.Physical'"
+
+                                    $URI = "$($URI)&`$filter=$($filter)"
+
+                                    break
+
+                                }
 
                             }
 
-                            'Machine' {
+                            Write-Verbose -Message "Type $($Type) selected"
 
-                                $Filter = "resourceType/id eq 'Infrastructure.Machine' or `
-                                resourceType/id eq 'Infrastructure.Virtual' or `
-                                resourceType/id eq 'Infrastructure.Cloud' or `
-                                resourceType/id eq 'Infrastructure.Physical'"
+                        }
 
-                                $URI = "$($URI)&`$filter=$($filter)"
+                        $EscapedURI = [uri]::EscapeUriString($URI)
 
-                                break
-
+                        try {
+                            $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
+                            
+                            foreach ($Resource in $Response.content) {
+                               intNewvRAObjectResource $Resource
                             }
 
+                            $TotalPages = $Response.metadata.totalPages
+                            Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($nbPage) of $($TotalPages) | Size: $($Response.metadata.size)"
                         }
-
-                        Write-Verbose -Message "Type $($Type) selected"
-
-                    }
-
-                    $EscapedURI = [uri]::EscapeUriString($URI)
-
-                    $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
-
-                    foreach ($Resource in $Response.content) {
-
-                        [PSCustomObject] @{
-
-                            ResourceId = $Resource.resourceId
-                            Name = $Resource.name
-                            Description = $Resource.description
-                            Status = $Resource.status
-                            CatalogItemLabel = $Resource.catalogItemLabel
-                            RequestId = $Resource.requestId
-                            ResourceType = $Resource.resourceType
-                            Owners = $Resource.owners
-                            BusinessGroupId = $Resource.businessGroupId
-                            TenantId = $Resource.tenantId
-                            DateCreated = $Resource.dateCreated
-                            LastUpdated = $Resource.lastUpdated
-                            Lease = $Resource.lease
-                            Costs = $Resource.costs
-                            CostToDate = $Resource.costToDate
-                            TotalCost = $Resource.totalCost
-                            ParentResourceId = $Resource.parentResourceId
-                            HasChildren = $Resource.hasChildren
-                            Data = $Resource.data
-                            Links = $Resource.links
-                            IconId = $Resource.iconId
-
+                        catch {
+                            throw "An error occurred when getting vRA Resources! $($_.Exception.Message)"
                         }
-
                     }
-
-                    Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
-
+                    
                     break
 
                 }
@@ -297,4 +237,37 @@
 
     }
 
+}
+
+Function intNewvRAObjectResource {
+    Param (
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
+        $Data
+    )
+
+    [PSCustomObject]@{
+        ResourceId = $Data.ResourceId
+        BusinessGroupId = $Data.businessGroupId
+        BusinessGroupName = $Data.data.MachineGroupName
+        TenantId = $Data.tenantId
+        CatalogItemLabel = $Data.data.Component
+        ParentResourceId = $Data.parentResourceId
+        HasChildren = $Data.hasChildren
+        Data = $Data.data
+        ResourceType = $Data.resourceType
+        Name = $Data.name
+        Description = $Data.description
+        Status = $Data.status
+        RequestId = $Data.requestId      
+        Owners = $Data.owners
+        DateCreated = $Data.dateCreated
+        LastUpdated = $Data.lastUpdated
+        Lease = $Data.lease
+        Costs = $Data.costs
+        CostToDate = $Data.costToDate
+        TotalCost = $Data.totalCost
+        Links = $Data.links
+        IconId = $Data.iconId
+    }
 }
