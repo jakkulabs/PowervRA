@@ -95,7 +95,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        # Tags = @()
+        Tags = @('Automation', 'VMware', 'vRA', 'vRealize')
 
         # A URL to the license for this module.
         LicenseUri = 'https://raw.githubusercontent.com/jakkulabs/PowervRA/master/LICENSE'
@@ -105,7 +105,7 @@ PrivateData = @{
 
         # A URL to an icon representing this module.
         IconUri = 'https://raw.githubusercontent.com/jakkulabs/PowervRA/master/media/PowervRA-icon.png'
-                   
+
         # ReleaseNotes of this module
         ReleaseNotes = 'https://raw.githubusercontent.com/jakkulabs/PowervRA/master/docs/CHANGELOG.md'
 
