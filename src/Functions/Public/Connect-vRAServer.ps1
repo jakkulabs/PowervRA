@@ -138,13 +138,11 @@
     try {
 
         # --- Create Invoke-RestMethod Parameters
-        $JSON = @"
-        {
-            "username":"$($Username)",
-            "password":"$($JSONPassword)",
-            "tenant":"$($Tenant)"
-        }
-"@
+        $JSON = @{
+            username = $Username
+            password = $JSONPassword
+            tenant = $Tenant
+        } | ConvertTo-Json
 
         $Params = @{
 
