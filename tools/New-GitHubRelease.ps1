@@ -33,6 +33,9 @@ if (!$PSBoundParameters.ContainsKey("Tag")){
     $Tag = "v$($ENV:BUILD_BUILDNUMBER.Split("-")[0])"
 }
 
+# --- Set TLS version
+[System.Net.ServicePointManager]::SecurityProtocol += [System.Net.SecurityProtocolType]::Tls12
+
 # --- Attempt to create a new release
 try {
 
