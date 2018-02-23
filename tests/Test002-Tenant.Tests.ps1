@@ -29,7 +29,7 @@ Describe -Name 'Tenant Tests' -Fixture {
 
     It -Name "Return named Tenant Directory $($JSON.TenantDirectory.Name)" -Test {
 
-        $TenantDirectoryB = Get-vRATenantDirectory -Id $JSON.TenantDirectory.ID
+        $TenantDirectoryB = Get-vRATenantDirectory -Id $JSON.TenantDirectory.ID | Where-Object {$_.Name -eq $JSON.TenantDirectory.Name}
         $TenantDirectoryB.Name | Should Be $JSON.TenantDirectory.Name
     }
 
@@ -73,7 +73,7 @@ Describe -Name 'Tenant Tests' -Fixture {
     It -Name "Remove named Tenant Directory in $($JSON.Tenant.Name)" -Test {
 
         Remove-vRATenantDirectory -ID $JSON.TenantDirectory.ID -Domain $JSON.TenantDirectory.Domain -Confirm:$false
-        $TenantDirectoryD = Get-vRATenantDirectory -Id $JSON.TenantDirectory.ID
+        $TenantDirectoryD = Get-vRATenantDirectory -Id $JSON.TenantDirectory.ID | Where-Object {$_.Name -eq $JSON.TenantDirectory.Name}
         $TenantDirectoryD | Should Be $null
     }
 

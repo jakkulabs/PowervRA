@@ -1,3 +1,21 @@
+# Version 3.1.1
+## Features
+* Feature - Get-vRAResource enhancements (#171) (@BlackCatDeployment)
+
+## Fixes
+* Fixed #173 - Consider using Module Tags in addition to PSEditions
+* Fixed #175 - Use ConvertTo-Json in Connect-vRAServer (@mponton)
+
+# Version 3.1.0
+## Features
+* Feature - New function Remove-vRAReservationStorage (#157) (@skunkie)
+* Feature - New function Get-vRARequestDetail (#167) (@otabut)
+* Feature - Listed as PS Core compatible module in PS Gallery
+* Feature - Supported on vRA 7.2 and 7.3
+
+## Fixes
+* Fixed #168 - Get-vRATenantDirectory does not support multiple directories in the API response
+
 # Version 3.0.0
 ## Breaking Changes
 **WARNING: This release contains breaking changes**
@@ -73,8 +91,8 @@
 * Module restructured to use ps1 files for functions instead of psm1 files
 * Private functions are now actually private
 * Public functions restructured in to endpoint folders
-* Removed depricated functions: Export-vRAContentPackage, Get-vRAContentPackage, Import-vRAContentPackage, Remove-vRAContentPackage, 
-  Test-vRAContentPackage, Get-vRAConsumerCatalogItem, Get-vRAConsumerCatalogItemRequestTemplate, Get-vRAConsumerEntitledCatalogItem, 
+* Removed depricated functions: Export-vRAContentPackage, Get-vRAContentPackage, Import-vRAContentPackage, Remove-vRAContentPackage,
+  Test-vRAContentPackage, Get-vRAConsumerCatalogItem, Get-vRAConsumerCatalogItemRequestTemplate, Get-vRAConsumerEntitledCatalogItem,
   Get-vRAConsumerRequest, Get-vRAConsumerResource, Get-vRAConsumerResourceOperation, Get-vRAConsumerResourceType, Get-vRAConsumerService
   Request-vRAConsumerCatalogItem
 * Updated README.md to include more information regarting Core Support
