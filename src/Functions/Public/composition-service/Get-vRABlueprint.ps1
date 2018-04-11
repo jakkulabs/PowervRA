@@ -33,12 +33,15 @@
 
     .EXAMPLE
     Get-vRABlueprint -Name "Blueprint01","Blueprint02"
+
+    .EXAMPLE
+    Get-vRABlueprint -Name "Blueprint01","Blueprint02" -ExtendedProperties
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
-    [parameter(Mandatory=$true,ValueFromPipeline=$false,ParameterSetName="ById")]
+    [parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="ById")]
     [ValidateNotNullOrEmpty()]
     [String[]]$Id,
 
