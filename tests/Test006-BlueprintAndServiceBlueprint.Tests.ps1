@@ -14,6 +14,12 @@ Describe -Name 'Blueprint Tests' -Fixture {
         $BlueprintA.Name | Should Be $JSON.Blueprint.Name
     }
 
+    It -Name "Return named Blueprint $($JSON.Blueprint.Name) Extended Properties" -Test {
+
+        $BlueprintB = Get-vRABlueprint -Name $JSON.Blueprint.Name -ExtendedProperties
+        $BlueprintB.ExternalId | Should BeOfType System.String
+    }
+
     It -Name "Return named Service Blueprint $($JSON.ServiceBlueprint.Name)" -Test {
 
         $ServiceBlueprintA = Get-vRAServiceBlueprint -Name $JSON.ServiceBlueprint.Name
