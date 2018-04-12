@@ -1,6 +1,6 @@
 ## Features
-* Feature - Get-vRAResource enhancements (#171) (@BlackCatDeployment)
+* Feature - New parameter ExtendedProperties and pipeline support for Get-vRABlueprint
 
 ## Fixes
-* Fixed #173 - Consider using Module Tags in addition to PSEditions
-* Fixed #175 - Use ConvertTo-Json in Connect-vRAServer (@mponton)
+* Fixed #102 - Get-vRABlueprint is using the wrong API endpoint
+* Fixed #178 - Get-vRABlueprint is not using the Limit parameter

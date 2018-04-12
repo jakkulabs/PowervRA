@@ -1,3 +1,11 @@
+# Version 3.2.0
+## Features
+* Feature - New parameter ExtendedProperties and pipeline support for Get-vRABlueprint
+
+## Fixes
+* Fixed #102 - Get-vRABlueprint is using the wrong API endpoint
+* Fixed #178 - Get-vRABlueprint is not using the Limit parameter
+
 # Version 3.1.1
 ## Features
 * Feature - Get-vRAResource enhancements (#171) (@BlackCatDeployment)
