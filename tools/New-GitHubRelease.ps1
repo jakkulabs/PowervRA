@@ -34,7 +34,7 @@ if (!$PSBoundParameters.ContainsKey("Tag")){
 }
 
 # --- Set TLS version
-[System.Net.ServicePointManager]::SecurityProtocol += [System.Net.SecurityProtocolType]::Tls12
+[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
 
 # --- Attempt to create a new release
 try {
