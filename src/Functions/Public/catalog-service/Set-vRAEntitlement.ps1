@@ -148,7 +148,7 @@
                     # --- Build catalog item ref object
                     $CatalogItemRef = [PSCustomObject] @{
 
-                        id = $((Get-vRAEntitledCatalogItem -Name $CatalogItem).Id)
+                        id = $((Get-vRACatalogItem -Name $CatalogItem).Id)
                         label = $null
 
                     }
