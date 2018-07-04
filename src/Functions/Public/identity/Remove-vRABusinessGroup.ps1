@@ -67,7 +67,7 @@
                             $URI = "/identity/api/tenants/$($TenantId)/subtenants/$($id)"  
 
                             # --- Run vRA REST Request
-                            $Response = Invoke-vRARestMethod -Method DELETE -URI $URI
+                            $null = Invoke-vRARestMethod -Method DELETE -URI $URI
                         }
                     }
                     catch [Exception]{
@@ -93,7 +93,7 @@
                             $URI = "/identity/api/tenants/$($TenantId)/subtenants/$($Id)"  
 
                             # --- Run vRA REST Request
-                            $Response = Invoke-vRARestMethod -Method DELETE -URI $URI
+                            $null = Invoke-vRARestMethod -Method DELETE -URI $URI
                         }
                     }
                     catch [Exception]{

@@ -131,7 +131,7 @@
                     $URI = "/reservation-service/api/reservations/policies/$($Id)"  
 
                     # --- Run vRA REST Request
-                    $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body $Body
+                    $null = Invoke-vRARestMethod -Method PUT -URI $URI -Body $Body
 
                     # --- Output the Successful Result
                     Get-vRAStorageReservationPolicy -Id $Id
@@ -198,7 +198,7 @@
                     $URI = "/reservation-service/api/reservations/policies/$($Id)"  
 
                     # --- Run vRA REST Request
-                    $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body $Body
+                    $null = Invoke-vRARestMethod -Method PUT -URI $URI -Body $Body
 
                     # --- Output the Successful Result
                     Get-vRAStorageReservationPolicy -Name $Name
