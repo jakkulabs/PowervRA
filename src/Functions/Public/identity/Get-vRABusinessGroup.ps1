@@ -82,6 +82,7 @@ try {
 
             $GroupManagerRole = $BusinessGroupRolesResponse.content | Where-Object {$_.name -eq "Business Group Manager"}
             $SupportUserRole = $BusinessGroupRolesResponse.content | Where-Object {$_.name -eq "Support User"}
+            $SharedAccessUserRole = $BusinessGroupRolesResponse.content | Where-Object {$_.name -eq "com.vmware.csp.core.cafe.identity@csp.scoperole.sharedaccess.user.name"}
             $UserRole = $BusinessGroupRolesResponse.content | Where-Object {$_.name -eq "Basic User"}
 
             [pscustomobject]@{
@@ -93,6 +94,7 @@ try {
                 ExtensionData = $BusinessGroup.extensionData
                 GroupManagerRole = $GroupManagerRole.principalId
                 SupportUserRole = $SupportUserRole.principalId
+                SharedAccessUserRole = $SharedAccessUserRole.principalId
                 UserRole = $UserRole.principalId
                 Tenant = $BusinessGroup.tenant
             }
@@ -115,6 +117,7 @@ try {
 
             $GroupManagerRole = $BusinessGroupRolesResponse.content | Where-Object {$_.name -eq "Business Group Manager"}
             $SupportUserRole = $BusinessGroupRolesResponse.content | Where-Object {$_.name -eq "Support User"}
+            $SharedAccessUserRole = $BusinessGroupRolesResponse.content | Where-Object {$_.name -eq "com.vmware.csp.core.cafe.identity@csp.scoperole.sharedaccess.user.name"}
             $UserRole = $BusinessGroupRolesResponse.content | Where-Object {$_.name -eq "Basic User"}
 
             [pscustomobject]@{
@@ -126,6 +129,7 @@ try {
                 ExtensionData = $BusinessGroup.extensionData
                 GroupManagerRole = $GroupManagerRole.principalId
                 SupportUserRole = $SupportUserRole.principalId
+                SharedAccessUserRole = $SharedAccessUserRole.principalId
                 UserRole = $UserRole.principalId
                 Tenant = $BusinessGroup.tenant
             }
