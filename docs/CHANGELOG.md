@@ -1,3 +1,10 @@
+# Version 3.3.0
+## Features
+* Feature - New-vRABusinessGroup does not support SharedAccess User role (#183) (@thecloudxpert)
+
+## Fixes
+* Fixed #180 - Set-vRAEntitlement assumes EntitledCatalogItems (@feardamhan)
+
 # Version 3.2.0
 ## Features
 * Feature - New parameter ExtendedProperties and pipeline support for Get-vRABlueprint

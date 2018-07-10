@@ -1,6 +1,5 @@
 ## Features
-* Feature - New parameter ExtendedProperties and pipeline support for Get-vRABlueprint
+* Feature - New-vRABusinessGroup does not support SharedAccess User role (#183) (@thecloudxpert)
 
 ## Fixes
-* Fixed #102 - Get-vRABlueprint is using the wrong API endpoint
-* Fixed #178 - Get-vRABlueprint is not using the Limit parameter
+* Fixed #180 - Set-vRAEntitlement assumes EntitledCatalogItems (@feardamhan)
