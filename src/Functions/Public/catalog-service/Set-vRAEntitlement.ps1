@@ -254,7 +254,7 @@ function Set-vRAEntitlement {
 
             }
 			
-			# --- Update AllUsers
+	    # --- Update AllUsers
             if ($PSBoundParameters.ContainsKey("AllUsers")) {
 
                 Write-Verbose -Message "Updating AllUsers: $($Entitlement.AllUsers) >> $($AllUsers)"
