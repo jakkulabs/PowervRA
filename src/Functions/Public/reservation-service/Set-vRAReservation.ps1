@@ -139,11 +139,11 @@
     [Int]$AlertReminderFrequency
 
     )
- 
+
     begin {
-    
+
     }
-    
+
     process {
 
         try {
@@ -168,7 +168,7 @@
 
             }
 
-            if ($PSBoundParameters.ContainsKey("ReservationPolicy")) {               
+            if ($PSBoundParameters.ContainsKey("ReservationPolicy")) {
 
                 Write-Verbose -Message "Updating Reservation Policy: $($ReservationPolicy)"
 
@@ -178,7 +178,7 @@
 
             }
 
-            if ($PSBoundParameters.ContainsKey("Priority")) {               
+            if ($PSBoundParameters.ContainsKey("Priority")) {
 
                 Write-Verbose -Message "Updating Priority: $($Reservation.priority) >> $($Priority)"
 
@@ -187,38 +187,38 @@
             }
 
             if ($PSBoundParameters.ContainsKey("Enabled")) {
-            
+
                 if ($Enabled) {
-                                                          
+
                     $BoolAsString = "true"
-                
+
                 }
                 else {
 
                     $BoolAsString = "false"
 
                 }
-                
-                Write-Verbose -Message "Updating Reservation Status: $($Reservation.enabled) >> $($BoolAsString)"                                                     
+
+                Write-Verbose -Message "Updating Reservation Status: $($Reservation.enabled) >> $($BoolAsString)"
 
                 $Reservation.enabled = $BoolAsString
 
             }
 
             if ($PSBoundParameters.ContainsKey("EnableAlerts")) {
-            
+
                 if ($EnableAlerts) {
-                                                          
+
                     $BoolAsString = "true"
-                
+
                 }
                 else {
 
                     $BoolAsString = "false"
 
                 }
-                
-                Write-Verbose -Message "Updating Alert Policy Status: $($Reservation.alertPolicy.enabled) >> $($BoolAsString)"                               
+
+                Write-Verbose -Message "Updating Alert Policy Status: $($Reservation.alertPolicy.enabled) >> $($BoolAsString)"
 
                 $Reservation.alertPolicy.enabled = $BoolAsString
 
@@ -245,19 +245,19 @@
             }
 
             if ($PSBoundParameters.ContainsKey("EmailBusinessGroupManager")) {
-            
+
                 if ($EmailBusinessGroupManager) {
-                                                          
+
                     $BoolAsString = "true"
-                
+
                 }
                 else {
 
                     $BoolAsString = "false"
 
                 }
-                
-                Write-Verbose "Updating Email Business Group Manager Status: $($Reservation.alertPolicy.emailBgMgr) >> $($BoolAsString)"                                               
+
+                Write-Verbose "Updating Email Business Group Manager Status: $($Reservation.alertPolicy.emailBgMgr) >> $($BoolAsString)"
 
                 $Reservation.alertPolicy.emailBgMgr = $BoolAsString
 
@@ -267,11 +267,11 @@
 
             switch ($ReservationTypeName) {
 
-                'vSphere' {
+                {$_ -in 'vSphere','vSphere (vCenter)'} {
 
                     # ---
                     # --- Alert Policy
-                    # ---                
+                    # ---
 
                     if ($PSBoundParameters.ContainsKey("StorageAlertPercentageLevel")) {
 
@@ -343,7 +343,7 @@
 
                         # --- Calculate the memory value in MB
 
-                        $MemoryMB = [Math]::Round(($MemoryGB * 1024 * 1024 * 1024 / 1MB),4,[MidPointRounding]::AwayFromZero)  
+                        $MemoryMB = [Math]::Round(($MemoryGB * 1024 * 1024 * 1024 / 1MB),4,[MidPointRounding]::AwayFromZero)
 
                         $ReservationMemory = $Reservation.extensionData.entries | Where-Object {$_.key -eq "reservationMemory"}
 
@@ -379,7 +379,7 @@
                             }
                             else {
 
-                                # --- Update the existing resource pool                            
+                                # --- Update the existing resource pool
 
                                 $NewResourcePool = Get-vRAReservationComputeResourceResourcePool -Type $ReservationTypeName -ComputeResourceId $ComputeResourceId -Name $ResourcePool
 
@@ -387,7 +387,7 @@
 
                                 $ResourcePoolLabel = $NewResourcePool.label
 
-                                Write-Verbose "Updating Resource Pool: $($ResourcePoolObject.value.label) >> $($ResourcePool)"                        
+                                Write-Verbose "Updating Resource Pool: $($ResourcePoolObject.value.label) >> $($ResourcePool)"
 
                                 $ResourcePoolObject.value.id = $ResourcePoolId
 
@@ -400,10 +400,10 @@
 
                             Write-Verbose -Message "Setting Resource Pool To $($ResourcePool)"
 
-                            $NewResourcePool = Get-vRAReservationComputeResourceResourcePool -Type $ReservationTypeName -ComputeResourceId $ComputeResourceId -Name $ResourcePool                        
+                            $NewResourcePool = Get-vRAReservationComputeResourceResourcePool -Type $ReservationTypeName -ComputeResourceId $ComputeResourceId -Name $ResourcePool
 
                             $ResourcePoolTemplate = @"
-                    
+
                                 {
                                     "key": "resourcePool",
                                     "value": {
@@ -413,15 +413,15 @@
                                         "id": "$($NewResourcePool.Id)",
                                         "label": "$($NewResourcePool.Label)"
                                     }
-                                }                     
+                                }
 "@
-                    
-                            $Reservation.extensionData.entries += ($ResourcePoolTemplate | ConvertFrom-Json)                
-                                    
+
+                            $Reservation.extensionData.entries += ($ResourcePoolTemplate | ConvertFrom-Json)
+
                         }
-                    
-                    }           
- 
+
+                    }
+
                     break
                 }
 
@@ -429,7 +429,7 @@
 
                     # ---
                     # --- Alert Policy
-                    # ---                
+                    # ---
 
                     if ($PSBoundParameters.ContainsKey("StorageAlertPercentageLevel")) {
 
@@ -501,7 +501,7 @@
 
                         # --- Calculate the memory value in MB
 
-                        $MemoryMB = [Math]::Round(($MemoryGB * 1024 * 1024 * 1024 / 1MB),4,[MidPointRounding]::AwayFromZero)                          
+                        $MemoryMB = [Math]::Round(($MemoryGB * 1024 * 1024 * 1024 / 1MB),4,[MidPointRounding]::AwayFromZero)
 
                         $ReservationMemory = $Reservation.extensionData.entries | Where-Object {$_.key -eq "reservationMemory"}
 
@@ -518,61 +518,67 @@
                 }
 
                 'Amazon' {
-                        
-                    Write-Verbose -Message "Support for this reservation type has not been added"
+
+                    Write-Warning -Message "Support for Reservation type $ReservationTypeName has not been added"
                     break
 
                 }
 
                 'OpenStack' {
-                        
-                    Write-Verbose -Message "Support for this reservation type has not been added"
+
+                    Write-Warning -Message "Support for Reservation type $ReservationTypeName has not been added"
                     break
 
                 }
 
                 'vCloud' {
-                        
-                    Write-Verbose -Message "Support for this reservation type has not been added"
-                    break                        
-                        
+
+                    Write-Warning -Message "Support for Reservation type $ReservationTypeName has not been added"
+                    break
+
                 }
 
                 'HyperV' {
-                        
-                    Write-Verbose -Message "Support for this reservation type has not been added"
-                    break                        
-                        
+
+                    Write-Warning -Message "Support for Reservation type $ReservationTypeName has not been added"
+                    break
+
                 }
 
                 'KVM' {
-                        
-                    Write-Verbose -Message "Support for this reservation type has not been added"
-                    break                        
-                        
+
+                    Write-Warning -Message "Support for Reservation type $ReservationTypeName has not been added"
+                    break
+
                 }
 
                 'SCVMM' {
-                        
-                    Write-Verbose -Message "Support for this reservation type has not been added"
-                    break                        
-                        
+
+                    Write-Warning -Message "Support for Reservation type $ReservationTypeName has not been added"
+                    break
+
                 }
 
                 'XenServer' {
-                        
-                    Write-Verbose -Message "Support for this reservation type has not been added"
-                    break                        
-                        
-                }                           
+
+                    Write-Warning -Message "Support for Reservation type $ReservationTypeName has not been added"
+                    break
+
+                }
+
+                default {
+
+                    Write-Warning -Message  "Reservation type $ReservationTypeName for Reservation $($Reservation.name) for Reservation $($Reservation.name) did not match a known type"
+                    break
+                }
 
             }
-    
+
             if ($PSCmdlet.ShouldProcess($Id)){
 
                 $URI = "/reservation-service/api/reservations/$($Id)"
-                
-                Write-Verbose -Message "Preparing PUT to $($URI)"  
+
+                Write-Verbose -Message "Preparing PUT to $($URI)"
 
                 # --- Run vRA REST Request
                 Invoke-vRARestMethod -Method PUT -URI $URI -Body ($Reservation | ConvertTo-Json -Depth 100) -Verbose:$VerbosePreference | Out-Null
@@ -590,6 +596,6 @@
         }
     }
     end {
-        
+
     }
 }
