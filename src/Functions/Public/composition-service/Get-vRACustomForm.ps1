@@ -23,23 +23,28 @@ function Get-vRACustomForm {
 
     Param (
 
-    [parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="Standard")]
+    [parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
     [String[]]$Id
 
     )
+    process {
+
         try {
 
-                $URI = "/composition-service/api/blueprints/$($id)/forms/requestform"
+            foreach ($BlueprintId in $Id){
+                $URI = "/composition-service/api/blueprints/$($BlueprintId)/forms/requestform"
 
                 # --- Run vRA REST Request
+                Write-Verbose -Message "Getting vRA Custom Form for blueprint $($BlueprintId)"
                 $Response = Invoke-vRARestMethod -Method GET -URI $URI
                 $CustomForm = $Response.TrimStart('"').TrimEnd('"').Replace('\"','"');
                 $CustomForm
-                            
+            }
+
         }
         catch [Exception]{
-
             throw
         }
+    }
 }

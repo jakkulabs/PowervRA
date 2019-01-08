@@ -1,8 +1,8 @@
 ---
 
 site_name: PowervRA
-repo_url: https://github.com/jakkulabs/PowervRA
-site_author: JakkuLabs
+repo_url: https://github.com/kclinden/PowervRA
+site_author: kclinden
 edit_uri: edit/master/docs/
 theme: readthedocs
 copyright: "PowervRA is licensed under the <a href='https://github.com/jakkulabs/PowervRA/raw/master/LICENSE'>MIT license"
@@ -10,7 +10,7 @@ pages:
 - 'Home' : 'index.md'
 - 'Change log' : 'CHANGELOG.md'
 - 'Build' : 'build.md'
-- 'Functions': 
+- 'Functions':
     - Add-vRAPrincipalToTenantRole : functions/Add-vRAPrincipalToTenantRole.md
     - Add-vRAReservationNetwork : functions/Add-vRAReservationNetwork.md
     - Add-vRAReservationStorage : functions/Add-vRAReservationStorage.md
@@ -31,6 +31,7 @@ pages:
     - Get-vRAContent : functions/Get-vRAContent.md
     - Get-vRAContentData : functions/Get-vRAContentData.md
     - Get-vRAContentType : functions/Get-vRAContentType.md
+    - Get-vRACustomForm : functions/Get-vRACustomForm.md
     - Get-vRAEntitledCatalogItem : functions/Get-vRAEntitledCatalogItem.md
     - Get-vRAEntitledService : functions/Get-vRAEntitledService.md
     - Get-vRAEntitlement : functions/Get-vRAEntitlement.md
