@@ -42,7 +42,8 @@
     System.Management.Automation.PSObject.
 
     .EXAMPLE
-    Connect-vRAServer -Server vraappliance01.domain.local -Tenant Tenant01 -Credential (Get-Credential)
+    $cred = Get-Credential
+    Connect-vRAServer -Server vraappliance01.domain.local -Tenant Tenant01 -Credential $cred
 
     .EXAMPLE
     $SecurePassword = ConvertTo-SecureString “P@ssword” -AsPlainText -Force
