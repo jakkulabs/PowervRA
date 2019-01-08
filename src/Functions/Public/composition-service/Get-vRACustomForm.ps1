@@ -32,6 +32,9 @@ function Get-vRACustomForm {
       #Initialize
       Write-Verbose -Message "Initializing..."
 
+      #Test vRA API version
+      xRequires -Version 7.4
+
     }
     process {
       #Process
