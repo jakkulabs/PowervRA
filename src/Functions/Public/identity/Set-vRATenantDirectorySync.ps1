@@ -45,7 +45,13 @@ try {
     foreach ($TenantDomain in $Domain){
 
         $URI = "/identity/api/tenants/$($Id)/directories/$($TenantDomain)/sync "
+        if ($PSCmdlet.ShouldProcess($Id)){
 
+            # --- Run vRA REST Request
+            Invoke-vRARestMethod -Method POST -URI $URI
+
+            Get-vRATenantDirectoryStatus -Id $Id -Domain $Domain
+        }
         # --- Run vRA REST Request
         Invoke-vRARestMethod -Method POST -URI $URI
         
