@@ -1,4 +1,4 @@
-﻿function Set-vRATenantDirectorySync {
+function Invoke-vRATenantDirectorySync {
 <#
     .SYNOPSIS
     Sync an identity store
