@@ -28,7 +28,14 @@ function Get-vRACustomForm {
     [String[]]$Id
 
     )
+    begin {
+      #Initialize
+      Write-Verbose -Message "Initializing..."
+
+    }
     process {
+      #Process
+      Write-Verbose -Message "Processing..."
 
         try {
 
@@ -46,5 +53,10 @@ function Get-vRACustomForm {
         catch [Exception]{
             throw
         }
+    }
+    end {
+      #Finalize
+      Write-Verbose -Message "Finalizing..."
+
     }
 }
