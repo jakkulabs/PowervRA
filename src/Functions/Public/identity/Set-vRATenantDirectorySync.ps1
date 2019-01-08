@@ -38,7 +38,7 @@ function Invoke-vRATenantDirectorySync {
     )
 
     # --- Test for vRA API version
-    xRequires -Version 7.0
+    xRequires -Version 7.4
                 
 try {
         
