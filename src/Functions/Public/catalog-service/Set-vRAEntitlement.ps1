@@ -93,7 +93,7 @@ function Set-vRAEntitlement {
         [ValidateNotNullOrEmpty()]
         [bool]$LocalScopeForActions,
 		
-		[Parameter(Mandatory=$false)]
+		[Parameter(Mandatory=$false, ParameterSetName='AllUsers')]
         [ValidateNotNullOrEmpty()]
         [bool]$AllUsers
 
