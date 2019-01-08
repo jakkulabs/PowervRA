@@ -24,7 +24,7 @@ function Invoke-vRATenantDirectorySync {
     .EXAMPLE
     Set-vRATenantDirectorySync -Id Tenant01 -Domain vrademo.local,test.local
 #>
-[CmdletBinding()][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
