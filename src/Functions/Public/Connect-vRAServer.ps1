@@ -14,12 +14,14 @@
 
     .PARAMETER Username
     Username to connect with
+    For domain accounts ensure to specify the Username in the format username@domain, not Domain\Username
 
     .PARAMETER Password
     Password to connect with
 
     .PARAMETER Credential
     Credential object to connect with
+    For domain accounts ensure to specify the Username in the format username@domain, not Domain\Username
 
     .PARAMETER IgnoreCertRequirements
     Ignore requirements to use fully signed certificates
@@ -40,7 +42,8 @@
     System.Management.Automation.PSObject.
 
     .EXAMPLE
-    Connect-vRAServer -Server vraappliance01.domain.local -Tenant Tenant01 -Credential (Get-Credential)
+    $cred = Get-Credential
+    Connect-vRAServer -Server vraappliance01.domain.local -Tenant Tenant01 -Credential $cred
 
     .EXAMPLE
     $SecurePassword = ConvertTo-SecureString “P@ssword” -AsPlainText -Force
@@ -133,6 +136,12 @@
     if ($PSBoundParameters.ContainsKey("Password")){
 
         $JSONPassword = (New-Object System.Management.Automation.PSCredential("username", $Password)).GetNetworkCredential().Password
+    }
+
+    # --- Test for a '\' in the username, e.g. DOMAIN\Username, not supported by the API
+    if ($Username -match '\\'){
+
+        throw "The Username format DOMAIN\Username is not supported by the vRA REST API. Please use username@domain instaed"
     }
 
     try {
