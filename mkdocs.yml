@@ -1,8 +1,8 @@
 ---
 
 site_name: PowervRA
-repo_url: https://github.com/kclinden/PowervRA
-site_author: kclinden
+repo_url: https://github.com/jakkulabs/PowervRA
+site_author: JakkuLabs
 edit_uri: edit/master/docs/
 theme: readthedocs
 copyright: "PowervRA is licensed under the <a href='https://github.com/jakkulabs/PowervRA/raw/master/LICENSE'>MIT license"
