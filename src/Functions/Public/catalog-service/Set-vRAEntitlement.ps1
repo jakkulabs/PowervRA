@@ -34,6 +34,9 @@ function Set-vRAEntitlement {
     Determines if the entitled actions are entitled for all applicable service catalog items or only
     items in this entitlement
 
+    .PARAMETER AllUsers
+    Add all users to the entitlement
+
     .INPUTS
     System.String.
 
