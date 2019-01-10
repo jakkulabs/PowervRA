@@ -32,12 +32,15 @@ Param (
 )
 
 # --- Install dependencies
-$RequiredModules = @("BuildHelpers", "Psake", "PSScriptAnalyzer")
+$RequiredModules = @("Psake", "PSScriptAnalyzer")
 foreach ($Module in $RequiredModules) {
     if (!(Get-Module -Name $Module -ListAvailable)){
         Install-Module -Name $Module -Scope CurrentUser -Force        
     }
 }
+
+# --- Install build helpers separately to avoid current module errors
+Install-Module -Name "BuildHelpers" -RequiredVersion 2.0.1 -Scope CurrentUser -Force        
 
 # --- Set Build Environment
 Set-BuildEnvironment -Force
