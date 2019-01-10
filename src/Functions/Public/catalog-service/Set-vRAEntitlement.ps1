@@ -1,4 +1,4 @@
-﻿function Set-vRAEntitlement {
+function Set-vRAEntitlement {
 <#
     .SYNOPSIS
     Update an existing entitlement
@@ -47,6 +47,9 @@
     Set-vRAEntitlement -Id "e5cd1c84-3b76-4ae9-9f2e-35114da6cfd2" -Name "Updated Name" -Description "Updated Description" -Principals "user@vsphere.local" -EntitledCatalogItems "Centos" -EntitledServices "A service" -EntitledResourceOperations "Infrastructure.Machine.Action.PowerOff" -Status ACTIVE
 
     .EXAMPLE
+    Set-vRAEntitlement -Id "e5cd1c84-3b76-4ae9-9f2e-35114da6cfd2" -Name "Updated Name" -Description "Updated Description" -AllUsers:$true
+
+    .EXAMPLE
     Get-vRAEntitlement -Name "Entitlement 1" | Set-vRAEntitlement -Description "Updated description!"
 
 #>
@@ -88,7 +91,11 @@
 
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-        [bool]$LocalScopeForActions
+        [bool]$LocalScopeForActions,
+		
+		[Parameter(Mandatory=$false, ParameterSetName='AllUsers')]
+        [ValidateNotNullOrEmpty()]
+        [bool]$AllUsers
 
     )    
 
@@ -246,6 +253,15 @@
                 $Entitlement.localScopeForActions = $LocalScopeForActions
 
             }
+			
+	    # --- Update AllUsers
+            if ($PSBoundParameters.ContainsKey("AllUsers")) {
+
+                Write-Verbose -Message "Updating AllUsers: $($Entitlement.AllUsers) >> $($AllUsers)"
+                $Entitlement.AllUsers = $AllUsers
+
+            }
+			
             # --- Convert the modified entitlement to json 
             $Body = $Entitlement | ConvertTo-Json -Depth 50 -Compress
 
