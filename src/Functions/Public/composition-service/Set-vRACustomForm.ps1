@@ -36,7 +36,7 @@ function Set-vRACustomForm {
     [parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true)]
     [ValidateNotNullOrEmpty()]
     [Alias("id")]
-    [String[]]$blueprintId
+    [String[]]$blueprintId,
 
     [parameter(Mandatory=$true,ValueFromPipeline=$false)]
     [ValidateSet("Enable","Disable")]
