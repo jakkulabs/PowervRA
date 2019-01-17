@@ -6,7 +6,7 @@ function Get-vRACustomForm {
     .DESCRIPTION
     Retrieve vRA Custom Form for a Blueprint
 
-    .PARAMETER BlueprintId
+    .PARAMETER Id
     Specify the ID of a Blueprint
 
     .INPUTS
@@ -18,12 +18,16 @@ function Get-vRACustomForm {
     .EXAMPLE
     Get-vRACustomForm -Id "309100fd-b8ce-4e8c-ac8c-a667b8ace54f"
 
+    .EXAMPLE
+    Get-vRABlueprint -Name "CentOS" | Get-vRACustomForm
+
+
 #>
-[CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
+[OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
-    [parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName="Standard")]
+    [parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true)]
     [ValidateNotNullOrEmpty()]
     [String[]]$Id
 
@@ -31,6 +35,16 @@ function Get-vRACustomForm {
     begin {
       #Initialize
       Write-Verbose -Message "Initializing..."
+
+      #Create PSObject for Output
+      function StandardOutput ($Blueprint,$CustomForm){
+          [pscustomobject]@{
+
+            BlueprintID = $Blueprint
+            JSON = $CustomForm
+
+          }
+      }
 
       #Test vRA API version
       xRequires -Version 7.4
@@ -47,9 +61,16 @@ function Get-vRACustomForm {
 
                 # --- Run vRA REST Request
                 Write-Verbose -Message "Getting vRA Custom Form for blueprint $($BlueprintId)"
-                $Response = Invoke-vRARestMethod -Method GET -URI $URI
-                $CustomForm = $Response.TrimStart('"').TrimEnd('"').Replace('\"','"');
-                $CustomForm
+                try {
+                    $Response = Invoke-vRARestMethod -Method GET -URI $URI
+                    $ReturnedForm = $Response.TrimStart('"').TrimEnd('"').Replace('\"','"');
+                    $CustomForm = StandardOutput($BlueprintId)($ReturnedForm)
+                    return $CustomForm
+                }
+                catch {
+                    Write-Warning -Message "Blueprint $($BlueprintId) does not have a custom form"
+                }
+
             }
 
         }
