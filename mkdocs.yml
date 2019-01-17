@@ -31,7 +31,6 @@ pages:
     - Get-vRAContent : functions/Get-vRAContent.md
     - Get-vRAContentData : functions/Get-vRAContentData.md
     - Get-vRAContentType : functions/Get-vRAContentType.md
-    - Get-vRACustomForm : functions/Get-vRACustomForm.md
     - Get-vRAEntitledCatalogItem : functions/Get-vRAEntitledCatalogItem.md
     - Get-vRAEntitledService : functions/Get-vRAEntitledService.md
     - Get-vRAEntitlement : functions/Get-vRAEntitlement.md
