@@ -6,7 +6,7 @@ function Get-vRACustomForm {
     .DESCRIPTION
     Retrieve vRA Custom Form for a Blueprint
 
-    .PARAMETER Id
+    .PARAMETER BlueprintId
     Specify the ID of a Blueprint
 
     .INPUTS
@@ -16,7 +16,7 @@ function Get-vRACustomForm {
     System.String
 
     .EXAMPLE
-    Get-vRACustomForm -Id "309100fd-b8ce-4e8c-ac8c-a667b8ace54f"
+    Get-vRACustomForm -BlueprintId "CentOS"
 
     .EXAMPLE
     Get-vRABlueprint -Name "CentOS" | Get-vRACustomForm
@@ -27,9 +27,10 @@ function Get-vRACustomForm {
 
     Param (
 
-    [parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true)]
+    [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
+    [Alias("id")]
     [ValidateNotNullOrEmpty()]
-    [String[]]$Id
+    [String[]]$BlueprintId
 
     )
     begin {
@@ -56,19 +57,19 @@ function Get-vRACustomForm {
 
         try {
 
-            foreach ($BlueprintId in $Id){
-                $URI = "/composition-service/api/blueprints/$($BlueprintId)/forms/requestform"
+            foreach ($bp in $BlueprintId){
+                $URI = "/composition-service/api/blueprints/$($bp)/forms/requestform"
 
                 # --- Run vRA REST Request
-                Write-Verbose -Message "Getting vRA Custom Form for blueprint $($BlueprintId)"
+                Write-Verbose -Message "Getting vRA Custom Form for blueprint $($bp)"
                 try {
                     $Response = Invoke-vRARestMethod -Method GET -URI $URI
                     $ReturnedForm = $Response.TrimStart('"').TrimEnd('"').Replace('\"','"');
-                    $CustomForm = StandardOutput($BlueprintId)($ReturnedForm)
+                    $CustomForm = StandardOutput($bp)($ReturnedForm)
                     return $CustomForm
                 }
                 catch {
-                    Write-Warning -Message "Blueprint $($BlueprintId) does not have a custom form"
+                    Write-Warning -Message "Blueprint $($bp) does not have a custom form"
                 }
 
             }

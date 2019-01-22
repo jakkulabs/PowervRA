@@ -6,10 +6,10 @@ function Set-vRACustomForm {
     .DESCRIPTION
     Enable or Disable a vRA Custom Form to a Blueprint
 
-    .PARAMETER blueprintId
+    .PARAMETER BlueprintId
     The objectId of the blueprint
 
-    .PARAMETER action
+    .PARAMETER Action
     The action to take on the Custom Form of the Blueprint
 
     .INPUTS
@@ -19,13 +19,13 @@ function Set-vRACustomForm {
     System.String
 
     .EXAMPLE
-    Set-vRACustomForm -blueprintId "CentOS" -action Enabled
+    Set-vRACustomForm -BlueprintId "CentOS" -Action Enable
 
     .EXAMPLE
-    Set-vRACustomForm -blueprintId "CentOS" -action Disabled
+    Set-vRACustomForm -BlueprintId "CentOS" -Action Disable
 
     .EXAMPLE
-    Get-vRABlueprint -Name "CentOS" | Set-vRACustomForm -action Enabled
+    Get-vRABlueprint -Name "CentOS" | Set-vRACustomForm -Action Enable
 
 
 #>
@@ -33,14 +33,14 @@ function Set-vRACustomForm {
 
     Param (
 
-    [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
-    [ValidateNotNullOrEmpty()]
-    [Alias("id")]
-    [String[]]$blueprintId,
+      [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
+      [Alias("id")]
+      [ValidateNotNullOrEmpty()]
+      [String[]]$BlueprintId,
 
-    [parameter(Mandatory=$true,ValueFromPipeline=$false)]
-    [ValidateSet("Enable","Disable")]
-    [String]$action
+      [parameter(Mandatory=$true,ValueFromPipeline=$false)]
+      [ValidateSet("Enable","Disable")]
+      [String]$Action
 
     )
     begin {
@@ -59,15 +59,14 @@ function Set-vRACustomForm {
       Write-Verbose -Message "Processing..."
 
         try {
-            if($PSCmdlet.ShouldProcess($blueprintId)){
-                foreach ($bp in $blueprintId){
+            foreach ($bp in $blueprintId){
+                if($PSCmdlet.ShouldProcess($bp)){
                     Write-Verbose -Message "Executing action $($action) on blueprint $($bp)"
-                    $URI = "/composition-service/api/blueprints/$($BlueprintId)/forms/requestform/$($action)"
+                    $URI = "/composition-service/api/blueprints/$($bp)/forms/requestform/$($action)"
 
                     # --- Run vRA REST Request
                     $Response = Invoke-vRARestMethod -Method GET -URI $URI
-                    return $Response
-
+                    $Response
                 }
             }
         }
