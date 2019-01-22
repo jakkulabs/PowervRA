@@ -29,11 +29,11 @@ function Set-vRACustomForm {
 
 
 #>
-[CmdletBinding(SupportsShouldProcess,ConfirmImpact="High",DefaultParameterSetName="Standard")][OutputType('System.String')]
+[CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")][OutputType('System.String')]
 
     Param (
 
-    [parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true)]
+    [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
     [ValidateNotNullOrEmpty()]
     [Alias("id")]
     [String[]]$blueprintId,

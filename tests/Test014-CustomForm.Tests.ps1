@@ -26,4 +26,9 @@ Describe -Name 'Custom Forms Tests' -Fixture {
 
   }
 
+  It - Name "Enable Custom Form by id $($JSON.Blueprint.BlueprintId)" -Test {
+      $SetCustomFormA = Get-vRACustomForm -Id $JSON.Blueprint.BlueprintId | Set-vRACustomForm -Action enable
+      $SetCustomFormA | Should -Be "Custom form is enabled."
+  }
+
 }
