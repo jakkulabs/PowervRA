@@ -29,7 +29,7 @@ function Set-vRACustomForm {
 
 
 #>
-[CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.String')]
+[CmdletBinding(SupportsShouldProcess,ConfirmImpact="High",DefaultParameterSetName="Standard")][OutputType('System.String')]
 
     Param (
 
