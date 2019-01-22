@@ -43,7 +43,7 @@ function Add-vRACustomForm {
 
       [parameter(Mandatory=$true,ValueFromPipeline=$false)]
       [ValidateNotNullOrEmpty()]
-      [String[]]$Body
+      [String]$Body
 
     )
     begin {
