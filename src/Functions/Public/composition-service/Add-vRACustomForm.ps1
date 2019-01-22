@@ -75,7 +75,7 @@ function Add-vRACustomForm {
 
                 # --- Run vRA REST Request
                 Write-Verbose -Message "Removing vRA Custom Form for blueprint $($bp)"
-                $Response = Invoke-vRARestMethod -Method POST -URI $URI
+                $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body
                 return StandardOutput($bp)($Response)
 
             }
