@@ -59,17 +59,17 @@ function Set-vRACustomForm {
       Write-Verbose -Message "Processing..."
 
         try {
+            if($PSCmdlet.ShouldProcess($blueprintId)){
+                foreach ($bp in $blueprintId){
+                    Write-Verbose -Message "Executing action $($action) on blueprint $($bp)"
+                    $URI = "/composition-service/api/blueprints/$($BlueprintId)/forms/requestform/$($action)"
 
-            foreach ($bp in $blueprintId){
-                Write-Verbose -Message "Executing action $($action) on blueprint $($bp)"
-                $URI = "/composition-service/api/blueprints/$($BlueprintId)/forms/requestform/$($action)"
+                    # --- Run vRA REST Request
+                    $Response = Invoke-vRARestMethod -Method GET -URI $URI
+                    return $Response
 
-                # --- Run vRA REST Request
-                $Response = Invoke-vRARestMethod -Method GET -URI $URI
-                return $Response
-
+                }
             }
-
         }
         catch [Exception]{
             throw
