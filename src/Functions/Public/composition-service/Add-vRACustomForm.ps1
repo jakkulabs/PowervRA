@@ -41,7 +41,7 @@ function Add-vRACustomForm {
       [ValidateNotNullOrEmpty()]
       [String[]]$BlueprintId,
 
-      [parameter(Mandatory=$true,ValueFromPipeline=$false)]
+      [parameter(Mandatory=$true)]
       [ValidateNotNullOrEmpty()]
       [String]$Body
 
@@ -75,7 +75,8 @@ function Add-vRACustomForm {
                 $JSON = $Body
                 # --- Run vRA REST Request
                 Write-Verbose -Message "Removing vRA Custom Form for blueprint $($bp)"
-                $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $JSON
+                Write-Verbose -Message "Posting $($JSON)"
+                $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $($JSON)
                 return StandardOutput($bp)($Response)
 
             }
