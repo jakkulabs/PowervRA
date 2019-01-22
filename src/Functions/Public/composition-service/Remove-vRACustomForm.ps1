@@ -49,7 +49,7 @@ function Remove-vRACustomForm {
 
                     # --- Run vRA REST Request
                     Write-Verbose -Message "Removing vRA Custom Form for blueprint $($bp)"
-                    $Response = Invoke-vRARestMethod -Method DELETE -URI $URI
+                    Invoke-vRARestMethod -Method DELETE -URI $URI
                 }
             }
         }

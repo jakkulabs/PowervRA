@@ -66,7 +66,7 @@ function Set-vRACustomForm {
 
                     # --- Run vRA REST Request
                     $Response = Invoke-vRARestMethod -Method GET -URI $URI
-                    $Response
+                    Return $Response
                 }
             }
         }
