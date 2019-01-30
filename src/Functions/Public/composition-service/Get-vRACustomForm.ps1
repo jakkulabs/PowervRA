@@ -65,8 +65,7 @@ function Get-vRACustomForm {
                 try {
                     $Response = Invoke-vRARestMethod -Method GET -URI $URI
                     $ReturnedForm = $Response.TrimStart('"').TrimEnd('"').Replace('\"','"');
-                    $CustomForm = StandardOutput($bp)($ReturnedForm)
-                    return $CustomForm
+                    StandardOutput($bp)($ReturnedForm)
                 }
                 catch {
                     Write-Warning -Message "Blueprint $($bp) does not have a custom form"

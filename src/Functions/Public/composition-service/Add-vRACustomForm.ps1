@@ -32,7 +32,7 @@ function Add-vRACustomForm {
 
 
 #>
-[OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
@@ -74,10 +74,10 @@ function Add-vRACustomForm {
                 $URI = "/composition-service/api/blueprints/$($bp)/forms/requestform"
                 $JSON = $Body
                 # --- Run vRA REST Request
-                Write-Verbose -Message "Removing vRA Custom Form for blueprint $($bp)"
+                Write-Verbose -Message "Adding vRA Custom Form for blueprint $($bp)"
                 Write-Verbose -Message "Posting $($JSON)"
                 $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $($JSON)
-                return StandardOutput($bp)($Response)
+                StandardOutput($bp)($Response)
 
             }
 

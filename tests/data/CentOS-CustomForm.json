@@ -1,0 +1,125 @@
+{
+
+  "layout": {
+    "pages": [{
+      "id": "general",
+      "sections": [{
+        "id": "section_da101f84",
+        "fields": [{
+          "id": "_number_of_instances",
+          "display": "integerField",
+          "state": {
+            "visible": true,
+            "read-only": false
+          }
+        }]
+      }, {
+        "id": "section_d1ba9b46",
+        "fields": [{
+          "id": "_leaseDays",
+          "display": "integerField",
+          "state": {
+            "visible": true,
+            "read-only": false
+          }
+        }]
+      }, {
+        "id": "section_20433d87",
+        "fields": [{
+          "id": "vSphere__vCenter__Machine_1~_cluster",
+          "display": "integerField",
+          "state": {
+            "visible": true,
+            "read-only": false
+          }
+        }]
+      }, {
+        "id": "section_1d23f415",
+        "fields": [{
+          "id": "vSphere__vCenter__Machine_1~cpu",
+          "display": "integerField",
+          "state": {
+            "visible": true,
+            "read-only": false
+          }
+        }]
+      }, {
+        "id": "section_b938ea42",
+        "fields": [{
+          "id": "vSphere__vCenter__Machine_1~memory",
+          "display": "integerField",
+          "state": {
+            "visible": true,
+            "read-only": false
+          }
+        }]
+      }],
+      "title": "General"
+    }]
+  },
+  "schema": {
+    "_number_of_instances": {
+      "label": "Number of Deployments",
+      "description": "Indicates the number of deployments to be provisioned from the blueprint.",
+      "type": {
+        "dataType": "integer",
+        "isMultiple": false
+      },
+      "default": 1,
+      "constraints": {
+        "max-value": 100,
+        "min-value": 1
+      }
+    },
+    "_leaseDays": {
+      "label": "Lease days",
+      "description": "Indicates for how many days the deployed blueprint will be leased.",
+      "type": {
+        "dataType": "integer",
+        "isMultiple": false
+      },
+      "constraints": {}
+    },
+    "vSphere__vCenter__Machine_1~_cluster": {
+      "label": "Instances",
+      "type": {
+        "dataType": "integer",
+        "isMultiple": false
+      },
+      "default": 1,
+      "constraints": {
+        "max-value": 1,
+        "min-value": 1
+      }
+    },
+    "vSphere__vCenter__Machine_1~cpu": {
+      "label": "CPUs",
+      "description": "Number of virtual CPUs.",
+      "type": {
+        "dataType": "integer",
+        "isMultiple": false
+      },
+      "default": 1,
+      "constraints": {
+        "max-value": 1,
+        "min-value": 1
+      }
+    },
+    "vSphere__vCenter__Machine_1~memory": {
+      "label": "Memory (MB)",
+      "description": "The amount of RAM allocated to the machine in megabytes.",
+      "type": {
+        "dataType": "integer",
+        "isMultiple": false
+      },
+      "default": 4096,
+      "constraints": {
+        "max-value": 4096,
+        "min-value": 4096
+      }
+    }
+  },
+  "options": {
+    "externalValidations": []
+  }
+}
