@@ -1,5 +1,6 @@
 # --- Get data for the tests
 $JSON = Get-Content .\Variables.json -Raw | ConvertFrom-JSON
+$CustomForm = Get-Content .\CentOS-CustomForm.json -Raw
 
 # --- Startup
 $ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password -AsPlainText -Force
@@ -7,6 +8,15 @@ $Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Tenant $J
 
 # --- Tests
 Describe -Name 'Custom Forms Tests' -Fixture {
+
+  It -Name "Add Custom Form to blueprint by id $($JSON.Blueprint.BlueprintId)" -Test {
+
+      $AddCustomFormA = Add-vRACustomForm -Id $JSON.Blueprint.BlueprintId -Body $CustomForm
+      $AddCustomFormA | Should -BeOfType System.Management.Automation.PSCustomObject
+      $AddCustomFormA.BlueprintId | Should -Be $JSON.Blueprint.BlueprintId
+      $AddCustomFormA.CustomFormId | Should -BeOfType System.String
+
+  }
 
   It -Name "Get vRA Custom Form by blueprint id $($JSON.Blueprint.BlueprintId)" -Test {
 
@@ -54,15 +64,5 @@ Describe -Name 'Custom Forms Tests' -Fixture {
       $Form | Should -be
 
   }
-
-  It -Name "Add Custom Form to blueprint by id $($JSON.Blueprint.BlueprintId)" -Test {
-
-      $AddCustomFormA = Add-vRACustomForm -Id $JSON.Blueprint.BlueprintId -Body $GetCustomFormA.JSON
-      $AddCustomFormA | Should -BeOfType System.Management.Automation.PSCustomObject
-      $AddCustomFormA.BlueprintId | Should -Be $JSON.Blueprint.BlueprintId
-      $AddCustomFormA.CustomFormId | Should -BeOfType System.String
-
-  }
-
 
 }

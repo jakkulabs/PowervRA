@@ -65,8 +65,8 @@ function Set-vRACustomForm {
                     $URI = "/composition-service/api/blueprints/$($bp)/forms/requestform/$($action)"
 
                     # --- Run vRA REST Request
-                    $Response = Invoke-vRARestMethod -Method GET -URI $URI
-                    Return $Response
+                    Invoke-vRARestMethod -Method GET -URI $URI
+
                 }
             }
         }
