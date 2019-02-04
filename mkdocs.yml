@@ -10,7 +10,7 @@ pages:
 - 'Home' : 'index.md'
 - 'Change log' : 'CHANGELOG.md'
 - 'Build' : 'build.md'
-- 'Functions':
+- 'Functions': 
     - Add-vRAPrincipalToTenantRole : functions/Add-vRAPrincipalToTenantRole.md
     - Add-vRAReservationNetwork : functions/Add-vRAReservationNetwork.md
     - Add-vRAReservationStorage : functions/Add-vRAReservationStorage.md
