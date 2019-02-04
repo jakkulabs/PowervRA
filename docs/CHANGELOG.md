@@ -1,3 +1,7 @@
+# Version 3.5.0
+## Features
+* Feature - New functions Add-vRACustomForm, Get-vRACustomForm, Set-vRACustomForm and Remove-vRACustomForm (#190) (@kclinden)
+
 # Version 3.4.0
 ## Features
 * Feature - New function Invoke-vRATenantDirectorySync and added allusers parameter to Set-vRAEntitlement (#187) (@basvinken)
