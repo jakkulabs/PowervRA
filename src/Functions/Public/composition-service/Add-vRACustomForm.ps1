@@ -71,6 +71,7 @@ function Add-vRACustomForm {
         try {
 
             foreach ($bp in $BlueprintId){
+              if($PSCmdlet.ShouldProcess($bp)){
                 $URI = "/composition-service/api/blueprints/$($bp)/forms/requestform"
                 $JSON = $Body
                 # --- Run vRA REST Request
@@ -78,7 +79,7 @@ function Add-vRACustomForm {
                 Write-Verbose -Message "Posting $($JSON)"
                 $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $($JSON)
                 StandardOutput($bp)($Response)
-
+              }
             }
 
         }
