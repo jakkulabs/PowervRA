@@ -70,3 +70,18 @@ Get-Help Get-vRAEntitlement
 ```
 
 Alternatively check out our [Read the Docs site](https://powervra.readthedocs.org/en/latest/)
+
+### Updating the documentation
+To update the documentation you first need to ensure that the local module manifest is updated with any new functions
+
+```PowerShell
+.\tools\build.ps1 -Task UpdateModuleManifest
+```
+
+Once complete you can run the UpdateDocumentation task to create new markdown files and update any existing ones.
+
+```PowerShell
+.\tools\build.ps1 -Task UpdateDocumentation
+```
+
+The changes can then be committed back to the repository. Once pushed, they will be reflected in ReadTheDocs.
