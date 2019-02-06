@@ -1,71 +1,72 @@
-# Test-vRAPackage
+# Get-vRARequestDetail
 
 ## SYNOPSIS
-Validates a vRA Content Package
+Get detailed information about vRA request
 
 ## SYNTAX
 
+### ById (Default)
 ```
-Test-vRAPackage [-File] <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]
+Get-vRARequestDetail -Id <String[]> [<CommonParameters>]
+```
+
+### ByRequestNumber
+```
+Get-vRARequestDetail -RequestNumber <String[]> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Validates a vRA Content Package
+Get detailed information about vRA request.
+These are result produced by the request (if any)
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Test-vRAPackage -File C:\Packages\Package100.zip
+Get-vRARequestDetail -Id 972ab103-950a-4240-8a3d-97174ee07f35
 ```
 
 ### EXAMPLE 2
 ```
-Get-ChildItem -Path C:\Packages\Package100.zip| Test-vRAPackage
+Get-vRARequestDetail -RequestNumber 965299
+```
+
+### EXAMPLE 3
+```
+Get-vRARequestDetail -RequestNumber 965299,965300
+```
+
+### EXAMPLE 4
+```
+Get-vRARequest -RequestNumber 965299 | Get-vRARequestDetail
 ```
 
 ## PARAMETERS
 
-### -File
-The content package file
+### -Id
+The Id of the request to query
 
 ```yaml
 Type: String[]
-Parameter Sets: (All)
+Parameter Sets: ById
 Aliases:
 
 Required: True
-Position: 1
+Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
 
-### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
+### -RequestNumber
+The request number of the request to query
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
+Type: String[]
+Parameter Sets: ByRequestNumber
+Aliases:
 
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

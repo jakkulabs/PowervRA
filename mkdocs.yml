@@ -44,6 +44,7 @@ pages:
     - Get-vRAPackageContent : functions/Get-vRAPackageContent.md
     - Get-vRAPropertyDefinition : functions/Get-vRAPropertyDefinition.md
     - Get-vRARequest : functions/Get-vRARequest.md
+    - Get-vRARequestDetail : functions/Get-vRARequestDetail.md
     - Get-vRAReservation : functions/Get-vRAReservation.md
     - Get-vRAReservationComputeResource : functions/Get-vRAReservationComputeResource.md
     - Get-vRAReservationComputeResourceMemory : functions/Get-vRAReservationComputeResourceMemory.md

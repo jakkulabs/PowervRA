@@ -11,11 +11,10 @@ Note: this module is not in any way developed or supported by anyone officially 
 
 |||||||
 | --- | --- | --- | --- | --- | --- |
-|6.2.4*|7.0|7.0.1|7.1|7.2*|7.3*|
+|6.2.4*|7.0|7.0.1|7.1|7.2|7.3|
 
 
 * Support for 6.2.4 is limited given API restrictions. Functions which don't support 6.2.4 will exit early and cleanly.
-* Support for 7.2 and 7.3 has only received minor testing and updates so far
 
 ### PowerShell Editions
 
@@ -39,7 +38,7 @@ Install-Module -Name PowervRA -Scope CurrentUser
 Once you have installed and imported PowervRA, use Connect-vRAServer to connect to your vRA instance:
 
 ```PowerShell
-Connect-vRAServer -Server vra.corp.local -Tenant tenant01 -Credential (Get-Credential) 
+Connect-vRAServer -Server vra.corp.local -Tenant tenant01 -Credential (Get-Credential)
 ```
 
 If your instance has a self signed certificate you must use the **IgnoreCertRequirements** switch:
@@ -49,7 +48,7 @@ Connect-vRAServer -Server vra.corp.local -Tenant tenant01 -Credential (Get-Crede
 ```
 
 ## Running Locally
-When developing, use the provided build script and import the module that is inside the Release directory. 
+When developing, use the provided build script and import the module that is inside the Release directory.
 
 You **do not** have to manually edit src\PowervRA.psd1 when adding new functions
 
