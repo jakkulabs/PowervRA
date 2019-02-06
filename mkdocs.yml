@@ -11,6 +11,7 @@ pages:
 - 'Change log' : 'CHANGELOG.md'
 - 'Build' : 'build.md'
 - 'Functions': 
+    - Add-vRACustomForm : functions/Add-vRACustomForm.md
     - Add-vRAPrincipalToTenantRole : functions/Add-vRAPrincipalToTenantRole.md
     - Add-vRAReservationNetwork : functions/Add-vRAReservationNetwork.md
     - Add-vRAReservationStorage : functions/Add-vRAReservationStorage.md
@@ -31,6 +32,7 @@ pages:
     - Get-vRAContent : functions/Get-vRAContent.md
     - Get-vRAContentData : functions/Get-vRAContentData.md
     - Get-vRAContentType : functions/Get-vRAContentType.md
+    - Get-vRACustomForm : functions/Get-vRACustomForm.md
     - Get-vRAEntitledCatalogItem : functions/Get-vRAEntitledCatalogItem.md
     - Get-vRAEntitledService : functions/Get-vRAEntitledService.md
     - Get-vRAEntitlement : functions/Get-vRAEntitlement.md
@@ -44,6 +46,7 @@ pages:
     - Get-vRAPackageContent : functions/Get-vRAPackageContent.md
     - Get-vRAPropertyDefinition : functions/Get-vRAPropertyDefinition.md
     - Get-vRARequest : functions/Get-vRARequest.md
+    - Get-vRARequestDetail : functions/Get-vRARequestDetail.md
     - Get-vRAReservation : functions/Get-vRAReservation.md
     - Get-vRAReservationComputeResource : functions/Get-vRAReservationComputeResource.md
     - Get-vRAReservationComputeResourceMemory : functions/Get-vRAReservationComputeResourceMemory.md
@@ -75,6 +78,7 @@ pages:
     - Import-vRAPackage : functions/Import-vRAPackage.md
     - Invoke-vRADataCollection : functions/Invoke-vRADataCollection.md
     - Invoke-vRARestMethod : functions/Invoke-vRARestMethod.md
+    - Invoke-vRATenantDirectorySync : functions/Invoke-vRATenantDirectorySync.md
     - New-vRABusinessGroup : functions/New-vRABusinessGroup.md
     - New-vRAEntitlement : functions/New-vRAEntitlement.md
     - New-vRAExternalNetworkProfile : functions/New-vRAExternalNetworkProfile.md
@@ -94,6 +98,7 @@ pages:
     - New-vRATenantDirectory : functions/New-vRATenantDirectory.md
     - New-vRAUserPrincipal : functions/New-vRAUserPrincipal.md
     - Remove-vRABusinessGroup : functions/Remove-vRABusinessGroup.md
+    - Remove-vRACustomForm : functions/Remove-vRACustomForm.md
     - Remove-vRAExternalNetworkProfile : functions/Remove-vRAExternalNetworkProfile.md
     - Remove-vRAGroupPrincipal : functions/Remove-vRAGroupPrincipal.md
     - Remove-vRAIcon : functions/Remove-vRAIcon.md
@@ -115,6 +120,7 @@ pages:
     - Request-vRAResourceAction : functions/Request-vRAResourceAction.md
     - Set-vRABusinessGroup : functions/Set-vRABusinessGroup.md
     - Set-vRACatalogItem : functions/Set-vRACatalogItem.md
+    - Set-vRACustomForm : functions/Set-vRACustomForm.md
     - Set-vRAEntitlement : functions/Set-vRAEntitlement.md
     - Set-vRAExternalNetworkProfile : functions/Set-vRAExternalNetworkProfile.md
     - Set-vRANATNetworkProfile : functions/Set-vRANATNetworkProfile.md
