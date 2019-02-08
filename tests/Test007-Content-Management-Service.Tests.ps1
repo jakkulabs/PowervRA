@@ -63,6 +63,14 @@ Describe -Name 'Content-Management-Service Tests' -Fixture {
 
         }
 
+        It -Name "Import Content Item" -Test {
+
+          $TestYamlImport = Import-vRAContentData -ContentType "composite-blueprint" -Path .\CentOS.yaml
+          $TestYamlStatus = $TestYamlImport.operationStatus
+          (($TestYamlStatus -contains "SUCCESS") -or ($TestYamlStatus -contains "WARNING")) | Should Be $true
+
+        }
+
     }
 
     Context -Name "Package" -Fixture {
@@ -93,9 +101,9 @@ Describe -Name 'Content-Management-Service Tests' -Fixture {
         It -Name "Remove named Package" -Test {
 
             Remove-vRAPackage -Name $PackageName -Confirm:$false
-            
+
             try {
-            
+
                 $Package = Get-vRAPackage -Name $PackageName
             }
             catch [Exception]{
