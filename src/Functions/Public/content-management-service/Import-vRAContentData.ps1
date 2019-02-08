@@ -52,9 +52,9 @@
 
         try {
 
-            if ($PSCmdlet.ShouldProcess($ContentId)){
+            if ($PSCmdlet.ShouldProcess($Path)){
 
-                $Body = Get-Cotent -Raw -Path $Path
+                $Body = Get-Content -Raw -Path $Path
 
                 #vRA API - The string "import" isn't actually processed by vRA. The content id is processed via the body automatically. Validated this for new and exiting content items.
                 $URI = "/content-management-service/api/contents/$($ContentType)/import/data"
