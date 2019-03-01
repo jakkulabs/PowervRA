@@ -141,6 +141,17 @@
       "Name" : "PropertyDefinition01",
       "Label": "Check this box",
       "BooleanDisplay": "CHECKBOX"
+    },
+    "PropertyGroup" : {
+      "Name" : "PropertyGroup1",
+      "Label" : "Test Property Group1",
+      "SimpleProperty": "Simple Value",
+      "ComplexProperty": {
+        "mandatory": true,
+        "encrypted": false,
+        "visibility": true,
+        "defaultValue": "Complex Value"
+      }
     }
   },
   "Principal":
