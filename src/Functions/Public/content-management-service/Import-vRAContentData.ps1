@@ -19,7 +19,7 @@
     System.String
 
     .EXAMPLE
-    Import-vRAContentData -Path ./CentOS.yaml -ContentType Composite-Blueprint
+    Import-vRAContentData -Path ./CentOS.yaml -ContentType composite-blueprint
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")][OutputType('System.String')]
