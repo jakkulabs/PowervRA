@@ -54,44 +54,6 @@
     Begin {
         # --- Test for vRA API version
         xRequires -Version 7.0
-        
-        # Recursive function to Convert returned response to a Hashtable
-        function ConvertPSObjectToHashtable
-        {
-            param (
-                [Parameter(ValueFromPipeline)]
-                $InputObject
-            )
-
-            process
-            {
-                if ($null -eq $InputObject) { return $null }
-
-                if ($InputObject -is [System.Collections.IEnumerable] -and $InputObject -isnot [string])
-                {
-                    $collection = @(
-                        foreach ($object in $InputObject) { ConvertPSObjectToHashtable $object }
-                    )
-
-                    Write-Output -NoEnumerate $collection
-                }
-                elseif ($InputObject -is [psobject])
-                {
-                    $hash = @{}
-
-                    foreach ($property in $InputObject.PSObject.Properties)
-                    {
-                        $hash[$property.Name] = ConvertPSObjectToHashtable $property.Value
-                    }
-
-                    $hash
-                }
-                else
-                {
-                    $InputObject
-                }
-            }
-        }
     }
 
     Process {
@@ -108,8 +70,6 @@
                         $URI = "/properties-service/api/propertygroups/$($PropertyGroupId)"
 
                         $PropertyGroup = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
-
-                        # Write-Verbose $Response.content | Out-String
 
                         $props = @{}
                         foreach($vRAProp in $PropertyGroup.properties.PSObject.Properties) {

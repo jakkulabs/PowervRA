@@ -4,7 +4,7 @@
     Removes a Property Group from the specified tenant
     
     .DESCRIPTION
-    Uses the REST API to delete a property Group based on the Id supplied. If the Tenant is supplied it will delete the property for that tenant only.
+    Uses the REST API to delete a property Group based on the Id supplied. If the Tenant is supplied it will delete the property group for that tenant only.
 
     .PARAMETER Id
     The id of the property Group to delete

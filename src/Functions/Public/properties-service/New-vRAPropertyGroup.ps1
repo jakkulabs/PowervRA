@@ -19,7 +19,7 @@
     The tenant in which to create the Property Group (Defaults to the connection tenant )
 
     .PARAMETER Properties
-    The tenant in which to create the Property Group (Defaults to the connection tenant )
+    A hashtable representing the properties you would like to build into this new property group
    
     .PARAMETER JSON
     Property Group to send in JSON format
@@ -47,10 +47,10 @@
     New-vRAPropertyGroup -Name OneWithPropertiesExt -Label "One With Properties" -Properties @{"com.org.bool"=@{"mandatory"=$true; "defaultValue"=$false;}; "com.org.encryptedandshowonform"=@{"encrypted"=$true; "visibility"=$true; "defaultValue": "Un-encrypted string";};}
 
 #> 
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = "Low")][OutputType('System.Management.Automation.PSObject')]
+    [CmdletBinding(SupportsShouldProcess,ConfirmImpact = "Low",DefaultParameterSetName = 'Default')][OutputType('System.Management.Automation.PSObject')]
 
     Param (
-        [parameter(Mandatory = $true)]
+        [parameter(Mandatory = $true, ParameterSetName = "Default")]
         [ValidateNotNullOrEmpty()]
         [String]$Name,
         
