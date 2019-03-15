@@ -44,7 +44,7 @@
 
     .EXAMPLE
     # Create a property group with some properties added in the extended form
-    New-vRAPropertyGroup -Name OneWithPropertiesExt -Label "One With Properties" -Properties @{"com.org.bool"=@{"mandatory"=$true; "defaultValue"=$false;}; "com.org.encryptedandshowonform"=@{"encrypted"=$true; "visibility"=$true; "defaultValue": "Un-encrypted string";};}
+    New-vRAPropertyGroup -Name OneWithPropertiesExt -Label "One With Properties" -Properties @{"com.org.bool"=@{"mandatory"=$true; "defaultValue"=$false;}; "com.org.encryptedandshowonform"=@{"encrypted"=$true; "visibility"=$true; "defaultValue"="Un-encrypted string";};}
 
 #> 
     [CmdletBinding(SupportsShouldProcess,ConfirmImpact = "Low",DefaultParameterSetName = 'Default')][OutputType('System.Management.Automation.PSObject')]
