@@ -1,3 +1,8 @@
+# Version 3.6.0
+## Features
+* Feature - New function Import-vRAContentData (#197) (@kclinden)
+* Feature - New functions New-vRAPropertyGroup, Get-vRAPropertyGroup and Remove-vRAPropertyGroup (#198) (Stevio54)
+
 # Version 3.5.0
 ## Features
 * Feature - New functions Add-vRACustomForm, Get-vRACustomForm, Set-vRACustomForm and Remove-vRACustomForm (#190) (@kclinden)
