@@ -21,9 +21,7 @@ Note: this module is not in any way developed or supported by anyone officially 
 |Edition|Version|
 | --- | --- |
 |Desktop|5.1|
-|Core|6.0.0-rc**|
-
-To get up and running with PowerShell Core follow the instructions for your operating system [here](https://github.com/PowerShell/PowerShell/blob/master/README.md#get-powershell).
+|Core|6.x|
 
 ## Download
 
@@ -68,8 +66,6 @@ Documentation for each command can be viewed with Get-Help, e.g.:
 ```
 Get-Help Get-vRAEntitlement
 ```
-
-Alternatively check out our [Read the Docs site](https://powervra.readthedocs.org/en/latest/)
 
 ### Updating the documentation
 To update the documentation you first need to ensure that the local module manifest is updated with any new functions
