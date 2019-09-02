@@ -24,7 +24,7 @@ Task Init {
 
 Task Analyze {
 
-    $Results = Invoke-ScriptAnalyzer -Path $ENV:BHModulePath -Recurse -Settings $ScriptAnalyzerSettingsPath -Verbose:$VerbosePreference
+    $Results = Invoke-ScriptAnalyzer -Path $ENV:BHModulePath -Recurse -Settings $ScriptAnalyzerSettingsPath -Verbose
     $Results | Select-Object RuleName, Severity, ScriptName, Line, Message | Format-List
 
     switch ($ScriptAnalysisFailBuildOnSeverityLevel) {
@@ -92,7 +92,7 @@ Task UpdateModuleManifest {
     $ExportFunctions = @()
 
     foreach ($FunctionFile in $PublicFunctions) {
-        $AST = [System.Management.Automation.Language.Parser]::ParseFile($FunctionFile.FullName, [ref]$null, [ref]$null)        
+        $AST = [System.Management.Automation.Language.Parser]::ParseFile($FunctionFile.FullName, [ref]$null, [ref]$null)
         $Functions = $AST.FindAll({
             # --- Only export functions that contain a "-" and do not start with "int"
             $args[0] -is [System.Management.Automation.Language.FunctionDefinitionAst] -and `
@@ -101,7 +101,7 @@ Task UpdateModuleManifest {
         },$true)
         if ($Functions.Name) {
             $ExportFunctions += $Functions.Name
-        }        
+        }
     }
 
     Set-ModuleFunctions -Name $ENV:BHPSModuleManifest -FunctionsToExport $ExportFunctions -Verbose:$VerbosePreference
@@ -137,7 +137,7 @@ Task CreateArtifact {
     if ($ENV:TF_BUILD){
         $ModuleManifestVersion = $ENV:BUILD_BUILDNUMBER.Split("-")[0]
     }
-    Update-Metadata -Path "$($ReleaseDirectoryPath)\$($ModuleName).psd1" -PropertyName ModuleVersion -Value $ModuleManifestVersion        
+    Update-Metadata -Path "$($ReleaseDirectoryPath)\$($ModuleName).psd1" -PropertyName ModuleVersion -Value $ModuleManifestVersion
 
     # --- Create an empty psm1 file
     Write-Output "Creating base PSM1 file"
@@ -171,8 +171,8 @@ $($Content)
 
 Task CreateArchive {
 
-    $Destination = "$($ReleaseDirectoryPath).zip"    
-    
+    $Destination = "$($ReleaseDirectoryPath).zip"
+
     if ($ENV:TF_BUILD){
         $Destination = "$($ReleaseDirectoryPath).$($ENV:BUILD_BUILDNUMBER).zip"
     }
@@ -186,7 +186,7 @@ Task CreateArchive {
 }
 
 Task UpdateDocumentation {
-    
+
     Write-Output "Updating Markdown help"
     $ModuleInfo = Import-Module $ENV:BHPSModuleManifest -Global -Force -PassThru
     $FunctionsPath = "$DocsDirectory\functions"
@@ -206,27 +206,4 @@ Task UpdateDocumentation {
     Write-Output "Updating index.md"
     Copy-Item -Path "$ENV:BHProjectPath\README.md" -Destination "$($DocsDirectory)\index.md" -Force -Verbose:$VerbosePreference | Out-Null
 
-    # --- Update mkdocs.yml with new functions
-    Write-Output "Updating mkdocs.yml"
-    $Mkdocs = "$ENV:BHProjectPath\mkdocs.yml"
-    $Functions = $ModuleInfo.ExportedCommands.Keys | ForEach-Object {"`n    - $($_) : functions/$($_).md"}
-
-    $Template = @"
----
-
-site_name: $($ModuleName)
-repo_url: $($RepositoryUrl)
-site_author: $($ModuleAuthor)
-edit_uri: edit/master/docs/
-theme: readthedocs
-copyright: "$($ModuleName) is licensed under the <a href='$($RepositoryUrl)/raw/master/LICENSE'>MIT license"
-pages:
-- 'Home' : 'index.md'
-- 'Change log' : 'CHANGELOG.md'
-- 'Build' : 'build.md'
-- 'Functions': $($Functions -join "`r")
-"@
-    
-    $Template | Set-Content -Path $Mkdocs -Force
-    
 }
