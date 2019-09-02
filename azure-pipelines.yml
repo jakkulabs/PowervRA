@@ -31,12 +31,6 @@ steps:
   inputs:
     scriptName: tools/build.ps1
 
-- script: |
-    npm install eclint
-    node ./node_modules/eclint/bin/eclint.js check
-  displayName: "Validate editorconfig against release"
-  workingDirectory: $(System.DefaultWorkingDirectory)
-
 - task: PublishTestResults@2
   displayName: 'Publish Test Results **\TEST_*.xml'
   inputs:
