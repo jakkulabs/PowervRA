@@ -5,9 +5,13 @@ trigger:
       - "*"
 
 pr: none
+
 pool:
   name: Hosted VS2017
-  demands: DotNetFramework
+  demands:
+    - DotNetFramework
+    - npm
+    - node.js
 
 steps:
 - task: gittools.gitversion-preview.gitversion-task.GitVersion@5
@@ -15,10 +19,22 @@ steps:
   inputs:
     configFilePath: GitVersion.yml
 
+- script: |
+    npm install eclint
+    node ./node_modules/eclint/bin/eclint.js check
+  displayName: "Validate editorconfig against src"
+  workingDirectory: $(System.DefaultWorkingDirectory)/src
+
 - task: PowerShell@1
   displayName: 'Execute Build'
   inputs:
     scriptName: tools/build.ps1
+
+- script: |
+    npm install eclint
+    node ./node_modules/eclint/bin/eclint.js check
+  displayName: "Validate editorconfig against release"
+  workingDirectory: $(System.DefaultWorkingDirectory)/Release
 
 - task: PublishTestResults@2
   displayName: 'Publish Test Results **\TEST_*.xml'
