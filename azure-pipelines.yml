@@ -56,4 +56,3 @@ steps:
   inputs:
     PathtoPublish: Release
     ArtifactName: Release
-
