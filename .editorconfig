@@ -1,0 +1,21 @@
+# Default .editorconfig
+# https://gds-way.cloudapps.digital/manuals/programming-languages/editorconfig
+# https://github.com/PowerShell/PowerShellEditorServices/blob/master/.editorconfig
+
+root = true
+
+[*]
+indent_style = space
+trim_trailing_whitespace = true
+charset = utf-8
+insert_final_newline = true
+end_of_line = lf
+
+[*.{json,yml}]
+indent_size = 2
+
+[*.{ps1,psm1,psd1}]
+indent_size = 4
+
+[*.{cs}]
+indent_size = 4
