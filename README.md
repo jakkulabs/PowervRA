@@ -1,4 +1,4 @@
-![Build status](https://jakkulabs.visualstudio.com/_apis/public/build/definitions/b9938934-bc30-4bf9-8ee8-91138dde4db8/1/badge)
+[![Build Status](https://jakkulabs.visualstudio.com/Lab/_apis/build/status/PowervRA?branchName=master)](https://jakkulabs.visualstudio.com/Lab/_build/latest?definitionId=3&branchName=master) ![](https://img.shields.io/powershellgallery/v/PowervRA) ![](https://img.shields.io/powershellgallery/dt/PowervRA)
 
 # Welcome to PowervRA
 PowervRA is a PowerShell module built on top of the services exposed by the vRealize Automation 7 REST API.
