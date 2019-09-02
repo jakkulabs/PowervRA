@@ -34,7 +34,7 @@ Param (
 # --- Install dependencies
 $RequiredModules = @("Psake", "PSScriptAnalyzer", "BuildHelpers")
 foreach ($Module in $RequiredModules) {
-    Install-Module -Name $Module -Scope CurrentUser -Confirm:$false -Verbose
+    Install-Module -Name $Module -Scope CurrentUser -Force -Verbose
     Import-Module -Name $Module
 }
 
