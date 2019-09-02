@@ -4,6 +4,13 @@ trigger:
     include:
       - "*"
 
+  paths:
+    include:
+      - src/*
+      - tests/*
+      - tools/*
+      - azure-pipelines.yml
+
 pr: none
 
 pool:
