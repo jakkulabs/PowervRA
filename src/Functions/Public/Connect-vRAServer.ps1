@@ -141,7 +141,7 @@
     # --- Test for a '\' in the username, e.g. DOMAIN\Username, not supported by the API
     if ($Username -match '\\'){
 
-        throw "The Username format DOMAIN\Username is not supported by the vRA REST API. Please use username@domain instaed"
+        throw "The Username format DOMAIN\Username is not supported by the vRA REST API. Please use username@domain instead"
     }
 
     try {
