@@ -1,4 +1,4 @@
-![Build status](https://jakkulabs.visualstudio.com/_apis/public/build/definitions/b9938934-bc30-4bf9-8ee8-91138dde4db8/1/badge)
+[![Build Status](https://jakkulabs.visualstudio.com/Lab/_apis/build/status/PowervRA?branchName=master)](https://jakkulabs.visualstudio.com/Lab/_build/latest?definitionId=3&branchName=master) ![](https://img.shields.io/powershellgallery/v/PowervRA) ![](https://img.shields.io/powershellgallery/dt/PowervRA)
 
 # Welcome to PowervRA
 PowervRA is a PowerShell module built on top of the services exposed by the vRealize Automation 7 REST API.
@@ -9,9 +9,14 @@ Note: this module is not in any way developed or supported by anyone officially 
 
 ### vRealize Automation
 
-|||||||
-| --- | --- | --- | --- | --- | --- |
-|6.2.4*|7.0|7.0.1|7.1|7.2|7.3|
+| Version | Tested |
+| --- | --- |
+|6.2.4*| :white_check_mark: |
+|7.0| :white_check_mark: |
+|7.0.1| :white_check_mark: |
+|7.1| :white_check_mark: |
+|7.2| :white_check_mark: |
+|7.3| :white_check_mark: |
 
 
 * Support for 6.2.4 is limited given API restrictions. Functions which don't support 6.2.4 will exit early and cleanly.
@@ -21,9 +26,7 @@ Note: this module is not in any way developed or supported by anyone officially 
 |Edition|Version|
 | --- | --- |
 |Desktop|5.1|
-|Core|6.0.0-rc**|
-
-To get up and running with PowerShell Core follow the instructions for your operating system [here](https://github.com/PowerShell/PowerShell/blob/master/README.md#get-powershell).
+|Core|6.x|
 
 ## Download
 
@@ -68,8 +71,6 @@ Documentation for each command can be viewed with Get-Help, e.g.:
 ```
 Get-Help Get-vRAEntitlement
 ```
-
-Alternatively check out our [Read the Docs site](https://powervra.readthedocs.org/en/latest/)
 
 ### Updating the documentation
 To update the documentation you first need to ensure that the local module manifest is updated with any new functions

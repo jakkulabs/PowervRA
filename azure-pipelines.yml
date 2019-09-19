@@ -1,0 +1,53 @@
+trigger:
+  batch: true
+  branches:
+    include:
+      - "*"
+
+  paths:
+    include:
+      - src/*
+      - tests/*
+      - tools/*
+      - azure-pipelines.yml
+
+pr: none
+
+pool:
+  name: Hosted VS2017
+  demands:
+    - DotNetFramework
+    - npm
+    - node.js
+
+steps:
+- task: gittools.gitversion-preview.gitversion-task.GitVersion@5
+  displayName: GitVersion
+  inputs:
+    configFilePath: GitVersion.yml
+
+- task: PowerShell@1
+  displayName: 'Execute Build'
+  inputs:
+    scriptName: tools/build.ps1
+
+- task: PublishTestResults@2
+  displayName: 'Publish Test Results **\TEST_*.xml'
+  inputs:
+    testResultsFormat: NUnit
+    testResultsFiles: '**\TEST_*.xml'
+  continueOnError: true
+
+- task: CopyFiles@2
+  displayName: 'Copy Files to: Release'
+  inputs:
+    SourceFolder: tools
+    Contents: |
+      Publish-PSModule.ps1
+    TargetFolder: Release
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: Release'
+  inputs:
+    PathtoPublish: Release
+    ArtifactName: Release
