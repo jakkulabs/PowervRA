@@ -9,19 +9,8 @@
     .PARAMETER Server
     vRA Server to connect to
 
-    .PARAMETER Tenant
-    Tenant to connect to
-
-    .PARAMETER Username
-    Username to connect with
-    For domain accounts ensure to specify the Username in the format username@domain, not Domain\Username
-
-    .PARAMETER Password
-    Password to connect with
-
-    .PARAMETER Credential
-    Credential object to connect with
-    For domain accounts ensure to specify the Username in the format username@domain, not Domain\Username
+    .PARAMETER APIToken
+    API Token to connect with
 
     .PARAMETER IgnoreCertRequirements
     Ignore requirements to use fully signed certificates
@@ -34,22 +23,18 @@
 
     .INPUTS
     System.String
-    System.SecureString
-    Management.Automation.PSCredential
     Switch
 
     .OUTPUTS
     System.Management.Automation.PSObject.
 
     .EXAMPLE
-    $cred = Get-Credential
-    Connect-vRAServer -Server vraappliance01.domain.local -Tenant Tenant01 -Credential $cred
+    Connect-vRAServer -Server api.mgmt.cloud.vmware.com -APIToken 'CuIKrjQgI6htiyRgIyd0ZtQM91fqg6AQyQhwPFJYgzBsaIKxKcWHLAGk81kknulQ'
 
     .EXAMPLE
-    $SecurePassword = ConvertTo-SecureString “P@ssword” -AsPlainText -Force
-    Connect-vRAServer -Server vraappliance01.domain.local -Tenant Tenant01 -Username TenantAdmin01 -Password $SecurePassword -IgnoreCertRequirements
+    Connect-vRAServer -Server vraappliance01.domain.local -APIToken 'CuIKrjQgI6htiyRgIyd0ZtQM91fqg6AQyQhwPFJYgzBsaIKxKcWHLAGk81kknulQ' -IgnoreCertRequirements
 #>
-[CmdletBinding(DefaultParametersetName="Username")][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding()][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
@@ -57,21 +42,9 @@
         [ValidateNotNullOrEmpty()]
         [String]$Server,
 
-        [parameter(Mandatory=$false)]
+        [parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
-        [String]$Tenant = "vsphere.local",
-
-        [parameter(Mandatory=$true,ParameterSetName="Username")]
-        [ValidateNotNullOrEmpty()]
-        [String]$Username,
-
-        [parameter(Mandatory=$true,ParameterSetName="Username")]
-        [ValidateNotNullOrEmpty()]
-        [SecureString]$Password,
-
-        [Parameter(Mandatory=$true,ParameterSetName="Credential")]
-        [ValidateNotNullOrEmpty()]
-        [Management.Automation.PSCredential]$Credential,
+        [String]$APIToken,
 
         [parameter(Mandatory=$false)]
         [Switch]$IgnoreCertRequirements,
@@ -126,46 +99,25 @@
         $SslProtocolResult = $SslProtocol
     }
 
-    # --- Convert Secure Credentials to a format for sending in the JSON payload
-    if ($PSBoundParameters.ContainsKey("Credential")){
-
-        $Username = $Credential.UserName
-        $JSONPassword = $Credential.GetNetworkCredential().Password
-    }
-
-    if ($PSBoundParameters.ContainsKey("Password")){
-
-        $JSONPassword = (New-Object System.Management.Automation.PSCredential("username", $Password)).GetNetworkCredential().Password
-    }
-
-    # --- Test for a '\' in the username, e.g. DOMAIN\Username, not supported by the API
-    if ($Username -match '\\'){
-
-        throw "The Username format DOMAIN\Username is not supported by the vRA REST API. Please use username@domain instead"
-    }
-
     try {
 
         # --- Create Invoke-RestMethod Parameters
         $JSON = @{
-            username = $Username
-            password = $JSONPassword
-            tenant = $Tenant
+            refreshToken = $APIToken
         } | ConvertTo-Json
 
         $Params = @{
 
             Method = "POST"
-            URI = "https://$($Server)/identity/api/tokens"
+            URI = "https://$($Server)/iaas/login"
             Headers = @{
                 "Accept"="application/json";
                 "Content-Type" = "application/json";
             }
             Body = $JSON
-
         }
 
-        if ((!$SignedCertificate) -and ($IsCoreCLR)) {
+        if ((!$SignedCertificates) -and ($IsCoreCLR)) {
 
             $Params.Add("SkipCertificateCheck", $true)
 
@@ -183,17 +135,14 @@
         $Global:vRAConnection = [PSCustomObject] @{
 
             Server = "https://$($Server)"
-            Token = $Response.id
-            Tenant = $Null
-            Username = $Username
+            Token = $Response.token
             APIVersion = $Null
             SignedCertificates = $SignedCertificates
             SslProtocol = $SslProtocolResult
         }
 
-        # --- Update vRAConnection with tenant and api version
-        $Global:vRAConnection.Tenant = (Get-vRATenant -Id $Tenant).id
-        $Global:vRAConnection.APIVersion = (Get-vRAVersion).APIVersion
+        # --- Update vRAConnection with API version
+        $Global:vRAConnection.APIVersion = (Get-vRAAPIVersion).APIVersion
 
     }
     catch [Exception]{
@@ -203,5 +152,4 @@
     }
 
     Write-Output $vRAConnection
-
 }
