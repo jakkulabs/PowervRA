@@ -46,7 +46,7 @@
         [ValidateNotNullOrEmpty()]
         [String[]]$Name,
 
-        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [Parameter(Mandatory=$false)]
         [ValidateSet('azure','aws','gcp','nsx-t','nsx-v','vmc','vsphere')]
         [String]$Type
     )
