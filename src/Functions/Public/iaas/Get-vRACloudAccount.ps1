@@ -73,6 +73,7 @@
             [PSCustomObject] @{
 
                 Name = $CloudAccount.name
+                Description = $CloudAccount.description
                 Id = $CloudAccount.id
                 CloudAccountType = $CloudAccountType
                 EnabledRegionIds = $CloudAccount.enabledRegionIds
