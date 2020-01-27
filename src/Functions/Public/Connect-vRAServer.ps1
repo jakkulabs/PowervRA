@@ -53,7 +53,7 @@
         .EXAMPLE
         Connect-vRAServer -Server vraappliance01.domain.local -APIToken 'CuIKrjQgI6htiyRgIyd0ZtQM91fqg6AQyQhwPFJYgzBsaIKxKcWHLAGk81kknulQ' -IgnoreCertRequirements
     #>
-    [CmdletBinding()][OutputType('System.Management.Automation.PSObject')]
+    [CmdletBinding(DefaultParameterSetName="Username")][OutputType('System.Management.Automation.PSObject')]
 
         Param (
 
