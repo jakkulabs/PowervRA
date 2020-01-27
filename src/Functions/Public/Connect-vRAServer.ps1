@@ -132,9 +132,6 @@
 
         try {
 
-            # --- First step - retrieve refresh token
-            # --- Build the refresh token request
-
             # --- if a refresh token is supplied, we use iaas login
             if ($PSBoundParameters.ContainsKey("APIToken")){
                 # -- iaas login with refresh token

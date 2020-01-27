@@ -18,6 +18,13 @@ Describe -Name 'Connectivity Tests' -Fixture {
         $($Global:vRAConnection.Token) | Should Be $true
     }
 
+    It -Name 'Connects to a vRA Appliance with a refresh_token and retrieves the access token' -Test {
+
+        Connect-vRAServer -Server $JSON.Connection.vRAAppliance -APIToken $JSON.Connection.Refresh_Token -IgnoreCertRequirements
+        $($Global:vRAConnection.Token) | Should Be $true
+
+    }
+
 }
 
 Describe -Name 'Disconnectivity Tests' -Fixture {
