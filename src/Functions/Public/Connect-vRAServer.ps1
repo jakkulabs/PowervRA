@@ -42,6 +42,18 @@
         [ValidateNotNullOrEmpty()]
         [String]$Server,
 
+        [parameter(Mandatory=$true,ParameterSetName="Username")]
+        [ValidateNotNullOrEmpty()]
+        [String]$Username,
+
+        [parameter(Mandatory=$true,ParameterSetName="Username")]
+        [ValidateNotNullOrEmpty()]
+        [SecureString]$Password,
+
+        [Parameter(Mandatory=$true,ParameterSetName="Credential")]
+        [ValidateNotNullOrEmpty()]
+        [Management.Automation.PSCredential]$Credential,
+
         [parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [String]$APIToken,
