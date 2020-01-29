@@ -7,10 +7,10 @@
     Create a vRA Cloud Account for Azure
 
     .PARAMETER Name
-    The name of the service
+    The name of the Cloud Account for Azure
 
     .PARAMETER Description
-    A description of the service
+    A description of the Cloud Account for Azure
 
     .PARAMETER SubscriptionId
     Azure Tenantid
