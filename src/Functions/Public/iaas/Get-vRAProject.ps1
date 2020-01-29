@@ -72,7 +72,7 @@
                 # --- Get Project by id
                 'ById' {
 
-                    foreach ($ProjectId in $Id) {
+                    foreach ($ProjectId in $Id){
 
                         $URI = "$($APIUrl)?`$filter=id eq '$($ProjectId)'"
 
@@ -89,13 +89,13 @@
                 # --- Get Project by name
                 'ByName' {
 
-                    foreach ($ProjectName in $Name) {
+                    foreach ($ProjectName in $Name){
 
                         $URI = "$($APIUrl)?`$filter=name eq '$($ProjectName)'"
 
                         $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
-                        foreach ($Project in $Response.content) {
+                        foreach ($Project in $Response.content){
 
                             CalculateOutput
                         }
@@ -110,7 +110,7 @@
 
                     $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
-                    foreach ($Project in $Response.content) {
+                    foreach ($Project in $Response.content){
 
                         CalculateOutput
                     }
