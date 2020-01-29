@@ -103,7 +103,7 @@
 
                     break
                 }
-                # --- No parameters passed so return all catalog items
+                # --- No parameters passed so return all Projects
                 'Standard' {
 
                     $URI = $APIUrl
