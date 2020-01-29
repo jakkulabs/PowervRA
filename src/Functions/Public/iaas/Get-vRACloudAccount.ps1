@@ -126,7 +126,7 @@
 
                     break
                 }
-                # --- No parameters passed so return all catalog items
+                # --- No parameters passed so return all Cloud Accounts
                 'Standard' {
 
                     $URI = $APIUrl
