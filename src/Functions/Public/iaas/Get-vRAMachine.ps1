@@ -16,13 +16,13 @@
     System.Management.Automation.PSObject.
 
     .EXAMPLE
-    Get-vRAMachines
+    Get-vRAMachine
 
     .EXAMPLE
-    Get-vRAMachines -Id 'b1dd48e71d74267559bb930934470'
+    Get-vRAMachine -Id 'b1dd48e71d74267559bb930934470'
 
     .EXAMPLE
-    Get-vRAMachines -Name 'iaas01'
+    Get-vRAMachine -Name 'iaas01'
 
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
@@ -69,24 +69,33 @@
 
                 # --- Get Machine by its id
                 'ById' {
-                    $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=id eq '$Id'" -Method GET
+                    foreach ($machineId in $Id) {
+                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=id eq '$machineId'" -Method GET
+                        CalculateOutput
+                    }
+
                     break
                 }
 
                 # --- Get Machine by its name
                 'ByName' {
-                    $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$Name'" -Method GET
+                    foreach ($machineName in $Name) {
+                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machineName'" -Method GET
+                        CalculateOutput
+                    }
+
                     break
                 }
 
                 # --- No parameters passed so return all machines
                 'Standard' {
                     $Response = Invoke-vRARestMethod -URI $APIUrl -Method GET
+                    CalculateOutput
                 }
 
             }
 
-            CalculateOutput
+
         }
         catch [Exception]{
 
