@@ -37,7 +37,7 @@
     Start-vRAMachineResize -Name 'iaas01' -Flavor Small
 
 #>
-[CmdletBinding(DefaultParameterSetName="ResizeByName")][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(DefaultParameterSetName="ResizeByName", SupportsShouldProcess, ConfirmImpact='High')][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
@@ -64,7 +64,11 @@
         [Parameter(Mandatory=$true,ParameterSetName="ResizeByName")]
         [Parameter(Mandatory=$true,ParameterSetName="ResizeById")]
         [ValidateNotNullOrEmpty()]
-        [int]$Memory
+        [int]$Memory,
+
+        [Parameter()]
+        [switch]
+        $Force
 
     )
     Begin {
@@ -87,57 +91,57 @@
 
         try {
 
-            switch ($PsCmdlet.ParameterSetName) {
+            if ($Force -or $PsCmdlet.ShouldProcess("ShouldProcess?")) {
+                switch ($PsCmdlet.ParameterSetName) {
 
-                # --- Resize by Flavor, do not need cpu and memory
-                'ResizeFlavorById' {
-                    foreach ($machineId in $Id) {
-                        $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/resize?name=$Flavor" -Method POST
-                        CalculateOutput
+                    # --- Resize by Flavor, do not need cpu and memory
+                    'ResizeFlavorById' {
+                        foreach ($machineId in $Id) {
+                            $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/resize?name=$Flavor" -Method POST
+                            CalculateOutput
+                        }
+
+                        break
                     }
 
-                    break
-                }
+                    # --- Resize by Flavor, do not need cpu and memory
+                    'ResizeFlavorByName' {
+                        foreach ($machine in $Name) {
+                            $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machine'`&`$select=id" -Method GET
+                            $machineId = $machineResponse.content[0].Id
 
-                # --- Resize by Flavor, do not need cpu and memory
-                'ResizeFlavorByName' {
-                    foreach ($machine in $Name) {
-                        $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machine'`&`$select=id" -Method GET
-                        $machineId = $machineResponse.content[0].Id
+                            $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/resize?name=$Flavor" -Method POST
+                            CalculateOutput
+                        }
 
-                        $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/resize?name=$Flavor" -Method POST
-                        CalculateOutput
+                        break
                     }
 
-                    break
-                }
+                    # --- Resize with cpu and memory for given machine by its id
+                    'ResizeById' {
+                        foreach ($machineId in $Id) {
+                            $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/resize?memoryInMB=$Memory`&cpuCount=$CPU" -Method POST
+                            CalculateOutput
+                        }
 
-                # --- Resize with cpu and memory for given machine by its id
-                'ResizeById' {
-                    foreach ($machineId in $Id) {
-                        $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/resize?memoryInMB=$Memory`&cpuCount=$CPU" -Method POST
-                        CalculateOutput
+                        break
                     }
 
-                    break
-                }
+                    # --- Resize with cpu and memory for given machine by its name
+                    'ResizeByName' {
+                        foreach ($machine in $Name) {
+                            $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machine'`&`$select=id" -Method GET
+                            $machineId = $machineResponse.content[0].Id
 
-                # --- Resize with cpu and memory for given machine by its name
-                'ResizeByName' {
-                    foreach ($machine in $Name) {
-                        $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machine'`&`$select=id" -Method GET
-                        $machineId = $machineResponse.content[0].Id
+                            $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/resize?memoryInMB=$Memory`&cpuCount=$CPU" -Method POST
+                            CalculateOutput
+                        }
 
-                        $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/resize?memoryInMB=$Memory`&cpuCount=$CPU" -Method POST
-                        CalculateOutput
+                        break
                     }
 
-                    break
                 }
-
             }
-
-
         }
         catch [Exception]{
 
