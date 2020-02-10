@@ -65,6 +65,7 @@
                 LastRunTimeMicros = $OnboardingPlan.lastRunTimeMicros
                 NextRefreshTimeMicros = $OnboardingPlan.nextRefreshTimeMicros
                 RefreshIntervalMicros = $OnboardingPlan.refreshIntervalMicros
+                DocumentSelfLink = $DocumentSelfLink
             }
         }
     }

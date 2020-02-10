@@ -80,6 +80,7 @@
                 CreatedBy = $OnboardingPlan.createdBy
                 EnableExtensibilityEvents = $OnboardingPlan.enableExtensibilityEvents
                 OrganizationId = $OnboardingPlan.organizationId
+                DocumentSelfLink = $DocumentSelfLink
             }
         }
     }
