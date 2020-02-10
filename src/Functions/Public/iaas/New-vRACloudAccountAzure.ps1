@@ -103,18 +103,18 @@
 
     )
 
-    Begin {
+    begin {
         if ($PSBoundParameters.ContainsKey("CreateDefaultZones")) {
 
             $CreateDefaultZonesStatus = 'true'
         }
         else {
 
-            $CreateDefaultZonesStatus = 'true'
+            $CreateDefaultZonesStatus = 'false'
         }
     }
 
-    Process {
+    process {
 
             if ($PSBoundParameters.ContainsKey("JSON")) {
 
@@ -141,47 +141,6 @@
                         "createDefaultZones": $($CreateDefaultZonesStatus)
                     }
 "@
-
-$Body
-
-                # --- If certain parameters are specified, ConvertFrom-Json, update, then ConvertTo-Json
-                # if ($PSBoundParameters.ContainsKey("Owner") -or $PSBoundParameters.ContainsKey("SupportTeam") -or $PSBoundParameters.ContainsKey("IconId")){
-
-                #     $Object = $Body | ConvertFrom-Json
-
-                #     # --- Add owner catalogPrincipal
-                #     if ($PSBoundParameters.ContainsKey("Owner")) {
-
-                #         Write-Verbose -Message "Adding owner principal: $($Owner)"
-
-                #         $CatalogPrincipal = Get-vRACatalogPrincipal -Id $Owner
-
-                #         $Object | Add-Member -MemberType NoteProperty -Name "owner" -Value $CatalogPrincipal
-
-                #     }
-
-                #     # --- Add supportTeam catalogPrincipal
-                #     if ($PSBoundParameters.ContainsKey("SupportTeam")) {
-
-                #         Write-Verbose -Message "Adding support team principal: $($SupportTeam)"
-
-                #         $CatalogPrincipal = Get-vRACatalogPrincipal -Id $SupportTeam
-
-                #         $Object | Add-Member -MemberType NoteProperty -Name "supportTeam" -Value $CatalogPrincipal
-
-                #     }
-
-                #     if ($PSBoundParameters.ContainsKey("IconId")) {
-
-                #         Write-Verbose -Message "Setting IconId: $($IconId)"
-
-                #         $Object.iconId = $IconId
-
-                #     }
-
-                #     $Body = $Object | ConvertTo-Json -Compress
-
-                # }
 
             }
 
@@ -217,7 +176,7 @@ $Body
         }
     }
 
-    End {
+    end {
 
     }
 }
