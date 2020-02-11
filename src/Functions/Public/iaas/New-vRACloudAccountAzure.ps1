@@ -13,10 +13,10 @@
     A description of the Cloud Account for Azure
 
     .PARAMETER SubscriptionId
-    Azure Tenantid
+    Azure SubscriptionId
 
     .PARAMETER TenantId
-    Azure Tenantid
+    Azure TenantId
 
     .PARAMETER ClientApplicationId
     Azure ClientApplicationId
@@ -31,7 +31,7 @@
     Azure RegionIds to enable
 
     .PARAMETER JSON
-    A json string with the body payload
+    A JSON string with the body payload
 
     .INPUTS
     System.String
