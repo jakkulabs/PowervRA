@@ -105,13 +105,11 @@
 "@
         }
 
-        # --- Create new service
+        # --- Create new Onboarding Plan
         try {
             if ($PSCmdlet.ShouldProcess($Name)){
 
-                # --- Build the URI string for the service
                 $URI = "/relocation/onboarding/plan"
-
                 $OnboardingPlan = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference
 
                 CalculateOutput
