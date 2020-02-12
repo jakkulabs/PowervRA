@@ -141,17 +141,13 @@
                         "createDefaultZones": $($CreateDefaultZonesStatus)
                     }
 "@
-
             }
 
-        # --- Create new service
+        # --- Create new Azure Cloud Account
         try {
             if ($PSCmdlet.ShouldProcess($Name)){
 
-                # --- Build the URI string for the service
-
                 $URI = "/iaas/api/cloud-accounts-azure"
-
                 $CloudAccount = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference
 
                 [PSCustomObject] @{
@@ -175,7 +171,6 @@
             throw
         }
     }
-
     end {
 
     }
