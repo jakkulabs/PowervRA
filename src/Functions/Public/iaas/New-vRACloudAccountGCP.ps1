@@ -28,7 +28,7 @@
     GCP RegionIds to enable
 
     .PARAMETER CreateDefaultZones
-    GCP RegionIds to enable
+    Enable CreateDefaultZones
 
     .PARAMETER JSON
     A JSON string with the body payload
