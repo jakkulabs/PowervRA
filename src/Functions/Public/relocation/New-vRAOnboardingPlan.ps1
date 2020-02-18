@@ -49,7 +49,7 @@
         [ValidateNotNullOrEmpty()]
         [String]$Name,
 
-        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [Parameter(Mandatory=$true,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
         [String]$CloudAccountId,
 
