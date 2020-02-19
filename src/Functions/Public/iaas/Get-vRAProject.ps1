@@ -1,10 +1,10 @@
 ﻿function Get-vRAProject {
 <#
     .SYNOPSIS
-    Get a vRA Project.
+    Get a vRA Project
 
     .DESCRIPTION
-    Get a vRA Project.
+    Get a vRA Project
 
     .PARAMETER Id
     The ID of the Project
@@ -41,7 +41,7 @@
         [String[]]$Name
     )
 
-    Begin {
+    begin {
         $APIUrl = '/iaas/projects'
 
         function CalculateOutput {
@@ -63,7 +63,7 @@
         }
     }
 
-    Process {
+    process {
 
         try {
 
@@ -75,7 +75,6 @@
                     foreach ($ProjectId in $Id){
 
                         $URI = "$($APIUrl)?`$filter=id eq '$($ProjectId)'"
-
                         $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
                         foreach ($Project in $Response.content) {
@@ -92,7 +91,6 @@
                     foreach ($ProjectName in $Name){
 
                         $URI = "$($APIUrl)?`$filter=name eq '$($ProjectName)'"
-
                         $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
                         foreach ($Project in $Response.content){
@@ -107,7 +105,6 @@
                 'Standard' {
 
                     $URI = $APIUrl
-
                     $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
                     foreach ($Project in $Response.content){
@@ -123,7 +120,7 @@
         }
     }
 
-    End {
+    end {
 
     }
 }
