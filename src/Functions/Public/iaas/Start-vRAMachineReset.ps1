@@ -12,6 +12,9 @@
     .PARAMETER Name
     The Name of the vRA Machine
 
+    .PARAMETER Force
+    Force this change
+
     .OUTPUTS
     System.Management.Automation.PSObject.
 
@@ -35,8 +38,7 @@
         [String[]]$Name,
 
         [Parameter()]
-        [switch]
-        $Force
+        [switch]$Force
 
     )
     Begin {

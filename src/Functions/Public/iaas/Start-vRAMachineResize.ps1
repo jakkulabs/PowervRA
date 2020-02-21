@@ -21,6 +21,9 @@
     .PARAMETER Flavor
     As an alternative, you can provide a flavor instead of a cpu or memory option
 
+    .PARAMETER Force
+    Force this change
+
     .OUTPUTS
     System.Management.Automation.PSObject.
 
@@ -67,8 +70,7 @@
         [int]$Memory,
 
         [Parameter()]
-        [switch]
-        $Force
+        [switch]$Force
 
     )
     Begin {
