@@ -1,4 +1,4 @@
-function Start-vRAVirtualDiskCreate {
+function New-vRAVirtualDisk {
     <#
         .SYNOPSIS
         Retrieve a vRA Machine's Disks
@@ -27,6 +27,12 @@ function Start-vRAVirtualDiskCreate {
         .PARAMETER ProjectName
         As an alternate, a project name can be given for this operation
 
+        .PARAMETER WaitForCompletion
+        If this flag is added, this function will wait for the request to complete and will reutnr the created Virtual Disk
+
+        .PARAMETER CompletionTimeout
+        The default of this paramter is 2 minutes (120 seconds), but this parameter can be overriden here
+
         .PARAMETER Force
         Force the creation
 
@@ -34,13 +40,19 @@ function Start-vRAVirtualDiskCreate {
         System.Management.Automation.PSObject.
 
         .EXAMPLE
-        Start-vRAVirtualDiskCreate -Name 'test_disk_1' -CapacityInGB 10 -ProjectId 'b1dd48e71d74267559bb930934470'
+        New-vRAVirtualDisk -Name 'test_disk_1' -CapacityInGB 10 -ProjectId 'b1dd48e71d74267559bb930934470'
 
         .EXAMPLE
-        Start-vRAVirtualDiskCreate -Name 'test_disk_1' -CapacityInGB 10 -ProjectName 'GOLD'
+        New-vRAVirtualDisk -Name 'test_disk_1' -CapacityInGB 10 -ProjectName 'GOLD'
 
         .EXAMPLE
-        Start-vRAVirtualDiskCreate -Name 'test_disk_1' -CapacityInGB 10 -ProjectId 'b1dd48e71d74267559bb930934470' -Persistent -Encrypted
+        New-vRAVirtualDisk -Name 'test_disk_1' -CapacityInGB 10 -ProjectName 'GOLD' -WaitForCompletion
+
+        .EXAMPLE
+        New-vRAVirtualDisk -Name 'test_disk_1' -CapacityInGB 10 -ProjectName 'GOLD' -WaitForCompletion -CompletionTimeout 300
+
+        .EXAMPLE
+        New-vRAVirtualDisk -Name 'test_disk_1' -CapacityInGB 10 -ProjectId 'b1dd48e71d74267559bb930934470' -Persistent -Encrypted
 
     #>
     [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High",DefaultParameterSetName="ByName")][OutputType('System.Management.Automation.PSObject')]
@@ -76,6 +88,12 @@ function Start-vRAVirtualDiskCreate {
             [switch]$Encrypted,
 
             [Parameter()]
+            [switch]$WaitForCompletion,
+
+            [Parameter()]
+            [int]$CompletionTimeout = 120,
+
+            [Parameter()]
             [switch]$Force
 
         )
@@ -85,12 +103,49 @@ function Start-vRAVirtualDiskCreate {
 
             function CalculateOutput {
 
-                [PSCustomObject]@{
-                    Name = $Response.name
-                    Progress = $Response.progress
-                    Id = $Response.id
-                    Status = $Response.status
+                if ($WaitForCompletion) {
+                    # if the wait for completion flag is given, the output will be different, we will wait here
+                    # we will use the built-in function to check status
+                    $elapsedTime = 0
+                    do {
+                        $RequestResponse = Get-vRARequest -RequestId $Response.id
+                        if ($RequestResponse.Status -eq "FINISHED") {
+                            foreach ($resource in $RequestResponse.Resources) {
+                                $Response = Invoke-vRARestMethod -URI "$resource" -Method GET
+                                [PSCustomObject]@{
+                                    Name = $Response.name
+                                    Status = $Response.status
+                                    Owner = $Response.owner
+                                    ExternalRegionId = $Response.externalRegionId
+                                    ExternalZoneId = $Response.externalZoneId
+                                    Description = $Response.description
+                                    Tags = $Response.tags
+                                    CapacityInGB = $Response.capacityInGB
+                                    CloudAccountIDs = $Response.cloudAccountIds
+                                    ExternalId = $Response.externalId
+                                    Id = $Response.id
+                                    DateCreated = $Response.createdAt
+                                    LastUpdated = $Response.updatedAt
+                                    OrganizationId = $Response.orgId
+                                    Properties = $Response.customProperties
+                                    ProjectId = $Response.projectId
+                                    Persistent = $Response.persistent
+                                }
+                            }
+                            break # leave loop as we are done here
+                        }
+                        $elapsedTime += 5
+                        Start-Sleep -Seconds 5
+                    } while ($elapsedTime -lt $CompletionTimeout)
+                } else {
+                    [PSCustomObject]@{
+                        Name = $Response.name
+                        Progress = $Response.progress
+                        Id = $Response.id
+                        Status = $Response.status
+                    }
                 }
+
             }
         }
         Process {
