@@ -1,4 +1,4 @@
-﻿function Start-vRAMachineResize {
+﻿function Resize-vRAMachine {
 <#
     .SYNOPSIS
     Resize a vRA Machine with the given CPU and Memory inputs
@@ -21,6 +21,12 @@
     .PARAMETER Flavor
     As an alternative, you can provide a flavor instead of a cpu or memory option
 
+    .PARAMETER WaitForCompletion
+    If this flag is added, this function will wait for the resize operation to complete
+
+    .PARAMETER CompletionTimeout
+    The default of this paramter is 2 minutes (120 seconds), but this parameter can be overriden here
+
     .PARAMETER Force
     Force this change
 
@@ -28,16 +34,22 @@
     System.Management.Automation.PSObject.
 
     .EXAMPLE
-    Start-vRAMachineResize -Id 'b1dd48e71d74267559bb930934470' -CPU 4 -Memory 8192
+    Resize-vRAMachine -Id 'b1dd48e71d74267559bb930934470' -CPU 4 -Memory 8192
 
     .EXAMPLE
-    Start-vRAMachineResize -Name 'iaas01' -CPU 4 -Memory 8192
+    Resize-vRAMachine -Name 'iaas01' -CPU 4 -Memory 8192
 
     .EXAMPLE
-    Start-vRAMachineResize -Id 'b1dd48e71d74267559bb930934470' -Flavor Small
+    Resize-vRAMachine -Id 'b1dd48e71d74267559bb930934470' -Flavor Small
 
     .EXAMPLE
-    Start-vRAMachineResize -Name 'iaas01' -Flavor Small
+    Resize-vRAMachine -Name 'iaas01' -Flavor Small
+
+    .EXAMPLE
+    Resize-vRAMachine -Name 'iaas01' -Flavor Small -WaitForCompletion
+
+    .EXAMPLE
+    Resize-vRAMachine -Name 'iaas01' -Flavor Small -WaitForCompletion -CompletionTimeout 300
 
 #>
 [CmdletBinding(DefaultParameterSetName="ResizeByName", SupportsShouldProcess, ConfirmImpact='High')][OutputType('System.Management.Automation.PSObject')]
@@ -70,6 +82,12 @@
         [int]$Memory,
 
         [Parameter()]
+        [switch]$WaitForCompletion,
+
+        [Parameter()]
+        [int]$CompletionTimeout = 120,
+
+        [Parameter()]
         [switch]$Force
 
     )
@@ -78,14 +96,57 @@
         $APIUrl = "/iaas/api/machines"
 
         function CalculateOutput {
+            if ($WaitForCompletion) {
+                # if the wait for completion flag is given, the output will be different, we will wait here
+                # we will use the built-in function to check status
+                $elapsedTime = 0
+                do {
+                    $RequestResponse = Get-vRARequest -RequestId $Response.id
+                    if ($RequestResponse.Status -eq "FINISHED") {
+                        foreach ($resource in $RequestResponse.Resources) {
+                            $Record = Invoke-vRARestMethod -URI "$resource" -Method GET
+                            [PSCustomObject]@{
+                                Name = $Record.name
+                                PowerState = $Record.powerState
+                                IPAddress = $Record.address
+                                ExternalRegionId = $Record.externalRegionId
+                                CloudAccountIDs = $Record.cloudAccountIds
+                                ExternalId = $Record.externalId
+                                Id = $Record.id
+                                DateCreated = $Record.createdAt
+                                LastUpdated = $Record.updatedAt
+                                OrganizationId = $Record.organizationId
+                                Properties = $Record.customProperties
+                                RequestId = $Response.id
+                                RequestStatus = "FINISHED"
+                            }
+                        }
+                        break # leave loop as we are done here
+                    }
+                    $elapsedTime += 5
+                    Start-Sleep -Seconds 5
+                } while ($elapsedTime -lt $CompletionTimeout)
 
-            [PSCustomObject]@{
-                Name = $Response.name
-                Progress = $Response.progress
-                Resources = $Response.resources
-                Id = $Response.id
-                Message = $Response.message
-                Status = $Response.status
+                if ($elapsedTime -gt $CompletionTimeout -or $elapsedTime -eq $CompletionTimeout) {
+                    # we have errored out
+                    [PSCustomObject]@{
+                        Name = $Response.name
+                        Progress = $Response.progress
+                        Resources = $Response.resources
+                        RequestId = $Response.id
+                        Message = "We waited for completion, but we hit a timeout at $CompletionTimeout seconds. You may use Get-vRARequest -RequestId $($Response.id) to continue checking status. Here was the original response: $($Response.message)"
+                        RequestStatus = $Response.status
+                    }
+                }
+            } else {
+                [PSCustomObject]@{
+                    Name = $Response.name
+                    Progress = $Response.progress
+                    Resources = $Response.resources
+                    RequestId = $Response.id
+                    Message = $Response.message
+                    RequestStatus = $Response.status
+                }
             }
         }
     }
