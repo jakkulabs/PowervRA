@@ -42,5 +42,4 @@ stages:
         - task: PublishPipelineArtifact@1
           displayName: 'Publish Pipeline Artifacts'
           inputs:
-            path: '$(System.DefaultWorkingDirectory)/Release/*.zip'
-            artifactName: 'artifact'
+            path: $(System.DefaultWorkingDirectory)/Release
