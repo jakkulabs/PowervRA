@@ -38,3 +38,9 @@ stages:
             testResultsFormat: NUnit
             testResultsFiles: '**\TEST_*.xml'
           continueOnError: true
+
+        - task: PublishPipelineArtifact@1
+          displayName: 'Publish Pipeline Artifacts'
+          inputs:
+            path: '$(System.DefaultWorkingDirectory)/Release/*.zip'
+            artifactName: 'artifact'
