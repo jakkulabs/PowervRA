@@ -154,57 +154,64 @@
 
         try {
 
-            if ($Force -or $PsCmdlet.ShouldProcess("ShouldProcess?")) {
+
                 switch ($PsCmdlet.ParameterSetName) {
 
                     # --- Resize by Flavor, do not need cpu and memory
                     'ResizeFlavorById' {
-                        foreach ($machineId in $Id) {
-                            $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/resize?name=$Flavor" -Method POST
-                            CalculateOutput
-                        }
 
+                        foreach ($machineId in $Id) {
+                            if ($Force -or $PsCmdlet.ShouldProcess($machineId)) {
+                                $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/resize?name=$Flavor" -Method POST
+                                CalculateOutput
+                            }
+                        }
                         break
                     }
 
                     # --- Resize by Flavor, do not need cpu and memory
                     'ResizeFlavorByName' {
+
                         foreach ($machine in $Name) {
+                            if ($Force -or $PsCmdlet.ShouldProcess($machine)) {
                             $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machine'`&`$select=id" -Method GET
                             $machineId = $machineResponse.content[0].Id
 
                             $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/resize?name=$Flavor" -Method POST
                             CalculateOutput
+                            }
                         }
-
                         break
                     }
 
                     # --- Resize with cpu and memory for given machine by its id
                     'ResizeById' {
-                        foreach ($machineId in $Id) {
-                            $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/resize?memoryInMB=$Memory`&cpuCount=$CPU" -Method POST
-                            CalculateOutput
-                        }
 
+                        foreach ($machineId in $Id) {
+                            if ($Force -or $PsCmdlet.ShouldProcess($machineId)) {
+                                $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/resize?memoryInMB=$Memory`&cpuCount=$CPU" -Method POST
+                                CalculateOutput
+                            }
+                        }
                         break
                     }
 
                     # --- Resize with cpu and memory for given machine by its name
                     'ResizeByName' {
+
                         foreach ($machine in $Name) {
-                            $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machine'`&`$select=id" -Method GET
-                            $machineId = $machineResponse.content[0].Id
+                            if ($Force -or $PsCmdlet.ShouldProcess($machine)) {
+                                $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machine'`&`$select=id" -Method GET
+                                $machineId = $machineResponse.content[0].Id
 
-                            $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/resize?memoryInMB=$Memory`&cpuCount=$CPU" -Method POST
-                            CalculateOutput
+                                $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/resize?memoryInMB=$Memory`&cpuCount=$CPU" -Method POST
+                                CalculateOutput
+                            }
                         }
-
                         break
                     }
 
                 }
-            }
         }
         catch [Exception]{
 

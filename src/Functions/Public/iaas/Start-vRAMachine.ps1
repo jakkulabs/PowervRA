@@ -122,34 +122,37 @@
         Process {
 
             try {
-                if ($Force -or $PsCmdlet.ShouldProcess('ShouldProcess?')){
+
                     switch ($PsCmdlet.ParameterSetName) {
 
-                        # --- Restart the given machine by its id
+                        # --- Start the given machine by its id
                         'PowerOnById' {
-                            foreach ($machineId in $Id) {
-                                $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/power-on" -Method POST
-                                CalculateOutput
-                            }
 
+                            foreach ($machineId in $Id) {
+                                if ($Force -or $PsCmdlet.ShouldProcess($machineId)){
+                                    $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/power-on" -Method POST
+                                    CalculateOutput
+                                }
+                            }
                             break
                         }
 
-                        # --- Restart the given machine by its name
+                        # --- Start the given machine by its name
                         'PowerOnByName' {
+
                             foreach ($machine in $Name) {
-                                $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machine'`&`$select=id" -Method GET
-                                $machineId = $machineResponse.content[0].Id
+                                if ($Force -or $PsCmdlet.ShouldProcess($machine)){
+                                    $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machine'`&`$select=id" -Method GET
+                                    $machineId = $machineResponse.content[0].Id
 
-                                $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/power-on" -Method POST
-                                CalculateOutput
+                                    $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/power-on" -Method POST
+                                    CalculateOutput
+                                }
                             }
-
                             break
                         }
 
                     }
-                }
 
             }
             catch [Exception]{

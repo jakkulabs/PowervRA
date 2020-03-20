@@ -122,34 +122,37 @@
     Process {
 
         try {
-            if ($Force -or $PsCmdlet.ShouldProcess('ShouldProcess?')) {
+
                 switch ($PsCmdlet.ParameterSetName) {
 
-                    # --- Restart the given machine by its id
+                    # --- Shutdown the given machine by its id
                     'ShutdownById' {
-                        foreach ($machineId in $Id) {
-                            $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/shutdown" -Method POST
-                            CalculateOutput
-                        }
 
+                        foreach ($machineId in $Id) {
+                            if ($Force -or $PsCmdlet.ShouldProcess($machineId)) {
+                                $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/shutdown" -Method POST
+                                CalculateOutput
+                            }
+                        }
                         break
                     }
 
-                    # --- Restart the given machine by its name
+                    # --- Shutdown the given machine by its name
                     'ShutdownByName' {
+
                         foreach ($machine in $Name) {
-                            $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machine'`&`$select=id" -Method GET
-                            $machineId = $machineResponse.content[0].Id
+                            if ($Force -or $PsCmdlet.ShouldProcess($machine)) {
+                                $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machine'`&`$select=id" -Method GET
+                                $machineId = $machineResponse.content[0].Id
 
-                            $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/shutdown" -Method POST
-                            CalculateOutput
+                                $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/shutdown" -Method POST
+                                CalculateOutput
+                            }
                         }
-
                         break
                     }
 
                 }
-            }
         }
         catch [Exception]{
 

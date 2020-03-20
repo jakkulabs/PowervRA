@@ -151,58 +151,57 @@ function New-vRAVirtualDisk {
         Process {
 
             try {
-                if ($Force -or $PsCmdlet.ShouldProcess('ShouldProcess?')){
+
 
                 switch ($PsCmdlet.ParameterSetName) {
 
                     # --- Get Machine by its id
                     'ById' {
-
-                        $Body = @"
-                            {
-                                "capacityInGB": $($CapacityInGB),
-                                "encrypted": $($Encrypted),
-                                "name": "$($Name)",
-                                "description": "$($DeviceDescription)",
-                                "persistent": $($Persistent),
-                                "projectId": "$($ProjectId)"
-                            }
+                        if ($Force -or $PsCmdlet.ShouldProcess($ProjectId)){
+                            $Body = @"
+                                {
+                                    "capacityInGB": $($CapacityInGB),
+                                    "encrypted": $($Encrypted),
+                                    "name": "$($Name)",
+                                    "description": "$($DeviceDescription)",
+                                    "persistent": $($Persistent),
+                                    "projectId": "$($ProjectId)"
+                                }
 "@
-                        # --- Check to see if the DiskId's were optionally present
-                        $Response = Invoke-vRARestMethod -URI "$APIUrl" -Method POST -Body $Body
+                            # --- Check to see if the DiskId's were optionally present
+                            $Response = Invoke-vRARestMethod -URI "$APIUrl" -Method POST -Body $Body
 
-                        CalculateOutput
-
+                            CalculateOutput
+                        }
                         break
                     }
 
                     # --- Get Machine by its name
                     # --- Will need to retrieve the machine first, then use ID to get final output
                     'ByName' {
+                        if ($Force -or $PsCmdlet.ShouldProcess($ProjectName)){
+                            $projResponse = Invoke-vRARestMethod -URI "/iaas/api/projects`?`$filter=name eq '$ProjectName'`&`$select=id" -Method GET
+                            $projId = $projResponse.content[0].id
 
-                        $projResponse = Invoke-vRARestMethod -URI "/iaas/api/projects`?`$filter=name eq '$ProjectName'`&`$select=id" -Method GET
-                        $projId = $projResponse.content[0].id
-
-                        $Body = @"
-                            {
-                                "capacityInGB": $($CapacityInGB),
-                                "encrypted": $($Encrypted),
-                                "name": "$($Name)",
-                                "description": "$($DeviceDescription)",
-                                "persistent": $($Persistent),
-                                "projectId": "$($projId)"
-                            }
+                            $Body = @"
+                                {
+                                    "capacityInGB": $($CapacityInGB),
+                                    "encrypted": $($Encrypted),
+                                    "name": "$($Name)",
+                                    "description": "$($DeviceDescription)",
+                                    "persistent": $($Persistent),
+                                    "projectId": "$($projId)"
+                                }
 "@
                             Write-Verbose $Body
-                        $Response = Invoke-vRARestMethod -URI "$APIUrl" -Method POST -Body $Body
+                            $Response = Invoke-vRARestMethod -URI "$APIUrl" -Method POST -Body $Body
 
-                        CalculateOutput
-
+                            CalculateOutput
+                        }
                         break
                     }
 
                 }
-            }
             }
             catch [Exception]{
 

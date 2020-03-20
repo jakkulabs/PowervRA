@@ -122,34 +122,38 @@
     Process {
 
         try {
-            if ($Force -or $PsCmdlet.ShouldProcess('ShouldProcess?')) {
+
                 switch ($PsCmdlet.ParameterSetName) {
 
                     # --- Restart the given machine by its id
                     'ResetById' {
-                        foreach ($machineId in $Id) {
-                            $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/reset" -Method POST
-                            CalculateOutput
-                        }
 
+                        foreach ($machineId in $Id) {
+                                if ($Force -or $PsCmdlet.ShouldProcess($machineId)) {
+                                $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/reset" -Method POST
+                                CalculateOutput
+                            }
+                        }
                         break
                     }
 
                     # --- Restart the given machine by its name
                     'ResetByName' {
-                        foreach ($machine in $Name) {
-                            $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machine'`&`$select=id" -Method GET
-                            $machineId = $machineResponse.content[0].Id
 
-                            $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/reset" -Method POST
-                            CalculateOutput
+                        foreach ($machine in $Name) {
+                            if ($Force -or $PsCmdlet.ShouldProcess($machine)) {
+                                $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machine'`&`$select=id" -Method GET
+                                $machineId = $machineResponse.content[0].Id
+
+                                $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/reset" -Method POST
+                                CalculateOutput
+                            }
                         }
 
                         break
                     }
 
                 }
-            }
         }
         catch [Exception]{
 

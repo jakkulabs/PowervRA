@@ -153,7 +153,7 @@
     Process {
 
         try {
-            if ($Force -or $PsCmdlet.ShouldProcess('ShouldProcess?')){
+
             $Body = @"
                 {
                     "blockDeviceId": "$($blockDeviceId)",
@@ -167,31 +167,30 @@
 
                 # --- Get Machine by its id
                 'ById' {
+                    if ($Force -or $PsCmdlet.ShouldProcess($Id)){
+                        # --- Check to see if the DiskId's were optionally present
+                        $Response = Invoke-vRARestMethod -URI "$APIUrl`/$Id`/disks" -Method GET -Body $Body
 
-                    # --- Check to see if the DiskId's were optionally present
-                    $Response = Invoke-vRARestMethod -URI "$APIUrl`/$Id`/disks" -Method GET -Body $Body
-
-                    CalculateOutput
-
+                        CalculateOutput
+                    }
                     break
                 }
 
                 # --- Get Machine by its name
                 # --- Will need to retrieve the machine first, then use ID to get final output
                 'ByName' {
+                    if ($Force -or $PsCmdlet.ShouldProcess($Name)){
+                        $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$Name'`&`$select=id" -Method GET
+                        $machineId = $machineResponse.content[0].id
 
-                    $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$Name'`&`$select=id" -Method GET
-                    $machineId = $machineResponse.content[0].id
+                        $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId`/disks" -Method POST -Body $Body
 
-                    $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId`/disks" -Method POST -Body $Body
-
-                    CalculateOutput
-
+                        CalculateOutput
+                    }
                     break
                 }
 
             }
-        }
         }
         catch [Exception]{
 
