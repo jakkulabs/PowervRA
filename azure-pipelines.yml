@@ -67,7 +67,7 @@ stages:
         - task: PowerShell@1
           displayName: 'Publish Module'
           inputs:
-            scriptName: $(Pipeline.Workspace)/tools/build.ps1
+            scriptName: $(Pipeline.Workspace)/Tools/Publish-PSModule.ps1
             arguments: -ApiKey $(PSGalleryAPIKey) -Path "$(Pipeline.Workspace)/Release/PowervRA" -CheckForExistingVersion
 
         - task: GitHubRelease@1
@@ -76,5 +76,3 @@ stages:
             gitHubConnection: 'JakkuLabs'
             tagPattern: 'v*'
             title: PowervRA
-          continueOnError: true
-
