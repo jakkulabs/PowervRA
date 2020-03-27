@@ -52,7 +52,6 @@ stages:
   - stage: Release
     jobs:
     - job: Publish
-      dependsOn: BuildModule
       condition: and(succeeded('BuildModule'), startswith(variables['Build.SourceBranch'], 'refs/tags/v') )
       steps:
         - task: DownloadPipelineArtifact@2
