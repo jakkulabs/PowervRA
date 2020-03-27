@@ -40,6 +40,42 @@ stages:
           continueOnError: true
 
         - task: PublishPipelineArtifact@1
-          displayName: 'Publish Pipeline Artifacts'
           inputs:
-            path: $(System.DefaultWorkingDirectory)/Release
+            targetPath: $(Pipeline.Workspace)/Release
+            artifactName: Release
+
+        - task: PublishPipelineArtifact@1
+          inputs:
+            targetPath: $(Pipeline.Workspace)/tools
+            artifactName: Tools
+
+  - stage: Release
+    jobs:
+    - job: Publish
+      dependsOn: BuildModule
+      condition: and(succeeded('BuildModule'), startswithvariables['Build.SourceBranch'], 'refs/tags/v' )
+      steps:
+        - task: DownloadPipelineArtifact@2
+          displayName: Restore Release Artifact
+          inputs:
+            artifactName: Release
+
+        - task: DownloadPipelineArtifact@2
+          displayName: Restore Tools Artifact
+          inputs:
+            artifactName: Tools
+
+        - task: PowerShell@1
+          displayName: 'Publish Module'
+          inputs:
+            scriptName: $(Pipeline.Workspace)/tools/build.ps1
+            arguments: -ApiKey $(PSGalleryAPIKey) -Path "$(Pipeline.Workspace)/Release/PowervRA" -CheckForExistingVersion
+
+        - task: GitHubRelease@1
+          displayName: 'GitHub Release'
+          inputs:
+            gitHubConnection: 'JakkuLabs'
+            tagPattern: 'v*'
+            title: PowervRA
+          continueOnError: true
+
