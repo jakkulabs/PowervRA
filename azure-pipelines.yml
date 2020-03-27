@@ -41,12 +41,12 @@ stages:
 
         - task: PublishPipelineArtifact@1
           inputs:
-            targetPath: $(Pipeline.Workspace)/Release
+            targetPath: $(System.DefaultWorkingDirectory)/Release
             artifactName: Release
 
         - task: PublishPipelineArtifact@1
           inputs:
-            targetPath: $(Pipeline.Workspace)/tools
+            targetPath: $(System.DefaultWorkingDirectory)/tools
             artifactName: Tools
 
   - stage: Release
