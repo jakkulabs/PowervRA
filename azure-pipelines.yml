@@ -69,7 +69,7 @@ stages:
             arguments: -ApiKey $(PSTestGalleryApiKey) -Path "$(Pipeline.Workspace)/Release/PowervRA" -CheckForExistingVersion -PreRelease
 
     - job: Production
-      condition: startswith(variables['Build.SourceBranch'], 'refs/tags/v'))
+      condition: startswith(variables['Build.SourceBranch'], 'refs/tags/v')
       steps:
         - task: DownloadPipelineArtifact@2
           displayName: Restore Pipeline Artifacts
