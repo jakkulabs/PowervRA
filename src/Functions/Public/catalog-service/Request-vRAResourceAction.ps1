@@ -137,7 +137,7 @@ function Request-vRAResourceAction {
 
                    $ResponseId = ($Response.Headers.Location) -replace '^http.*requests/',''
 
-                   if ($PSBoundParameters.ContainsKey("Wait")) {
+                   if ($Wait.IsPresent) {
 
                        While($true) {
 
@@ -147,9 +147,9 @@ function Request-vRAResourceAction {
 
                            Write-Verbose -Message "State: $($Request.state)"
 
-                           if ($Request.state -eq "SUCCESSFUL" -or $Request.state -Like "*FAILED") {
+                           if ($Request.state -eq "SUCCESSFUL" -or $Request.state -Like "*FAILED" -or $Request.state -Like "*REJECTED") {
 
-                               if ($Request.state -Like "*FAILED") {
+                               if ($Request.state -Like "*FAILED" -or $Request.state -Like "*REJECTED") {
 
                                    throw "$($Request.requestCompletion.completionDetails)"
 

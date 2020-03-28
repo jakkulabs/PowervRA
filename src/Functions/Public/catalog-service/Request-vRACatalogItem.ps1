@@ -148,7 +148,7 @@
                 
                 $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $JSON -Verbose:$VerbosePreference
                 
-                if ($PSBoundParameters.ContainsKey("Wait")) {
+                if ($Wait.IsPresent) {
 
                     While($true) {
                         
@@ -158,9 +158,9 @@
 
                         Write-Verbose -Message "State: $($Request.state)"
                         
-                        if ($Request.state -eq "SUCCESSFUL" -or $Request.state -Like "*FAILED") {
+                        if ($Request.state -eq "SUCCESSFUL" -or $Request.state -Like "*FAILED" -or $Request.state -Like "*REJECTED") {
                             
-                            if ($Request.state -Like "*FAILED") {
+                            if ($Request.state -Like "*FAILED" -or $Request.state -Like "*REJECTED") {
                                 
                                 throw "$($Request.requestCompletion.completionDetails)"
                                 
