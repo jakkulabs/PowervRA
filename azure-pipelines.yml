@@ -3,6 +3,9 @@ trigger:
   branches:
     include:
       - "*"
+  tags:
+    include:
+      - "v*"
 
   paths:
     include:
