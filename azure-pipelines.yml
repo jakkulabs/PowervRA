@@ -55,7 +55,8 @@ stages:
   - stage: Release
     jobs:
     - job: Publish
-      condition: and(succeeded('BuildModule'), startswith(variables['Build.SourceBranch'], 'refs/tags/v') )
+      dependsOn: CI
+      condition: and(succeeded('CI'), startswith(variables['Build.SourceBranch'], 'refs/tags/v') )
       steps:
         - task: DownloadPipelineArtifact@2
           displayName: Restore Release Artifact
