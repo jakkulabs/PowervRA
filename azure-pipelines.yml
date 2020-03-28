@@ -56,7 +56,8 @@ stages:
     dependsOn: CI
     condition: succeeded('CI')
     jobs:
-    - job: Publish
+    - job: Test
+      condition: eq(variables['Build.SourceBranch'], refs/heads/build_release')
       steps:
         - task: DownloadPipelineArtifact@2
           displayName: Restore Pipeline Artifacts
@@ -66,7 +67,18 @@ stages:
           inputs:
             scriptName: $(Pipeline.Workspace)/Tools/Publish-PSModule.ps1
             arguments: -ApiKey $(PSTestGalleryApiKey) -Path "$(Pipeline.Workspace)/Release/PowervRA" -CheckForExistingVersion -PreRelease
-          enabled: true
+
+    - job: Production
+      condition: startswith(variables['Build.SourceBranch'], 'refs/tags/v'))
+      steps:
+        - task: DownloadPipelineArtifact@2
+          displayName: Restore Pipeline Artifacts
+
+        - task: PowerShell@1
+          displayName: 'Publish Module'
+          inputs:
+            scriptName: $(Pipeline.Workspace)/Tools/Publish-PSModule.ps1
+            arguments: -ApiKey $(PSGalleryApiKey) -Path "$(Pipeline.Workspace)/Release/PowervRA" -CheckForExistingVersion
 
         - task: GitHubRelease@1
           displayName: 'GitHub Release'
@@ -74,5 +86,4 @@ stages:
             gitHubConnection: 'JakkuLabs'
             tagPattern: 'v*'
             title: PowervRA
-          enabled: false
 
