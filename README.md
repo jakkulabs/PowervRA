@@ -9,7 +9,7 @@ PowervRA is a PowerShell module built on top of the services exposed by the vRea
 
 ### vRealize Automation
 
-**PowervRA 4.x and above is only compatible with vRA 8.x and the Cloud version. The API was completely changed after vRA 7.x and has been re-written to support that going forward.**
+**PowervRA 4.x and above is only compatible with vRA 8.x and the Cloud version. The API was completely changed after vRA 7.x and PowervRA has been re-written to support that going forward.**
 
 | Version | Tested |
 | --- | --- |
