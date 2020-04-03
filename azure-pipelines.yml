@@ -57,7 +57,7 @@ stages:
     condition: succeeded('CI')
     jobs:
     - job: Test
-      condition: eq(variables['Build.SourceBranch'], 'refs/heads/build_release')
+      condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
       steps:
         - task: DownloadPipelineArtifact@2
           displayName: Restore Pipeline Artifacts
