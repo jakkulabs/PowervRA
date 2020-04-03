@@ -3,6 +3,9 @@ trigger:
   branches:
     include:
       - "*"
+  tags:
+    include:
+      - "v*"
 
   paths:
     include:
@@ -14,40 +17,73 @@ trigger:
 pr: none
 
 pool:
-  name: Hosted VS2017
-  demands:
-    - DotNetFramework
-    - npm
-    - node.js
+  vmImage: windows-latest
 
-steps:
-- task: gittools.gitversion-preview.gitversion-task.GitVersion@5
-  displayName: GitVersion
-  inputs:
-    configFilePath: GitVersion.yml
+stages:
+  - stage: CI
+    jobs:
+    - job: BuildModule
+      steps:
+        - task: UseGitVersion@5
+          inputs:
+            versionSpec: 5.x
+            useConfigFile: true
+            configFilePath: GitVersion.yml
 
-- task: PowerShell@1
-  displayName: 'Execute Build'
-  inputs:
-    scriptName: tools/build.ps1
+        - task: PowerShell@1
+          displayName: 'Execute Build'
+          inputs:
+            scriptName: tools/build.ps1
 
-- task: PublishTestResults@2
-  displayName: 'Publish Test Results **\TEST_*.xml'
-  inputs:
-    testResultsFormat: NUnit
-    testResultsFiles: '**\TEST_*.xml'
-  continueOnError: true
+        - task: PublishTestResults@2
+          displayName: 'Publish Test Results **\TEST_*.xml'
+          inputs:
+            testResultsFormat: NUnit
+            testResultsFiles: '**\TEST_*.xml'
+          continueOnError: true
 
-- task: CopyFiles@2
-  displayName: 'Copy Files to: Release'
-  inputs:
-    SourceFolder: tools
-    Contents: |
-      Publish-PSModule.ps1
-    TargetFolder: Release
+        - task: PublishPipelineArtifact@1
+          inputs:
+            targetPath: $(System.DefaultWorkingDirectory)/Release
+            artifactName: Release
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: Release'
-  inputs:
-    PathtoPublish: Release
-    ArtifactName: Release
+        - task: PublishPipelineArtifact@1
+          inputs:
+            targetPath: $(System.DefaultWorkingDirectory)/tools
+            artifactName: Tools
+
+  - stage: Release
+    dependsOn: CI
+    condition: succeeded('CI')
+    jobs:
+    - job: Test
+      condition: eq(variables['Build.SourceBranch'], 'refs/heads/build_release')
+      steps:
+        - task: DownloadPipelineArtifact@2
+          displayName: Restore Pipeline Artifacts
+
+        - task: PowerShell@1
+          displayName: 'Publish Module'
+          inputs:
+            scriptName: $(Pipeline.Workspace)/Tools/Publish-PSModule.ps1
+            arguments: -ApiKey $(PSTestGalleryApiKey) -Path "$(Pipeline.Workspace)/Release/PowervRA" -CheckForExistingVersion -PreRelease
+
+    - job: Production
+      condition: startswith(variables['Build.SourceBranch'], 'refs/tags/v')
+      steps:
+        - task: DownloadPipelineArtifact@2
+          displayName: Restore Pipeline Artifacts
+
+        - task: PowerShell@1
+          displayName: 'Publish Module'
+          inputs:
+            scriptName: $(Pipeline.Workspace)/Tools/Publish-PSModule.ps1
+            arguments: -ApiKey $(PSGalleryApiKey) -Path "$(Pipeline.Workspace)/Release/PowervRA" -CheckForExistingVersion
+
+        - task: GitHubRelease@1
+          displayName: 'GitHub Release'
+          inputs:
+            gitHubConnection: 'JakkuLabs'
+            tagPattern: 'v*'
+            title: PowervRA
+
