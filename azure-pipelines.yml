@@ -84,6 +84,5 @@ stages:
           displayName: 'GitHub Release'
           inputs:
             gitHubConnection: 'JakkuLabs'
-            tagPattern: 'v*'
             title: PowervRA
 
