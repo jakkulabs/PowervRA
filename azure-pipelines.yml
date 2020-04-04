@@ -67,6 +67,7 @@ stages:
           inputs:
             scriptName: $(Pipeline.Workspace)/Tools/Publish-PSModule.ps1
             arguments: -ApiKey $(PSTestGalleryApiKey) -Path "$(Pipeline.Workspace)/Release/PowervRA" -CheckForExistingVersion -PreRelease
+          enabled: false
 
     - job: Production
       condition: startswith(variables['Build.SourceBranch'], 'refs/tags/v')
@@ -79,6 +80,7 @@ stages:
           inputs:
             scriptName: $(Pipeline.Workspace)/Tools/Publish-PSModule.ps1
             arguments: -ApiKey $(PSGalleryApiKey) -Path "$(Pipeline.Workspace)/Release/PowervRA" -CheckForExistingVersion
+          enabled: false
 
         - task: GitHubRelease@1
           displayName: 'GitHub Release'
