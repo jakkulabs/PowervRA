@@ -83,6 +83,6 @@ stages:
         - task: GitHubRelease@1
           displayName: 'GitHub Release'
           inputs:
-            gitHubConnection: 'JakkuLabs'
+            gitHubConnection: 'chelnak'
             title: PowervRA
 
