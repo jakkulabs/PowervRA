@@ -2,3 +2,4 @@
 *.zip
 tests/*.json
 Release/
+.DS_Store
