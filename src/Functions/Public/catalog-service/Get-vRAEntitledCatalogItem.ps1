@@ -213,7 +213,7 @@
                             Forms = $CatalogItem.forms
                             IconId = $CatalogItem.iconId
                             ProviderBinding = $CatalogItem.providerBinding
-                            EntitledOrganizations = $CatalogItem.entitledOrganizations
+                            EntitledOrganizations = $Response.content.entitledOrganizations
 
                         }
 
