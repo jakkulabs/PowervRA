@@ -130,7 +130,7 @@ Task CreateArtifact {
 
     # --- Set the psd1 module version
     if ($ENV:TF_BUILD){
-        $ModuleManifestVersion = $ENV:BUILD_BUILDNUMBER.Split("-")[0]
+        $ModuleManifestVersion = $ENV:GITVERSION_MajorMinorPatch
     }
     Update-Metadata -Path "$($ReleaseDirectoryPath)\$($ModuleName).psd1" -PropertyName ModuleVersion -Value $ModuleManifestVersion
 
@@ -169,7 +169,7 @@ Task CreateArchive {
     $Destination = "$($ReleaseDirectoryPath).zip"
 
     if ($ENV:TF_BUILD){
-        $Destination = "$($ReleaseDirectoryPath).$($ENV:BUILD_BUILDNUMBER).zip"
+        $Destination = "$($ReleaseDirectoryPath).$($ENV:GITVERSION_SemVer).zip"
     }
 
     if (Test-Path -Path $Destination) {
