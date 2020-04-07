@@ -17,10 +17,10 @@ PowervRA is a PowerShell module built on top of the services exposed by the vRea
 |Cloud API: 2019-01-15 | :white_check_mark: |
 
 
-For vRA versions prior to 8.0 / Cloud, the following are supported when using PowervRA release 3.x, currently 3.6.0. To install that version from the PowerShell Gallery use:
+For vRA versions prior to 8.0 / Cloud, the following are supported when using PowervRA release 3.x, currently 3.7.0. To install that version from the PowerShell Gallery use:
 
 ```PowerShell
-Install-Module -Name PowervRA -RequiredVersion 3.6.0 -Scope CurrentUser
+Install-Module -Name PowervRA -RequiredVersion 3.7.0 -Scope CurrentUser
 ```
 
 
@@ -52,10 +52,10 @@ You can grab the latest version of the module from the PowerShell Gallery by run
 Install-Module -Name PowervRA -Scope CurrentUser
 ```
 
-For vRA 7.x and earlier compatibilty, be sure to use the latest 3.x version of PowervRA, currently 3.6.0:
+For vRA 7.x and earlier compatibilty, be sure to use the latest 3.x version of PowervRA, currently 3.7.0:
 
 ```PowerShell
-Install-Module -Name PowervRA -RequiredVersion 3.6.0 -Scope CurrentUser
+Install-Module -Name PowervRA -RequiredVersion 3.7.0 -Scope CurrentUser
 ```
 
 ## Quick Start
