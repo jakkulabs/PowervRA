@@ -3,7 +3,7 @@ $JSON = Get-Content .\Variables.json -Raw | ConvertFrom-JSON
 
 # --- Startup
 $ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password -AsPlainText -Force
-$Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Tenant $JSON.Connection.Tenant -Username $JSON.Connection.Username -Password $ConnectionPassword -IgnoreCertRequirements
+$Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Username $JSON.Connection.Username -Password $ConnectionPassword -IgnoreCertRequirements
 
 # --- Tests
 Describe -Name 'User Principal Tests' -Fixture {
@@ -11,7 +11,7 @@ Describe -Name 'User Principal Tests' -Fixture {
     It -Name "Create named User Principal $($JSON.Principal.UserPrincipalId)" -Test {
 
         $SecurePassword = ConvertTo-SecureString $JSON.Principal.UserPrincipalPassword -AsPlainText -Force
-        $UserPrincipalA = New-vRAUserPrincipal -Tenant $JSON.Connection.Tenant -FirstName $JSON.Principal.UserPrincipalFirstName -LastName $JSON.Principal.UserPrincipalLastName -EmailAddress $JSON.Principal.UserPrincipalEmailAddress -Description $JSON.Principal.UserPrincipalDescription -Password $SecurePassword -PrincipalId $JSON.Principal.UserPrincipalId
+        $UserPrincipalA = New-vRAUserPrincipal -FirstName $JSON.Principal.UserPrincipalFirstName -LastName $JSON.Principal.UserPrincipalLastName -EmailAddress $JSON.Principal.UserPrincipalEmailAddress -Description $JSON.Principal.UserPrincipalDescription -Password $SecurePassword -PrincipalId $JSON.Principal.UserPrincipalId
         $UserPrincipalA.FirstName | Should Be $Json.Principal.UserPrincipalFirstName
 
     }
@@ -60,7 +60,7 @@ Describe -Name 'Group Principal Tests' -Fixture {
 
     It -Name "Create named Custom Group $($JSON.Principal.GroupPrincipalName)" -Test {
 
-        $GroupPrincipalA = New-vRAGroupPrincipal -Tenant $JSON.Connection.Tenant -Name $JSON.Principal.GroupPrincipalName -Description $JSON.Principal.GroupPrincipalDescription
+        $GroupPrincipalA = New-vRAGroupPrincipal -Name $JSON.Principal.GroupPrincipalName -Description $JSON.Principal.GroupPrincipalDescription
         $GroupPrincipalA.Name | Should Be $JSON.Principal.GroupPrincipalName
 
     }

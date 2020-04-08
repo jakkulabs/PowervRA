@@ -26,10 +26,6 @@
 
         try {
 
-            # --- Remove the token from vRA and remove the global PowerShell variable
-            $URI = "/identity/api/tokens/$($Global:vRAConnection.Token)"
-            Invoke-vRARestMethod -Method DELETE -URI $URI -Verbose:$VerbosePreference
-
             # --- Remove custom Security Protocol if it has been specified
             if ($Global:vRAConnection.SslProtocol -ne 'Default'){
 
@@ -49,9 +45,6 @@
 
             Write-Verbose -Message "Removing vRAConnection global variable"
             Remove-Variable -Name vRAConnection -Scope Global -Force -ErrorAction SilentlyContinue
-
         }
-
     }
-
 }

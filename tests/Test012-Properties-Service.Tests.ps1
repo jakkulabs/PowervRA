@@ -3,7 +3,7 @@ $JSON = Get-Content .\Variables.json -Raw | ConvertFrom-JSON
 
 # --- Startup
 $ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password -AsPlainText -Force
-$Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Tenant $JSON.Connection.Tenant -Username $JSON.Connection.Username -Password $ConnectionPassword -IgnoreCertRequirements
+$Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Username $JSON.Connection.Username -Password $ConnectionPassword -IgnoreCertRequirements
 
 # --- Tests
 Describe -Name 'Properties Service Tests' -Fixture {
@@ -53,7 +53,7 @@ Describe -Name 'Properties Service Tests' -Fixture {
 
         # add complex property to hash
         $PropertiesHash.Add("ComplexProperty", $ComplexProperty)
-        
+
         $PropertyGroupA = New-vRAPropertyGroup -Name $JSON.PropertiesService.PropertyGroup.Name -Label $JSON.PropertiesService.PropertyGroup.Label `
                                         -Properties $PropertiesHash
         $PropertyGroupA.Id | Should Be $JSON.PropertiesService.PropertyGroup.Name
@@ -67,7 +67,7 @@ Describe -Name 'Properties Service Tests' -Fixture {
         $PropertyGroupA.Properties.ComplexProperty.encrypted | Should Be $JSON.PropertiesService.PropertyGroup.ComplexProperty.encrypted
         $PropertyGroupA.Properties.ComplexProperty.visibility | Should Be $JSON.PropertiesService.PropertyGroup.ComplexProperty.visibility
 
-        # check defaultValue if unencrypted 
+        # check defaultValue if unencrypted
         if (-Not $PropertyGroupA.Properties.ComplexProperty.encrypted) {
             $PropertyGroupA.Properties.ComplexProperty.defaultValue | Should Be $JSON.PropertiesService.PropertyGroup.ComplexProperty.defaultValue
         } else {

@@ -33,22 +33,18 @@
     System.Management.Automation.PSObject
 
     .EXAMPLE
-    Invoke-vRARestMethod -Method GET -URI '/identity/api/tenants'
+    Invoke-vRARestMethod -Method GET -URI '/iaas/api/about'
 
     .EXAMPLE
     $JSON = @"
         {
-          "name" : "Tenant02",
-          "description" : "This is Tenant02",
-          "urlName" : "Tenant02",
-          "contactEmail" : "test.user@tenant02.local",
-          "id" : "Tenant02",
-          "defaultTenant" : false,
-          "password" : ""
+            "name": "TestOnboardingPlan",
+            "endpointId": "42fe38765a63bd755921a88814a14",
+            "projectId": "9f732951-2279-422a-8045-9b254d427100"
         }
     "@
 
-    Invoke-vRARestMethod -Method PUT -URI '/identity/api/tenants/Tenant02' -Body $JSON -WebRequest
+    Invoke-vRARestMethod -Method POST -URI '/relocation/onboarding/plan' -Body $JSON -WebRequest
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 

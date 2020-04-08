@@ -3,7 +3,7 @@ $JSON = Get-Content .\Variables.json -Raw | ConvertFrom-JSON
 
 # --- Startup
 $ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password-AsPlainText -Force
-$Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Tenant $JSON.Connection.Tenant -Username $JSON.Connection.Username -Password $ConnectionPassword -IgnoreCertRequirements
+$Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Username $JSON.Connection.Username -Password $ConnectionPassword -IgnoreCertRequirements
 
 # --- Tests
 Describe -Name 'Iaas-Proxy-Provider Tests' -Fixture {
@@ -150,7 +150,7 @@ Describe -Name 'Iaas-Proxy-Provider Tests' -Fixture {
                 $IPAddressList = $NetworkProfile | Get-vRANetworkProfileIPAddressList
                 $IPAddressList | Should Not Be $null
 
-            } 
+            }
 
             # --- UPDATE
             It -Name "Update named External Network Profile" -Test {
@@ -177,7 +177,7 @@ Describe -Name 'Iaas-Proxy-Provider Tests' -Fixture {
                 $NetworkProfileDescription = $NetworkProfile.Description
                 $UpdatedNetworkProfile = $NetworkProfile | Set-vRARoutedNetworkProfile -Description "$($NetworkProfileDescription) Updated" -Confirm:$false
                 $UpdatedNetworkProfile.Description | Should Be "$($NetworkProfileDescription) Updated"
-                
+
             }
 
             # --- DELETE
@@ -192,7 +192,7 @@ Describe -Name 'Iaas-Proxy-Provider Tests' -Fixture {
 
                 $NetworkProfile = Get-vRARoutedNetworkProfile -Name $RoutedProfileName
                 $NetworkProfile | Remove-vRARoutedNetworkProfile -Confirm:$false
-                
+
             }
 
             It -Name "Remove named External Network Profile" -Test {

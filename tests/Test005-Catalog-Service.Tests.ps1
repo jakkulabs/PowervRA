@@ -3,7 +3,7 @@ $JSON = Get-Content .\Variables.json -Raw | ConvertFrom-JSON
 
 # --- Startup
 $ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password -AsPlainText -Force
-$Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Tenant $JSON.Connection.Tenant -Username $JSON.Connection.Username -Password $ConnectionPassword -IgnoreCertRequirements
+$Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Username $JSON.Connection.Username -Password $ConnectionPassword -IgnoreCertRequirements
 
 # --- Tests
 Describe -Name 'Catalog-Service Tests' -Fixture {
@@ -51,7 +51,7 @@ Describe -Name 'Catalog-Service Tests' -Fixture {
             $Requests.Count | Should be 20
 
         }
-        
+
         It -Name "Return requests requested for a user" -Test {
 
             $RequestedFor = (Get-vRARequest -Limit 1).RequestedFor
@@ -135,10 +135,10 @@ Describe -Name 'Catalog-Service Tests' -Fixture {
             $EntitledService = Get-vRAEntitledService -Limit 1 -ErrorAction SilentlyContinue
             $EntitledService | Should Not Be $null
 
-        }        
+        }
 
         It -Name "Update named Service" -Test {
-            
+
             $Service = Get-vRAService -Name $ServiceName
             $UpdatedServiceDescription = "$($Service.Description) Updated"
             $Service = Set-vRAService -Id $Service.Id -Description $UpdatedServiceDescription -Confirm:$false
@@ -169,7 +169,7 @@ Describe -Name 'Catalog-Service Tests' -Fixture {
         $EntitlementName = "Test Entitlement - $(Get-Random -Maximum 20)"
 
         It -Name "Create named Entitlement" -Test {
-            
+
             $BusinessGroup = Get-vRABusinessGroup -Limit 1
             $BusinessUser = $BusinessGroup.UserRole | Select -First 1
             $UserPrincipal = "$($BusinessUser.name)@$($BusinessUser.domain)"
@@ -194,8 +194,8 @@ Describe -Name 'Catalog-Service Tests' -Fixture {
 
         }
 
-    }    
-    
+    }
+
     Context -Name "Resource Action" -Fixture {
 
         It -Name "Return available Resource Actions for a Resource" -Test {
@@ -218,7 +218,7 @@ Describe -Name 'Catalog-Service Tests' -Fixture {
             $ResourceOperation.Id | Should Be $ResourceOperationId
 
         }
-    
+
         It -Name "Return Resource Operation by external id" -Test {
 
             $ResourceOperationExternalId = (Get-vRAResourceOperation -Limit 1).ExternalId

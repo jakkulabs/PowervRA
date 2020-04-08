@@ -3,14 +3,14 @@ $JSON = Get-Content .\Variables.json -Raw | ConvertFrom-JSON
 
 # --- Startup
 $ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password -AsPlainText -Force
-$Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Tenant $JSON.Connection.Tenant -Username $JSON.Connection.Username -Password $ConnectionPassword -IgnoreCertRequirements
+$Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Username $JSON.Connection.Username -Password $ConnectionPassword -IgnoreCertRequirements
 
 # --- Tests
 Describe -Name 'o11n Gateway Service Tests' -Fixture {
 
     It -Name "Invoke vRA DataCollection" -Test {
 
-       { Invoke-vRADataCollection } | Should Not Throw 
+       { Invoke-vRADataCollection } | Should Not Throw
     }
 }
 

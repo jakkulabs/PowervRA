@@ -4,7 +4,7 @@ $CustomForm = Get-Content .\CentOS-CustomForm.json -Raw
 
 # --- Startup
 $ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password -AsPlainText -Force
-$Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Tenant $JSON.Connection.Tenant -Username $JSON.Connection.Username -Password $ConnectionPassword -IgnoreCertRequirements
+$Connection = Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Username $JSON.Connection.Username -Password $ConnectionPassword -IgnoreCertRequirements
 
 # --- Tests
 Describe -Name 'Custom Forms Tests' -Fixture {
