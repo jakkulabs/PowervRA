@@ -9,6 +9,9 @@ function Update-vRAVariable {
         .PARAMETER Id
         vRealize Automation Code Stream Variable Id
 
+        .PARAMETER Name
+        Name of the vRealize Automation Code Stream Variable
+
         .PARAMETER Description
         A description of the vRealize Automation Code Stream Variable
 
@@ -114,7 +117,6 @@ function Update-vRAVariable {
                     $Variable = Invoke-vRARestMethod -Method PUT -URI $URI -Body $Body -Verbose:$VerbosePreference
 
                     [PSCustomObject] @{
-
                         Name = $Variable.name
                         Description = $Variable.description
                         Id = $Variable.id
