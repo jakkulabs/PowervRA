@@ -57,6 +57,7 @@
                     LastUpdated = $Record.updatedAt
                     OrganizationId = $Record.organizationId
                     Properties = $Record.customProperties
+                    Tags = $Record.tags
                 }
             }
         }
