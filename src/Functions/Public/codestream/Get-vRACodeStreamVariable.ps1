@@ -1,4 +1,4 @@
-﻿function Get-vRAVariable {
+﻿function Get-vRACodeStreamVariable {
 <#
     .SYNOPSIS
     Retrieve vRA Code Stream Variable depending on input
@@ -19,16 +19,16 @@
     System.Management.Automation.PSObject.
 
     .EXAMPLE
-    Get-vRAVariable
+    Get-vRACodeStreamVariable
 
     .EXAMPLE
-    Get-vRAVariable -Id '96afe0f9-a2ac-4468-8671-a2ca6fdbca37'
+    Get-vRACodeStreamVariable -Id '96afe0f9-a2ac-4468-8671-a2ca6fdbca37'
 
     .EXAMPLE
-    Get-vRAVariable -Variable 'My Variable'
+    Get-vRACodeStreamVariable -Variable 'My Variable'
 
     .EXAMPLE
-    Get-vRAVariable -Project 'My Project'
+    Get-vRACodeStreamVariable -Project 'My Project'
 
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
