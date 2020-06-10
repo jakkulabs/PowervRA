@@ -1,4 +1,4 @@
-function Update-vRAVariable {
+function Update-vRACodeStreamVariable {
     <#
         .SYNOPSIS
         Update a vRealize Automation Code Stream Variable
@@ -31,10 +31,10 @@ function Update-vRAVariable {
         System.Management.Automation.PSObject
 
         .EXAMPLE
-        Update-vRAVariable -Name "My Variable" -Type REGULAR -Id 05352fc5-24c2-4ead-b6c0-5373e60a1b3d -Description "Updated from PowervRA!" -Value "New value"
+        Update-vRACodeStreamVariable -Name "My Variable" -Type REGULAR -Id 05352fc5-24c2-4ead-b6c0-5373e60a1b3d -Description "Updated from PowervRA!" -Value "New value"
 
         .EXAMPLE
-        Get-vRAVariable -Variable "My Variable" | Update-vRAVariable -Value "New value" -Description "New Description"
+         -Variable "My Variable" | Update-vRACodeStreamVariable -Value "New value" -Description "New Description"
 
         .EXAMPLE
         $JSON = @"
@@ -46,7 +46,7 @@ function Update-vRAVariable {
             }
     "@
 
-        $JSON | Update-vRAVariable -Id 05352fc5-24c2-4ead-b6c0-5373e60a1b3d
+        $JSON | Update-vRACodeStreamVariable -Id 05352fc5-24c2-4ead-b6c0-5373e60a1b3d
 
 
     #>

@@ -1,22 +1,22 @@
-function Remove-vRAVariable {
+function Remove-vRACodeStreamExecution {
     <#
         .SYNOPSIS
-        Remove a vRA Code Stream Variable
+        Remove a vRA Code Stream Execution
 
         .DESCRIPTION
-        Remove a vRA Code Stream Variable
+        Remove a vRA Code Stream Execution
 
         .PARAMETER Id
-        The Id of the vRA Code Stream Variable
+        The Id of the vRA Code Stream Execution
 
         .INPUTS
         System.String
 
         .EXAMPLE
-        Remove-vRAVariable -Id '4b3bd194-9b5f-40fd-9ed0-58d997237999'
+        ReRemove-vRACodeStreamExecution -Id '4b3bd194-9b5f-40fd-9ed0-58d997237999'
 
         .EXAMPLE
-        Get-vRAVariable -Variable 'My Variable' | Remove-vRAVariable
+        Get-vRACodeStreamExecution -Pipeline 'My Pipeline' | ReRemove-vRACodeStreamExecution
 
     #>
     [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High",DefaultParameterSetName="ById")]
@@ -39,11 +39,11 @@ function Remove-vRAVariable {
 
                 'ById' {
 
-                    foreach ($variableId in $Id) {
+                    foreach ($executionId in $Id) {
 
-                        if ($PSCmdlet.ShouldProcess($variableId)){
+                        if ($PSCmdlet.ShouldProcess($executionId)){
 
-                            $URI = "/pipeline/api/variables/$($variableId)"
+                            $URI = "/pipeline/api/executions/$($executionId)"
 
                             Invoke-vRARestMethod -Method DELETE -URI "$($URI)" -Verbose:$VerbosePreference | Out-Null
                         }

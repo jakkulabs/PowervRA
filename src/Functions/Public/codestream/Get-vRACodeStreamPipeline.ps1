@@ -1,34 +1,34 @@
-﻿function Get-vRAExecution {
+﻿function Get-vRACodeStreamPipeline {
 <#
     .SYNOPSIS
-    Retrieve vRA Code Stream Execution depending on input
+    Retrieve vRA Code Stream Pipeline depending on input
 
     .DESCRIPTION
-    Retrieve a list of vRA Code Stream Executions or a single Execution depending on input
+    Retrieve a list of vRA Code Stream Pipelines or a single Pipeline depending on input
 
     .PARAMETER Id
-    The ID of the vRA Code Stream Execution
+    The ID of the vRA Code Stream Pipeline
 
     .PARAMETER Pipeline
-    The name of the Pipeline of the vRA Code Stream Execution
+    The name of the Pipeline of the vRA Code Stream Pipeline
 
     .PARAMETER Project
-    The name of the Project of the vRA Code Stream Execution
+    The name of the Project of the vRA Code Stream Pipeline
 
     .OUTPUTS
     System.Management.Automation.PSObject.
 
     .EXAMPLE
-    Get-vRAExecution
+    Get-vRACodeStreamPipeline
 
     .EXAMPLE
-    Get-vRAExecution -Id '96afe0f9-a2ac-4468-8671-a2ca6fdbca37'
+    Get-vRACodeStreamPipeline -Id '96afe0f9-a2ac-4468-8671-a2ca6fdbca37'
 
     .EXAMPLE
-    Get-vRAExecution -Pipeline 'My Pipeline'
+    Get-vRACodeStreamPipeline -Pipeline 'My Pipeline'
 
     .EXAMPLE
-    Get-vRAExecution -Project 'My Project'
+    Get-vRACodeStreamPipeline -Project 'My Project'
 
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
@@ -50,18 +50,17 @@
     )
     Begin {
 
-        $APIUrl = "/pipeline/api/executions"
+        $APIUrl = "/pipeline/api/pipelines"
 
         function CalculateOutput {
             foreach ($Record in $Response.documents.PsObject.Properties) {
                 [PSCustomObject]@{
-                    Name = $Record.value.name+" #"+$Record.value.index
+                    Name = $Record.value.name
                     Project = $Record.value.project
                     Id = $Record.value.id
                     LastUpdated = $Record.value.updatedAt
-                    Status = $Record.value.status
-                    StatusMessage = $Record.value.statusMessage
-                    ExecutedBy = $Record.value._executedBy
+                    UpdatedBy = $Record.value._updatedBy
+                    State = $Record.value.state
                 }
             }
         }
@@ -72,17 +71,17 @@
 
             switch ($PsCmdlet.ParameterSetName) {
 
-                # --- Get Execution by its id
+                # --- Get Pipeline by its id
                 'ById' {
-                    foreach ($executionId in $Id) {
-                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=id eq '$executionId'" -Method GET
+                    foreach ($pipelineId in $Id) {
+                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=id eq '$pipelineId'" -Method GET
                         CalculateOutput
                     }
 
                     break
                 }
 
-                # --- Get Execution by its pipeline name
+                # --- Get Pipeline by its pipeline name
                 'ByName' {
                     foreach ($pipelineName in $Pipeline) {
                         $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$pipelineName'" -Method GET
@@ -92,7 +91,7 @@
                     break
                 }
 
-                # --- Get Execution by its project name
+                # --- Get Pipeline by its project name
                 'ByProject' {
                     foreach ($projectName in $Project) {
                         $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=project eq '$projectName'" -Method GET
@@ -102,7 +101,7 @@
                     break
                 }
                 
-                # --- No parameters passed so return all executions
+                # --- No parameters passed so return all Pipelines
                 'Standard' {
                     $Response = Invoke-vRARestMethod -URI $APIUrl -Method GET
                     CalculateOutput
