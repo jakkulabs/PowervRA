@@ -38,6 +38,8 @@
 
 #>
 [CmdletBinding(SupportsShouldProcess, ConfirmImpact="High", DefaultParameterSetName="RebootByName")][OutputType('System.Management.Automation.PSObject')]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'WaitForCompletion',Justification = 'False positive as rule does not scan child scopes')]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'CompletionTimeout',Justification = 'False positive as rule does not scan child scopes')]
 
     Param (
 
