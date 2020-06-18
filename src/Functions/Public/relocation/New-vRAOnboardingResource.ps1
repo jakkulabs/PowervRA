@@ -89,20 +89,20 @@
     )
 
     begin {
-        function CalculateOutput {
+        function CalculateOutput($ResponseObject) {
 
-            $DocumentSelfLink = $OnboardingResource.documentSelfLink
+            $DocumentSelfLink = $ResponseObject.documentSelfLink
             $OnboardingResourceId = ($DocumentSelfLink -split "/")[-1]
 
             [PSCustomObject] @{
 
-                Name = $OnboardingResource.resourceName
+                Name = $ResponseObject.resourceName
                 Id = $OnboardingResourceId
-                PlanLink = $OnboardingResource.planLink
-                ResourceLink = $OnboardingResource.resourceLink
-                DeploymentLink = $OnboardingResource.deploymentLink
-                RuleLinks = $OnboardingResource.ruleLinks
-                CreatedTimeMicros = $OnboardingResource.createdTimeMicros
+                PlanLink = $ResponseObject.planLink
+                ResourceLink = $ResponseObject.resourceLink
+                DeploymentLink = $ResponseObject.deploymentLink
+                RuleLinks = $ResponseObject.ruleLinks
+                CreatedTimeMicros = $ResponseObject.createdTimeMicros
                 DocumentSelfLink = $DocumentSelfLink
             }
         }
@@ -141,7 +141,7 @@
                 $URI = "/relocation/onboarding/resource"
                 $OnboardingResource = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference
 
-                CalculateOutput
+                CalculateOutput($OnboardingResource)
             }
         }
         catch [Exception] {
