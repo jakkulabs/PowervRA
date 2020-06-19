@@ -103,14 +103,14 @@ function New-vRAVirtualDisk {
 
             $APIUrl = "/iaas/api/block-devices"
 
-            function CalculateOutput {
+            function CalculateOutput([int]$CompletionTimeout,[switch]$WaitForCompletion,[PSCustomObject]$RestResponse) {
 
                 if ($WaitForCompletion) {
                     # if the wait for completion flag is given, the output will be different, we will wait here
                     # we will use the built-in function to check status
                     $elapsedTime = 0
                     do {
-                        $RequestResponse = Get-vRARequest -RequestId $Response.id
+                        $RequestResponse = Get-vRARequest -RequestId $RestResponse.id
                         if ($RequestResponse.Status -eq "FINISHED") {
                             foreach ($resource in $RequestResponse.Resources) {
                                 $Response = Invoke-vRARestMethod -URI "$resource" -Method GET
@@ -141,10 +141,10 @@ function New-vRAVirtualDisk {
                     } while ($elapsedTime -lt $CompletionTimeout)
                 } else {
                     [PSCustomObject]@{
-                        Name = $Response.name
-                        Progress = $Response.progress
-                        Id = $Response.id
-                        Status = $Response.status
+                        Name = $RestResponse.name
+                        Progress = $RestResponse.progress
+                        Id = $RestResponse.id
+                        Status = $RestResponse.status
                     }
                 }
 
@@ -171,9 +171,9 @@ function New-vRAVirtualDisk {
                                 }
 "@
                             # --- Check to see if the DiskId's were optionally present
-                            $Response = Invoke-vRARestMethod -URI "$APIUrl" -Method POST -Body $Body
+                            $RestResponse = Invoke-vRARestMethod -URI "$APIUrl" -Method POST -Body $Body
 
-                            CalculateOutput
+                            CalculateOutput $CompletionTimeout $WaitForCompletion $RestResponse
                         }
                         break
                     }
@@ -196,9 +196,9 @@ function New-vRAVirtualDisk {
                                 }
 "@
                             Write-Verbose $Body
-                            $Response = Invoke-vRARestMethod -URI "$APIUrl" -Method POST -Body $Body
+                            $RestResponse = Invoke-vRARestMethod -URI "$APIUrl" -Method POST -Body $Body
 
-                            CalculateOutput
+                            CalculateOutput $CompletionTimeout $WaitForCompletion $RestResponse
                         }
                         break
                     }

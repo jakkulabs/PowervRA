@@ -44,7 +44,7 @@
     begin {
         $APIUrl = '/iaas/projects'
 
-        function CalculateOutput {
+        function CalculateOutput([PSCustomObject]$Project) {
 
             [PSCustomObject] @{
 
@@ -79,7 +79,7 @@
 
                         foreach ($Project in $Response.content) {
 
-                            CalculateOutput
+                            CalculateOutput $Project
                         }
                     }
 
@@ -95,7 +95,7 @@
 
                         foreach ($Project in $Response.content){
 
-                            CalculateOutput
+                            CalculateOutput $Project
                         }
                     }
 
@@ -109,7 +109,7 @@
 
                     foreach ($Project in $Response.content){
 
-                        CalculateOutput
+                        CalculateOutput $Project
                     }
                 }
             }

@@ -49,7 +49,7 @@
 
         $APIUrl = "/iaas/api/machines"
 
-        function CalculateOutput {
+        function CalculateOutput([PSCustomObject]$Response) {
 
             # --- The output comes in two flavors, a list or a single item, we are checking for list here
             if ($Response.content) {
@@ -114,7 +114,7 @@
 
                             $Response = Invoke-vRARestMethod -URI "$APIUrl`/$Id`/disks`/$disk" -Method GET
 
-                            CalculateOutput
+                            CalculateOutput $Response
 
                         }
 
@@ -122,7 +122,7 @@
 
                         $Response = Invoke-vRARestMethod -URI "$APIUrl`/$Id`/disks" -Method GET
 
-                        CalculateOutput
+                        CalculateOutput $Response
 
                     }
 
@@ -143,7 +143,7 @@
 
                             $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId`/disks`/$disk" -Method GET
 
-                            CalculateOutput
+                            CalculateOutput $Response
 
                         }
 
@@ -152,7 +152,7 @@
 
                         $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId`/disks" -Method GET
 
-                        CalculateOutput
+                        CalculateOutput $Response
 
                     }
 

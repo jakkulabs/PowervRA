@@ -65,14 +65,14 @@
 
         $APIUrl = "/iaas/api/machines"
 
-        function CalculateOutput {
+        function CalculateOutput([int]$CompletionTimeout,[switch]$WaitForCompletion,[PSCustomObject]$RestResponse) {
 
             if ($WaitForCompletion) {
                 # if the wait for completion flag is given, the output will be different, we will wait here
                 # we will use the built-in function to check status
                 $elapsedTime = 0
                 do {
-                    $RequestResponse = Get-vRARequest -RequestId $Response.id
+                    $RequestResponse = Get-vRARequest -RequestId $RestResponse.id
                     if ($RequestResponse.Status -eq "FINISHED") {
                         foreach ($resource in $RequestResponse.Resources) {
                             $Record = Invoke-vRARestMethod -URI "$resource" -Method GET
@@ -101,22 +101,22 @@
                 if ($elapsedTime -gt $CompletionTimeout -or $elapsedTime -eq $CompletionTimeout) {
                     # we have errored out
                     [PSCustomObject]@{
-                        Name = $Response.name
-                        Progress = $Response.progress
-                        Resources = $Response.resources
-                        RequestId = $Response.id
-                        Message = "We waited for completion, but we hit a timeout at $CompletionTimeout seconds. You may use Get-vRARequest -RequestId $($Response.id) to continue checking status. Here was the original response: $($Response.message)"
-                        RequestStatus = $Response.status
+                        Name = $RestResponse.name
+                        Progress = $RestResponse.progress
+                        Resources = $RestResponse.resources
+                        RequestId = $RestResponse.id
+                        Message = "We waited for completion, but we hit a timeout at $CompletionTimeout seconds. You may use Get-vRARequest -RequestId $($RestResponse.id) to continue checking status. Here was the original response: $($RestResponse.message)"
+                        RequestStatus = $RestResponse.status
                     }
                 }
             } else {
                 [PSCustomObject]@{
-                    Name = $Response.name
-                    Progress = $Response.progress
-                    Resources = $Response.resources
-                    RequestId = $Response.id
-                    Message = $Response.message
-                    RequestStatus = $Response.status
+                    Name = $RestResponse.name
+                    Progress = $RestResponse.progress
+                    Resources = $RestResponse.resources
+                    RequestId = $RestResponse.id
+                    Message = $RestResponse.message
+                    RequestStatus = $RestResponse.status
                 }
             }
         }
@@ -132,8 +132,8 @@
 
                         foreach ($machineId in $Id) {
                             if ($Force -or $PsCmdlet.ShouldProcess($machineId)) {
-                                $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/shutdown" -Method POST
-                                CalculateOutput
+                                $RestResponse = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/shutdown" -Method POST
+                                CalculateOutput $CompletionTimeout $WaitForCompletion $RestResponse
                             }
                         }
                         break
@@ -147,8 +147,8 @@
                                 $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machine'`&`$select=id" -Method GET
                                 $machineId = $machineResponse.content[0].Id
 
-                                $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/shutdown" -Method POST
-                                CalculateOutput
+                                $RestResponse = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/shutdown" -Method POST
+                                CalculateOutput $CompletionTimeout $WaitForCompletion $RestResponse
                             }
                         }
                         break

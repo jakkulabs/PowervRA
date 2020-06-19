@@ -44,7 +44,7 @@
     begin {
         $APIUrl = '/iaas/zones'
 
-        function CalculateOutput {
+        function CalculateOutput([PSCustomObject]$CloudZone) {
 
             [PSCustomObject] @{
 
@@ -79,7 +79,7 @@
 
                         foreach ($CloudZone in $Response.content) {
 
-                            CalculateOutput
+                            CalculateOutput $CloudZone
                         }
                     }
 
@@ -95,7 +95,7 @@
 
                         foreach ($CloudZone in $Response.content){
 
-                            CalculateOutput
+                            CalculateOutput $CloudZone
                         }
                     }
 
@@ -109,7 +109,7 @@
 
                     foreach ($CloudZone in $Response.content){
 
-                        CalculateOutput
+                        CalculateOutput $CloudZone
                     }
                 }
             }
