@@ -104,7 +104,7 @@
     )
 
     begin {
-        if ($PSBoundParameters.ContainsKey("CreateDefaultZones")) {
+        if ($CreateDefaultZones.IsPresent) {
 
             $CreateDefaultZonesStatus = 'true'
         }

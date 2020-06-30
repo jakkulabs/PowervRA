@@ -75,7 +75,7 @@
 
                         $OnboardingDeployment= Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
-                        CalculateOutput($OnboardingDeployment)
+                        CalculateOutput $OnboardingDeployment
                     }
 
                     break
@@ -98,7 +98,7 @@
                             if ($OnboardingDeployment.name -eq $OnboardingDeploymentName){
 
                                 $MatchedOnboardingDeployment = $true
-                                CalculateOutput($OnboardingDeployment)
+                                CalculateOutput $OnboardingDeployment
                             }
                         }
 
@@ -121,7 +121,7 @@
 
                         $OnboardingDeployment = $Response.documents.$document
 
-                        CalculateOutput($OnboardingDeployment)
+                        CalculateOutput $OnboardingDeployment
                     }
                 }
             }

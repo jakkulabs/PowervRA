@@ -34,19 +34,19 @@
     System.Management.Automation.PSObject.
 
     .EXAMPLE
-    New-vRAMachineAttachedDisk -Id 'b1dd48e71d74267559bb930934470' -blockDeviceId '123456'
+    New-vRAMachineAttachedDisk -Id 'b1dd48e71d74267559bb930934470' -BlockDeviceId'123456'
 
     .EXAMPLE
-    New-vRAMachineAttachedDisk -Name 'iaas01' -blockDeviceId '123456'
+    New-vRAMachineAttachedDisk -Name 'iaas01' -BlockDeviceId'123456'
 
     .EXAMPLE
-    New-vRAMachineAttachedDisk -Name 'iaas01' -blockDeviceId '123456' -WaitForCompletion
+    New-vRAMachineAttachedDisk -Name 'iaas01' -BlockDeviceId'123456' -WaitForCompletion
 
     .EXAMPLE
-    New-vRAMachineAttachedDisk -Name 'iaas01' -blockDeviceId '123456' -WaitForCompletion -CompletionTimeout 300
+    New-vRAMachineAttachedDisk -Name 'iaas01' -BlockDeviceId'123456' -WaitForCompletion -CompletionTimeout 300
 
     .EXAMPLE
-    New-vRAMachineAttachedDisk -Name 'iaas01' -blockDeviceId '123456' -DeviceName 'Disk 17' -DeviceDescription 'This is a disk attached from script'
+    New-vRAMachineAttachedDisk -Name 'iaas01' -BlockDeviceId'123456' -DeviceName 'Disk 17' -DeviceDescription 'This is a disk attached from script'
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High",DefaultParameterSetName="ByName")][OutputType('System.Management.Automation.PSObject')]
@@ -92,7 +92,7 @@
 
         function CalculateOutput([String[]]$blockDeviceId,[int]$CompletionTimeout,[switch]$WaitForCompletion,[PSCustomObject]$RestResponse) {
 
-            if ($WaitForCompletion) {
+            if ($WaitForCompletion.IsPresent) {
                 # if the wait for completion flag is given, the output will be different, we will wait here
                 # we will use the built-in function to check status
                 $elapsedTime = 0
@@ -169,11 +169,11 @@
 
                 # --- Get Machine by its id
                 'ById' {
-                    if ($Force -or $PsCmdlet.ShouldProcess($Id)){
+                    if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($Id)){
                         # --- Check to see if the DiskId's were optionally present
                         $RestResponse = Invoke-vRARestMethod -URI "$APIUrl`/$Id`/disks" -Method GET -Body $Body
 
-                        CalculateOutput $blockDeviceId $CompletionTimeout $WaitForCompletion $RestResponse
+                        CalculateOutput $BlockDeviceId$CompletionTimeout $WaitForCompletion $RestResponse
                     }
                     break
                 }
@@ -181,13 +181,13 @@
                 # --- Get Machine by its name
                 # --- Will need to retrieve the machine first, then use ID to get final output
                 'ByName' {
-                    if ($Force -or $PsCmdlet.ShouldProcess($Name)){
+                    if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($Name)){
                         $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$Name'`&`$select=id" -Method GET
                         $machineId = $machineResponse.content[0].id
 
                         $RestResponse = Invoke-vRARestMethod -URI "$APIUrl`/$machineId`/disks" -Method POST -Body $Body
 
-                        CalculateOutput $blockDeviceId $CompletionTimeout $WaitForCompletion $RestResponse
+                        CalculateOutput $BlockDeviceId$CompletionTimeout $WaitForCompletion $RestResponse
                     }
                     break
                 }

@@ -142,7 +142,7 @@
 
         $APIUrl = "/iaas/api/cloud-accounts-vsphere"
 
-        if ($PSBoundParameters.ContainsKey("CreateDefaultZones")) {
+        if ($CreateDefaultZones.IsPresent) {
 
             $CreateDefaultZonesStatus = 'true'
         }
@@ -151,7 +151,7 @@
             $CreateDefaultZonesStatus = 'false'
         }
 
-        if ($PSBoundParameters.ContainsKey("AcceptSelfSignedCertificate")) {
+        if ($AcceptSelfSignedCertificate.IsPresent) {
 
             $AcceptSelfSignedCertificateStatus = 'true'
         }

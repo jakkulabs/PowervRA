@@ -61,7 +61,7 @@
 
         function CalculateOutput([PSCustomObject]$CloudAccount, [String]$Type) {
 
-            if ($Type -ne $nulls){
+            if ($null -ne $Type){
 
                 $CloudAccountType = $Type
             }

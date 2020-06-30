@@ -78,7 +78,7 @@
                         $URI = "$($APIUrl)/$($OnboardingResourceId)"
                         $OnboardingResource= Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
-                        CalculateOutput($OnboardingResource)
+                        CalculateOutput $OnboardingResource
                     }
 
                     break
@@ -100,7 +100,7 @@
                             if ($OnboardingResource.resourceName -eq $OnboardingResourceName){
 
                                 $MatchedOnboardingResource = $true
-                                CalculateOutput($OnboardingResource)
+                                CalculateOutput $OnboardingResource
                             }
                         }
 
@@ -122,7 +122,7 @@
 
                         $OnboardingResource = $Response.documents.$document
 
-                        CalculateOutput($OnboardingResource)
+                        CalculateOutput $OnboardingResource
                     }
                 }
             }

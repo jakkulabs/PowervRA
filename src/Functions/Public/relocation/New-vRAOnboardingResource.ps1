@@ -141,7 +141,7 @@
                 $URI = "/relocation/onboarding/resource"
                 $OnboardingResource = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference
 
-                CalculateOutput($OnboardingResource)
+                CalculateOutput $OnboardingResource
             }
         }
         catch [Exception] {

@@ -67,7 +67,7 @@ function Get-vRARegionEnumerationvSphere {
 
         $APIUrl = "/iaas/api/cloud-accounts-vsphere/region-enumeration"
 
-        if ($PSBoundParameters.ContainsKey("AcceptSelfSignedCertificate")) {
+        if ($AcceptSelfSignedCertificate.IsPresent) {
 
             $AcceptSelfSignedCertificateStatus = 'true'
         }

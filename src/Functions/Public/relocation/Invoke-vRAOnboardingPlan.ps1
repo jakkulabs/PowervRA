@@ -107,7 +107,7 @@
 "@
                             $ExecuteOnboardingPlan= Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference
 
-                            CalculateOutput($ExecuteOnboardingPlan)
+                            CalculateOutput $ExecuteOnboardingPlan
                         }
                     }
 
@@ -128,7 +128,7 @@
 "@
                             $ExecuteOnboardingPlan= Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference
 
-                            CalculateOutput($ExecuteOnboardingPlan)
+                            CalculateOutput $ExecuteOnboardingPlan
                         }
                     }
                 }
@@ -146,7 +146,7 @@
 "@
                             $ExecuteOnboardingPlan= Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference
 
-                            CalculateOutput($ExecuteOnboardingPlan)
+                            CalculateOutput $ExecuteOnboardingPlan
                         }
                     }
                 }
@@ -161,7 +161,7 @@
 
                         $ExecuteOnboardingPlan= Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference
 
-                        CalculateOutput($ExecuteOnboardingPlan)
+                        CalculateOutput $ExecuteOnboardingPlan
                     }
                 }
             }

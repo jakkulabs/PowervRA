@@ -85,7 +85,7 @@
 
                         $OnboardingPlan= Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
-                        CalculateOutput($OnboardingPlan)
+                        CalculateOutput $OnboardingPlan
                     }
 
                     break
@@ -108,7 +108,7 @@
                             if ($OnboardingPlan.name -eq $OnboardingPlanName){
 
                                 $MatchedOnboardingPlan = $true
-                                CalculateOutput($OnboardingPlan)
+                                CalculateOutput $OnboardingPlan
                             }
                         }
 
@@ -131,7 +131,7 @@
 
                         $OnboardingPlan = $Response.documents.$document
 
-                        CalculateOutput($OnboardingPlan)
+                        CalculateOutput $OnboardingPlan
                     }
                 }
             }

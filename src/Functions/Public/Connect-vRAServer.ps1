@@ -88,7 +88,7 @@
         # --- Handle untrusted certificates if necessary
         $SignedCertificates = $true
 
-        if ($PSBoundParameters.ContainsKey("IgnoreCertRequirements") ){
+        if ($IgnoreCertRequirements.IsPresent){
 
             if (!$IsCoreCLR) {
 

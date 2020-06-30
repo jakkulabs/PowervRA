@@ -75,7 +75,7 @@
 
                         $ExecuteOnboardingPlan = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
-                        CalculateOutput($ExecuteOnboardingPlan)
+                        CalculateOutput $ExecuteOnboardingPlan
                     }
 
                     break
@@ -87,7 +87,7 @@
 
                         $ExecuteOnboardingPlan = Invoke-vRARestMethod -Method GET -URI $OnboardingPlanExecutionLink -Verbose:$VerbosePreference
 
-                        CalculateOutput($ExecuteOnboardingPlan)
+                        CalculateOutput $ExecuteOnboardingPlan
                     }
 
                     break

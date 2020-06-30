@@ -138,7 +138,7 @@
     try {
 
         # --- Use either Invoke-WebRequest or Invoke-RestMethod
-        if ($PSBoundParameters.ContainsKey("WebRequest")) {
+        if ($WebRequest.IsPresent) {
 
             Invoke-WebRequest @Params
         }

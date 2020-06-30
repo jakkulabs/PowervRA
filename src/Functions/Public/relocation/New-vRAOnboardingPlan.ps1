@@ -112,7 +112,7 @@
                 $URI = "/relocation/onboarding/plan"
                 $OnboardingPlan = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference
 
-                CalculateOutput($OnboardingPlan)
+                CalculateOutput $OnboardingPlan
             }
         }
         catch [Exception] {

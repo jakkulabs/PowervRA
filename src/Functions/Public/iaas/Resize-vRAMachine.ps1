@@ -98,7 +98,7 @@
         $APIUrl = "/iaas/api/machines"
 
         function CalculateOutput([int]$CompletionTimeout,[switch]$WaitForCompletion,[PSCustomObject]$RestResponse) {
-            if ($WaitForCompletion) {
+            if ($WaitForCompletion.IsPresent) {
                 # if the wait for completion flag is given, the output will be different, we will wait here
                 # we will use the built-in function to check status
                 $elapsedTime = 0
@@ -163,7 +163,7 @@
                     'ResizeFlavorById' {
 
                         foreach ($machineId in $Id) {
-                            if ($Force -or $PsCmdlet.ShouldProcess($machineId)) {
+                            if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($machineId)) {
                                 $RestResponse = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/resize?name=$Flavor" -Method POST
                                 CalculateOutput $CompletionTimeout $WaitForCompletion $RestResponse
                             }
@@ -175,7 +175,7 @@
                     'ResizeFlavorByName' {
 
                         foreach ($machine in $Name) {
-                            if ($Force -or $PsCmdlet.ShouldProcess($machine)) {
+                            if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($machine)) {
                             $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machine'`&`$select=id" -Method GET
                             $machineId = $machineResponse.content[0].Id
 
@@ -190,7 +190,7 @@
                     'ResizeById' {
 
                         foreach ($machineId in $Id) {
-                            if ($Force -or $PsCmdlet.ShouldProcess($machineId)) {
+                            if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($machineId)) {
                                 $RestResponse = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/resize?memoryInMB=$Memory`&cpuCount=$CPU" -Method POST
                                 CalculateOutput $CompletionTimeout $WaitForCompletion $RestResponse
                             }
@@ -202,7 +202,7 @@
                     'ResizeByName' {
 
                         foreach ($machine in $Name) {
-                            if ($Force -or $PsCmdlet.ShouldProcess($machine)) {
+                            if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($machine)) {
                                 $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machine'`&`$select=id" -Method GET
                                 $machineId = $machineResponse.content[0].Id
 

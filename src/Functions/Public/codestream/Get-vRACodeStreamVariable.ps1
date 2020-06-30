@@ -76,7 +76,7 @@
                 'ById' {
                     foreach ($variableId in $Id) {
                         $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=id eq '$variableId'" -Method GET
-                        CalculateOutput($Response)
+                        CalculateOutput $Response
                     }
 
                     break
@@ -86,7 +86,7 @@
                 'ByName' {
                     foreach ($variableName in $Variable) {
                         $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$variableName'" -Method GET
-                        CalculateOutput($Response)
+                        CalculateOutput $Response
                     }
 
                     break
@@ -96,7 +96,7 @@
                 'ByProject' {
                     foreach ($projectName in $Project) {
                         $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=project eq '$projectName'" -Method GET
-                        CalculateOutput($Response)
+                        CalculateOutput $Response
                     }
 
                     break
@@ -105,7 +105,7 @@
                 # --- No parameters passed so return all Variables
                 'Standard' {
                     $Response = Invoke-vRARestMethod -URI $APIUrl -Method GET
-                    CalculateOutput($Response)
+                    CalculateOutput $Response
                 }
 
             }

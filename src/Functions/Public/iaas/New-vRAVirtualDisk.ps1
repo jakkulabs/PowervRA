@@ -105,7 +105,7 @@ function New-vRAVirtualDisk {
 
             function CalculateOutput([int]$CompletionTimeout,[switch]$WaitForCompletion,[PSCustomObject]$RestResponse) {
 
-                if ($WaitForCompletion) {
+                if ($WaitForCompletion.IsPresent) {
                     # if the wait for completion flag is given, the output will be different, we will wait here
                     # we will use the built-in function to check status
                     $elapsedTime = 0
@@ -159,14 +159,14 @@ function New-vRAVirtualDisk {
 
                     # --- Get Machine by its id
                     'ById' {
-                        if ($Force -or $PsCmdlet.ShouldProcess($ProjectId)){
+                        if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($ProjectId)){
                             $Body = @"
                                 {
                                     "capacityInGB": $($CapacityInGB),
-                                    "encrypted": $($Encrypted),
+                                    "encrypted": $($Encrypted.IsPresent),
                                     "name": "$($Name)",
                                     "description": "$($DeviceDescription)",
-                                    "persistent": $($Persistent),
+                                    "persistent": $($Persistent.IsPresent),
                                     "projectId": "$($ProjectId)"
                                 }
 "@
@@ -181,17 +181,17 @@ function New-vRAVirtualDisk {
                     # --- Get Machine by its name
                     # --- Will need to retrieve the machine first, then use ID to get final output
                     'ByName' {
-                        if ($Force -or $PsCmdlet.ShouldProcess($ProjectName)){
+                        if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($ProjectName)){
                             $projResponse = Invoke-vRARestMethod -URI "/iaas/api/projects`?`$filter=name eq '$ProjectName'`&`$select=id" -Method GET
                             $projId = $projResponse.content[0].id
 
                             $Body = @"
                                 {
                                     "capacityInGB": $($CapacityInGB),
-                                    "encrypted": $($Encrypted),
+                                    "encrypted": $($Encrypted.IsPresent),
                                     "name": "$($Name)",
                                     "description": "$($DeviceDescription)",
-                                    "persistent": $($Persistent),
+                                    "persistent": $($Persistent.IsPresent),
                                     "projectId": "$($projId)"
                                 }
 "@

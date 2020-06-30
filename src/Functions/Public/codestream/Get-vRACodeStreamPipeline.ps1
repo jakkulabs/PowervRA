@@ -75,7 +75,7 @@
                 'ById' {
                     foreach ($pipelineId in $Id) {
                         $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=id eq '$pipelineId'" -Method GET
-                        CalculateOutput($Response)
+                        CalculateOutput $Response
                     }
 
                     break
@@ -85,7 +85,7 @@
                 'ByName' {
                     foreach ($pipelineName in $Pipeline) {
                         $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$pipelineName'" -Method GET
-                        CalculateOutput($Response)
+                        CalculateOutput $Response
                     }
 
                     break
@@ -95,7 +95,7 @@
                 'ByProject' {
                     foreach ($projectName in $Project) {
                         $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=project eq '$projectName'" -Method GET
-                        CalculateOutput($Response)
+                        CalculateOutput $Response
                     }
 
                     break
@@ -104,7 +104,7 @@
                 # --- No parameters passed so return all Pipelines
                 'Standard' {
                     $Response = Invoke-vRARestMethod -URI $APIUrl -Method GET
-                    CalculateOutput($Response)
+                    CalculateOutput $Response
                 }
 
             }
