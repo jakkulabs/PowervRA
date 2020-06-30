@@ -173,7 +173,7 @@
                         # --- Check to see if the DiskId's were optionally present
                         $RestResponse = Invoke-vRARestMethod -URI "$APIUrl`/$Id`/disks" -Method GET -Body $Body
 
-                        CalculateOutput $BlockDeviceId$CompletionTimeout $WaitForCompletion $RestResponse
+                        CalculateOutput $BlockDeviceId $CompletionTimeout $WaitForCompletion $RestResponse
                     }
                     break
                 }
@@ -187,7 +187,7 @@
 
                         $RestResponse = Invoke-vRARestMethod -URI "$APIUrl`/$machineId`/disks" -Method POST -Body $Body
 
-                        CalculateOutput $BlockDeviceId$CompletionTimeout $WaitForCompletion $RestResponse
+                        CalculateOutput $BlockDeviceId $CompletionTimeout $WaitForCompletion $RestResponse
                     }
                     break
                 }
