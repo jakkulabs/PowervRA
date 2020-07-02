@@ -62,7 +62,7 @@ Aliases:
 
 Required: False
 Position: 2
-Default value: $Global:vRAConnection.Tenant
+Default value: $Script:vRAConnection.Tenant
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

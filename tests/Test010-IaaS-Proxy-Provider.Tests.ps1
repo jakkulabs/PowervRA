@@ -10,7 +10,7 @@ Describe -Name 'Iaas-Proxy-Provider Tests' -Fixture {
 
     Context -Name 'Network Profile' -Fixture {
 
-        $APIVersion = [version]$Global:vRAConnection.APIVersion
+        $APIVersion = [version]$Script:vRAConnection.APIVersion
         $RequiredVersion = [version]"7.1"
 
         if ($APIVersion -lt $RequiredVersion) {
