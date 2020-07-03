@@ -221,7 +221,7 @@
             }
 
             # --- Create Output Object
-            $Global:vRAConnection = [PSCustomObject] @{
+            $Script:vRAConnection = [PSCustomObject] @{
 
                 Server = "https://$($Server)"
                 Token = $token
@@ -232,7 +232,7 @@
             }
 
             # --- Update vRAConnection with API version
-            $Global:vRAConnection.APIVersion = (Get-vRAAPIVersion).APIVersion
+            $Script:vRAConnection.APIVersion = (Get-vRAAPIVersion).APIVersion
 
         }
         catch [Exception]{
