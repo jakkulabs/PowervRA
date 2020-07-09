@@ -214,3 +214,7 @@ function New-vRAVirtualDisk {
 
         }
     }
+
+    New-Alias -Name New-vRABlockDevice -Value New-vRAVirtualDisk
+    Export-ModuleMember -Alias * -Function *
+
