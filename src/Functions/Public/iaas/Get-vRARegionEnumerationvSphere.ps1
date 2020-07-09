@@ -47,7 +47,7 @@ function Get-vRARegionEnumerationvSphere {
 
         [Parameter(Mandatory = $true, ParameterSetName = "Username")]
         [ValidateNotNullOrEmpty()]
-        [String]$username,
+        [String]$Username,
 
         [Parameter(Mandatory = $true, ParameterSetName = "Username")]
         [ValidateNotNullOrEmpty()]
@@ -99,7 +99,7 @@ function Get-vRARegionEnumerationvSphere {
                 "hostName": "$($HostName)",
                 "acceptSelfSignedCertificate": $($AcceptSelfSignedCertificateStatus),
                 "password": "$($JSONPassword)",
-                "username": "$($username)"
+                "username": "$($Username)"
             }
 "@
 

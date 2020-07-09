@@ -66,7 +66,7 @@
         [Parameter(Mandatory=$true,ParameterSetName="ByName")]
         [Parameter(Mandatory=$true,ParameterSetName="ById")]
         [ValidateNotNullOrEmpty()]
-        [String[]]$blockDeviceId,
+        [String[]]$BlockDeviceId,
 
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
@@ -90,17 +90,17 @@
 
         $APIUrl = "/iaas/api/machines"
 
-        function CalculateOutput([String[]]$blockDeviceId,[int]$CompletionTimeout,[switch]$WaitForCompletion,[PSCustomObject]$RestResponse) {
+        function CalculateOutput([String[]]$BlockDeviceId,[int]$CompletionTimeout,[switch]$WaitForCompletion,[PSCustomObject]$RestResponse) {
 
             if ($WaitForCompletion.IsPresent) {
                 # if the wait for completion flag is given, the output will be different, we will wait here
                 # we will use the built-in function to check status
-                $elapsedTime = 0
+                $ElapsedTime = 0
                     do {
                         $RequestResponse = Get-vRARequest -RequestId $RestResponse.id
                         if ($RequestResponse.Status -eq "FINISHED") {
-                            foreach ($resource in $RequestResponse.Resources) {
-                                $Response = Invoke-vRARestMethod -URI "$resource/disks/$blockDeviceId" -Method GET
+                            foreach ($Resource in $RequestResponse.Resources) {
+                                $Response = Invoke-vRARestMethod -URI "$Resource/disks/$BlockDeviceId" -Method GET
                                 [PSCustomObject]@{
                                     Name = $Response.name
                                     Status = $Response.status
@@ -125,11 +125,11 @@
                             }
                             break # leave loop as we are done here
                         }
-                        $elapsedTime += 5
+                        $ElapsedTime += 5
                         Start-Sleep -Seconds 5
-                    } while ($elapsedTime -lt $CompletionTimeout)
+                    } while ($ElapsedTime -lt $CompletionTimeout)
 
-                    if ($elapsedTime -gt $CompletionTimeout -or $elapsedTime -eq $CompletionTimeout) {
+                    if ($ElapsedTime -gt $CompletionTimeout -or $ElapsedTime -eq $CompletionTimeout) {
                         # we have errored out
                         [PSCustomObject]@{
                             Name = $RestResponse.name
@@ -158,7 +158,7 @@
 
             $Body = @"
                 {
-                    "blockDeviceId": "$($blockDeviceId)",
+                    "blockDeviceId": "$($BlockDeviceId)",
                     "name": "$($DeviceName)",
                     "description": "$($DeviceDescription)"
                 }
@@ -182,10 +182,10 @@
                 # --- Will need to retrieve the machine first, then use ID to get final output
                 'ByName' {
                     if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($Name)){
-                        $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$Name'`&`$select=id" -Method GET
-                        $machineId = $machineResponse.content[0].id
+                        $MachineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$Name'`&`$select=id" -Method GET
+                        $MachineId = $MachineResponse.content[0].id
 
-                        $RestResponse = Invoke-vRARestMethod -URI "$APIUrl`/$machineId`/disks" -Method POST -Body $Body
+                        $RestResponse = Invoke-vRARestMethod -URI "$APIUrl`/$MachineId`/disks" -Method POST -Body $Body
 
                         CalculateOutput $BlockDeviceId $CompletionTimeout $WaitForCompletion $RestResponse
                     }

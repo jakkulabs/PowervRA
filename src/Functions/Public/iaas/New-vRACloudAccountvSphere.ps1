@@ -99,7 +99,7 @@
 
         [Parameter(Mandatory = $true, ParameterSetName = "Username")]
         [ValidateNotNullOrEmpty()]
-        [String]$username,
+        [String]$Username,
 
         [Parameter(Mandatory = $true, ParameterSetName = "Username")]
         [ValidateNotNullOrEmpty()]
@@ -217,7 +217,7 @@
                         $RegionIDs = Get-vRARegionEnumerationvSphere -HostName $HostName  -Credential $Credential -AcceptSelfSignedCertificate:$($AcceptSelfSignedCertificate)
                     } else {
                         # assume username and password
-                        $RegionIDs = Get-vRARegionEnumerationvSphere -HostName $HostName  -username $username -Password $Password -AcceptSelfSignedCertificate:$($AcceptSelfSignedCertificate)
+                        $RegionIDs = Get-vRARegionEnumerationvSphere -HostName $HostName  -Username $Username -Password $Password -AcceptSelfSignedCertificate:$($AcceptSelfSignedCertificate)
                     }
                 }
 
@@ -236,7 +236,7 @@
                                 "name": "$($Name)",
                                 "description": "$($Description)",
                                 "regionIds": [ $($RegionIdsFormatForBodyText) ],
-                                "username": "$($username)"
+                                "username": "$($Username)"
                             }
 "@
             }

@@ -52,8 +52,8 @@
 
         $APIUrl = "/pipeline/api/pipelines"
 
-        function CalculateOutput($responseObject) {
-            foreach ($Record in $responseObject.documents.PsObject.Properties) {
+        function CalculateOutput($ResponseObject) {
+            foreach ($Record in $ResponseObject.documents.PsObject.Properties) {
                 [PSCustomObject]@{
                     Name = $Record.value.name
                     Project = $Record.value.project
@@ -73,8 +73,8 @@
 
                 # --- Get Pipeline by its id
                 'ById' {
-                    foreach ($pipelineId in $Id) {
-                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=id eq '$pipelineId'" -Method GET
+                    foreach ($PipelineId in $Id) {
+                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=id eq '$PipelineId'" -Method GET
                         CalculateOutput $Response
                     }
 
@@ -83,8 +83,8 @@
 
                 # --- Get Pipeline by its pipeline name
                 'ByName' {
-                    foreach ($pipelineName in $Pipeline) {
-                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$pipelineName'" -Method GET
+                    foreach ($PipelineName in $Pipeline) {
+                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$PipelineName'" -Method GET
                         CalculateOutput $Response
                     }
 
@@ -93,14 +93,14 @@
 
                 # --- Get Pipeline by its project name
                 'ByProject' {
-                    foreach ($projectName in $Project) {
-                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=project eq '$projectName'" -Method GET
+                    foreach ($ProjectName in $Project) {
+                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=project eq '$ProjectName'" -Method GET
                         CalculateOutput $Response
                     }
 
                     break
                 }
-                
+
                 # --- No parameters passed so return all Pipelines
                 'Standard' {
                     $Response = Invoke-vRARestMethod -URI $APIUrl -Method GET

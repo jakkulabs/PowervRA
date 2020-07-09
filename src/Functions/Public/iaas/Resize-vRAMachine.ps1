@@ -101,12 +101,12 @@
             if ($WaitForCompletion.IsPresent) {
                 # if the wait for completion flag is given, the output will be different, we will wait here
                 # we will use the built-in function to check status
-                $elapsedTime = 0
+                $ElapsedTime = 0
                 do {
                     $RequestResponse = Get-vRARequest -RequestId $RestResponse.id
                     if ($RequestResponse.Status -eq "FINISHED") {
-                        foreach ($resource in $RequestResponse.Resources) {
-                            $Record = Invoke-vRARestMethod -URI "$resource" -Method GET
+                        foreach ($Resource in $RequestResponse.Resources) {
+                            $Record = Invoke-vRARestMethod -URI "$Resource" -Method GET
                             [PSCustomObject]@{
                                 Name = $Record.name
                                 PowerState = $Record.powerState
@@ -125,11 +125,11 @@
                         }
                         break # leave loop as we are done here
                     }
-                    $elapsedTime += 5
+                    $ElapsedTime += 5
                     Start-Sleep -Seconds 5
-                } while ($elapsedTime -lt $CompletionTimeout)
+                } while ($ElapsedTime -lt $CompletionTimeout)
 
-                if ($elapsedTime -gt $CompletionTimeout -or $elapsedTime -eq $CompletionTimeout) {
+                if ($ElapsedTime -gt $CompletionTimeout -or $ElapsedTime -eq $CompletionTimeout) {
                     # we have errored out
                     [PSCustomObject]@{
                         Name = $RestResponse.name
@@ -162,9 +162,9 @@
                     # --- Resize by Flavor, do not need cpu and memory
                     'ResizeFlavorById' {
 
-                        foreach ($machineId in $Id) {
-                            if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($machineId)) {
-                                $RestResponse = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/resize?name=$Flavor" -Method POST
+                        foreach ($MachineId in $Id) {
+                            if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($MachineId)) {
+                                $RestResponse = Invoke-vRARestMethod -URI "$APIUrl`/$MachineId/operations/resize?name=$Flavor" -Method POST
                                 CalculateOutput $CompletionTimeout $WaitForCompletion $RestResponse
                             }
                         }
@@ -174,12 +174,12 @@
                     # --- Resize by Flavor, do not need cpu and memory
                     'ResizeFlavorByName' {
 
-                        foreach ($machine in $Name) {
-                            if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($machine)) {
-                            $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machine'`&`$select=id" -Method GET
-                            $machineId = $machineResponse.content[0].Id
+                        foreach ($Machine in $Name) {
+                            if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($Machine)) {
+                            $MachineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$Machine'`&`$select=id" -Method GET
+                            $MachineId = $MachineResponse.content[0].Id
 
-                            $RestResponse = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/resize?name=$Flavor" -Method POST
+                            $RestResponse = Invoke-vRARestMethod -URI "$APIUrl`/$MachineId/operations/resize?name=$Flavor" -Method POST
                             CalculateOutput $CompletionTimeout $WaitForCompletion $RestResponse
                             }
                         }
@@ -189,9 +189,9 @@
                     # --- Resize with cpu and memory for given machine by its id
                     'ResizeById' {
 
-                        foreach ($machineId in $Id) {
-                            if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($machineId)) {
-                                $RestResponse = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/resize?memoryInMB=$Memory`&cpuCount=$CPU" -Method POST
+                        foreach ($MachineId in $Id) {
+                            if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($MachineId)) {
+                                $RestResponse = Invoke-vRARestMethod -URI "$APIUrl`/$MachineId/operations/resize?memoryInMB=$Memory`&cpuCount=$CPU" -Method POST
                                 CalculateOutput $CompletionTimeout $WaitForCompletion $RestResponse
                             }
                         }
@@ -201,12 +201,12 @@
                     # --- Resize with cpu and memory for given machine by its name
                     'ResizeByName' {
 
-                        foreach ($machine in $Name) {
-                            if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($machine)) {
-                                $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machine'`&`$select=id" -Method GET
-                                $machineId = $machineResponse.content[0].Id
+                        foreach ($Machine in $Name) {
+                            if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($Machine)) {
+                                $MachineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$Machine'`&`$select=id" -Method GET
+                                $MachineId = $MachineResponse.content[0].Id
 
-                                $RestResponse = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/resize?memoryInMB=$Memory`&cpuCount=$CPU" -Method POST
+                                $RestResponse = Invoke-vRARestMethod -URI "$APIUrl`/$MachineId/operations/resize?memoryInMB=$Memory`&cpuCount=$CPU" -Method POST
                                 CalculateOutput $CompletionTimeout $WaitForCompletion $RestResponse
                             }
                         }

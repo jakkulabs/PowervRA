@@ -70,8 +70,8 @@
 
                 # --- Get Machine by its id
                 'ById' {
-                    foreach ($machineId in $Id) {
-                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=id eq '$machineId'" -Method GET
+                    foreach ($MachineId in $Id) {
+                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=id eq '$MachineId'" -Method GET
                         CalculateOutput $Response
                     }
 
@@ -80,8 +80,8 @@
 
                 # --- Get Machine by its name
                 'ByName' {
-                    foreach ($machineName in $Name) {
-                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machineName'" -Method GET
+                    foreach ($MachineName in $Name) {
+                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$MachineName'" -Method GET
                         CalculateOutput $Response
                     }
 

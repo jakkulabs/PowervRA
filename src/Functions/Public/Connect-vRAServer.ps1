@@ -198,21 +198,21 @@
             $Response = Invoke-RestMethod @Params
 
             if ('refresh_token' -in $Response.PSobject.Properties.Name) {
-                $token = $Response.access_token
-                $refreshToken = $Response.refresh_token
+                $Token = $Response.access_token
+                $RefreshToken = $Response.refresh_token
             }
 
             if ('token' -in $Response.PSobject.Properties.Name) {
-                $token = $Response.token
-                $refreshToken = $APIToken
+                $Token = $Response.token
+                $RefreshToken = $APIToken
             }
 
             # --- Create Output Object
             $Global:vRAConnection = [PSCustomObject] @{
 
                 Server = "https://$($Server)"
-                Token = $token
-                RefreshToken = $refreshToken
+                Token = $Token
+                RefreshToken = $RefreshToken
                 APIVersion = $Null
                 SignedCertificates = $SignedCertificates
                 SslProtocol = $SslProtocolResult

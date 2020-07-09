@@ -39,11 +39,11 @@ function Remove-vRACodeStreamVariable {
 
                 'ById' {
 
-                    foreach ($variableId in $Id) {
+                    foreach ($VariableId in $Id) {
 
-                        if ($PSCmdlet.ShouldProcess($variableId)){
+                        if ($PSCmdlet.ShouldProcess($VariableId)){
 
-                            $URI = "/pipeline/api/variables/$($variableId)"
+                            $URI = "/pipeline/api/variables/$($VariableId)"
 
                             Invoke-vRARestMethod -Method DELETE -URI "$($URI)" -Verbose:$VerbosePreference | Out-Null
                         }

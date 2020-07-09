@@ -108,12 +108,12 @@ function New-vRAVirtualDisk {
                 if ($WaitForCompletion.IsPresent) {
                     # if the wait for completion flag is given, the output will be different, we will wait here
                     # we will use the built-in function to check status
-                    $elapsedTime = 0
+                    $ElapsedTime = 0
                     do {
                         $RequestResponse = Get-vRARequest -RequestId $RestResponse.id
                         if ($RequestResponse.Status -eq "FINISHED") {
-                            foreach ($resource in $RequestResponse.Resources) {
-                                $Response = Invoke-vRARestMethod -URI "$resource" -Method GET
+                            foreach ($Resource in $RequestResponse.Resources) {
+                                $Response = Invoke-vRARestMethod -URI "$Resource" -Method GET
                                 [PSCustomObject]@{
                                     Name = $Response.name
                                     Status = $Response.status
@@ -136,9 +136,9 @@ function New-vRAVirtualDisk {
                             }
                             break # leave loop as we are done here
                         }
-                        $elapsedTime += 5
+                        $ElapsedTime += 5
                         Start-Sleep -Seconds 5
-                    } while ($elapsedTime -lt $CompletionTimeout)
+                    } while ($ElapsedTime -lt $CompletionTimeout)
                 } else {
                     [PSCustomObject]@{
                         Name = $RestResponse.name
@@ -182,8 +182,8 @@ function New-vRAVirtualDisk {
                     # --- Will need to retrieve the machine first, then use ID to get final output
                     'ByName' {
                         if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($ProjectName)){
-                            $projResponse = Invoke-vRARestMethod -URI "/iaas/api/projects`?`$filter=name eq '$ProjectName'`&`$select=id" -Method GET
-                            $projId = $projResponse.content[0].id
+                            $ProjResponse = Invoke-vRARestMethod -URI "/iaas/api/projects`?`$filter=name eq '$ProjectName'`&`$select=id" -Method GET
+                            $ProjId = $ProjResponse.content[0].id
 
                             $Body = @"
                                 {
@@ -192,7 +192,7 @@ function New-vRAVirtualDisk {
                                     "name": "$($Name)",
                                     "description": "$($DeviceDescription)",
                                     "persistent": $($Persistent.IsPresent),
-                                    "projectId": "$($projId)"
+                                    "projectId": "$($ProjId)"
                                 }
 "@
                             Write-Verbose $Body

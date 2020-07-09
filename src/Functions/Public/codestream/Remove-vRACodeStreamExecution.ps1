@@ -39,11 +39,11 @@ function Remove-vRACodeStreamExecution {
 
                 'ById' {
 
-                    foreach ($executionId in $Id) {
+                    foreach ($ExecutionId in $Id) {E
 
-                        if ($PSCmdlet.ShouldProcess($executionId)){
+                        if ($PSCmdlet.ShouldProcess($ExecutionId)){
 
-                            $URI = "/pipeline/api/executions/$($executionId)"
+                            $URI = "/pipeline/api/executions/$($ExecutionId)"
 
                             Invoke-vRARestMethod -Method DELETE -URI "$($URI)" -Verbose:$VerbosePreference | Out-Null
                         }
