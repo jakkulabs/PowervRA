@@ -142,9 +142,6 @@
                     refreshToken = $APIToken
                 } | ConvertTo-Json
             } else {
-                # -- Login with credentials
-                $URI = "https://$($Server)/csp/gateway/am/api/login?access_token"
-
                 # --- Convert Secure Credentials to a format for sending in the JSON payload
                 if ($PSBoundParameters.ContainsKey("Credential")){
 
@@ -163,11 +160,27 @@
                     throw "The Username format DOMAIN\Username is not supported by the vRA REST API. Please use username@domain instead"
                 }
 
-                # --- Create Invoke-RestMethod Parameters
-                $JSON = @{
-                    username = $Username
-                    password = $JSONPassword
-                } | ConvertTo-Json
+                # --- Logging in with a domain
+                if ($Username -match '@') {
+                    # Log in using the advanced authentication API
+                    $URI = "https://$($Server)/csp/gateway/am/idp/auth/login?access_token"
+                    $User = $Username.split('@')[0]
+                    $Domain = $Username.split('@')[1]
+                    $JSON = @{
+                        username = $User
+                        password = $JSONPassword
+                        domain = $Domain
+                    } | ConvertTo-Json
+                } else {
+                    # -- Login with the basic authentication API
+                    $URI = "https://$($Server)/csp/gateway/am/api/login?access_token"
+
+                    # --- Create Invoke-RestMethod Parameters
+                    $JSON = @{
+                        username = $Username
+                        password = $JSONPassword
+                    } | ConvertTo-Json
+                }
             }
 
 
@@ -208,7 +221,7 @@
             }
 
             # --- Create Output Object
-            $Global:vRAConnection = [PSCustomObject] @{
+            $Script:vRAConnection = [PSCustomObject] @{
 
                 Server = "https://$($Server)"
                 Token = $Token
@@ -219,7 +232,7 @@
             }
 
             # --- Update vRAConnection with API version
-            $Global:vRAConnection.APIVersion = (Get-vRAAPIVersion).APIVersion
+            $Script:vRAConnection.APIVersion = (Get-vRAAPIVersion).APIVersion
 
         }
         catch [Exception]{
