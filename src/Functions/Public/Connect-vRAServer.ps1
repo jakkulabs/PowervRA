@@ -12,9 +12,17 @@
         .PARAMETER Username
         Username to connect with
         For domain accounts ensure to specify the Username in the format username@domain, not Domain\Username
+        Note: UPN's are valid login Usernames as well and may also be in the format username@domain
 
         .PARAMETER Password
         Password to connect with
+
+        .PARAMETER Domain
+        Domain in which to connect with
+        If this is explicitly supplied then we can expect that an Advanced login is being performed
+
+        .PARAMETER LoginType
+        Provide the login type to use. Default is simple
 
         .PARAMETER Credential
         Credential object to connect with
@@ -41,11 +49,15 @@
 
         .EXAMPLE
         $cred = Get-Credential
-        Connect-vRAServer -Server vraappliance01.domain.local -Credential $cred
+        Connect-vRAServer -Server vraappliance01.domain.local -Credential $cred -LoginType Advanced
 
         .EXAMPLE
         $SecurePassword = ConvertTo-SecureString “P@ssword” -AsPlainText -Force
-        Connect-vRAServer -Server vraappliance01.domain.local -Username TenantAdmin01 -Password $SecurePassword -IgnoreCertRequirements
+        Connect-vRAServer -Server vraappliance01.domain.local -Username TenantAdmin01 -Password $SecurePassword -IgnoreCertRequirements -LoginType Simple
+
+        .EXAMPLE
+        $SecurePassword = ConvertTo-SecureString “P@ssword” -AsPlainText -Force
+        Connect-vRAServer -Server vraappliance01.domain.local -Username TenantAdmin01 -Password $SecurePassword -Domain My.Local -IgnoreCertRequirements -LoginType Advanced
 
         .EXAMPLE
         Connect-vRAServer -Server api.mgmt.cloud.vmware.com -APIToken 'CuIKrjQgI6htiyRgIyd0ZtQM91fqg6AQyQhwPFJYgzBsaIKxKcWHLAGk81kknulQ'
@@ -73,6 +85,10 @@
             [ValidateNotNullOrEmpty()]
             [Management.Automation.PSCredential]$Credential,
 
+            [Parameter(Mandatory=$false)]
+            [ValidateSet('Simple','Advanced')]
+            [String]$LoginType,
+
             [parameter(Mandatory=$true,ParameterSetName="APIToken")]
             [ValidateNotNullOrEmpty()]
             [String]$APIToken,
@@ -85,162 +101,175 @@
             [String]$SslProtocol
         )
 
-        # --- Handle untrusted certificates if necessary
-        $SignedCertificates = $true
+        # --- Dynamic parameter for Domain based on other inputs
+        DynamicParam {
+            if (($LoginType -eq 'Advanced') -and ($null -eq $Credential) -and ($Username -notmatch '@')) {
+                # User is attempting advanced login but has not supplied the domain in the username
+                New-DynamicParameter Domain [string] -Mandatory $true
+            } elseif (($LoginType -eq 'Advanced') -and ($null -eq $Credential) -and ($Username -match '@')) {
+                # User may be supplying the domain in the username, but we make this parameter optional
+                # If the user is providing a UPN and wants an advanced login, they will supply
+                New-DynamicParameter Domain [string] -Mandatory $false
+            }
+        }
 
-        if ($IgnoreCertRequirements.IsPresent){
+        Process {
+            # --- Handle untrusted certificates if necessary
+            $SignedCertificates = $true
 
-            if (!$IsCoreCLR) {
+            if ($IgnoreCertRequirements.IsPresent){
 
-                if ( -not ("TrustAllCertsPolicy" -as [type])) {
+                if (!$IsCoreCLR) {
 
-                    Add-Type @"
-                    using System.Net;
-                    using System.Security.Cryptography.X509Certificates;
-                    public class TrustAllCertsPolicy : ICertificatePolicy {
-                        public bool CheckValidationResult(
-                            ServicePoint srvPoint, X509Certificate certificate,
-                            WebRequest request, int certificateProblem) {
-                            return true;
+                    if ( -not ("TrustAllCertsPolicy" -as [type])) {
+
+                        Add-Type @"
+                        using System.Net;
+                        using System.Security.Cryptography.X509Certificates;
+                        public class TrustAllCertsPolicy : ICertificatePolicy {
+                            public bool CheckValidationResult(
+                                ServicePoint srvPoint, X509Certificate certificate,
+                                WebRequest request, int certificateProblem) {
+                                return true;
+                            }
                         }
-                    }
 "@
+                    }
+                    [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
+
                 }
-                [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
+
+                $SignedCertificates = $false
 
             }
 
-            $SignedCertificates = $false
+            # --- Security Protocol
+            $SslProtocolResult = 'Default'
 
-        }
+            if ($PSBoundParameters.ContainsKey("SslProtocol") ){
 
-        # --- Security Protocol
-        $SslProtocolResult = 'Default'
+                if (!$IsCoreCLR) {
 
-        if ($PSBoundParameters.ContainsKey("SslProtocol") ){
+                    $CurrentProtocols = ([System.Net.ServicePointManager]::SecurityProtocol).toString() -split ', '
+                    if (!($SslProtocol -in $CurrentProtocols)){
 
-            if (!$IsCoreCLR) {
-
-                $CurrentProtocols = ([System.Net.ServicePointManager]::SecurityProtocol).toString() -split ', '
-                if (!($SslProtocol -in $CurrentProtocols)){
-
-                    [System.Net.ServicePointManager]::SecurityProtocol += [System.Net.SecurityProtocolType]::$($SslProtocol)
+                        [System.Net.ServicePointManager]::SecurityProtocol += [System.Net.SecurityProtocolType]::$($SslProtocol)
+                    }
                 }
+                $SslProtocolResult = $SslProtocol
             }
-            $SslProtocolResult = $SslProtocol
-        }
 
-        try {
+            try {
 
-            # --- if a refresh token is supplied, we use iaas login
-            if ($PSBoundParameters.ContainsKey("APIToken")){
-                # -- iaas login with refresh token
-                $URI = "https://$($Server)/iaas/login"
-
-                # --- Create Invoke-RestMethod Parameters
-                $JSON = @{
-                    refreshToken = $APIToken
-                } | ConvertTo-Json
-            } else {
-                # --- Convert Secure Credentials to a format for sending in the JSON payload
-                if ($PSBoundParameters.ContainsKey("Credential")){
-
-                    $Username = $Credential.UserName
-                    $JSONPassword = $Credential.GetNetworkCredential().Password
-                }
-
-                if ($PSBoundParameters.ContainsKey("Password")){
-
-                    $JSONPassword = (New-Object System.Management.Automation.PSCredential("username", $Password)).GetNetworkCredential().Password
-                }
-
-                # --- Test for a '\' in the username, e.g. DOMAIN\Username, not supported by the API
-                if ($Username -match '\\'){
-
-                    throw "The Username format DOMAIN\Username is not supported by the vRA REST API. Please use username@domain instead"
-                }
-
-                # --- Logging in with a domain
-                if ($Username -match '@') {
-                    # Log in using the advanced authentication API
-                    $URI = "https://$($Server)/csp/gateway/am/idp/auth/login?access_token"
-                    $User = $Username.split('@')[0]
-                    $Domain = $Username.split('@')[1]
-                    $JSON = @{
-                        username = $User
-                        password = $JSONPassword
-                        domain = $Domain
-                    } | ConvertTo-Json
-                } else {
-                    # -- Login with the basic authentication API
-                    $URI = "https://$($Server)/csp/gateway/am/api/login?access_token"
+                # --- if a refresh token is supplied, we use iaas login
+                if ($PSBoundParameters.ContainsKey("APIToken")){
+                    # -- iaas login with refresh token
+                    $URI = "https://$($Server)/iaas/login"
 
                     # --- Create Invoke-RestMethod Parameters
                     $JSON = @{
-                        username = $Username
-                        password = $JSONPassword
+                        refreshToken = $APIToken
                     } | ConvertTo-Json
+                } else {
+                    # --- Convert Secure Credentials to a format for sending in the JSON payload
+                    if ($PSBoundParameters.ContainsKey("Credential")){
+
+                        $Username = $Credential.UserName
+                        $JSONPassword = $Credential.GetNetworkCredential().Password
+                    }
+
+                    if ($PSBoundParameters.ContainsKey("Password")){
+
+                        $JSONPassword = (New-Object System.Management.Automation.PSCredential("username", $Password)).GetNetworkCredential().Password
+                    }
+
+                    # --- Test for a '\' in the username, e.g. DOMAIN\Username, not supported by the API
+                    if ($Username -match '\\'){
+
+                        throw "The Username format DOMAIN\Username is not supported by the vRA REST API. Please use username@domain instead"
+                    }
+
+                    # --- Logging in with a domain
+                    if ($Username -match '@') {
+                        # Log in using the advanced authentication API
+                        $URI = "https://$($Server)/csp/gateway/am/idp/auth/login?access_token"
+                        $User = $Username.split('@')[0]
+                        $Domain = $Username.split('@')[1]
+                        $JSON = @{
+                            username = $User
+                            password = $JSONPassword
+                            domain = $Domain
+                        } | ConvertTo-Json
+                    } else {
+                        # -- Login with the basic authentication API
+                        $URI = "https://$($Server)/csp/gateway/am/api/login?access_token"
+
+                        # --- Create Invoke-RestMethod Parameters
+                        $JSON = @{
+                            username = $Username
+                            password = $JSONPassword
+                        } | ConvertTo-Json
+                    }
                 }
-            }
 
 
 
-            $Params = @{
+                $Params = @{
 
-                Method = "POST"
-                URI = $URI
-                Headers = @{
-                    "Accept"="application/json";
-                    "Content-Type" = "application/json";
+                    Method = "POST"
+                    URI = $URI
+                    Headers = @{
+                        "Accept"="application/json";
+                        "Content-Type" = "application/json";
+                    }
+                    Body = $JSON
                 }
-                Body = $JSON
+
+                if ((!$SignedCertificates) -and ($IsCoreCLR)) {
+
+                    $Params.Add("SkipCertificateCheck", $true)
+
+                }
+
+                if (($SslProtocolResult -ne 'Default') -and ($IsCoreCLR)) {
+
+                    $Params.Add("SslProtocol", $SslProtocol)
+
+                }
+
+                $Response = Invoke-RestMethod @Params
+
+                if ('refresh_token' -in $Response.PSobject.Properties.Name) {
+                    $Token = $Response.access_token
+                    $RefreshToken = $Response.refresh_token
+                }
+
+                if ('token' -in $Response.PSobject.Properties.Name) {
+                    $Token = $Response.token
+                    $RefreshToken = $APIToken
+                }
+
+                # --- Create Output Object
+                $Script:vRAConnection = [PSCustomObject] @{
+
+                    Server = "https://$($Server)"
+                    Token = $Token
+                    RefreshToken = $RefreshToken
+                    APIVersion = $Null
+                    SignedCertificates = $SignedCertificates
+                    SslProtocol = $SslProtocolResult
+                }
+
+                # --- Update vRAConnection with API version
+                $Script:vRAConnection.APIVersion = (Get-vRAAPIVersion).APIVersion
+
+            }
+            catch [Exception]{
+
+                throw
+
             }
 
-            if ((!$SignedCertificates) -and ($IsCoreCLR)) {
-
-                $Params.Add("SkipCertificateCheck", $true)
-
-            }
-
-            if (($SslProtocolResult -ne 'Default') -and ($IsCoreCLR)) {
-
-                $Params.Add("SslProtocol", $SslProtocol)
-
-            }
-
-            $Response = Invoke-RestMethod @Params
-
-            if ('refresh_token' -in $Response.PSobject.Properties.Name) {
-                $Token = $Response.access_token
-                $RefreshToken = $Response.refresh_token
-            }
-
-            if ('token' -in $Response.PSobject.Properties.Name) {
-                $Token = $Response.token
-                $RefreshToken = $APIToken
-            }
-
-            # --- Create Output Object
-            $Script:vRAConnection = [PSCustomObject] @{
-
-                Server = "https://$($Server)"
-                Token = $Token
-                RefreshToken = $RefreshToken
-                APIVersion = $Null
-                SignedCertificates = $SignedCertificates
-                SslProtocol = $SslProtocolResult
-            }
-
-            # --- Update vRAConnection with API version
-            $Script:vRAConnection.APIVersion = (Get-vRAAPIVersion).APIVersion
-
-        }
-        catch [Exception]{
-
-            throw
-
-        }
-
-        Write-Output $vRAConnection
+            Write-Output $vRAConnection
     }
-
+}
