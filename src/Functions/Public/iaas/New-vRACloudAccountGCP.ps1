@@ -136,7 +136,7 @@ N/2DOnL7ChnG8ZJp45SKq26g6D+OU5rg83KuNMJQ0w3dXuR2ch\nnLxRJH0dt7oA
     )
 
     begin {
-        if ($PSBoundParameters.ContainsKey("CreateDefaultZones")) {
+        if ($CreateDefaultZones.IsPresent) {
 
             $CreateDefaultZonesStatus = 'true'
         }

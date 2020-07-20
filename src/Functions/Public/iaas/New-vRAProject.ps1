@@ -142,7 +142,7 @@
 
     begin {
 
-        if ($PSBoundParameters.ContainsKey("SharedResources")) {
+        if ($SharedResources.IsPresent) {
 
             $SharedResourcesStatus = 'true'
         }

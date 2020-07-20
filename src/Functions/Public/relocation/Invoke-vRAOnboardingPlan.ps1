@@ -68,22 +68,22 @@
     begin {
 
         $URI = "/relocation/api/wo/execute-plan"
-        function CalculateOutput {
+        function CalculateOutput($ResponseObject) {
 
             [PSCustomObject] @{
 
-                ExecutionId = $ExecuteOnboardingPlan.executionId
-                DocumentSelfLink = $ExecuteOnboardingPlan.documentSelfLink
-                PlanLink = $ExecuteOnboardingPlan.planLink
-                TaskInfo = $ExecuteOnboardingPlan.taskInfo
-                SubStage = $ExecuteOnboardingPlan.subStage
-                PlanValidated = $ExecuteOnboardingPlan.planValidated
-                BlueprintsValidated = $ExecuteOnboardingPlan.blueprintsValidated
-                DeploymentsValidated = $ExecuteOnboardingPlan.deploymentsValidated
-                MachinesValidated = $ExecuteOnboardingPlan.machinesValidated
-                DeploymentCount = $ExecuteOnboardingPlan.deploymentCount
-                RetryCount = $ExecuteOnboardingPlan.retryCount
-                FailedDeploymentCount = $ExecuteOnboardingPlan.failedDeploymentCount
+                ExecutionId = $ResponseObject.executionId
+                DocumentSelfLink = $ResponseObject.documentSelfLink
+                PlanLink = $ResponseObject.planLink
+                TaskInfo = $ResponseObject.taskInfo
+                SubStage = $ResponseObject.subStage
+                PlanValidated = $ResponseObject.planValidated
+                BlueprintsValidated = $ResponseObject.blueprintsValidated
+                DeploymentsValidated = $ResponseObject.deploymentsValidated
+                MachinesValidated = $ResponseObject.machinesValidated
+                DeploymentCount = $ResponseObject.deploymentCount
+                RetryCount = $ResponseObject.retryCount
+                FailedDeploymentCount = $ResponseObject.failedDeploymentCount
             }
         }
     }
@@ -107,7 +107,7 @@
 "@
                             $ExecuteOnboardingPlan= Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference
 
-                            CalculateOutput
+                            CalculateOutput $ExecuteOnboardingPlan
                         }
                     }
 
@@ -128,7 +128,7 @@
 "@
                             $ExecuteOnboardingPlan= Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference
 
-                            CalculateOutput
+                            CalculateOutput $ExecuteOnboardingPlan
                         }
                     }
                 }
@@ -146,7 +146,7 @@
 "@
                             $ExecuteOnboardingPlan= Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference
 
-                            CalculateOutput
+                            CalculateOutput $ExecuteOnboardingPlan
                         }
                     }
                 }
@@ -161,7 +161,7 @@
 
                         $ExecuteOnboardingPlan= Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference
 
-                        CalculateOutput
+                        CalculateOutput $ExecuteOnboardingPlan
                     }
                 }
             }

@@ -64,22 +64,22 @@
     )
 
     Begin {
-        function CalculateOutput {
+        function CalculateOutput($ResponseObject) {
 
-            $DocumentSelfLink = $OnboardingPlan.documentSelfLink
+            $DocumentSelfLink = $ResponseObject.documentSelfLink
             $OnboardingPlanId = ($DocumentSelfLink -split "/")[-1]
 
             [PSCustomObject] @{
 
-                Name = $OnboardingPlan.name
+                Name = $ResponseObject.name
                 Id = $OnboardingPlanId
-                Status = $OnboardingPlan.status
-                EndpointId = $OnboardingPlan.endpointId
-                EndpointIds = $OnboardingPlan.endpointIds
-                ProjectId = $OnboardingPlan.projectId
-                CreatedBy = $OnboardingPlan.createdBy
-                EnableExtensibilityEvents = $OnboardingPlan.enableExtensibilityEvents
-                OrganizationId = $OnboardingPlan.organizationId
+                Status = $ResponseObject.status
+                EndpointId = $ResponseObject.endpointId
+                EndpointIds = $ResponseObject.endpointIds
+                ProjectId = $ResponseObject.projectId
+                CreatedBy = $ResponseObject.createdBy
+                EnableExtensibilityEvents = $ResponseObject.enableExtensibilityEvents
+                OrganizationId = $ResponseObject.organizationId
                 DocumentSelfLink = $DocumentSelfLink
             }
         }
@@ -112,7 +112,7 @@
                 $URI = "/relocation/onboarding/plan"
                 $OnboardingPlan = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference
 
-                CalculateOutput
+                CalculateOutput $OnboardingPlan
             }
         }
         catch [Exception] {

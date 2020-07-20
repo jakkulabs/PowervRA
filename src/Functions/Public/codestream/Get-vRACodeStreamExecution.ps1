@@ -52,8 +52,8 @@
 
         $APIUrl = "/pipeline/api/executions"
 
-        function CalculateOutput($responseObject) {
-            foreach ($Record in $responseObject.documents.PsObject.Properties) {
+        function CalculateOutput($ResponseObject) {
+            foreach ($Record in $ResponseObject.documents.PsObject.Properties) {
                 [PSCustomObject]@{
                     Name = $Record.value.name+" #"+$Record.value.index
                     Project = $Record.value.project
@@ -74,9 +74,9 @@
 
                 # --- Get Execution by its id
                 'ById' {
-                    foreach ($executionId in $Id) {
-                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=id eq '$executionId'" -Method GET
-                        CalculateOutput($Response)
+                    foreach ($ExecutionId in $Id) {
+                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=id eq '$ExecutionId'" -Method GET
+                        CalculateOutput $Response
                     }
 
                     break
@@ -84,9 +84,9 @@
 
                 # --- Get Execution by its pipeline name
                 'ByName' {
-                    foreach ($pipelineName in $Pipeline) {
-                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$pipelineName'" -Method GET
-                        CalculateOutput($Response)
+                    foreach ($PipelineName in $Pipeline) {
+                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$PipelineName'" -Method GET
+                        CalculateOutput $Response
                     }
 
                     break
@@ -94,18 +94,18 @@
 
                 # --- Get Execution by its project name
                 'ByProject' {
-                    foreach ($projectName in $Project) {
-                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=project eq '$projectName'" -Method GET
-                        CalculateOutput($Response)
+                    foreach ($ProjectName in $Project) {
+                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=project eq '$ProjectName'" -Method GET
+                        CalculateOutput $Response
                     }
 
                     break
                 }
-                
+
                 # --- No parameters passed so return all executions
                 'Standard' {
                     $Response = Invoke-vRARestMethod -URI $APIUrl -Method GET
-                    CalculateOutput($Response)
+                    CalculateOutput $Response
                 }
 
             }

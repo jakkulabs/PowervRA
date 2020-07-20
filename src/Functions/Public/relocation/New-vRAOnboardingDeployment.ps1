@@ -56,16 +56,16 @@
     )
 
     begin {
-        function CalculateOutput {
+        function CalculateOutput($ResponseObject) {
 
-            $DocumentSelfLink = $OnboardingDeployment.documentSelfLink
+            $DocumentSelfLink = $ResponseObject.documentSelfLink
             $OnboardingDeploymentId = ($DocumentSelfLink -split "/")[-1]
 
             [PSCustomObject] @{
 
-                Name = $OnboardingDeployment.name
+                Name = $ResponseObject.name
                 Id = $OnboardingDeploymentId
-                PlanLink = $OnboardingDeployment.planLink
+                PlanLink = $ResponseObject.planLink
                 DocumentSelfLink = $DocumentSelfLink
             }
         }
@@ -97,7 +97,7 @@
                 $URI = "/relocation/onboarding/deployment"
                 $OnboardingDeployment = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference
 
-                CalculateOutput
+                CalculateOutput $OnboardingDeployment
             }
         }
         catch [Exception] {

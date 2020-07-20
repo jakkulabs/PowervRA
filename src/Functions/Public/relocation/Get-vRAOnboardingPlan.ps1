@@ -44,27 +44,27 @@
     Begin {
         $APIUrl = '/relocation/onboarding/plan'
 
-        function CalculateOutput {
+        function CalculateOutput($ResponseObject) {
 
-            $DocumentSelfLink = $OnboardingPlan.documentSelfLink
+            $DocumentSelfLink = $ResponseObject.documentSelfLink
             $OnboardingPlanId = ($DocumentSelfLink -split "/")[-1]
 
             [PSCustomObject] @{
 
-                Name = $OnboardingPlan.name
+                Name = $ResponseObject.name
                 Id = $OnboardingPlanId
-                Status = $OnboardingPlan.status
-                EndpointName = $OnboardingPlan.endpointName
-                EndpointId = $OnboardingPlan.endpointId
-                EndpointIds = $OnboardingPlan.endpointIds
-                ProjectName = $OnboardingPlan.projectName
-                ProjectId = $OnboardingPlan.projectId
-                CreatedBy = $OnboardingPlan.createdBy
-                EnableExtensibilityEvents = $OnboardingPlan.enableExtensibilityEvents
-                OrganizationId = $OnboardingPlan.organizationId
-                LastRunTimeMicros = $OnboardingPlan.lastRunTimeMicros
-                NextRefreshTimeMicros = $OnboardingPlan.nextRefreshTimeMicros
-                RefreshIntervalMicros = $OnboardingPlan.refreshIntervalMicros
+                Status = $ResponseObject.status
+                EndpointName = $ResponseObject.endpointName
+                EndpointId = $ResponseObject.endpointId
+                EndpointIds = $ResponseObject.endpointIds
+                ProjectName = $ResponseObject.projectName
+                ProjectId = $ResponseObject.projectId
+                CreatedBy = $ResponseObject.createdBy
+                EnableExtensibilityEvents = $ResponseObject.enableExtensibilityEvents
+                OrganizationId = $ResponseObject.organizationId
+                LastRunTimeMicros = $ResponseObject.lastRunTimeMicros
+                NextRefreshTimeMicros = $ResponseObject.nextRefreshTimeMicros
+                RefreshIntervalMicros = $ResponseObject.refreshIntervalMicros
                 DocumentSelfLink = $DocumentSelfLink
             }
         }
@@ -85,7 +85,7 @@
 
                         $OnboardingPlan= Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
-                        CalculateOutput
+                        CalculateOutput $OnboardingPlan
                     }
 
                     break
@@ -108,7 +108,7 @@
                             if ($OnboardingPlan.name -eq $OnboardingPlanName){
 
                                 $MatchedOnboardingPlan = $true
-                                CalculateOutput
+                                CalculateOutput $OnboardingPlan
                             }
                         }
 
@@ -131,7 +131,7 @@
 
                         $OnboardingPlan = $Response.documents.$document
 
-                        CalculateOutput
+                        CalculateOutput $OnboardingPlan
                     }
                 }
             }

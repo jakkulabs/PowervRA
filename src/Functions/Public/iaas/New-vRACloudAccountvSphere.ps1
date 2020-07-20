@@ -51,7 +51,7 @@
         System.Management.Automation.PSObject
 
         .EXAMPLE
-        New-vRACloudAccountvSphere -Name "vSphere Test" -HostName "vc.mycompany.com" -Username "administrator@mycompany.com" -Password "cndhjslacd90ascdbasyoucbdh"  -RegionIds "Datacenter:datacenter-2" -CreateDefaultZones -AcceptSelfSignedCertificate
+        New-vRACloudAccountvSphere -Name "vSphere Test" -HostName "vc.mycompany.com" -Username "administrator@mycompany.com" -Password ("cndhjslacd90ascdbasyoucbdh" | ConvertTo-SecureString -AsPlainText -Force) -RegionIds "Datacenter:datacenter-2" -CreateDefaultZones -AcceptSelfSignedCertificate
 
         .EXAMPLE
         New-vRACloudAccountvSphere -Name "vSphere Test" -HostName "vc.mycompany.com" -Credential (get-credential)  -CreateDefaultZones -AcceptSelfSignedCertificate
@@ -99,7 +99,7 @@
 
         [Parameter(Mandatory = $true, ParameterSetName = "Username")]
         [ValidateNotNullOrEmpty()]
-        [String]$username,
+        [String]$Username,
 
         [Parameter(Mandatory = $true, ParameterSetName = "Username")]
         [ValidateNotNullOrEmpty()]
@@ -142,7 +142,7 @@
 
         $APIUrl = "/iaas/api/cloud-accounts-vsphere"
 
-        if ($PSBoundParameters.ContainsKey("CreateDefaultZones")) {
+        if ($CreateDefaultZones.IsPresent) {
 
             $CreateDefaultZonesStatus = 'true'
         }
@@ -151,7 +151,7 @@
             $CreateDefaultZonesStatus = 'false'
         }
 
-        if ($PSBoundParameters.ContainsKey("AcceptSelfSignedCertificate")) {
+        if ($AcceptSelfSignedCertificate.IsPresent) {
 
             $AcceptSelfSignedCertificateStatus = 'true'
         }
@@ -171,39 +171,7 @@
 
             $JSONPassword = (New-Object System.Management.Automation.PSCredential("username", $Password)).GetNetworkCredential().Password
         }
-        function ProcessReqionIds {
-            $RegionEnumerationUrl = "$APIUrl/region-enumeration"
-
-            if ($null -ne $RegionIds -and $RegionIds) {
-                # if this is the case, the region ids were supplied, skip the pull
-                return $RegionIds
-            }
-            else {
-                # the region id's were not explicitly given, so we will pull all regions and apply
-                # we pass in the same body expression, and it will return the list of zones available
-                if ($null -eq $Body) {
-                    $Body = @"
-                    {
-                        "hostName": "$($HostName)",
-                        "acceptSelfSignedCertificate": $($AcceptSelfSignedCertificateStatus),
-                        "associatedCloudAccountIds": [ $($AssociatedCloudAccountIdsFormatForBodyText) ],
-                        "password": "$($JSONPassword)",
-                        "createDefaultZones": $($CreateDefaultZonesStatus),
-                        "dcid": "$($DCId)",
-                        "name": "$($Name)",
-                        "description": "$($Description)",
-                        "username": "$($username)"
-                    }
-"@
-                }
-
-                $Enumeration = Invoke-vRARestMethod -Method POST -URI $RegionEnumerationUrl -Body $Body -Verbose:$VerbosePreference
-
-                # pull the response
-                return $Enumeration.externalRegionIds
-            }
-        }
-        function CalculateOutput {
+        function CalculateOutput([PSCustomObject]$CloudAccount) {
             [PSCustomObject] @{
                 Name                = $CloudAccount.name
                 HostName            = $CloudAccount.HostName
@@ -243,7 +211,15 @@
                 $AssociatedCloudAccountIdsAddQuotes = $AssociatedCloudAccountIds | ForEach-Object { "`"$_`"" }
                 $AssociatedCloudAccountIdsFormatForBodyText = $AssociatedCloudAccountIdsAddQuotes -join ","
 
-                $RegionIDs = ProcessReqionIds # process to see if regions were given, if not, we pull all of them
+                if ($null -eq $RegionIds) {
+                    # process to see if regions were given, if not, we pull all of them
+                    if ($PSBoundParameters.ContainsKey("Credential")){
+                        $RegionIDs = Get-vRARegionEnumerationvSphere -HostName $HostName  -Credential $Credential -AcceptSelfSignedCertificate:$($AcceptSelfSignedCertificate)
+                    } else {
+                        # assume username and password
+                        $RegionIDs = Get-vRARegionEnumerationvSphere -HostName $HostName  -Username $Username -Password $Password -AcceptSelfSignedCertificate:$($AcceptSelfSignedCertificate)
+                    }
+                }
 
                 # Format RegionIds with surrounding quotes and join into single string
                 $RegionIdsAddQuotes = $RegionIDs | ForEach-Object { "`"$_`"" }
@@ -260,7 +236,7 @@
                                 "name": "$($Name)",
                                 "description": "$($Description)",
                                 "regionIds": [ $($RegionIdsFormatForBodyText) ],
-                                "username": "$($username)"
+                                "username": "$($Username)"
                             }
 "@
             }
@@ -270,7 +246,7 @@
 
                 $CloudAccount = Invoke-vRARestMethod -Method POST -URI $APIUrl -Body $Body -Verbose:$VerbosePreference
 
-                CalculateOutput
+                CalculateOutput $CloudAccount
             }
         }
         catch [Exception] {

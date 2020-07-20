@@ -44,21 +44,21 @@
     begin {
         $APIUrl = '/relocation/onboarding/resource'
 
-        function CalculateOutput {
+        function CalculateOutput($ResponseObject) {
 
-            $DocumentSelfLink = $OnboardingResource.documentSelfLink
+            $DocumentSelfLink = $ResponseObject.documentSelfLink
             $OnboardingResourceId = ($DocumentSelfLink -split "/")[-1]
 
             [PSCustomObject] @{
 
-                Name = $OnboardingResource.resourceName
+                Name = $ResponseObject.resourceName
                 Id = $OnboardingResourceId
-                PlanLink = $OnboardingResource.planLink
-                ResourceLink = $OnboardingResource.resourceLink
-                DeploymentLink = $OnboardingResource.deploymentLink
-                TagLinks = $OnboardingResource.tagLinks
-                RuleLinks = $OnboardingResource.ruleLinks
-                CreatedTimeMicros = $OnboardingResource.createdTimeMicros
+                PlanLink = $ResponseObject.planLink
+                ResourceLink = $ResponseObject.resourceLink
+                DeploymentLink = $ResponseObject.deploymentLink
+                TagLinks = $ResponseObject.tagLinks
+                RuleLinks = $ResponseObject.ruleLinks
+                CreatedTimeMicros = $ResponseObject.createdTimeMicros
                 DocumentSelfLink = $DocumentSelfLink
             }
         }
@@ -78,7 +78,7 @@
                         $URI = "$($APIUrl)/$($OnboardingResourceId)"
                         $OnboardingResource= Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
-                        CalculateOutput
+                        CalculateOutput $OnboardingResource
                     }
 
                     break
@@ -100,7 +100,7 @@
                             if ($OnboardingResource.resourceName -eq $OnboardingResourceName){
 
                                 $MatchedOnboardingResource = $true
-                                CalculateOutput
+                                CalculateOutput $OnboardingResource
                             }
                         }
 
@@ -122,7 +122,7 @@
 
                         $OnboardingResource = $Response.documents.$document
 
-                        CalculateOutput
+                        CalculateOutput $OnboardingResource
                     }
                 }
             }

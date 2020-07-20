@@ -49,7 +49,7 @@
 
         $APIUrl = "/iaas/api/machines"
 
-        function CalculateOutput {
+        function CalculateOutput([PSCustomObject]$Response) {
 
             # --- The output comes in two flavors, a list or a single item, we are checking for list here
             if ($Response.content) {
@@ -110,11 +110,11 @@
                     # --- Check to see if the DiskId's were optionally present
                     if ($DiskId) {
 
-                        foreach($disk in $DiskId) {
+                        foreach($Disk in $DiskId) {
 
-                            $Response = Invoke-vRARestMethod -URI "$APIUrl`/$Id`/disks`/$disk" -Method GET
+                            $Response = Invoke-vRARestMethod -URI "$APIUrl`/$Id`/disks`/$Disk" -Method GET
 
-                            CalculateOutput
+                            CalculateOutput $Response
 
                         }
 
@@ -122,7 +122,7 @@
 
                         $Response = Invoke-vRARestMethod -URI "$APIUrl`/$Id`/disks" -Method GET
 
-                        CalculateOutput
+                        CalculateOutput $Response
 
                     }
 
@@ -133,26 +133,26 @@
                 # --- Will need to retrieve the machine first, then use ID to get final output
                 'ByName' {
 
-                    $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$Name'`&`$select=id" -Method GET
-                    $machineId = $machineResponse.content[0].id
+                    $MachineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$Name'`&`$select=id" -Method GET
+                    $MachineId = $MachineResponse.content[0].id
 
                     # --- Check to see if the DiskId's were optionally present
                     if ($DiskId) {
 
-                        foreach($disk in $DiskId) {
+                        foreach($Disk in $DiskId) {
 
-                            $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId`/disks`/$disk" -Method GET
+                            $Response = Invoke-vRARestMethod -URI "$APIUrl`/$MachineId`/disks`/$Disk" -Method GET
 
-                            CalculateOutput
+                            CalculateOutput $Response
 
                         }
 
 
                     } else {
 
-                        $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId`/disks" -Method GET
+                        $Response = Invoke-vRARestMethod -URI "$APIUrl`/$MachineId`/disks" -Method GET
 
-                        CalculateOutput
+                        CalculateOutput $Response
 
                     }
 

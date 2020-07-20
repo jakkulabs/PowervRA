@@ -42,7 +42,7 @@
 
         $APIUrl = "/iaas/api/machines"
 
-        function CalculateOutput {
+        function CalculateOutput([PSCustomObject]$Response) {
 
             foreach ($Record in $Response.content) {
                 [PSCustomObject]@{
@@ -70,9 +70,9 @@
 
                 # --- Get Machine by its id
                 'ById' {
-                    foreach ($machineId in $Id) {
-                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=id eq '$machineId'" -Method GET
-                        CalculateOutput
+                    foreach ($MachineId in $Id) {
+                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=id eq '$MachineId'" -Method GET
+                        CalculateOutput $Response
                     }
 
                     break
@@ -80,9 +80,9 @@
 
                 # --- Get Machine by its name
                 'ByName' {
-                    foreach ($machineName in $Name) {
-                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machineName'" -Method GET
-                        CalculateOutput
+                    foreach ($MachineName in $Name) {
+                        $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$MachineName'" -Method GET
+                        CalculateOutput $Response
                     }
 
                     break
@@ -91,7 +91,7 @@
                 # --- No parameters passed so return all machines
                 'Standard' {
                     $Response = Invoke-vRARestMethod -URI $APIUrl -Method GET
-                    CalculateOutput
+                    CalculateOutput $Response
                 }
 
             }

@@ -32,7 +32,7 @@ function Get-vRARequest {
 
             $APIUrl = "/iaas/api/request-tracker"
 
-            function CalculateOutput {
+            function CalculateOutput([PSCustomObject]$Response) {
 
                 if ($Response.content) {
                     foreach ($Record in $Response.content) {
@@ -69,7 +69,7 @@ function Get-vRARequest {
                         # --- Check to see if the DiskId's were optionally present
                         $Response = Invoke-vRARestMethod -URI "$APIUrl/$RequestId" -Method GET
 
-                        CalculateOutput
+                        CalculateOutput $Response
 
                         break
                     }
@@ -78,7 +78,7 @@ function Get-vRARequest {
                         # --- Check to see if the DiskId's were optionally present
                         $Response = Invoke-vRARestMethod -URI "$APIUrl" -Method GET
 
-                        CalculateOutput
+                        CalculateOutput $Response
 
                         break
                     }

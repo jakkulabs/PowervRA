@@ -65,17 +65,17 @@
 
             $APIUrl = "/iaas/api/machines"
 
-            function CalculateOutput {
+            function CalculateOutput([int]$CompletionTimeout,[switch]$WaitForCompletion,[PSCustomObject]$RestResponse) {
 
-                if ($WaitForCompletion) {
+                if ($WaitForCompletion.IsPresent) {
                     # if the wait for completion flag is given, the output will be different, we will wait here
                     # we will use the built-in function to check status
-                    $elapsedTime = 0
+                    $ElapsedTime = 0
                     do {
-                        $RequestResponse = Get-vRARequest -RequestId $Response.id
+                        $RequestResponse = Get-vRARequest -RequestId $RestResponse.id
                         if ($RequestResponse.Status -eq "FINISHED") {
-                            foreach ($resource in $RequestResponse.Resources) {
-                                $Record = Invoke-vRARestMethod -URI "$resource" -Method GET
+                            foreach ($Resource in $RequestResponse.Resources) {
+                                $Record = Invoke-vRARestMethod -URI "$Resource" -Method GET
                                 [PSCustomObject]@{
                                     Name = $Record.name
                                     PowerState = $Record.powerState
@@ -94,29 +94,29 @@
                             }
                             break # leave loop as we are done here
                         }
-                        $elapsedTime += 5
+                        $ElapsedTime += 5
                         Start-Sleep -Seconds 5
-                    } while ($elapsedTime -lt $CompletionTimeout)
+                    } while ($ElapsedTime -lt $CompletionTimeout)
 
-                    if ($elapsedTime -gt $CompletionTimeout -or $elapsedTime -eq $CompletionTimeout) {
+                    if ($ElapsedTime -gt $CompletionTimeout -or $ElapsedTime -eq $CompletionTimeout) {
                         # we have errored out
                         [PSCustomObject]@{
-                            Name = $Response.name
-                            Progress = $Response.progress
-                            Resources = $Response.resources
-                            RequestId = $Response.id
-                            Message = "We waited for completion, but we hit a timeout at $CompletionTimeout seconds. You may use Get-vRARequest -RequestId $($Response.id) to continue checking status. Here was the original response: $($Response.message)"
-                            RequestStatus = $Response.status
+                            Name = $RestResponse.name
+                            Progress = $RestResponse.progress
+                            Resources = $RestResponse.resources
+                            RequestId = $RestResponse.id
+                            Message = "We waited for completion, but we hit a timeout at $CompletionTimeout seconds. You may use Get-vRARequest -RequestId $($RestResponse.id) to continue checking status. Here was the original response: $($RestResponse.message)"
+                            RequestStatus = $RestResponse.status
                         }
                     }
                 } else {
                     [PSCustomObject]@{
-                        Name = $Response.name
-                        Progress = $Response.progress
-                        Resources = $Response.resources
-                        RequestId = $Response.id
-                        Message = $Response.message
-                        RequestStatus = $Response.status
+                        Name = $RestResponse.name
+                        Progress = $RestResponse.progress
+                        Resources = $RestResponse.resources
+                        RequestId = $RestResponse.id
+                        Message = $RestResponse.message
+                        RequestStatus = $RestResponse.status
                     }
                 }
             }
@@ -131,10 +131,10 @@
                         # --- Suspend the given machine by its id
                         'SuspendById' {
 
-                            foreach ($machineId in $Id) {
-                                if ($Force -or $PsCmdlet.ShouldProcess($machineid)) {
-                                    $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/suspend" -Method POST
-                                    CalculateOutput
+                            foreach ($MachineId in $Id) {
+                                if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($Machineid)) {
+                                    $RestResponse = Invoke-vRARestMethod -URI "$APIUrl`/$MachineId/operations/suspend" -Method POST
+                                    CalculateOutput $CompletionTimeout $WaitForCompletion $RestResponse
                                 }
                             }
                             break
@@ -143,13 +143,13 @@
                         # --- Suspend the given machine by its name
                         'SuspendByName' {
 
-                            foreach ($machine in $Name) {
-                                if ($Force -or $PsCmdlet.ShouldProcess($machine)) {
-                                    $machineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$machine'`&`$select=id" -Method GET
-                                    $machineId = $machineResponse.content[0].Id
+                            foreach ($Machine in $Name) {
+                                if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($Machine)) {
+                                    $MachineResponse = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$Machine'`&`$select=id" -Method GET
+                                    $MachineId = $MachineResponse.content[0].Id
 
-                                    $Response = Invoke-vRARestMethod -URI "$APIUrl`/$machineId/operations/suspend" -Method POST
-                                    CalculateOutput
+                                    $RestResponse = Invoke-vRARestMethod -URI "$APIUrl`/$MachineId/operations/suspend" -Method POST
+                                    CalculateOutput $CompletionTimeout $WaitForCompletion $RestResponse
                                 }
                             }
                             break

@@ -44,17 +44,17 @@
     Begin {
         $APIUrl = '/relocation/onboarding/deployment'
 
-        function CalculateOutput {
+        function CalculateOutput($ResponseObject) {
 
-            $DocumentSelfLink = $OnboardingDeployment.documentSelfLink
+            $DocumentSelfLink = $ResponseObject.documentSelfLink
             $OnboardingDeploymentId = ($DocumentSelfLink -split "/")[-1]
 
             [PSCustomObject] @{
 
-                Name = $OnboardingDeployment.name
+                Name = $ResponseObject.name
                 Id = $OnboardingDeploymentId
-                PlanLink = $OnboardingDeployment.planLink
-                ConsumerDeploymentLink = $OnboardingDeployment.consumerDeploymentLink
+                PlanLink = $ResponseObject.planLink
+                ConsumerDeploymentLink = $ResponseObject.consumerDeploymentLink
                 DocumentSelfLink = $DocumentSelfLink
             }
         }
@@ -75,7 +75,7 @@
 
                         $OnboardingDeployment= Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
-                        CalculateOutput
+                        CalculateOutput $OnboardingDeployment
                     }
 
                     break
@@ -98,7 +98,7 @@
                             if ($OnboardingDeployment.name -eq $OnboardingDeploymentName){
 
                                 $MatchedOnboardingDeployment = $true
-                                CalculateOutput
+                                CalculateOutput $OnboardingDeployment
                             }
                         }
 
@@ -121,7 +121,7 @@
 
                         $OnboardingDeployment = $Response.documents.$document
 
-                        CalculateOutput
+                        CalculateOutput $OnboardingDeployment
                     }
                 }
             }

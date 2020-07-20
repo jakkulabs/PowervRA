@@ -59,9 +59,9 @@
             $APIUrl = $APIUrl + "-$Type"
         }
 
-        function CalculateOutput {
+        function CalculateOutput([PSCustomObject]$CloudAccount, [String]$Type) {
 
-            if ($Type){
+            if ($null -ne $Type){
 
                 $CloudAccountType = $Type
             }
@@ -99,7 +99,7 @@
 
                         $CloudAccount = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
-                        CalculateOutput
+                        CalculateOutput $CloudAccount $Type
                     }
 
                     break
@@ -121,7 +121,7 @@
 
                         }
 
-                        CalculateOutput
+                        CalculateOutput $CloudAccount $Type
                     }
 
                     break
@@ -135,7 +135,7 @@
 
                     foreach ($CloudAccount in $Response.content) {
 
-                        CalculateOutput
+                        CalculateOutput $CloudAccount $Type
                     }
                 }
             }

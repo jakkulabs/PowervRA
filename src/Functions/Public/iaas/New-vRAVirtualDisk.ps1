@@ -103,17 +103,17 @@ function New-vRAVirtualDisk {
 
             $APIUrl = "/iaas/api/block-devices"
 
-            function CalculateOutput {
+            function CalculateOutput([int]$CompletionTimeout,[switch]$WaitForCompletion,[PSCustomObject]$RestResponse) {
 
-                if ($WaitForCompletion) {
+                if ($WaitForCompletion.IsPresent) {
                     # if the wait for completion flag is given, the output will be different, we will wait here
                     # we will use the built-in function to check status
-                    $elapsedTime = 0
+                    $ElapsedTime = 0
                     do {
-                        $RequestResponse = Get-vRARequest -RequestId $Response.id
+                        $RequestResponse = Get-vRARequest -RequestId $RestResponse.id
                         if ($RequestResponse.Status -eq "FINISHED") {
-                            foreach ($resource in $RequestResponse.Resources) {
-                                $Response = Invoke-vRARestMethod -URI "$resource" -Method GET
+                            foreach ($Resource in $RequestResponse.Resources) {
+                                $Response = Invoke-vRARestMethod -URI "$Resource" -Method GET
                                 [PSCustomObject]@{
                                     Name = $Response.name
                                     Status = $Response.status
@@ -136,15 +136,15 @@ function New-vRAVirtualDisk {
                             }
                             break # leave loop as we are done here
                         }
-                        $elapsedTime += 5
+                        $ElapsedTime += 5
                         Start-Sleep -Seconds 5
-                    } while ($elapsedTime -lt $CompletionTimeout)
+                    } while ($ElapsedTime -lt $CompletionTimeout)
                 } else {
                     [PSCustomObject]@{
-                        Name = $Response.name
-                        Progress = $Response.progress
-                        Id = $Response.id
-                        Status = $Response.status
+                        Name = $RestResponse.name
+                        Progress = $RestResponse.progress
+                        Id = $RestResponse.id
+                        Status = $RestResponse.status
                     }
                 }
 
@@ -159,21 +159,21 @@ function New-vRAVirtualDisk {
 
                     # --- Get Machine by its id
                     'ById' {
-                        if ($Force -or $PsCmdlet.ShouldProcess($ProjectId)){
+                        if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($ProjectId)){
                             $Body = @"
                                 {
                                     "capacityInGB": $($CapacityInGB),
-                                    "encrypted": $($Encrypted),
+                                    "encrypted": $($Encrypted.IsPresent),
                                     "name": "$($Name)",
                                     "description": "$($DeviceDescription)",
-                                    "persistent": $($Persistent),
+                                    "persistent": $($Persistent.IsPresent),
                                     "projectId": "$($ProjectId)"
                                 }
 "@
                             # --- Check to see if the DiskId's were optionally present
-                            $Response = Invoke-vRARestMethod -URI "$APIUrl" -Method POST -Body $Body
+                            $RestResponse = Invoke-vRARestMethod -URI "$APIUrl" -Method POST -Body $Body
 
-                            CalculateOutput
+                            CalculateOutput $CompletionTimeout $WaitForCompletion $RestResponse
                         }
                         break
                     }
@@ -181,24 +181,24 @@ function New-vRAVirtualDisk {
                     # --- Get Machine by its name
                     # --- Will need to retrieve the machine first, then use ID to get final output
                     'ByName' {
-                        if ($Force -or $PsCmdlet.ShouldProcess($ProjectName)){
-                            $projResponse = Invoke-vRARestMethod -URI "/iaas/api/projects`?`$filter=name eq '$ProjectName'`&`$select=id" -Method GET
-                            $projId = $projResponse.content[0].id
+                        if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($ProjectName)){
+                            $ProjResponse = Invoke-vRARestMethod -URI "/iaas/api/projects`?`$filter=name eq '$ProjectName'`&`$select=id" -Method GET
+                            $ProjId = $ProjResponse.content[0].id
 
                             $Body = @"
                                 {
                                     "capacityInGB": $($CapacityInGB),
-                                    "encrypted": $($Encrypted),
+                                    "encrypted": $($Encrypted.IsPresent),
                                     "name": "$($Name)",
                                     "description": "$($DeviceDescription)",
-                                    "persistent": $($Persistent),
-                                    "projectId": "$($projId)"
+                                    "persistent": $($Persistent.IsPresent),
+                                    "projectId": "$($ProjId)"
                                 }
 "@
                             Write-Verbose $Body
-                            $Response = Invoke-vRARestMethod -URI "$APIUrl" -Method POST -Body $Body
+                            $RestResponse = Invoke-vRARestMethod -URI "$APIUrl" -Method POST -Body $Body
 
-                            CalculateOutput
+                            CalculateOutput $CompletionTimeout $WaitForCompletion $RestResponse
                         }
                         break
                     }
