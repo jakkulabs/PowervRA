@@ -253,9 +253,9 @@
                 if ($_.Exception.Response.StatusCode -eq "BadRequest") {
                     # This could be due to an incorrectly set UserAttribute, so customizing the message.
                     if ($Username -match "@") {
-                        Write-Host -ForegroundColor White -BackgroundColor DarkGray "Unfortunately, you have received a 400 BAD Request Error. Is it possible that your environment has userPrincipalName set as the Username attribute? If so, please make sure to include the parameter UserAttribute and set it to either UPN or userPrincipalName (e.g. -UserAttribute UPN)"
+                        Write-Error -Exception $_.Exception -Message "Is it possible that your environment has userPrincipalName set as the Username attribute? If so, please make sure to include the parameter UserAttribute and set it to either UPN or userPrincipalName (e.g. -UserAttribute UPN)`n`n$($_)" -ErrorAction Stop
                     } else {
-                        Write-Host -ForegroundColor White -BackgroundColor DarkGray "Unfortunately, you have received a 400 BAD Request Error. It is possible that the Username you provided, $Username, is missing a domain (e.g. $Username@domain.com)?"
+                        Write-Error -Exception $_.Exception -Message "It is possible that the Username you provided, $Username, is missing a domain (e.g. $Username@domain.com)?`n`n$($_)" -ErrorAction Stop
                     }
                 }
 
