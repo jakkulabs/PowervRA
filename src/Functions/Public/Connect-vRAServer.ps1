@@ -17,16 +17,14 @@
         .PARAMETER Password
         Password to connect with
 
-        .PARAMETER Domain
-        Domain in which to connect with
-        If this is explicitly supplied then we can expect that an Advanced login is being performed
-
-        .PARAMETER LoginType
-        Provide the login type to use. Default is simple
-
         .PARAMETER Credential
         Credential object to connect with
         For domain accounts ensure to specify the Username in the format username@domain, not Domain\Username
+
+        .PARAMETER UserAttribute
+        The AD/LDAP Attribute configured in VMware Identity Manager as the Username
+        Default is SAMAccountName (SAM)
+        Accepted values: sAMAccountName, SAM, userPrincipalName, UPN
 
         .PARAMETER APIToken
         API Token to connect with
@@ -49,15 +47,15 @@
 
         .EXAMPLE
         $cred = Get-Credential
-        Connect-vRAServer -Server vraappliance01.domain.local -Credential $cred -LoginType Advanced
+        Connect-vRAServer -Server vraappliance01.domain.local -Credential $cred
 
         .EXAMPLE
         $SecurePassword = ConvertTo-SecureString “P@ssword” -AsPlainText -Force
-        Connect-vRAServer -Server vraappliance01.domain.local -Username TenantAdmin01 -Password $SecurePassword -IgnoreCertRequirements -LoginType Simple
+        Connect-vRAServer -Server vraappliance01.domain.local -Username TenantAdmin01@domain.com -Password $SecurePassword -IgnoreCertRequirements -UserAttribute UPN
 
         .EXAMPLE
         $SecurePassword = ConvertTo-SecureString “P@ssword” -AsPlainText -Force
-        Connect-vRAServer -Server vraappliance01.domain.local -Username TenantAdmin01 -Password $SecurePassword -Domain My.Local -IgnoreCertRequirements -LoginType Advanced
+        Connect-vRAServer -Server vraappliance01.domain.local -Username TenantAdmin01 -Password $SecurePassword -Domain My.Local -IgnoreCertRequirements
 
         .EXAMPLE
         Connect-vRAServer -Server api.mgmt.cloud.vmware.com -APIToken 'CuIKrjQgI6htiyRgIyd0ZtQM91fqg6AQyQhwPFJYgzBsaIKxKcWHLAGk81kknulQ'
@@ -85,13 +83,13 @@
             [ValidateNotNullOrEmpty()]
             [Management.Automation.PSCredential]$Credential,
 
-            [Parameter(Mandatory=$false)]
-            [ValidateSet('Simple','Advanced')]
-            [String]$LoginType,
-
             [parameter(Mandatory=$true,ParameterSetName="APIToken")]
             [ValidateNotNullOrEmpty()]
             [String]$APIToken,
+
+            [parameter(Mandatory=$false)]
+            [ValidateSet('sAMAccountName', 'SAM', 'userPrincipalName', 'UPN')]
+            [String]$UserAttribute = 'SAM',
 
             [parameter(Mandatory=$false)]
             [Switch]$IgnoreCertRequirements,
@@ -100,18 +98,6 @@
             [ValidateSet('Ssl3', 'Tls', 'Tls11', 'Tls12')]
             [String]$SslProtocol
         )
-
-        # --- Dynamic parameter for Domain based on other inputs
-        DynamicParam {
-            if (($LoginType -eq 'Advanced') -and ($null -eq $Credential) -and ($Username -notmatch '@')) {
-                # User is attempting advanced login but has not supplied the domain in the username
-                New-DynamicParameter Domain [string] -Mandatory $true
-            } elseif (($LoginType -eq 'Advanced') -and ($null -eq $Credential) -and ($Username -match '@')) {
-                # User may be supplying the domain in the username, but we make this parameter optional
-                # If the user is providing a UPN and wants an advanced login, they will supply
-                New-DynamicParameter Domain [string] -Mandatory $false
-            }
-        }
 
         Process {
             # --- Handle untrusted certificates if necessary
@@ -190,7 +176,7 @@
                     }
 
                     # --- Logging in with a domain
-                    if ($Username -match '@') {
+                    if (@("SAM", "SAMAccountName").Contains($UserAttribute) -and $Username -match '@') {
                         # Log in using the advanced authentication API
                         $URI = "https://$($Server)/csp/gateway/am/idp/auth/login?access_token"
                         $User = $Username.split('@')[0]
@@ -211,8 +197,6 @@
                         } | ConvertTo-Json
                     }
                 }
-
-
 
                 $Params = @{
 
@@ -265,6 +249,15 @@
 
             }
             catch [Exception]{
+
+                if ($_.Exception.Response.StatusCode -eq "BadRequest") {
+                    # This could be due to an incorrectly set UserAttribute, so customizing the message.
+                    if ($Username -match "@") {
+                        Write-Host -ForegroundColor White -BackgroundColor DarkGray "Unfortunately, you have received a 400 BAD Request Error. Is it possible that your environment has userPrincipalName set as the Username attribute? If so, please make sure to include the parameter UserAttribute and set it to either UPN or userPrincipalName (e.g. -UserAttribute UPN)"
+                    } else {
+                        Write-Host -ForegroundColor White -BackgroundColor DarkGray "Unfortunately, you have received a 400 BAD Request Error. It is possible that the Username you provided, $Username, is missing a domain (e.g. $Username@domain.com)?"
+                    }
+                }
 
                 throw
 
