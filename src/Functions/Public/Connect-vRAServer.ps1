@@ -12,7 +12,7 @@
         .PARAMETER Username
         Username to connect with
         For domain accounts ensure to specify the Username in the format username@domain, not Domain\Username
-        Note: UPN's are valid login Usernames as well and may also be in the format username@domain
+        Note: UPNs are valid login Usernames as well and may also be in the format username@domain
 
         .PARAMETER Password
         Password to connect with
