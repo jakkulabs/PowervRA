@@ -33,13 +33,13 @@ stages:
         - task: PowerShell@1
           displayName: 'Execute Build'
           inputs:
-            scriptName: tools/build.ps1
+            scriptName: tools/build.ps1 -Task BuildWithTests
 
         - task: PublishTestResults@2
-          displayName: 'Publish Test Results **\TEST_*.xml'
+          displayName: 'Publish Test Results'
           inputs:
             testResultsFormat: NUnit
-            testResultsFiles: '**\TEST_*.xml'
+            testResultsFiles: 'tools\testResults.xml'
           continueOnError: true
 
         - task: PublishPipelineArtifact@1

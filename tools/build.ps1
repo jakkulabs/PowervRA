@@ -27,15 +27,48 @@
 [Cmdletbinding()]
 Param (
     [Parameter()]
-    [ValidateSet("Test", "Analyze", "Build", "UpdateModuleManifest", "UpdateDocumentation")]
+    [ValidateSet("BuildWithTests", "Build", "UpdateModuleManifest", "UpdateDocumentation")]
     [String]$Task
 )
 
+$Requirements = @(
+    @{
+        Name = "PSake"
+        Version = 4.9.0
+    },
+    @{
+        Name = "PSScriptAnalyzer"
+        Version = 1.19.1
+    },
+    @{
+        Name = "BuildHelpers"
+        Version = 2.0.15
+    },
+    @{
+        Name = "Pester"
+        Version = 5.0.2
+    }
+)
+
 # --- Install dependencies
-$RequiredModules = @("Psake", "PSScriptAnalyzer", "BuildHelpers")
-foreach ($Module in $RequiredModules) {
-    Install-Module -Name $Module -Scope CurrentUser -Force -Verbose
-    Import-Module -Name $Module
+Write-Host "Installing required modules:"
+foreach ($Module in $Requirements) {
+
+    $ModuleParams = @{
+        Name = $Module.Name
+        RequiredVersion = $Module.Version
+        Scope = "CurrentUser"
+    }
+
+    if (Get-Module -Name $Module.Name -ListAvailable) {
+        Write-Host "    -> Updating $($Module.Name)"
+        Update-Module @ModuleParams
+    } else {
+        Write-Host "    -> Installing $($Module.Name)"
+        Install-Module @ModuleParams
+    }
+
+    Import-Module -Name $Module.Name -Force
 }
 
 # --- Set Build Environment

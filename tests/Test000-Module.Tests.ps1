@@ -1,47 +1,51 @@
 ﻿# --- Validate the module manifest
-$ModulePath = (Resolve-Path -Path .\src\*.psd1).Path
-
-Describe -Name 'Module Tests' -Fixture {
-    It -Name "The module has a valid manifest file" -Test {
-        {Test-ModuleManifest -Path $ModulePath} | Should Not Throw
-    }
+BeforeAll {
+    $ModulePath = (Resolve-Path -Path $ENV:BHProjectPath\Release\PowervRA\PowervRA.psd1).Path
+    Import-Module $ModulePath -Force -Global
+    $Functions = @(Get-Command -Module PowervRA -CommandType Function | ForEach-Object { @{Name = $_.Name}})
 }
 
-# --- Import Module once the manifest test has passed
-Import-Module $ModulePath -Force -Global
-
 # --- Ensure that each function has valid help
-Describe "Help tests for PowervRA" -Tags Help {
+Describe "Function Help -> " -Tags Help {
 
-    $Functions = Get-Command -Module PowervRA -CommandType Function
+    It "<Name> has the required help entries" -TestCases $Functions {
+        Param($Name)
+        (Get-Help -Name $Name).Synopsis | Should -Not -BeNullOrEmpty
+        (Get-Help -Name $Name).Description | Should -Not -BeNullOrEmpty
+        (Get-Help -Name $Name).Examples | Should -Not -BeNullOrEmpt
+    }
 
-    foreach ($Function in $Functions) {
+    It "<Name> has documentation for all parameters" -TestCases $Functions {
+        Param($Name)
+        $Help = Get-Help -Name $Name
+        foreach ($Parameter in $Help.parameters.parameter) {
 
-        $Help = Get-Help $Function.name
+            if ($Parameter -notmatch 'whatif|confirm') {
 
-        Context $Help.name {
-
-            It "Has a Synopsis" {
-                $Help.synopsis | Should Not BeNullOrEmpty
-            }
-
-            It "Has a description" {
-                $Help.description | Should Not BeNullOrEmpty
-            }
-
-            It "Has an example" {
-                $Help.examples | Should Not BeNullOrEmpty
-            }
-
-            foreach ($Parameter in $Help.parameters.parameter) {
-
-                if ($Parameter -notmatch 'whatif|confirm') {
-
-                    It "Has a Parameter description for '$($Parameter.name)'" {
-                        $Parameter.Description.text | Should Not BeNullOrEmpty
-                    }
-                }
+                    $Parameter.Description.text | Should -Not -BeNullOrEmpty
             }
         }
     }
+
+    # foreach ($Function in $Functions) {
+
+    #     $Help = Get-Help $Function.name
+
+    #     Context $Help.name {
+
+    #         It "Has a Synopsis" {
+    #             $Help.synopsis | Should Not BeNullOrEmpty
+    #         }
+
+    #         It "Has a description" {
+    #             $Help.description | Should Not BeNullOrEmpty
+    #         }
+
+    #         It "Has an example" {
+    #             $Help.examples | Should Not BeNullOrEmpty
+    #         }
+
+
+    #     }
+    # }
 }
