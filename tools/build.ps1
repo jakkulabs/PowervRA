@@ -58,6 +58,7 @@ foreach ($Module in $Requirements) {
         Name = $Module.Name
         RequiredVersion = $Module.Version
         Scope = "CurrentUser"
+        Force = $True
     }
 
     if (Get-Module -Name $Module.Name -ListAvailable) {
