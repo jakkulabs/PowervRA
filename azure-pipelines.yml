@@ -33,7 +33,8 @@ stages:
         - task: PowerShell@1
           displayName: 'Execute Build'
           inputs:
-            scriptName: tools/build.ps1 -Task BuildWithTests
+            scriptName: tools/build.ps1
+            arguments: -Task BuildWithTests
 
         - task: PublishTestResults@2
           displayName: 'Publish Test Results'
