@@ -1,8 +1,8 @@
 ﻿# --- Validate the module manifest
 BeforeAll {
     $ModulePath = (Resolve-Path -Path $ENV:BHProjectPath\Release\PowervRA\PowervRA.psd1).Path
-    Import-Module $ModulePath -Force -Global
-    $Functions = @(Get-Command -Module PowervRA -CommandType Function | ForEach-Object { @{Name = $_.Name}})
+    Import-Module $ModulePath -Force
+    $Functions = @(Get-Command -Module PowervRA -CommandType Function | ForEach-Object { @{Name = $_.Name } })
 }
 
 # --- Ensure that each function has valid help
@@ -21,8 +21,7 @@ Describe "Function Help -> " -Tags Help {
         foreach ($Parameter in $Help.parameters.parameter) {
 
             if ($Parameter -notmatch 'whatif|confirm') {
-
-                    $Parameter.Description.text | Should -Not -BeNullOrEmpty
+                $Parameter.Description.text | Should -Not -BeNullOrEmpty
             }
         }
     }
