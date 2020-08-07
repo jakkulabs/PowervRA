@@ -65,9 +65,9 @@ foreach ($RequiredModule in $Requirements) {
         Force = $True
     }
 
-    $InstalledModule = @(Get-Module -Name $RequiredModule.Name -ListAvailable)[0]
+    $InstalledModule = Get-Module -Name $RequiredModule.Name -ListAvailable
 
-    if ($InstalledModule -and ($InstalledModule.Version -lt [Version]$RequiredModule.Version)) {
+    if ($InstalledModule -and ($InstalledModule[0].Version -lt [Version]$RequiredModule.Version)) {
         Write-Host "    -> Updating $($RequiredModule.Name)"
         Update-Module @ModuleParams
     }
