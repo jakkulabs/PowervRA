@@ -4,15 +4,13 @@ Describe "Function Help -> " {
     BeforeAll {
         $ModulePath = (Resolve-Path -Path $ENV:BHProjectPath\Release\PowervRA\PowervRA.psd1).Path
         Import-Module $ModulePath -Force
-
-        $Functions = @(Get-Command -Module PowervRA -CommandType Function | ForEach-Object { @{Name = $_.Name } })
-
     }
 
     AfterAll {
         Remove-Module -Name PowervRA -Force
     }
 
+    $Functions = @(Get-Command -Module PowervRA -CommandType Function | ForEach-Object { @{Name = $_.Name } })
 
     It "<Name> has the required help entries" -TestCases $Functions {
         Param(
