@@ -1,22 +1,26 @@
-﻿# --- Validate the module manifest
-BeforeAll {
+﻿BeforeAll {
     $ModulePath = (Resolve-Path -Path $ENV:BHProjectPath\Release\PowervRA\PowervRA.psd1).Path
     Import-Module $ModulePath -Force
-    $Functions = @(Get-Command -Module PowervRA -CommandType Function | ForEach-Object { @{Name = $_.Name } })
 }
 
 # --- Ensure that each function has valid help
 Describe "Function Help -> " -Tags Help {
 
+    $Functions = @(Get-Command -Module PowervRA -CommandType Function | ForEach-Object { @{Name = $_.Name } })
+
     It "<Name> has the required help entries" -TestCases $Functions {
-        Param($Name)
+        Param(
+            [string]$Name
+        )
         (Get-Help -Name $Name).Synopsis | Should -Not -BeNullOrEmpty
         (Get-Help -Name $Name).Description | Should -Not -BeNullOrEmpty
         (Get-Help -Name $Name).Examples | Should -Not -BeNullOrEmpt
     }
 
     It "<Name> has documentation for all parameters" -TestCases $Functions {
-        Param($Name)
+        Param(
+            [string]$Name
+        )
         $Help = Get-Help -Name $Name
         foreach ($Parameter in $Help.parameters.parameter) {
 
@@ -25,26 +29,4 @@ Describe "Function Help -> " -Tags Help {
             }
         }
     }
-
-    # foreach ($Function in $Functions) {
-
-    #     $Help = Get-Help $Function.name
-
-    #     Context $Help.name {
-
-    #         It "Has a Synopsis" {
-    #             $Help.synopsis | Should Not BeNullOrEmpty
-    #         }
-
-    #         It "Has a description" {
-    #             $Help.description | Should Not BeNullOrEmpty
-    #         }
-
-    #         It "Has an example" {
-    #             $Help.examples | Should Not BeNullOrEmpty
-    #         }
-
-
-    #     }
-    # }
 }
