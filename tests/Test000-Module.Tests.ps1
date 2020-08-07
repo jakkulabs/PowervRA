@@ -13,8 +13,6 @@ Describe "Function Help -> " {
     Import-Module $ModulePath -Force
 
     $Functions = @(Get-Command -Module PowervRA -CommandType Function | ForEach-Object { @{Name = $_.Name } })
-    Write-Host !(get-module powervra -ListAvailable)
-    Write-Host ($Functions | ConvertTo-Json)
 
     It "<Name> has the required help entries" -TestCases $Functions {
         Param(
