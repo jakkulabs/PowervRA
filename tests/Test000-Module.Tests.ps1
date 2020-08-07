@@ -9,14 +9,8 @@
 # --- Ensure that each function has valid help and parameter descriptions
 Describe "Function Help -> " {
 
-    BeforeAll {
-        $ModulePath = "$ENV:BHProjectPath\Release\PowervRA\PowervRA.psd1"
-        Import-Module $ModulePath -Force
-    }
-
-    AfterAll {
-        Remove-Module -Name PowervRA -Force
-    }
+    $ModulePath = "$ENV:BHProjectPath\Release\PowervRA\PowervRA.psd1"
+    Import-Module $ModulePath -Force
 
     $Functions = @(Get-Command -Module PowervRA -CommandType Function | ForEach-Object { @{Name = $_.Name } })
     Write-Host !(get-module powervra -ListAvailable)
@@ -46,5 +40,9 @@ Describe "Function Help -> " {
                 $Parameter.Description.text | Should -Not -BeNullOrEmpty
             }
         }
+    }
+
+    AfterAll {
+        Remove-Module -Name PowervRA -Force
     }
 }
