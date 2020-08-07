@@ -34,42 +34,46 @@ Param (
 $Requirements = @(
     @{
         Name = "PSake"
-        Version = 4.9.0
+        Version = "4.9.0"
     },
     @{
         Name = "PSScriptAnalyzer"
-        Version = 1.19.1
+        Version = "1.19.1"
     },
     @{
         Name = "BuildHelpers"
-        Version = 2.0.15
+        Version = "2.0.15"
     },
     @{
         Name = "Pester"
-        Version = 5.0.2
+        Version = "5.0.2"
     }
 )
 
 # --- Install dependencies
 Write-Host "Installing required modules:"
-foreach ($Module in $Requirements) {
+foreach ($RequiredModule in $Requirements) {
 
     $ModuleParams = @{
-        Name = $Module.Name
+        Name = $RequiredModule.Name
         RequiredVersion = $Module.Version
         Scope = "CurrentUser"
         Force = $True
     }
 
-    if (Get-Module -Name $Module.Name -ListAvailable) {
-        Write-Host "    -> Updating $($Module.Name)"
+    $InstalledModule = (Get-Module -Name $RequiredModule.Name -ListAvailable)[0]
+
+    if ($InstalledModule -and ($InstalledModule.Version -lt [Version]$RequiredModule.Version)) {
+        Write-Host "    -> Updating $($RequiredModule.Name)"
         Update-Module @ModuleParams
-    } else {
-        Write-Host "    -> Installing $($Module.Name)"
+    }
+
+    if (!$InstalledModule) {
+        Write-Host "    -> Installing $($RequiredModule.Name)"
         Install-Module @ModuleParams
     }
 
-    Import-Module -Name $Module.Name -Force
+    Import-Module -Name $RequiredModule.Name -Force
 }
 
 # --- Set Build Environment
