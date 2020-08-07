@@ -31,6 +31,10 @@ Param (
     [String]$Task
 )
 
+$ErrorActionPreference = "Stop"
+
+Set-StrictMode -Version 3.0
+
 $Requirements = @(
     @{
         Name = "PSake"
@@ -56,7 +60,7 @@ foreach ($RequiredModule in $Requirements) {
 
     $ModuleParams = @{
         Name = $RequiredModule.Name
-        RequiredVersion = $Module.Version
+        RequiredVersion = $RequiredModule.Version
         Scope = "CurrentUser"
         Force = $True
     }
