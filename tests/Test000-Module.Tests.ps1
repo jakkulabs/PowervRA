@@ -1,8 +1,16 @@
-﻿# --- Ensure that each function has valid help and parameter descriptions
+﻿Describe "Module Manifest ->" {
+
+    It "has a valid module manifest" {
+        {Test-ModuleManifest -Path $ENV:BHProjectPath\Release\PowervRA\PowervRA.psd1} | Should -Not -Throw
+    }
+
+}
+
+# --- Ensure that each function has valid help and parameter descriptions
 Describe "Function Help -> " {
 
     BeforeAll {
-        $ModulePath = (Resolve-Path -Path $ENV:BHProjectPath\Release\PowervRA\PowervRA.psd1).Path
+        $ModulePath = "$ENV:BHProjectPath\Release\PowervRA\PowervRA.psd1"
         Import-Module $ModulePath -Force
     }
 
