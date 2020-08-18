@@ -1,47 +1,46 @@
-﻿# --- Validate the module manifest
-$ModulePath = (Resolve-Path -Path .\src\*.psd1).Path
+﻿Describe "Module Manifest ->" {
 
-Describe -Name 'Module Tests' -Fixture {
-    It -Name "The module has a valid manifest file" -Test {
-        {Test-ModuleManifest -Path $ModulePath} | Should Not Throw
+    It "has a valid module manifest" {
+        {Test-ModuleManifest -Path $ENV:BHProjectPath\Release\PowervRA\PowervRA.psd1} | Should -Not -Throw
     }
+
 }
 
-# --- Import Module once the manifest test has passed
-Import-Module $ModulePath -Force -Global
+# --- Ensure that each function has valid help and parameter descriptions
+Describe "Function Help -> " {
 
-# --- Ensure that each function has valid help
-Describe "Help tests for PowervRA" -Tags Help {
+    $ModulePath = "$ENV:BHProjectPath\Release\PowervRA\PowervRA.psd1"
+    Import-Module $ModulePath -Force
 
-    $Functions = Get-Command -Module PowervRA -CommandType Function
+    $Functions = @(Get-Command -Module PowervRA -CommandType Function | ForEach-Object { @{Name = $_.Name } })
 
-    foreach ($Function in $Functions) {
+    It "<Name> has the required help entries" -TestCases $Functions {
+        Param(
+            [string]$Name
+        )
 
-        $Help = Get-Help $Function.name
+        $Help = Get-Help -Name $Name
 
-        Context $Help.name {
+        $Help.Synopsis | Should -Not -BeNullOrEmpty
+        $Help.Description | Should -Not -BeNullOrEmpty
+        $Help.Examples | Should -Not -BeNullOrEmpt
+    }
 
-            It "Has a Synopsis" {
-                $Help.synopsis | Should Not BeNullOrEmpty
-            }
+    It "<Name> has documentation for all parameters" -TestCases $Functions {
+        Param(
+            [string]$Name
+        )
 
-            It "Has a description" {
-                $Help.description | Should Not BeNullOrEmpty
-            }
+        $Help = Get-Help -Name $Name
 
-            It "Has an example" {
-                $Help.examples | Should Not BeNullOrEmpty
-            }
-
-            foreach ($Parameter in $Help.parameters.parameter) {
-
-                if ($Parameter -notmatch 'whatif|confirm') {
-
-                    It "Has a Parameter description for '$($Parameter.name)'" {
-                        $Parameter.Description.text | Should Not BeNullOrEmpty
-                    }
-                }
+        foreach ($Parameter in $Help.parameters.parameter) {
+            if ($Parameter -notmatch 'whatif|confirm') {
+                $Parameter.Description.text | Should -Not -BeNullOrEmpty
             }
         }
+    }
+
+    AfterAll {
+        Remove-Module -Name PowervRA -Force
     }
 }

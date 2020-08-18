@@ -7,8 +7,9 @@ properties {
 
 # --- Define the build tasks
 Task Default -depends Build
-Task Test -depends Init, Analyze, ExecuteTest
-Task Build -depends Test, UpdateModuleManifest, CreateArtifact, CreateArchive
+Task Build -depends Lint, UpdateModuleManifest, CreateArtifact, CreateArchive
+Task BuildWithTests -depends Init, Build, ExecuteTest
+
 Task Init {
 
     Write-Output "Build System Details:"
@@ -22,9 +23,9 @@ Task Init {
 # Task: Test #
 ##############
 
-Task Analyze {
+Task Lint {
 
-    $Results = Invoke-ScriptAnalyzer -Path $ENV:BHModulePath -Recurse -Settings $ScriptAnalyzerSettingsPath -Verbose
+    $Results = Invoke-ScriptAnalyzer -Path $ENV:BHModulePath -Recurse -Settings $ScriptAnalyzerSettingsPath -Verbose:$VerbosePreference
     $Results | Select-Object RuleName, Severity, ScriptName, Line, Message | Format-List
 
     switch ($ScriptAnalysisFailBuildOnSeverityLevel) {
@@ -60,25 +61,7 @@ Task Analyze {
 }
 
 Task ExecuteTest {
-
-    # --- Run Tests. Currently limited to help tests
-    $Timestamp = Get-date -uformat "%Y%m%d-%H%M%S"
-    $TestFile = "TEST_PS$PSVersion`_$TimeStamp.xml"
-    $Parameters = @{
-        Script = "$ENV:BHProjectPath\tests\Test000-Module.Tests.ps1"
-        PassThru = $true
-        OutputFormat = 'NUnitXml'
-        OutputFile = "$ENV:BHProjectPath\$TestFile"
-    }
-
-    Push-Location
-    Set-Location -Path $ENV:BHProjectPath
-    $TestResults = Invoke-Pester @Parameters
-    Pop-Location
-
-    if ($TestResults.FailedCount -gt 0) {
-        Write-Error "Failed '$($TestResults.FailedCount)' tests, build failed"
-    }
+    Invoke-Pester $ENV:BHProjectPath\tests\Test000-Module.Tests.ps1 -CI -Output Detailed
 }
 
 ###############
