@@ -143,8 +143,36 @@
             Invoke-WebRequest @Params
         }
         else {
+            $Page = 1
+            Do {
+                $Result = Invoke-RestMethod @Params
+                Write-Output $Result
 
-            Invoke-RestMethod @Params
+                # Check if endpoint supports pagination
+                $Properties = $Result | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name
+                If ($Properties -contains "last")
+                {
+                    If (-not $Result.last)
+                    {
+                        $Page ++
+                        # Check if parameter is already specified in Uri
+                        $AddParam = "?"
+                        If ($FullURI -match "\?")
+                        {
+                            $AddParam = "&"
+                        }
+                        $Params.Uri = "$($FullURI)$($AddParam)page=$Page"
+                    }
+                    Else
+                    {
+                        $Escape = $true
+                    }
+                }
+                Else
+                {
+                    $Escape = $true
+                }
+            } Until ($Escape)
         }
     }
     catch {
