@@ -88,8 +88,10 @@ function Get-vRABlueprint {
                                 $BlueprintSelfLink = $blueprint.selfLink
 
                                 # Get full blueprint resource info
-                                $FullBlueprint = (Invoke-vRARestMethod -Method GET -URI $BlueprintSelfLink -Verbose:$VerbosePreference).Content
-                                CalculateOutput $FullBlueprint
+                                $FullBlueprints = Invoke-vRARestMethod -Method GET -URI $BlueprintSelfLink -Verbose:$VerbosePreference
+                                foreach ($FullBlueprint in $FullBlueprints){
+                                    CalculateOutput $FullBlueprint
+                                }
                             }
                         }
     
@@ -108,8 +110,10 @@ function Get-vRABlueprint {
                                 $BlueprintSelfLink = $blueprint.selfLink
 
                                 # Get full blueprint resource info
-                                $FullBlueprint = (Invoke-vRARestMethod -Method GET -URI $BlueprintSelfLink -Verbose:$VerbosePreference).Content
-                                CalculateOutput $FullBlueprint
+                                $FullBlueprints = Invoke-vRARestMethod -Method GET -URI $BlueprintSelfLink -Verbose:$VerbosePreference
+                                foreach ($FullBlueprint in $FullBlueprints){
+                                    CalculateOutput $FullBlueprint
+                                }
                             }
                         }
     
@@ -126,8 +130,10 @@ function Get-vRABlueprint {
                             $BlueprintSelfLink = $blueprint.selfLink
 
                             # Get full blueprint resource info
-                            $FullBlueprint = (Invoke-vRARestMethod -Method GET -URI $BlueprintSelfLink -Verbose:$VerbosePreference).Content
-                            CalculateOutput $FullBlueprint
+                            $FullBlueprints = Invoke-vRARestMethod -Method GET -URI $BlueprintSelfLink -Verbose:$VerbosePreference
+                            foreach ($FullBlueprint in $FullBlueprints){
+                                CalculateOutput $FullBlueprint
+                            }
                         }
                     }
                 }
