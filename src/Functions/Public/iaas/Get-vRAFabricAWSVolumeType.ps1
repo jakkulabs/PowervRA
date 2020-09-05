@@ -1,4 +1,4 @@
-function Get-vRAFabricAWSVolumeTypes {
+function Get-vRAFabricAWSVolumeType {
     <#
         .SYNOPSIS
         Get a vRA Fabric AWS Volume Types
@@ -19,14 +19,6 @@ function Get-vRAFabricAWSVolumeTypes {
     [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
     
         Param (
-    
-            [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName="ById")]
-            [ValidateNotNullOrEmpty()]
-            [String[]]$Id,
-    
-            [Parameter(Mandatory=$true,ParameterSetName="ByName")]
-            [ValidateNotNullOrEmpty()]
-            [String[]]$Name
         )
     
         begin {

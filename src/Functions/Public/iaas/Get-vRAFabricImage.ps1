@@ -1,4 +1,4 @@
-function Get-vRAFabricImages {
+function Get-vRAFabricImage {
     <#
         .SYNOPSIS
         Get a vRA FabricImages

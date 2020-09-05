@@ -1,4 +1,4 @@
-function Get-vRAFabricAzureStorageAccounts {
+function Get-vRAFabricAzureStorageAccount {
     <#
         .SYNOPSIS
         Get a vRA Fabric Azure Storage Accounts
@@ -19,14 +19,6 @@ function Get-vRAFabricAzureStorageAccounts {
     [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
     
         Param (
-    
-            [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName="ById")]
-            [ValidateNotNullOrEmpty()]
-            [String[]]$Id,
-    
-            [Parameter(Mandatory=$true,ParameterSetName="ByName")]
-            [ValidateNotNullOrEmpty()]
-            [String[]]$Name
         )
     
         begin {
