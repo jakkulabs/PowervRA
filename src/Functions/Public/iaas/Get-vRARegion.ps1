@@ -1,16 +1,16 @@
-function Get-vRAImageProfile {
+function Get-vRARegion {
     <#
         .SYNOPSIS
-        Get a vRA Image Profile
+        Get a vRA Region
     
         .DESCRIPTION
-        Get a vRA Image Profile
+        Get a vRA Region
     
         .PARAMETER Id
-        The ID of the vRA Image Profile
+        The ID of the vRA Region
     
         .PARAMETER Name
-        The Name of the vRA Image Profile
+        The Name of the vRA Region
     
         .INPUTS
         System.String
@@ -19,13 +19,13 @@ function Get-vRAImageProfile {
         System.Management.Automation.PSObject
     
         .EXAMPLE
-        Get-vRAImageProfile
+        Get-vRARegion
     
         .EXAMPLE
-        Get-vRAImageProfile -Id '3492a6e8-r5d4-1293-b6c4-39037ba693f9'
+        Get-vRARegion -Id '3492a6e8-r5d4-1293-b6c4-39037ba693f9'
     
         .EXAMPLE
-        Get-vRAImageProfile -Name 'TestImageProfile'
+        Get-vRARegion -Name 'TestRegion'
     
     #>
     [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
@@ -42,19 +42,18 @@ function Get-vRAImageProfile {
         )
     
         begin {
-            $APIUrl = '/iaas/api/image-profiles'
+            $APIUrl = '/iaas/api/regions'
     
-            function CalculateOutput([PSCustomObject]$ImageProfile) {
+            function CalculateOutput([PSCustomObject]$Region) {
     
                 [PSCustomObject] @{
-                    ImageMappings = $ImageProfile.imageMappings.mapping  ## Pull out mappings from nested JSON object
-                    ImageMapNames = ($ImageProfile.imageMappings.mapping | get-member -MemberType NoteProperty).Name  ## List mappings by their key name for easier access
-                    ExternalRegionId = $ImageProfile.externalRegionId
-                    Name = $ImageProfile.name
-                    Id = $ImageProfile.id
-                    UpdatedAt = $ImageProfile.updatedAt
-                    OrgId = $ImageProfile.orgId
-                    Links = $ImageProfile._links
+                    ExternalRegionId = $Region.externalRegionId
+                    Name = $Region.name
+                    CloudAccountId = $Region.cloudAccountId
+                    Id = $Region.id
+                    UpdatedAt = $Region.updatedAt
+                    OrgId = $Region.orgId
+                    Links = $Region._links
                 }
             }
         }
@@ -65,44 +64,44 @@ function Get-vRAImageProfile {
     
                 switch ($PsCmdlet.ParameterSetName) {
     
-                    # --- Get Image Profile by Id
+                    # --- Get Region by Id
                     'ById' {
     
-                        foreach ($ImageProfileId in $Id){
+                        foreach ($RegionId in $Id){
     
-                            $URI = "$($APIUrl)?`$filter=id eq '$($ImageProfileId)'"
+                            $URI = "$($APIUrl)?`$filter=id eq '$($RegionId)'"
                             $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
     
-                            foreach ($ImageProfile in $Response.content) {
-                                CalculateOutput $ImageProfile
+                            foreach ($Region in $Response.content) {
+                                CalculateOutput $Region
                             }
                         }
     
                         break
                     }
-                    # --- Get Image Profile by Name
+                    # --- Get Region by Name
                     'ByName' {
     
-                        foreach ($ImageProfileName in $Name){
+                        foreach ($RegionName in $Name){
     
-                            $URI = "$($APIUrl)?`$filter=name eq '$($ImageProfileName)'"
+                            $URI = "$($APIUrl)?`$filter=name eq '$($RegionName)'"
                             $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
     
-                            foreach ($ImageProfile in $Response.content) {
-                                CalculateOutput $ImageProfile
+                            foreach ($Region in $Response.content) {
+                                CalculateOutput $Region
                             }
                         }
     
                         break
                     }
-                    # --- No parameters passed so return all Image Profiles
+                    # --- No parameters passed so return all Regions
                     'Standard' {
     
                         $URI = $APIUrl
                         $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
-                        foreach ($ImageProfile in $Response.content) {
-                            CalculateOutput $ImageProfile
+                        foreach ($Region in $Response.content) {
+                            CalculateOutput $Region
                         }
                     }
                 }

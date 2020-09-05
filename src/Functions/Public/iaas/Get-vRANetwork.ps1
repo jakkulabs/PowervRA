@@ -1,16 +1,16 @@
-function Get-vRAImageProfile {
+function Get-vRANetwork {
     <#
         .SYNOPSIS
-        Get a vRA Image Profile
+        Get a vRA Network
     
         .DESCRIPTION
-        Get a vRA Image Profile
+        Get a vRA Network
     
         .PARAMETER Id
-        The ID of the vRA Image Profile
+        The ID of the vRA Network
     
         .PARAMETER Name
-        The Name of the vRA Image Profile
+        The Name of the vRA Network
     
         .INPUTS
         System.String
@@ -19,13 +19,13 @@ function Get-vRAImageProfile {
         System.Management.Automation.PSObject
     
         .EXAMPLE
-        Get-vRAImageProfile
+        Get-vRANetwork
     
         .EXAMPLE
-        Get-vRAImageProfile -Id '3492a6e8-r5d4-1293-b6c4-39037ba693f9'
+        Get-vRANetwork -Id '3492a6e8-r5d4-1293-b6c4-39037ba693f9'
     
         .EXAMPLE
-        Get-vRAImageProfile -Name 'TestImageProfile'
+        Get-vRANetwork -Name 'TestNetwork'
     
     #>
     [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
@@ -42,19 +42,23 @@ function Get-vRAImageProfile {
         )
     
         begin {
-            $APIUrl = '/iaas/api/image-profiles'
+            $APIUrl = '/iaas/api/networks'
     
-            function CalculateOutput([PSCustomObject]$ImageProfile) {
+            function CalculateOutput([PSCustomObject]$Network) {
     
                 [PSCustomObject] @{
-                    ImageMappings = $ImageProfile.imageMappings.mapping  ## Pull out mappings from nested JSON object
-                    ImageMapNames = ($ImageProfile.imageMappings.mapping | get-member -MemberType NoteProperty).Name  ## List mappings by their key name for easier access
-                    ExternalRegionId = $ImageProfile.externalRegionId
-                    Name = $ImageProfile.name
-                    Id = $ImageProfile.id
-                    UpdatedAt = $ImageProfile.updatedAt
-                    OrgId = $ImageProfile.orgId
-                    Links = $ImageProfile._links
+                    Cidr = $Network.cidr
+                    ExternalZoneId = $Network.externalZoneId
+                    ExternalRegionId = $Network.externalRegionId
+                    CloudAccountIds = $Network.cloudAccountIds
+                    Tags = $Network.tags
+                    CustomProperties = $Network.customProperties
+                    ExternalId = $Network.externalId
+                    Name = $Network.name
+                    Id = $Network.id
+                    UpdatedAt = $Network.updatedAt
+                    OrganizationId = $Network.orgId
+                    Links = $Network._links
                 }
             }
         }
@@ -65,44 +69,44 @@ function Get-vRAImageProfile {
     
                 switch ($PsCmdlet.ParameterSetName) {
     
-                    # --- Get Image Profile by Id
+                    # --- Get Network by Id
                     'ById' {
     
-                        foreach ($ImageProfileId in $Id){
+                        foreach ($NetworkId in $Id){
     
-                            $URI = "$($APIUrl)?`$filter=id eq '$($ImageProfileId)'"
+                            $URI = "$($APIUrl)?`$filter=id eq '$($NetworkId)'"
                             $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
     
-                            foreach ($ImageProfile in $Response.content) {
-                                CalculateOutput $ImageProfile
+                            foreach ($Network in $Response.content) {
+                                CalculateOutput $Network
                             }
                         }
     
                         break
                     }
-                    # --- Get Image Profile by Name
+                    # --- Get Network by Name
                     'ByName' {
     
-                        foreach ($ImageProfileName in $Name){
+                        foreach ($NetworkName in $Name){
     
-                            $URI = "$($APIUrl)?`$filter=name eq '$($ImageProfileName)'"
+                            $URI = "$($APIUrl)?`$filter=name eq '$($NetworkName)'"
                             $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
     
-                            foreach ($ImageProfile in $Response.content) {
-                                CalculateOutput $ImageProfile
+                            foreach ($Network in $Response.content) {
+                                CalculateOutput $Network
                             }
                         }
     
                         break
                     }
-                    # --- No parameters passed so return all Image Profiles
+                    # --- No parameters passed so return all Networks
                     'Standard' {
     
                         $URI = $APIUrl
                         $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
-                        foreach ($ImageProfile in $Response.content) {
-                            CalculateOutput $ImageProfile
+                        foreach ($Network in $Response.content) {
+                            CalculateOutput $Network
                         }
                     }
                 }
