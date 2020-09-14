@@ -80,18 +80,11 @@ function Get-vRABlueprint {
     
                         foreach ($BlueprintId in $Id){
     
-                            $URI = "$($APIUrl)?`$filter=id eq '$($BlueprintId)'"
+                            $URI = "$($APIUrl)/$($BlueprintId)"
                             $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
     
-                            foreach ($Blueprint in $Response.content) {
-                                # Get individual blueprint link
-                                $BlueprintSelfLink = $blueprint.selfLink
-
-                                # Get full blueprint resource info
-                                $FullBlueprints = Invoke-vRARestMethod -Method GET -URI $BlueprintSelfLink -Verbose:$VerbosePreference
-                                foreach ($FullBlueprint in $FullBlueprints){
-                                    CalculateOutput $FullBlueprint
-                                }
+                            foreach($Blueprint in $Response){
+                                CalculateOutput $Blueprint
                             }
                         }
     
@@ -102,17 +95,19 @@ function Get-vRABlueprint {
     
                         foreach ($BlueprintName in $Name){
     
-                            $URI = "$($APIUrl)?`$filter=name eq '$($BlueprintName)'"
+                            $URI = "$($APIUrl)"
                             $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
     
                             foreach ($Blueprint in $Response.content) {
-                                # Get individual blueprint link
-                                $BlueprintSelfLink = $blueprint.selfLink
+                                if($Blueprint.name -eq $BlueprintName){
+                                    # Get individual blueprint link
+                                    $BlueprintSelfLink = $blueprint.selfLink
 
-                                # Get full blueprint resource info
-                                $FullBlueprints = Invoke-vRARestMethod -Method GET -URI $BlueprintSelfLink -Verbose:$VerbosePreference
-                                foreach ($FullBlueprint in $FullBlueprints){
-                                    CalculateOutput $FullBlueprint
+                                    # Get full blueprint resource info
+                                    $FullBlueprints = Invoke-vRARestMethod -Method GET -URI $BlueprintSelfLink -Verbose:$VerbosePreference
+                                    foreach ($FullBlueprint in $FullBlueprints){
+                                        CalculateOutput $FullBlueprint
+                                    }
                                 }
                             }
                         }
