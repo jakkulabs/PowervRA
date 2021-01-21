@@ -45,6 +45,7 @@
     "@
 
     Invoke-vRARestMethod -Method POST -URI '/relocation/onboarding/plan' -Body $JSON -WebRequest
+
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
