@@ -8,7 +8,7 @@
 
     .PARAMETER Method
     REST Method:
-    Supported Methods: GET, POST, PUT,DELETE
+    Supported Methods: GET, PATCH, POST, PUT, DELETE
 
     .PARAMETER URI
     API URI, e.g. /identity/api/tenants
@@ -53,7 +53,7 @@
         [Parameter(Mandatory=$true, ParameterSetName="Standard")]
         [Parameter(Mandatory=$true, ParameterSetName="Body")]
         [Parameter(Mandatory=$true, ParameterSetName="OutFile")]
-        [ValidateSet("GET","POST","PUT","DELETE")]
+        [ValidateSet("GET","PATCH","POST","PUT","DELETE")]
         [String]$Method,
 
         [Parameter(Mandatory=$true, ParameterSetName="Standard")]
