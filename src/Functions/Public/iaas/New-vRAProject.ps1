@@ -15,6 +15,9 @@
     .PARAMETER Zones
     PSCustomObject(s) with properties for a Cloud Zone
 
+    .PARAMETER Viewers
+    Viewers to add to the Project
+
     .PARAMETER Members
     Members to add to the Project
 
@@ -52,6 +55,7 @@
         Name = 'Test Project'
         Description = 'Test Project'
         Zones = $CloudZone
+        Viewers = 'viewer1@test.com'
         Members = 'user1@test.com','user2@test.com'
         Administrators = 'admin1@test.com','admin2@test.com'
         OperationTimeout = 3600
@@ -115,9 +119,13 @@
         [ValidateNotNullOrEmpty()]
         [String]$Description,
 
-        [Parameter(Mandatory=$true,ParameterSetName="Standard")]
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
         [PSCustomObject[]]$Zones,
+
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [ValidateNotNullOrEmpty()]
+        [String[]]$Viewers,
 
         [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
@@ -127,7 +135,7 @@
         [ValidateNotNullOrEmpty()]
         [String[]]$Administrators,
 
-        [Parameter(Mandatory=$true,ParameterSetName="Standard")]
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
         [Int]$OperationTimeout,
 
@@ -169,6 +177,7 @@
                         "name": "$($Name)",
                         "description": "$($Description)",
                         "zoneAssignmentConfigurations": [],
+                        "viewers": [],
                         "members": [],
                         "administrators": [],
                         "operationTimeout": $($OperationTimeout),
@@ -182,6 +191,21 @@
                 foreach ($Zone in $Zones){
 
                     $JSONObject.zoneAssignmentConfigurations += $Zone
+                }
+
+                # --- Add Viewers
+                if ($PSBoundParameters.ContainsKey("Viewers")){
+
+                    foreach ($Viewer in $Viewers){
+
+                        $Addition = @"
+                        {
+                            "email": "$($Viewer)"
+                        }
+"@
+                        $AdditionObject = $Addition | ConvertFrom-Json
+                        $JSONObject.viewers += $AdditionObject
+                    }
                 }
 
                 # --- Add Members
