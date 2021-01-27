@@ -14,7 +14,8 @@ trigger:
       - tools/*
       - azure-pipelines.yml
 
-pr: none
+pr:
+- master
 
 pool:
   vmImage: windows-latest
