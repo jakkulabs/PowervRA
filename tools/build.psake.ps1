@@ -19,10 +19,6 @@ Task Init {
     Write-Output "ScriptAnalyzerSeverityLevel: $($ScriptAnalysisFailBuildOnSeverityLevel)"
 }
 
-##############
-# Task: Test #
-##############
-
 Task Lint {
 
     $Results = Invoke-ScriptAnalyzer -Path $ENV:BHModulePath -Recurse -Settings $ScriptAnalyzerSettingsPath -Verbose:$VerbosePreference
@@ -60,17 +56,11 @@ Task Lint {
 
 }
 
-Task ExecuteTest {
-    Invoke-Pester $ENV:BHProjectPath\tests\Test000-Module.Tests.ps1 -CI -Output Detailed
-}
-
-###############
-# Task: Build #
-###############
-
 Task UpdateModuleManifest {
 
     $PublicFunctions = Get-ChildItem -Path "$($ENV:BHModulePath)\Functions\Public" -Filter "*.ps1" -Recurse | Sort-Object
+
+    Write-Output "PublicFunctions are: $PublicFunctions"
 
     $ExportFunctions = @()
 
@@ -91,10 +81,6 @@ Task UpdateModuleManifest {
 
 }
 
-#################
-# Task: Release #
-#################
-
 Task CreateArtifact {
 
     # --- Clean any existing directory with the same name
@@ -112,9 +98,7 @@ Task CreateArtifact {
     Copy-Item -Path $ModuleManifestSource.FullName -Destination "$($ReleaseDirectoryPath)\$($ModuleName).psd1" -Force
 
     # --- Set the psd1 module version
-    if ($ENV:TF_BUILD){
-        $ModuleManifestVersion = $ENV:GITVERSION_MajorMinorPatch
-    }
+    $ModuleManifestVersion = $ENV:GITVERSION_MajorMinorPatch
     Update-Metadata -Path "$($ReleaseDirectoryPath)\$($ModuleName).psd1" -PropertyName ModuleVersion -Value $ModuleManifestVersion
 
     # --- Create an empty psm1 file
@@ -149,11 +133,7 @@ $($Content)
 
 Task CreateArchive {
 
-    $Destination = "$($ReleaseDirectoryPath).zip"
-
-    if ($ENV:TF_BUILD){
-        $Destination = "$($ReleaseDirectoryPath).$($ENV:GITVERSION_SemVer).zip"
-    }
+    $Destination = "$($ReleaseDirectoryPath).$($ENV:GITVERSION_SemVer).zip"
 
     if (Test-Path -Path $Destination) {
         Remove-Item -Path $Destination -Force
@@ -161,6 +141,18 @@ Task CreateArchive {
 
     Add-Type -assembly "System.IO.Compression.Filesystem"
     [IO.Compression.ZipFile]::CreateFromDirectory($ReleaseDirectoryPath, $Destination)
+}
+
+Task ExecuteTest {
+
+    $config = [PesterConfiguration]::Default
+    $config.CodeCoverage.Enabled = $true
+    $config.TestResult.Enabled = $true
+    $config.TestResult.OutputFormat = 'JUnitXml'
+    $config.Output.Verbosity = 'Detailed'
+    $config.Run.Path = "$ENV:BHProjectPath\tests\Test000-Module.Tests.ps1"
+    $config.Run.Exit = $true
+    Invoke-Pester -Configuration $config
 }
 
 Task UpdateDocumentation {
