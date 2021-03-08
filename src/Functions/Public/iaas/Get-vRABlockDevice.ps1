@@ -70,8 +70,8 @@ function Get-vRABlockDevice {
                 }
             }
         }
-        Process {
-
+        Process 
+        {
             try {
 
                 switch ($PsCmdlet.ParameterSetName) {
