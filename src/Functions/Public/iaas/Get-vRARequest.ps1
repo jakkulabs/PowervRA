@@ -63,10 +63,10 @@ function Get-vRARequest {
 
                 switch ($PsCmdlet.ParameterSetName) {
 
-                    # --- Get Machine by its id
+                    # --- Get Request by its id
                     'ById' {
 
-                        # --- Check to see if the DiskId's were optionally present
+                        # --- Check to see if the RequestIds's were optionally present
                         $Response = Invoke-vRARestMethod -URI "$APIUrl/$RequestId" -Method GET
 
                         CalculateOutput $Response
@@ -75,7 +75,7 @@ function Get-vRARequest {
                     }
 
                     default {
-                        # --- Check to see if the DiskId's were optionally present
+                        # --- Check to see if the RequestId's were optionally present
                         $Response = Invoke-vRARestMethod -URI "$APIUrl" -Method GET
 
                         CalculateOutput $Response

@@ -76,7 +76,7 @@ function Get-vRABlockDevice {
 
                 switch ($PsCmdlet.ParameterSetName) {
 
-                    # --- Get Machine by its id
+                    # --- Get Block Device by its id
                     'ById' {
                         foreach ($MachineId in $Id) {
                             $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=id eq '$MachineId'" -Method GET
@@ -86,7 +86,7 @@ function Get-vRABlockDevice {
                         break
                     }
 
-                    # --- Get Machine by its name
+                    # --- Get Block Device by its name
                     'ByName' {
                         foreach ($MachineName in $Name) {
                             $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$MachineName'" -Method GET
@@ -96,7 +96,7 @@ function Get-vRABlockDevice {
                         break
                     }
 
-                    # --- No parameters passed so return all machines
+                    # --- No parameters passed so return all Block Devices
                     'Standard' {
                         $Response = Invoke-vRARestMethod -URI $APIUrl -Method GET
                         CalculateOutput $Response

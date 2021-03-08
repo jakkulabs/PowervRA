@@ -157,7 +157,7 @@ function New-vRAVirtualDisk {
 
                 switch ($PsCmdlet.ParameterSetName) {
 
-                    # --- Get Machine by its id
+                    # --- Create Virtual Disk by the Project ID
                     'ById' {
                         if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($ProjectId)){
                             $Body = @"
@@ -170,7 +170,6 @@ function New-vRAVirtualDisk {
                                     "projectId": "$($ProjectId)"
                                 }
 "@
-                            # --- Check to see if the DiskId's were optionally present
                             $RestResponse = Invoke-vRARestMethod -URI "$APIUrl" -Method POST -Body $Body
 
                             CalculateOutput $CompletionTimeout $WaitForCompletion $RestResponse
@@ -178,8 +177,8 @@ function New-vRAVirtualDisk {
                         break
                     }
 
-                    # --- Get Machine by its name
-                    # --- Will need to retrieve the machine first, then use ID to get final output
+                    # --- Get Project by its name
+                    # --- Will need to retrieve the Project first, then use ID to get final output
                     'ByName' {
                         if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($ProjectName)){
                             $ProjResponse = Invoke-vRARestMethod -URI "/iaas/api/projects`?`$filter=name eq '$ProjectName'`&`$select=id" -Method GET
