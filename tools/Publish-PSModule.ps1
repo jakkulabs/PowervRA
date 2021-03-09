@@ -25,25 +25,7 @@ param(
 )
 
 try {
-    $NugetPath = "c:\nuget"
     $Repository = "PSGallery"
-
-    # --- C:\nuget exists on VS2017 build agents. To avoid task failure, check whether the directory exists and only create if it doesn't/
-    if (!(Test-Path -Path $NugetPath)) {
-        Write-Verbose "$NugetPath does not exist on this system. Creating directory."
-        New-Item -Path $NugetPath -ItemType Directory
-    }
-
-    Write-Verbose "Download Nuget.exe to C:\nuget"
-    Invoke-WebRequest -Uri "http://go.microsoft.com/fwlink/?LinkID=690216&clcid=0x409" -OutFile $NugetPath\Nuget.exe
-
-    Write-Verbose "Add C:\nuget as %PATH%"
-    $PathEnv = [System.Environment]::GetEnvironmentVariable("path")
-    $PathEnv = $PathEnv + ";" + $NugetPath
-    [System.Environment]::SetEnvironmentVariable("path", $PathEnv)
-
-    Write-Verbose "Create NuGet package provider"
-    Install-PackageProvider -Name NuGet -Scope CurrentUser -Force
 
     if ($PreRelease.IsPresent){
         Register-PackageSource -Name PoshTestGallery -Location https://www.poshtestgallery.com/api/v2/ -ProviderName PowerShellGet

@@ -77,7 +77,7 @@ Task UpdateModuleManifest {
         }
     }
 
-    Set-ModuleFunctions -Name $ENV:BHPSModuleManifest -FunctionsToExport $ExportFunctions -Verbose:$VerbosePreference
+    Set-ModuleFunction -Name $ENV:BHPSModuleManifest -FunctionsToExport $ExportFunctions -Verbose
 
 }
 
@@ -155,24 +155,24 @@ Task ExecuteTest {
     Invoke-Pester -Configuration $config
 }
 
-Task UpdateDocumentation {
+# Task UpdateDocumentation {
 
-    Write-Output "Updating Markdown help"
-    $FunctionsPath = "$DocsDirectory\functions"
+#     Write-Output "Updating Markdown help"
+#     $FunctionsPath = "$DocsDirectory\functions"
 
-    Remove-Item -Path $FunctionsPath -Recurse -Force -ErrorAction SilentlyContinue
-    New-Item $FunctionsPath -ItemType Directory | Out-Null
+#     Remove-Item -Path $FunctionsPath -Recurse -Force -ErrorAction SilentlyContinue
+#     New-Item $FunctionsPath -ItemType Directory | Out-Null
 
-    $PlatyPSParameters = @{
-        Module = $ModuleName
-        OutputFolder = $FunctionsPath
-        NoMetadata = $true
-    }
+#     $PlatyPSParameters = @{
+#         Module = $ModuleName
+#         OutputFolder = $FunctionsPath
+#         NoMetadata = $true
+#     }
 
-    New-MarkdownHelp @PlatyPSParameters -ErrorAction SilentlyContinue -Verbose:$VerbosePreference | Out-Null
+#     New-MarkdownHelp @PlatyPSParameters -ErrorAction SilentlyContinue -Verbose:$VerbosePreference | Out-Null
 
-    # --- Ensure that index.md is present and up to date
-    Write-Output "Updating index.md"
-    Copy-Item -Path "$ENV:BHProjectPath\README.md" -Destination "$($DocsDirectory)\index.md" -Force -Verbose:$VerbosePreference | Out-Null
+#     # --- Ensure that index.md is present and up to date
+#     Write-Output "Updating index.md"
+#     Copy-Item -Path "$ENV:BHProjectPath\README.md" -Destination "$($DocsDirectory)\index.md" -Force -Verbose:$VerbosePreference | Out-Null
 
-}
+# }
