@@ -50,7 +50,7 @@ $Requirements = @(
     },
     @{
         Name = "Pester"
-        Version = "5.0.2"
+        Version = "5.1.1"
     }
 )
 
