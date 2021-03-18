@@ -61,7 +61,7 @@ foreach ($RequiredModule in $Requirements) {
     $ModuleParams = @{
         Name = $RequiredModule.Name
         RequiredVersion = $RequiredModule.Version
-        #Scope = "CurrentUser"
+        Scope = "CurrentUser"
         Force = $True
     }
 
