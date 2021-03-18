@@ -139,9 +139,9 @@
                     $URI = "https://$($Server)/iaas/login"
 
                     # --- Create Invoke-RestMethod Parameters
-                    $JSON = @{
+                    $RawBody = @{
                         refreshToken = $APIToken
-                    } | ConvertTo-Json
+                    }
                 } else {
                     # --- Convert Secure Credentials to a format for sending in the JSON payload
                     if ($PSBoundParameters.ContainsKey("Credential")){
@@ -167,27 +167,20 @@
                         # Log in using the advanced authentication API
                         $User = $Username.split('@')[0]
                         $Domain = $Username.split('@')[1]
-                        $JSON = @{
+                        $RawBody = @{
                             username = $User
                             password = $JSONPassword
                             domain = $Domain
-                        } | ConvertTo-Json
-
-                        # The alternate is to include the @[DOMAIN] in the username to cover all possible configurations
-                        $AlternateJson = @{
-                            username = $Username
-                            password = $JSONPassword
-                            domain = $Domain
-                        } | ConvertTo-Json
+                        }
                     } else {
                         # -- Login with the basic authentication API
                         # -- We assume local account which can use the advanced authentication API with domain set to 'System Domain'
                         # --- Create Invoke-RestMethod Parameters
-                        $JSON = @{
+                        $RawBody = @{
                             username = $Username
                             password = $JSONPassword
                             domain = "System Domain"
-                        } | ConvertTo-Json
+                        }
                     }
                 }
 
@@ -199,7 +192,8 @@
                         "Accept"="application/json";
                         "Content-Type" = "application/json";
                     }
-                    Body = $JSON
+                    Body = ($RawBody | ConvertTo-Json)
+
                 }
 
                 if ((!$SignedCertificates) -and ($IsCoreCLR)) {
@@ -218,18 +212,10 @@
                 # so we try again with the alternative option if available
                 try {
                     $Response = Invoke-RestMethod @Params
-                } catch [Exception]{
+                } catch [System.Net.WebException]{
                     if ($_.Exception.Response.StatusCode -eq "BadRequest" -and $null -ne $AlternateJson) {
-                        $Params = @{
-
-                            Method = "POST"
-                            URI = $URI
-                            Headers = @{
-                                "Accept"="application/json";
-                                "Content-Type" = "application/json";
-                            }
-                            Body = $AlternateJson
-                        }
+                        $RawBody.username = $Username
+                        $Params.Body = ($RawBody | ConvertTo-Json)
                         $Response = Invoke-RestMethod @Params
                     } else {
                         throw $_
@@ -275,15 +261,6 @@
 
             }
             catch [Exception]{
-
-                if ($_.Exception.Response.StatusCode -eq "BadRequest") {
-                    # This could be due to an incorrectly set UserAttribute, so customizing the message.
-                    if ($Username -match "@") {
-                        Write-Error -Exception $_.Exception -Message "Is it possible that your environment has userPrincipalName set as the Username attribute? If so, please make sure to include the parameter UserAttribute and set it to either UPN or userPrincipalName (e.g. -UserAttribute UPN)`n`n$($_)" -ErrorAction Stop
-                    } else {
-                        Write-Error -Exception $_.Exception -Message "It is possible that the Username you provided, $Username, is missing a domain (e.g. $Username@domain.com)?`n`n$($_)" -ErrorAction Stop
-                    }
-                }
 
                 throw
 
