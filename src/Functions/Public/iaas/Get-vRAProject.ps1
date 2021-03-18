@@ -42,7 +42,7 @@
     )
 
     begin {
-        $APIUrl = '/iaas/projects'
+        $APIUrl = '/iaas/api/projects'
 
         function CalculateOutput([PSCustomObject]$Project) {
 

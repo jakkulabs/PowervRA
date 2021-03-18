@@ -42,7 +42,7 @@
     )
 
     begin {
-        $APIUrl = '/iaas/zones'
+        $APIUrl = '/iaas/api/zones'
 
         function CalculateOutput([PSCustomObject]$CloudZone) {
 

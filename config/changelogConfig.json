@@ -1,0 +1,20 @@
+{
+    "categories": [
+      {
+        "title": "## 🚀 Features",
+        "labels": ["feature"]
+      },
+      {
+        "title": "## 🐛 Bugfixes",
+        "labels": ["bug"]
+      },
+      {
+        "title": "## 🧪 Tests",
+        "labels": ["test"]
+      }
+    ],
+    "ignore_labels": [
+      "ignore"
+    ],
+    "template": "${{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n${{UNCATEGORIZED}}\n</details>"
+}

@@ -52,7 +52,7 @@
     )
 
     Begin {
-        $APIUrl = '/iaas/cloud-accounts'
+        $APIUrl = '/iaas/api/cloud-accounts'
 
         if ($PSBoundParameters.ContainsKey('Type')){
 

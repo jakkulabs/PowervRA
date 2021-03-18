@@ -44,7 +44,7 @@
         finally {
 
             Write-Verbose -Message "Removing vRAConnection global variable"
-            Remove-Variable -Name vRAConnection -Scope Global -Force -ErrorAction SilentlyContinue
+            Remove-Variable -Name vRAConnection -Scope Script -Force -ErrorAction SilentlyContinue
         }
     }
 }

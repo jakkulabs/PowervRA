@@ -39,7 +39,7 @@ function Remove-vRACodeStreamExecution {
 
                 'ById' {
 
-                    foreach ($ExecutionId in $Id) {E
+                    foreach ($ExecutionId in $Id) {
 
                         if ($PSCmdlet.ShouldProcess($ExecutionId)){
 

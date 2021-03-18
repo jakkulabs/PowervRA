@@ -7,8 +7,9 @@ properties {
 
 # --- Define the build tasks
 Task Default -depends Build
-Task Test -depends Init, Analyze, ExecuteTest
-Task Build -depends Test, UpdateModuleManifest, CreateArtifact, CreateArchive
+Task Build -depends Lint, UpdateModuleManifest, CreateArtifact, CreateArchive
+Task BuildWithTests -depends Init, Build, ExecuteTest
+
 Task Init {
 
     Write-Output "Build System Details:"
@@ -18,13 +19,9 @@ Task Init {
     Write-Output "ScriptAnalyzerSeverityLevel: $($ScriptAnalysisFailBuildOnSeverityLevel)"
 }
 
-##############
-# Task: Test #
-##############
+Task Lint {
 
-Task Analyze {
-
-    $Results = Invoke-ScriptAnalyzer -Path $ENV:BHModulePath -Recurse -Settings $ScriptAnalyzerSettingsPath -Verbose
+    $Results = Invoke-ScriptAnalyzer -Path $ENV:BHModulePath -Recurse -Settings $ScriptAnalyzerSettingsPath -Verbose:$VerbosePreference
     $Results | Select-Object RuleName, Severity, ScriptName, Line, Message | Format-List
 
     switch ($ScriptAnalysisFailBuildOnSeverityLevel) {
@@ -59,35 +56,11 @@ Task Analyze {
 
 }
 
-Task ExecuteTest {
-
-    # --- Run Tests. Currently limited to help tests
-    $Timestamp = Get-date -uformat "%Y%m%d-%H%M%S"
-    $TestFile = "TEST_PS$PSVersion`_$TimeStamp.xml"
-    $Parameters = @{
-        Script = "$ENV:BHProjectPath\tests\Test000-Module.Tests.ps1"
-        PassThru = $true
-        OutputFormat = 'NUnitXml'
-        OutputFile = "$ENV:BHProjectPath\$TestFile"
-    }
-
-    Push-Location
-    Set-Location -Path $ENV:BHProjectPath
-    $TestResults = Invoke-Pester @Parameters
-    Pop-Location
-
-    if ($TestResults.FailedCount -gt 0) {
-        Write-Error "Failed '$($TestResults.FailedCount)' tests, build failed"
-    }
-}
-
-###############
-# Task: Build #
-###############
-
 Task UpdateModuleManifest {
 
     $PublicFunctions = Get-ChildItem -Path "$($ENV:BHModulePath)\Functions\Public" -Filter "*.ps1" -Recurse | Sort-Object
+
+    Write-Output "PublicFunctions are: $PublicFunctions"
 
     $ExportFunctions = @()
 
@@ -104,13 +77,9 @@ Task UpdateModuleManifest {
         }
     }
 
-    Set-ModuleFunctions -Name $ENV:BHPSModuleManifest -FunctionsToExport $ExportFunctions -Verbose:$VerbosePreference
+    Set-ModuleFunction -Name $ENV:BHPSModuleManifest -FunctionsToExport $ExportFunctions -Verbose
 
 }
-
-#################
-# Task: Release #
-#################
 
 Task CreateArtifact {
 
@@ -129,9 +98,7 @@ Task CreateArtifact {
     Copy-Item -Path $ModuleManifestSource.FullName -Destination "$($ReleaseDirectoryPath)\$($ModuleName).psd1" -Force
 
     # --- Set the psd1 module version
-    if ($ENV:TF_BUILD){
-        $ModuleManifestVersion = $ENV:GITVERSION_MajorMinorPatch
-    }
+    $ModuleManifestVersion = $ENV:GITVERSION_MajorMinorPatch
     Update-Metadata -Path "$($ReleaseDirectoryPath)\$($ModuleName).psd1" -PropertyName ModuleVersion -Value $ModuleManifestVersion
 
     # --- Create an empty psm1 file
@@ -166,11 +133,7 @@ $($Content)
 
 Task CreateArchive {
 
-    $Destination = "$($ReleaseDirectoryPath).zip"
-
-    if ($ENV:TF_BUILD){
-        $Destination = "$($ReleaseDirectoryPath).$($ENV:GITVERSION_SemVer).zip"
-    }
+    $Destination = "$($ReleaseDirectoryPath).$($ENV:GITVERSION_SemVer).zip"
 
     if (Test-Path -Path $Destination) {
         Remove-Item -Path $Destination -Force
@@ -180,24 +143,36 @@ Task CreateArchive {
     [IO.Compression.ZipFile]::CreateFromDirectory($ReleaseDirectoryPath, $Destination)
 }
 
-Task UpdateDocumentation {
+Task ExecuteTest {
 
-    Write-Output "Updating Markdown help"
-    $FunctionsPath = "$DocsDirectory\functions"
-
-    Remove-Item -Path $FunctionsPath -Recurse -Force -ErrorAction SilentlyContinue
-    New-Item $FunctionsPath -ItemType Directory | Out-Null
-
-    $PlatyPSParameters = @{
-        Module = $ModuleName
-        OutputFolder = $FunctionsPath
-        NoMetadata = $true
-    }
-
-    New-MarkdownHelp @PlatyPSParameters -ErrorAction SilentlyContinue -Verbose:$VerbosePreference | Out-Null
-
-    # --- Ensure that index.md is present and up to date
-    Write-Output "Updating index.md"
-    Copy-Item -Path "$ENV:BHProjectPath\README.md" -Destination "$($DocsDirectory)\index.md" -Force -Verbose:$VerbosePreference | Out-Null
-
+    $config = [PesterConfiguration]::Default
+    $config.CodeCoverage.Enabled = $true
+    $config.TestResult.Enabled = $true
+    $config.TestResult.OutputFormat = 'JUnitXml'
+    $config.Output.Verbosity = 'Detailed'
+    $config.Run.Path = "$ENV:BHProjectPath\tests\Test000-Module.Tests.ps1"
+    $config.Run.Exit = $true
+    Invoke-Pester -Configuration $config
 }
+
+# Task UpdateDocumentation {
+
+#     Write-Output "Updating Markdown help"
+#     $FunctionsPath = "$DocsDirectory\functions"
+
+#     Remove-Item -Path $FunctionsPath -Recurse -Force -ErrorAction SilentlyContinue
+#     New-Item $FunctionsPath -ItemType Directory | Out-Null
+
+#     $PlatyPSParameters = @{
+#         Module = $ModuleName
+#         OutputFolder = $FunctionsPath
+#         NoMetadata = $true
+#     }
+
+#     New-MarkdownHelp @PlatyPSParameters -ErrorAction SilentlyContinue -Verbose:$VerbosePreference | Out-Null
+
+#     # --- Ensure that index.md is present and up to date
+#     Write-Output "Updating index.md"
+#     Copy-Item -Path "$ENV:BHProjectPath\README.md" -Destination "$($DocsDirectory)\index.md" -Force -Verbose:$VerbosePreference | Out-Null
+
+# }
