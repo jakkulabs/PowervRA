@@ -12,7 +12,6 @@
         .PARAMETER Username
         Username to connect with
         For domain accounts ensure to specify the Username in the format username@domain, not Domain\Username
-        Note: UPNs are valid login Usernames as well and may also be in the format username@domain
 
         .PARAMETER Password
         Password to connect with
@@ -20,11 +19,6 @@
         .PARAMETER Credential
         Credential object to connect with
         For domain accounts ensure to specify the Username in the format username@domain, not Domain\Username
-
-        .PARAMETER UserAttribute
-        The AD/LDAP Attribute configured in VMware Identity Manager as the Username
-        Default is SAMAccountName (SAM)
-        Accepted values: sAMAccountName, SAM, userPrincipalName, UPN
 
         .PARAMETER APIToken
         API Token to connect with
@@ -51,11 +45,7 @@
 
         .EXAMPLE
         $SecurePassword = ConvertTo-SecureString “P@ssword” -AsPlainText -Force
-        Connect-vRAServer -Server vraappliance01.domain.local -Username TenantAdmin01@domain.com -Password $SecurePassword -IgnoreCertRequirements -UserAttribute UPN
-
-        .EXAMPLE
-        $SecurePassword = ConvertTo-SecureString “P@ssword” -AsPlainText -Force
-        Connect-vRAServer -Server vraappliance01.domain.local -Username TenantAdmin01 -Password $SecurePassword -Domain My.Local -IgnoreCertRequirements
+        Connect-vRAServer -Server vraappliance01.domain.local -Username TenantAdmin01@domain.com -Password $SecurePassword -IgnoreCertRequirements
 
         .EXAMPLE
         Connect-vRAServer -Server api.mgmt.cloud.vmware.com -APIToken 'CuIKrjQgI6htiyRgIyd0ZtQM91fqg6AQyQhwPFJYgzBsaIKxKcWHLAGk81kknulQ'
