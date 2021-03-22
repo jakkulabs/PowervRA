@@ -12,7 +12,6 @@
         .PARAMETER Username
         Username to connect with
         For domain accounts ensure to specify the Username in the format username@domain, not Domain\Username
-        Note: UPNs are valid login Usernames as well and may also be in the format username@domain
 
         .PARAMETER Password
         Password to connect with
@@ -20,11 +19,6 @@
         .PARAMETER Credential
         Credential object to connect with
         For domain accounts ensure to specify the Username in the format username@domain, not Domain\Username
-
-        .PARAMETER UserAttribute
-        The AD/LDAP Attribute configured in VMware Identity Manager as the Username
-        Default is SAMAccountName (SAM)
-        Accepted values: sAMAccountName, SAM, userPrincipalName, UPN
 
         .PARAMETER APIToken
         API Token to connect with
@@ -51,11 +45,7 @@
 
         .EXAMPLE
         $SecurePassword = ConvertTo-SecureString “P@ssword” -AsPlainText -Force
-        Connect-vRAServer -Server vraappliance01.domain.local -Username TenantAdmin01@domain.com -Password $SecurePassword -IgnoreCertRequirements -UserAttribute UPN
-
-        .EXAMPLE
-        $SecurePassword = ConvertTo-SecureString “P@ssword” -AsPlainText -Force
-        Connect-vRAServer -Server vraappliance01.domain.local -Username TenantAdmin01 -Password $SecurePassword -Domain My.Local -IgnoreCertRequirements
+        Connect-vRAServer -Server vraappliance01.domain.local -Username TenantAdmin01@domain.com -Password $SecurePassword -IgnoreCertRequirements
 
         .EXAMPLE
         Connect-vRAServer -Server api.mgmt.cloud.vmware.com -APIToken 'CuIKrjQgI6htiyRgIyd0ZtQM91fqg6AQyQhwPFJYgzBsaIKxKcWHLAGk81kknulQ'
@@ -86,10 +76,6 @@
             [parameter(Mandatory=$true,ParameterSetName="APIToken")]
             [ValidateNotNullOrEmpty()]
             [String]$APIToken,
-
-            [parameter(Mandatory=$false)]
-            [ValidateSet('sAMAccountName', 'SAM', 'userPrincipalName', 'UPN')]
-            [String]$UserAttribute = 'SAM',
 
             [parameter(Mandatory=$false)]
             [Switch]$IgnoreCertRequirements,
@@ -153,9 +139,9 @@
                     $URI = "https://$($Server)/iaas/login"
 
                     # --- Create Invoke-RestMethod Parameters
-                    $JSON = @{
+                    $RawBody = @{
                         refreshToken = $APIToken
-                    } | ConvertTo-Json
+                    }
                 } else {
                     # --- Convert Secure Credentials to a format for sending in the JSON payload
                     if ($PSBoundParameters.ContainsKey("Credential")){
@@ -176,25 +162,25 @@
                     }
 
                     # --- Logging in with a domain
-                    if (@("SAM", "SAMAccountName").Contains($UserAttribute) -and $Username -match '@') {
+                    $URI = "https://$($Server)/csp/gateway/am/idp/auth/login?access_token"
+                    if ($Username -match '@') {
                         # Log in using the advanced authentication API
-                        $URI = "https://$($Server)/csp/gateway/am/idp/auth/login?access_token"
                         $User = $Username.split('@')[0]
                         $Domain = $Username.split('@')[1]
-                        $JSON = @{
+                        $RawBody = @{
                             username = $User
                             password = $JSONPassword
                             domain = $Domain
-                        } | ConvertTo-Json
+                        }
                     } else {
                         # -- Login with the basic authentication API
-                        $URI = "https://$($Server)/csp/gateway/am/api/login?access_token"
-
+                        # -- We assume local account which can use the advanced authentication API with domain set to 'System Domain'
                         # --- Create Invoke-RestMethod Parameters
-                        $JSON = @{
+                        $RawBody = @{
                             username = $Username
                             password = $JSONPassword
-                        } | ConvertTo-Json
+                            domain = "System Domain"
+                        }
                     }
                 }
 
@@ -206,7 +192,8 @@
                         "Accept"="application/json";
                         "Content-Type" = "application/json";
                     }
-                    Body = $JSON
+                    Body = ($RawBody | ConvertTo-Json)
+
                 }
 
                 if ((!$SignedCertificates) -and ($IsCoreCLR)) {
@@ -221,16 +208,41 @@
 
                 }
 
-                $Response = Invoke-RestMethod @Params
+                # Here we try with the first set of params, if it fails, it may be due to another configuration
+                # so we try again with the alternative option if available
+                try {
+                    $Response = Invoke-RestMethod @Params
+                } catch [System.Net.WebException]{
+                    if ($_.Exception.Response.StatusCode -eq "BadRequest" -and $null -ne $AlternateJson) {
+                        $RawBody.username = $Username
+                        $Params.Body = ($RawBody | ConvertTo-Json)
+                        $Response = Invoke-RestMethod @Params
+                    } else {
+                        throw $_
+                    }
+                }
 
                 if ('refresh_token' -in $Response.PSobject.Properties.Name) {
-                    $Token = $Response.access_token
                     $RefreshToken = $Response.refresh_token
                 }
 
-                if ('token' -in $Response.PSobject.Properties.Name) {
-                    $Token = $Response.token
-                    $RefreshToken = $APIToken
+                # now we need to login via the iaas api as well with the refresh token
+                $IaasParams = @{
+                    Method = "POST"
+                    URI = "https://$($Server)/iaas/api/login"
+                    Headers = @{
+                        "Accept"="application/json";
+                        "Content-Type" = "application/json";
+                    }
+                    Body = @{
+                        refreshToken = $RefreshToken
+                    } | ConvertTo-Json
+                }
+
+                $IaasResponse = Invoke-RestMethod @IaasParams
+
+                if ('token' -in $IaasResponse.PSobject.Properties.Name) {
+                    $Token = $IaasResponse.token
                 }
 
                 # --- Create Output Object
@@ -249,15 +261,6 @@
 
             }
             catch [Exception]{
-
-                if ($_.Exception.Response.StatusCode -eq "BadRequest") {
-                    # This could be due to an incorrectly set UserAttribute, so customizing the message.
-                    if ($Username -match "@") {
-                        Write-Error -Exception $_.Exception -Message "Is it possible that your environment has userPrincipalName set as the Username attribute? If so, please make sure to include the parameter UserAttribute and set it to either UPN or userPrincipalName (e.g. -UserAttribute UPN)`n`n$($_)" -ErrorAction Stop
-                    } else {
-                        Write-Error -Exception $_.Exception -Message "It is possible that the Username you provided, $Username, is missing a domain (e.g. $Username@domain.com)?`n`n$($_)" -ErrorAction Stop
-                    }
-                }
 
                 throw
 
