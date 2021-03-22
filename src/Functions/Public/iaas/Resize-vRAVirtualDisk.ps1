@@ -63,10 +63,6 @@
         $APIUrl = "/iaas/api/block-devices"
 
         function CalculateOutput([int]$Timeout,[switch]$WFC,[PSCustomObject]$RestResponse) {
-            Write-Verbose "CompletionTimeout: $Timeout"
-            Write-Verbose "WaitForCompletion: $($WFC.IsPresent)"
-            Write-Verbose "RestResponse: $RestResponse"
-            Write-Verbose "PSBoundParameters: $($PsBoundParameters.Values + $args)"
             if ($WFC.IsPresent) {
                 # if the wait for completion flag is given, the output will be different, we will wait here
                 # we will use the built-in function to check status

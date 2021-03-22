@@ -140,44 +140,23 @@
 
         $APIUrl = "/iaas/api/fabric-networks-vsphere"
 
-        function CalculateOutput {
-
-            if ($Response.PSObject.Properties.name -match "content") {
-                foreach ($Record in $Response.content) {
-                    
-                    [PSCustomObject]@{
-                        DefaultGateway = $Record.defaultGateway
-                        IsPublic = $Record.isPublic
-                        IsDefault = $Record.isDefault
-                        ExternalRegionId = $Record.externalRegionId
-                        CloudAccountIds = $Record.cloudAccountIds
-                        ExternalId = $Record.externalId
-                        Name = $Record.name
-                        Id = $Record.id
-                        CreatedAt = $Record.createdAt
-                        UpdatedAt = $Record.updatedAt
-                        OrganizationId = $Record.organizationId
-                        OrgId = $Record.orgId
-                        Links = $Record._links
-                    }
-                }
-            } else {
+        function CalculateOutput ([PSCustomObject]$FabricNetworks) {
+            
                 [PSCustomObject]@{
-                    DefaultGateway = $Response.defaultGateway
-                    IsPublic = $Response.isPublic
-                    IsDefault = $Response.isDefault
-                    ExternalRegionId = $Response.externalRegionId
-                    CloudAccountIds = $Response.cloudAccountIds
-                    ExternalId = $Response.externalId
-                    Name = $Response.name
-                    Id = $Response.id
-                    CreatedAt = $Response.createdAt
-                    UpdatedAt = $Response.updatedAt
-                    OrganizationId = $Response.organizationId
-                    OrgId = $Response.orgId
-                    Links = $Response._links
+                    DefaultGateway = $FabricNetworks.defaultGateway
+                    IsPublic = $FabricNetworks.isPublic
+                    IsDefault = $FabricNetworks.isDefault
+                    ExternalRegionId = $FabricNetworks.externalRegionId
+                    CloudAccountIds = $FabricNetworks.cloudAccountIds
+                    ExternalId = $FabricNetworks.externalId
+                    Name = $FabricNetworks.name
+                    Id = $FabricNetworks.id
+                    CreatedAt = $FabricNetworks.createdAt
+                    UpdatedAt = $FabricNetworks.updatedAt
+                    OrganizationId = $FabricNetworks.organizationId
+                    OrgId = $FabricNetworks.orgId
+                    Links = $FabricNetworks._links
                 }
-            }
             
         }
 
@@ -222,7 +201,7 @@
                 $Cidr = $CurrentRecord.cidr
             }
 
-            $Body = @"
+            $RawJson = @"
                 {
                     "ipv6Cidr": "$($ipv6)",
                     "isDefault": $($isDefault | ConvertTo-Json),
@@ -236,8 +215,7 @@
                     "dnsSearchDomains": [ $($DnsSearchDomainsJson) ]
                 }
 "@
-            $JSONObject = $Body | ConvertFrom-Json
-            $Body = $JSONObject | ConvertTo-Json -Depth 5
+            $Body = ($RawJson | ConvertFrom-Json) | ConvertTo-Json -Depth 5
 
             return $Body
         }
@@ -287,7 +265,7 @@
                         # send the udpate request
                         $Response = Invoke-vRARestMethod -URI "$APIUrl/$($CurrentRecord.Id)" -Body $Body -Method PATCH
 
-                        CalculateOutput
+                        CalculateOutput $Response
                     }
                 }
                     break
@@ -309,7 +287,7 @@
 
                         # send the udpate request
                         $Response = Invoke-vRARestMethod -URI "$APIUrl/$($CurrentRecord.Id)" -Body $Body -Method PATCH
-                        CalculateOutput
+                        CalculateOutput $Response
                     }
                 }
                     break

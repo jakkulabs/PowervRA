@@ -150,7 +150,29 @@
     )
 
     begin {
+        function CalculateOutput([PSCustomObject]$NetworkProfile) {
+
+            [PSCustomObject] @{
+
+                Owner = $NetworkProfile.owner
+                Links = $NetworkProfile._links
+                ExternalRegionId = $NetworkProfile.externalRegionId
+                Description = $NetworkProfile.description
+                IsolationNetworkDomainCIDR = $NetworkProfile.isolationNetworkDomainCIDR
+                OrgId = $NetworkProfile.orgId
+                Tags = $NetworkProfile.tags
+                OrganizationId = $NetworkProfile.organizationId
+                CreatedAt = $NetworkProfile.createdAt
+                CustomProperties = $NetworkProfile.customProperties
+                Name = $NetworkProfile.name
+                Id = $NetworkProfile.id
+                IsolationType = $NetworkProfile.isolationType
+                IsolatedNetworkCIDRPrefix = $NetworkProfile.isolatedNetworkCIDRPrefix
+                UpdatedAt = $NetworkProfile.updatedAt
+
+        }
     }
+}
 
     process {
 
@@ -219,26 +241,9 @@
             if ($PSCmdlet.ShouldProcess($Name)){
 
                 $URI = "/iaas/api/network-profiles"
-                $Record = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference
-
-                [PSCustomObject] @{
-
-                    Owner = $Record.owner
-                    Links = $Record._links
-                    ExternalRegionId = $Record.externalRegionId
-                    Description = $Record.description
-                    IsolationNetworkDomainCIDR = $Record.isolationNetworkDomainCIDR
-                    OrgId = $Record.orgId
-                    Tags = $Record.tags
-                    OrganizationId = $Record.organizationId
-                    CreatedAt = $Record.createdAt
-                    CustomProperties = $Record.customProperties
-                    Name = $Record.name
-                    Id = $Record.id
-                    IsolationType = $Record.isolationType
-                    IsolatedNetworkCIDRPrefix = $Record.isolatedNetworkCIDRPrefix
-                    UpdatedAt = $Record.updatedAt
-
+                $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference
+                CalculateOutput $Response
+                
                 }
             }
         }

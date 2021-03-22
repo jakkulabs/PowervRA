@@ -164,13 +164,29 @@
 
             $SharedResourcesStatus = 'false'
         }
+
+        function CalculateOutput([PSCustomObject]$Project) {
+            [PSCustomObject] @{
+                Name = $Project.name
+                Description = $Project.description
+                Id = $Project.id
+                Administrators = $Project.administrators
+                Members = $Project.members
+                Viewers = $Project.viewers
+                Zones = $Project.zones
+                SharedResources = $Project.sharedResources
+                OperationTimeout = $Project.operationTimeout
+                OrganizationId = $Project.organizationId
+                Links = $Project._links
+            }
+        }
     }
 
     process {
 
         switch ($PsCmdlet.ParameterSetName) {
 
-            # --- Get Project by id
+            # --- Update Project by id
             'ById' {
                 if ($null -eq $Name) {
                     # if the user does not provide a name keep the existing
@@ -179,12 +195,14 @@
                 }
             }
 
+            # --- Update Project by name
             'ByName' {
                 # we need the id to do the patch
                 $ExistingProject = Get-vRAProject -Name $Name
                 $Id = $ExistingProject.Id
             }
 
+            # --- Update Project by JSON
             'JSON' {
                 $Data = ($JSON | ConvertFrom-Json)
 
@@ -257,26 +275,14 @@
                 $Body = $JSONObject | ConvertTo-Json -Depth 5
             }
 
-        # --- Create new Project
+        # --- Update The Project
         try {
             if ($PSCmdlet.ShouldProcess($Name)){
 
                 $URI = "/iaas/api/projects"
-                $Project = Invoke-vRARestMethod -Method PATCH -URI "$URI`/$Id" -Body $Body -Verbose:$VerbosePreference
+                $Response = Invoke-vRARestMethod -Method PATCH -URI "$URI`/$Id" -Body $Body -Verbose:$VerbosePreference
 
-                [PSCustomObject] @{
-                    Name = $Project.name
-                    Description = $Project.description
-                    Id = $Project.id
-                    Administrators = $Project.administrators
-                    Members = $Project.members
-                    Viewers = $Project.viewers
-                    Zones = $Project.zones
-                    SharedResources = $Project.sharedResources
-                    OperationTimeout = $Project.operationTimeout
-                    OrganizationId = $Project.organizationId
-                    Links = $Project._links
-                }
+                CalculateOutput $Response
             }
         }
         catch [Exception] {
