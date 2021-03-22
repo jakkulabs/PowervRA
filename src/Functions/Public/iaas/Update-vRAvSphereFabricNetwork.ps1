@@ -222,11 +222,6 @@
                 $Cidr = $CurrentRecord.cidr
             }
 
-            # # handle tags diff
-            # if ($null -eq $Ipv6Cidr) {
-            #     $Ipv6Cidr = $CurrentRecord.content[0].ipv6Cidr
-            # }
-
             $Body = @"
                 {
                     "ipv6Cidr": "$($ipv6)",
@@ -280,7 +275,7 @@
 
             switch ($PsCmdlet.ParameterSetName) {
 
-                # --- Get Network by its id
+                # --- Process by its id
                 'ById' {
                     if ($PSCmdlet.ShouldProcess($Id)){
                     foreach ($networkId in $Id) {
@@ -298,7 +293,7 @@
                     break
                 }
 
-                # --- Get Network by its name
+                # --- Process  by its name
                 'ByName' {
                     if ($PSCmdlet.ShouldProcess($Name)){
                     $acctQuery = buildAccountQuery
