@@ -167,7 +167,7 @@
 
             switch ($PsCmdlet.ParameterSetName) {
 
-                # --- Get Machine by its id
+                # --- Get Machine Attached Disk by its id
                 'ById' {
                     if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($Id)){
                         # --- Check to see if the DiskId's were optionally present
@@ -178,7 +178,7 @@
                     break
                 }
 
-                # --- Get Machine by its name
+                # --- Get Machine Attached Disk by its name
                 # --- Will need to retrieve the machine first, then use ID to get final output
                 'ByName' {
                     if ($Force.IsPresent -or $PsCmdlet.ShouldProcess($Name)){
