@@ -66,7 +66,7 @@
         Description = 'Test Profile'
         RegionId = '9e49'
         fabricNetworkIds = '6543','6542'
-        Tags: 'placement:coems','mytag2:2'
+        Tags = 'placement:coems','mytag2:2'
     }
 
     New-vRANetworkProfile @ProfileArguments
@@ -223,7 +223,7 @@
                         "isolationExternalFabricNetworkId": "$($IsolationExternalFabricNetworkId)",
                         "isolationType": "$($IsolationType)",
                         "loadBalancerIds": [ $($LoadBalancerIdJson) ],
-                        "tags": $($TagsJson)
+                        "tags": [$($TagsJson)]
                     }
 "@
                 Write-Verbose $Body
@@ -244,7 +244,6 @@
                 $Response = Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference
                 CalculateOutput $Response
                 
-                }
             }
         }
         catch [Exception] {

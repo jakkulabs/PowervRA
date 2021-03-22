@@ -98,7 +98,7 @@ Task CreateArtifact {
     Copy-Item -Path $ModuleManifestSource.FullName -Destination "$($ReleaseDirectoryPath)\$($ModuleName).psd1" -Force
 
     # --- Set the psd1 module version
-    $ModuleManifestVersion = $ENV:GITVERSION_MajorMinorPatch
+    $ModuleManifestVersion = "2.25.0" # $ENV:GITVERSION_MajorMinorPatch
     Update-Metadata -Path "$($ReleaseDirectoryPath)\$($ModuleName).psd1" -PropertyName ModuleVersion -Value $ModuleManifestVersion
 
     # --- Create an empty psm1 file

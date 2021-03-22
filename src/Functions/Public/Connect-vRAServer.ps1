@@ -213,7 +213,7 @@
                 try {
                     $Response = Invoke-RestMethod @Params
                 } catch [System.Net.WebException]{
-                    if ($_.Exception.Response.StatusCode -eq "BadRequest" -and $null -ne $AlternateJson) {
+                    if ($_.Exception.Response.StatusCode -eq "BadRequest") {
                         $RawBody.username = $Username
                         $Params.Body = ($RawBody | ConvertTo-Json)
                         $Response = Invoke-RestMethod @Params
