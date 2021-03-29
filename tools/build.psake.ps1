@@ -8,7 +8,7 @@ properties {
 # --- Define the build tasks
 Task Default -depends Build
 Task Build -depends Lint, UpdateModuleManifest, CreateArtifact, CreateArchive
-Task BuildWithTests -depends Init, Build, ExecuteTest
+Task BuildWithTests -depends Init, Build, ExecuteTest, UpdateDocumentation
 
 Task Init {
 
@@ -155,24 +155,25 @@ Task ExecuteTest {
     Invoke-Pester -Configuration $config
 }
 
-# Task UpdateDocumentation {
+Task UpdateDocumentation {
 
-#     Write-Output "Updating Markdown help"
-#     $FunctionsPath = "$DocsDirectory\functions"
+    Write-Output "Updating Markdown help"
+    $FunctionsPath = "$DocsDirectory\functions"
 
-#     Remove-Item -Path $FunctionsPath -Recurse -Force -ErrorAction SilentlyContinue
-#     New-Item $FunctionsPath -ItemType Directory | Out-Null
+    Remove-Item -Path $FunctionsPath -Recurse -Force -ErrorAction SilentlyContinue
+    New-Item $FunctionsPath -ItemType Directory | Out-Null
 
-#     $PlatyPSParameters = @{
-#         Module = $ModuleName
-#         OutputFolder = $FunctionsPath
-#         NoMetadata = $true
-#     }
+    Import-Module -Name "$($ReleaseDirectoryPath)" -Global
 
-#     New-MarkdownHelp @PlatyPSParameters -ErrorAction SilentlyContinue -Verbose:$VerbosePreference | Out-Null
+    $PlatyPSParameters = @{
+        Module = $ModuleName
+        OutputFolder = $FunctionsPath
+        NoMetadata = $true
+    }
 
-#     # --- Ensure that index.md is present and up to date
-#     Write-Output "Updating index.md"
-#     Copy-Item -Path "$ENV:BHProjectPath\README.md" -Destination "$($DocsDirectory)\index.md" -Force -Verbose:$VerbosePreference | Out-Null
+    New-MarkdownHelp @PlatyPSParameters -ErrorAction SilentlyContinue -Verbose:$VerbosePreference | Out-Null
 
-# }
+    # --- Ensure that index.md is present and up to date
+    Write-Output "Updating index.md"
+    Copy-Item -Path "$ENV:BHProjectPath\README.md" -Destination "$($DocsDirectory)\index.md" -Force -Verbose:$VerbosePreference | Out-Null
+}
