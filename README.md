@@ -130,3 +130,7 @@ Once complete you can run the UpdateDocumentation task to create new markdown fi
 ```
 
 The changes can then be committed back to the repository. Once pushed, they will be reflected in ReadTheDocs.
+
+**Documentation**
+
+Documentation for all functions in the module can be found [here](https://jakkulabs.github.io/PowervRA/).
