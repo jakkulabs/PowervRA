@@ -192,7 +192,7 @@
                         "Accept"="application/json";
                         "Content-Type" = "application/json";
                     }
-                    Body = ($RawBody | ConvertTo-Json)
+                    Body = $RawBody | ConvertTo-Json
 
                 }
 
@@ -215,7 +215,7 @@
                 } catch [System.Net.WebException]{
                     if ($_.Exception.Response.StatusCode -eq "BadRequest") {
                         $RawBody.username = $Username
-                        $Params.Body = ($RawBody | ConvertTo-Json)
+                        $Params.Body = $RawBody | ConvertTo-Json
                         $Response = Invoke-RestMethod @Params
                     } else {
                         throw $_
