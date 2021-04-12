@@ -13,7 +13,7 @@
     A description of the Network Profile
 
     .PARAMETER Description
-    A description of the network profile
+    A description of the Network Profile
 
     .PARAMETER IsolationNetworkDomainCIDR
     CIDR of the isolation network domain
