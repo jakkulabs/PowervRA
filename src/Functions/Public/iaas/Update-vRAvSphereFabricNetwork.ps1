@@ -62,18 +62,9 @@
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'CloudAccountName',Justification = 'False positive as rule does not scan child scopes')]
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'CloudAccountId',Justification = 'False positive as rule does not scan child scopes')]
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Ipv6Cidr',Justification = 'False positive as rule does not scan child scopes')]
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'IsDefault',Justification = 'False positive as rule does not scan child scopes')]
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Domain',Justification = 'False positive as rule does not scan child scopes')]
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'DefaultIpv6Gateway',Justification = 'False positive as rule does not scan child scopes')]
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'DnsServerAddresses',Justification = 'False positive as rule does not scan child scopes')]
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'IsPublic',Justification = 'False positive as rule does not scan child scopes')]
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Cidr',Justification = 'False positive as rule does not scan child scopes')]
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'DefaultGateway',Justification = 'False positive as rule does not scan child scopes')]
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Tags',Justification = 'False positive as rule does not scan child scopes')]
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'DnsSearchDomains',Justification = 'False positive as rule does not scan child scopes')]
+ [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Ipv6Cidr',Justification = 'False positive as rule does not scan child scopes')]
+ [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Domain',Justification = 'False positive as rule does not scan child scopes')]
+ [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Tags',Justification = 'False positive as rule does not scan child scopes')]
 
     Param (
 
