@@ -86,7 +86,8 @@
             }
         }
 
-        function buildAccountQuery() {
+        function buildAccountQuery([String[]]$CloudAccountName,
+                                    [String[]]$CloudAccountId) {
             $accountIdString = ''
             $cloudAccountIds = @()
 
@@ -126,7 +127,7 @@
 
                 # --- Get Network by its name
                 'ByName' {
-                    $acctQuery = buildAccountQuery
+                    $acctQuery = buildAccountQuery -CloudAccountName $CloudAccountName -CloudAccountId $CloudAccountId
                     foreach ($networkName in $Name) {
                         if ($null -ne $acctQuery -and '' -ne $acctQuery) {
                             $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$networkName' and $acctQuery`&`$top=1000" -Method GET
@@ -141,7 +142,7 @@
 
                 # --- No parameters passed so return all networks
                 'Standard' {
-                    $acctQuery = buildAccountQuery
+                    $acctQuery = buildAccountQuery -CloudAccountName $CloudAccountName -CloudAccountId $CloudAccountId
                     if ($null -ne $acctQuery -and '' -ne $acctQuery) {
                         $Response = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=$acctQuery`&`$top=1000" -Method GET
                         CalculateOutput $Response

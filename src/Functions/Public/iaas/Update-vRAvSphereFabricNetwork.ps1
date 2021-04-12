@@ -160,7 +160,14 @@
             
         }
 
-        function buildUpdateBody() {
+        function buildUpdateBody([PSCustomObject]$CurrentRecord,
+                                    [bool]$IsDefault,
+                                    [String]$DefaultIpv6Gateway,
+                                    [String[]]$DnsServerAddresses,
+                                    [bool]$IsPublic,
+                                    [String]$Cidr,
+                                    [String]$DefaultGateway,
+                                    [String[]]$DnsSearchDomains) {
             $DnsServerAddressesJson = ($DnsServerAddresses | ForEach-Object {"`"$_`""}) -join ","
             $DnsSearchDomainsJson = ($DnsSearchDomains | ForEach-Object {"`"$_`""}) -join ","
             if($DnsServerAddressesJson -eq "`"`"") {
@@ -203,7 +210,7 @@
 
             $RawJson = @"
                 {
-                    "ipv6Cidr": "$($ipv6)",
+                    "ipv6Cidr": "$($Ipv6Cidr)",
                     "isDefault": $($isDefault | ConvertTo-Json),
                     "domain": "$($Domain)",
                     "defaultIpv6Gateway": "$($DefaultIpv6Gateway)",
@@ -220,7 +227,8 @@
             return $Body
         }
 
-        function buildAccountQuery() {
+        function buildAccountQuery([String[]]$CloudAccountName,
+                                    [String[]]$CloudAccountId) {
             $accountIdString = ''
             $cloudAccountIds = @()
 
@@ -260,7 +268,9 @@
                         $CurrentRecord = Invoke-vRARestMethod -URI "$APIUrl/$networkId" -Method GET
 
                         # build the body of the update request
-                        $Body = buildUpdateBody
+                        $Body = buildUpdateBody -CurrentRecord $CurrentProtocols -IsDefault $IsDefault `
+                                                -DefaultIpv6Gateway $DefaultIpv6Gateway -DnsServerAddresses $DnsServerAddresses `
+                                                -IsPublic $IsPublic -Cidr $Cidr -DefaultGateway $DefaultGateway -DnsSearchDomains $DnsSearchDomains
 
                         # send the udpate request
                         $Response = Invoke-vRARestMethod -URI "$APIUrl/$($CurrentRecord.Id)" -Body $Body -Method PATCH
@@ -274,7 +284,7 @@
                 # --- Process  by its name
                 'ByName' {
                     if ($PSCmdlet.ShouldProcess($Name)){
-                    $acctQuery = buildAccountQuery
+                    $acctQuery = buildAccountQuery -CloudAccountName $CloudAccountName -CloudAccountId $CloudAccountId
                     foreach ($networkName in $Name) {
                         if ($null -ne $acctQuery -and '' -ne $acctQuery) {
                             $CurrentRecord = Invoke-vRARestMethod -URI "$APIUrl`?`$filter=name eq '$networkName' and $acctQuery" -Method GET
@@ -283,7 +293,9 @@
                         }
                         
                         # build the body of the update request
-                        $Body = buildUpdateBody
+                        $Body = buildUpdateBody -CurrentRecord $CurrentProtocols -IsDefault $IsDefault `
+                                                -DefaultIpv6Gateway $DefaultIpv6Gateway -DnsServerAddresses $DnsServerAddresses `
+                                                -IsPublic $IsPublic -Cidr $Cidr -DefaultGateway $DefaultGateway -DnsSearchDomains $DnsSearchDomains
 
                         # send the udpate request
                         $Response = Invoke-vRARestMethod -URI "$APIUrl/$($CurrentRecord.Id)" -Body $Body -Method PATCH
