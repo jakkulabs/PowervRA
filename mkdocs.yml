@@ -1,0 +1,5 @@
+site_name: PowervRA Module Documentation
+site_url: https://jakkulabs.github.io/PowervRA/
+
+theme:
+  name: material

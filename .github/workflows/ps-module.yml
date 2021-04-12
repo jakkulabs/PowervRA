@@ -8,6 +8,7 @@ on:
       - tools/**
       - tests/**
       - .github/workflows/**
+      - mkdocs.yml
     tags:
       - v*
   pull_request:
@@ -54,12 +55,18 @@ jobs:
           name: Tools
           path: ${{ github.workspace }}/tools
 
+      - name: Upload Docs artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: docs
+          path: ${{ github.workspace }}/docs
+
   publish_test_results:
 
     name: "Publish Unit Tests Results"
+    if: always()
     needs: build
     runs-on: ubuntu-latest
-    if: always()
 
     steps:
       - name: Download Artifacts
@@ -71,6 +78,31 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           files: "./Tools/testResults.xml"
+
+  publish_docs:
+
+    name: "Publish Docs to GitHub Pages"
+    if: ${{ github.ref == 'refs/heads/master' }}
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install mkdocs-material
+        run: pip install mkdocs-material
+
+      - name: Run mkdocs
+        run: mkdocs gh-deploy --force
 
   test_release:
 
