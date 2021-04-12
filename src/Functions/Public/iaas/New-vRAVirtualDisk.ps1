@@ -56,6 +56,7 @@ function New-vRAVirtualDisk {
 
     #>
     [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High",DefaultParameterSetName="ByName")][OutputType('System.Management.Automation.PSObject')]
+    [Alias("New-vRABlockDevice")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'WaitForCompletion',Justification = 'False positive as rule does not scan child scopes')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'CompletionTimeout',Justification = 'False positive as rule does not scan child scopes')]
 
@@ -213,7 +214,4 @@ function New-vRAVirtualDisk {
 
         }
     }
-
-    New-Alias -Name New-vRABlockDevice -Value New-vRAVirtualDisk
-    Export-ModuleMember -Alias * -Function *
 
