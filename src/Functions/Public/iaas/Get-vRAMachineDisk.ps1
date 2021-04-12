@@ -104,7 +104,7 @@
 
             switch ($PsCmdlet.ParameterSetName) {
 
-                # --- Get Machine by its id
+                # --- Get Machine Disk by its id
                 'ById' {
 
                     # --- Check to see if the DiskId's were optionally present
@@ -129,7 +129,7 @@
                     break
                 }
 
-                # --- Get Machine by its name
+                # --- Get Machine Disk by its name
                 # --- Will need to retrieve the machine first, then use ID to get final output
                 'ByName' {
 
