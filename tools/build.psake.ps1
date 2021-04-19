@@ -1,3 +1,5 @@
+using namespace System.Management.Automation.Language
+
 # --- Dot source build.settings.ps1
 . $PSScriptRoot\build.settings.ps1
 
@@ -63,8 +65,11 @@ Task UpdateModuleManifest {
     Write-Output "PublicFunctions are: $PublicFunctions"
 
     $ExportFunctions = @()
+    $script:ExportAliases = @()
 
     foreach ($FunctionFile in $PublicFunctions) {
+
+        # Find functions to export
         $AST = [System.Management.Automation.Language.Parser]::ParseFile($FunctionFile.FullName, [ref]$null, [ref]$null)
         $Functions = $AST.FindAll({
             # --- Only export functions that contain a "-" and do not start with "int"
@@ -75,10 +80,28 @@ Task UpdateModuleManifest {
         if ($Functions.Name) {
             $ExportFunctions += $Functions.Name
         }
+
+        # Find aliases to export
+        $ParamBlock = $Ast.FindAll(
+            {
+                param($Item)
+                return ($Item -is [ParamBlockAst])
+            },
+            $true
+        )
+
+        $Aliases = $ParamBlock.Attributes | Where-Object {$_.TypeName.Name -eq 'Alias'}
+
+        if ($Aliases){
+            foreach ($Alias in $Aliases){
+
+                $script:ExportAliases += $Alias.PositionalArguments.Value
+            }
+        }
     }
 
-    Set-ModuleFunction -Name $ENV:BHPSModuleManifest -FunctionsToExport $ExportFunctions -Verbose
-
+    Set-ModuleFunction -Name $ENV:BHPSModuleManifest -FunctionsToExport ($ExportFunctions | Sort-Object) -Verbose
+    Set-ModuleAlias -Name $ENV:BHPSModuleManifest -AliasesToExport ($script:ExportAliases | Sort-Object) -Verbose
 }
 
 Task CreateArtifact {
@@ -129,6 +152,14 @@ $($Content)
     }
 
     Add-Content -Path $PSM1.FullName -Value $Body -Encoding UTF8
+
+    # Add export of aliases
+    if ($script:ExportAliases){
+
+        $AliasBody = "Export-ModuleMember -Alias " + ($script:ExportAliases -join ",")
+        Write-Output "Adding export alias content: $($AliasBody)"
+        Add-Content -Path $PSM1.FullName -Value $AliasBody -Encoding UTF8
+    }
 }
 
 Task CreateArchive {
