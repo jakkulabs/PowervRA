@@ -214,5 +214,3 @@ function New-vRAVirtualDisk {
 
         }
     }
-
-Export-ModuleMember -Alias New-vRABlockDevice

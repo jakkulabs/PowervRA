@@ -65,7 +65,7 @@ Task UpdateModuleManifest {
     Write-Output "PublicFunctions are: $PublicFunctions"
 
     $ExportFunctions = @()
-    $ExportAliases = @()
+    $script:ExportAliases = @()
 
     foreach ($FunctionFile in $PublicFunctions) {
 
@@ -95,13 +95,13 @@ Task UpdateModuleManifest {
         if ($Aliases){
             foreach ($Alias in $Aliases){
 
-                $ExportAliases += $Alias.PositionalArguments.Value
+                $script:ExportAliases += $Alias.PositionalArguments.Value
             }
         }
     }
 
     Set-ModuleFunction -Name $ENV:BHPSModuleManifest -FunctionsToExport ($ExportFunctions | Sort-Object) -Verbose
-    Set-ModuleAlias -Name $ENV:BHPSModuleManifest -AliasesToExport ($ExportAliases | Sort-Object) -Verbose
+    Set-ModuleAlias -Name $ENV:BHPSModuleManifest -AliasesToExport ($script:ExportAliases | Sort-Object) -Verbose
 }
 
 Task CreateArtifact {
@@ -152,6 +152,13 @@ $($Content)
     }
 
     Add-Content -Path $PSM1.FullName -Value $Body -Encoding UTF8
+
+    # Add export of aliases
+    if ($script:ExportAliases){
+
+        $AliasBody = "Export-ModuleMember -Alias " + ($script:ExportAliases -join ",")
+        Add-Content -Path $PSM1.FullName -Value $AliasBody -Encoding UTF8
+    }
 }
 
 Task CreateArchive {
