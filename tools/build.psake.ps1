@@ -157,7 +157,7 @@ $($Content)
     if ($script:ExportAliases){
 
         $AliasBody = "Export-ModuleMember -Alias " + ($script:ExportAliases -join ",")
-        Write-Output "Adding export alias content: " + $AliasBody
+        Write-Output "Adding export alias content: $($AliasBody)"
         Add-Content -Path $PSM1.FullName -Value $AliasBody -Encoding UTF8
     }
 }
