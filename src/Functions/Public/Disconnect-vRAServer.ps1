@@ -4,7 +4,7 @@
     Disconnect from a vRA server
 
     .DESCRIPTION
-    Disconnect from a vRA server by removing the authorization token and the global vRAConnection variable from PowerShell
+    Disconnect from a vRA server by removing the authorization token and the vRAConnection script variable from PowerShell
 
     .EXAMPLE
     Disconnect-vRAServer
@@ -43,7 +43,8 @@
         }
         finally {
 
-            Write-Verbose -Message "Removing vRAConnection global variable"
+            # --- Remove the vRAConnection script variable
+            Write-Verbose -Message "Removing vRAConnection script variable"
             Remove-Variable -Name vRAConnection -Scope Script -Force -ErrorAction SilentlyContinue
         }
     }
