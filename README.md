@@ -44,6 +44,15 @@ Install-Module -Name PowervRA -RequiredVersion 3.7.0 -Scope CurrentUser
 |Windows PowerShell|5.1| :white_check_mark: |
 
 
+## Breaking Changes
+
+Listed here are the breaking changes made which required the major version to be incremented
+
+| PowervRA Version | Breaking Change |
+| --- | --- |
+|4.x -> 5.x| Removed UserAttribute Parameter from `Connect-vRAServer` |
+|3.x -> 4.x| Re-written module to work with new vRA 8.x and Cloud API |
+
 ## Download
 
 You can grab the latest version of the module from the PowerShell Gallery by running the following command:
@@ -60,7 +69,7 @@ Install-Module -Name PowervRA -RequiredVersion 3.7.0 -Scope CurrentUser
 
 ## Quick Start
 
-### PowervRA 4.x
+### PowervRA 4.x, 5.x
 
 Once you have installed and imported PowervRA, use Connect-vRAServer to connect to your vRA instance:
 
