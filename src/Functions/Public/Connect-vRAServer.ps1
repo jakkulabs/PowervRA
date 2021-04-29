@@ -246,6 +246,19 @@
                         } | ConvertTo-Json
                     }
 
+
+                    if ((!$SignedCertificates) -and ($IsCoreCLR)) {
+
+                        $IaasParams.Add("SkipCertificateCheck", $true)
+
+                    }
+
+                    if (($SslProtocolResult -ne 'Default') -and ($IsCoreCLR)) {
+
+                        $IaasParams.Add("SslProtocol", $SslProtocol)
+
+                    }
+
                     $IaasResponse = Invoke-RestMethod @IaasParams
 
                     if ('token' -in $IaasResponse.PSobject.Properties.Name) {
