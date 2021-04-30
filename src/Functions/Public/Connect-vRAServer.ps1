@@ -222,27 +222,48 @@
                     }
                 }
 
-                if ('refresh_token' -in $Response.PSobject.Properties.Name) {
-                    $RefreshToken = $Response.refresh_token
+                if ('token' -in $Response.PSobject.Properties.Name) {
+                    $Token = $Response.token
                 }
 
-                # now we need to login via the iaas api as well with the refresh token
-                $IaasParams = @{
-                    Method = "POST"
-                    URI = "https://$($Server)/iaas/api/login"
-                    Headers = @{
-                        "Accept"="application/json";
-                        "Content-Type" = "application/json";
+                # Ony try this for the on-premises vRA version
+                if ($Server -ne 'api.mgmt.cloud.vmware.com'){
+
+                    if ('refresh_token' -in $Response.PSobject.Properties.Name) {
+                        $RefreshToken = $Response.refresh_token
                     }
-                    Body = @{
-                        refreshToken = $RefreshToken
-                    } | ConvertTo-Json
-                }
 
-                $IaasResponse = Invoke-RestMethod @IaasParams
+                    # now we need to login via the iaas api as well with the refresh token
+                    $IaasParams = @{
+                        Method = "POST"
+                        URI = "https://$($Server)/iaas/api/login"
+                        Headers = @{
+                            "Accept"="application/json";
+                            "Content-Type" = "application/json";
+                        }
+                        Body = @{
+                            refreshToken = $RefreshToken
+                        } | ConvertTo-Json
+                    }
 
-                if ('token' -in $IaasResponse.PSobject.Properties.Name) {
-                    $Token = $IaasResponse.token
+
+                    if ((!$SignedCertificates) -and ($IsCoreCLR)) {
+
+                        $IaasParams.Add("SkipCertificateCheck", $true)
+
+                    }
+
+                    if (($SslProtocolResult -ne 'Default') -and ($IsCoreCLR)) {
+
+                        $IaasParams.Add("SslProtocol", $SslProtocol)
+
+                    }
+
+                    $IaasResponse = Invoke-RestMethod @IaasParams
+
+                    if ('token' -in $IaasResponse.PSobject.Properties.Name) {
+                        $Token = $IaasResponse.token
+                    }
                 }
 
                 # --- Create Output Object
