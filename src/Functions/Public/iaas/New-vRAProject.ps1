@@ -30,6 +30,12 @@
     .PARAMETER SharedResources
     Deployments are shared between all users in the project
 
+    .PARAMETER PlacementPolicy
+    Placement Policy
+
+    .PARAMETER CustomProperties
+    Specify the custom properties that should be added to all requests in this project
+
     .PARAMETER JSON
     A JSON string with the body payload
 
@@ -50,6 +56,10 @@
         memoryLimitMb = 107374
     }
 
+    $CustomProperties = @{}
+    $CustomProperties.Add('Property1', "Value1")
+    $CustomProperties.Add('Property2', "Value2")
+
     $ProjectArguments = @{
 
         Name = 'Test Project'
@@ -60,6 +70,7 @@
         Administrators = 'admin1@test.com','admin2@test.com'
         OperationTimeout = 3600
         SharedResources = $true
+        CustomProperties = $CustomProperties
     }
 
     New-vRAProject @ProjectArguments
@@ -141,6 +152,14 @@
 
         [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [Switch]$SharedResources,
+
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [ValidateSet("DEFAULT", "SPREAD", IgnoreCase = $false)]
+        [String]$PlacementPolicy,
+
+        [Parameter(Mandatory=$false,ParameterSetName="Standard")]
+        [ValidateNotNullOrEmpty()]
+        [Hashtable]$CustomProperties,
 
         [Parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="JSON")]
         [ValidateNotNullOrEmpty()]
@@ -238,6 +257,18 @@
                     }
                 }
 
+                # --- Add Placement Policy
+                if ($PSBoundParameters.ContainsKey("PlacementPolicy")){
+
+                    $JSONObject | Add-Member -MemberType NoteProperty -Name 'placementPolicy' -Value $PlacementPolicy
+                }
+
+                # --- Add Custom Properties
+                if ($PSBoundParameters.ContainsKey("CustomProperties")){
+
+                    $JSONObject | Add-Member -MemberType NoteProperty -Name 'customProperties' -Value $CustomProperties
+                }
+
                 $Body = $JSONObject | ConvertTo-Json -Depth 5
             }
 
@@ -259,6 +290,8 @@
                     Zones = $Project.zones
                     SharedResources = $Project.sharedResources
                     OperationTimeout = $Project.operationTimeout
+                    PlacementPolicy = $Project.placementPolicy
+                    CustomProperties = $Project.customProperties
                     OrganizationId = $Project.organizationId
                     Links = $Project._links
                 }
