@@ -37,7 +37,7 @@
     Deployments are shared between all users in the project
 
     .PARAMETER PlacementPolicy
-    Placement Policy
+    Placement Policy - Valid values: "DEFAULT" or "SPREAD"
 
     .PARAMETER CustomProperties
     Specify the custom properties that should be added to all requests in this project
@@ -241,7 +241,7 @@
 
             # --- Update Project by JSON
             'JSON' {
-                $Data = ($JSON | ConvertFrom-Json)
+                $Data = $JSON | ConvertFrom-Json
 
                 $Body = $JSON
                 $Name = $Data.name
