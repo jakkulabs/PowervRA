@@ -57,6 +57,8 @@
                 Zones = $Project.zones
                 SharedResources = $Project.sharedResources
                 OperationTimeout = $Project.operationTimeout
+                PlacementPolicy = $Project.placementPolicy
+                CustomProperties = $Project.customProperties
                 OrganizationId = $Project.organizationId
                 Links = $Project._links
             }

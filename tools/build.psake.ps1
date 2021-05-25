@@ -177,7 +177,7 @@ Task CreateArchive {
 Task ExecuteTest {
 
     $config = [PesterConfiguration]::Default
-    $config.CodeCoverage.Enabled = $true
+    $config.CodeCoverage.Enabled = $false
     $config.TestResult.Enabled = $true
     $config.TestResult.OutputFormat = 'JUnitXml'
     $config.Output.Verbosity = 'Detailed'
