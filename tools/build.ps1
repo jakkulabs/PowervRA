@@ -46,11 +46,11 @@ $Requirements = @(
     },
     @{
         Name = "BuildHelpers"
-        Version = "2.0.15"
+        Version = "2.0.16"
     },
     @{
         Name = "Pester"
-        Version = "5.1.1"
+        Version = "5.2.1"
     },
     @{
         Name = "platyPS"
@@ -71,11 +71,19 @@ foreach ($RequiredModule in $Requirements) {
 
     $InstalledModule = Get-Module -Name $RequiredModule.Name -ListAvailable
 
+    # Update module if installed version is lower than required version
     if ($InstalledModule -and ($InstalledModule[0].Version -lt [Version]$RequiredModule.Version)) {
         Write-Host "    -> Updating $($RequiredModule.Name)"
         Update-Module @ModuleParams
     }
 
+    # Install module if installed version is greater than required version
+    if ($InstalledModule -and ($InstalledModule[0].Version -gt [Version]$RequiredModule.Version)) {
+        Write-Host "    -> Installing required version of $($RequiredModule.Name)"
+        Install-Module @ModuleParams
+    }
+
+    # Install module if not present
     if (!$InstalledModule) {
         Write-Host "    -> Installing $($RequiredModule.Name)"
         Install-Module @ModuleParams
@@ -90,7 +98,6 @@ Set-BuildEnvironment -Force
 # --- Set Psake parameters
 $PsakeBuildParameters = @{
     BuildFile = "$($PSScriptRoot)\build.psake.ps1"
-
     TaskList = $Task
     Nologo = $true
 }
