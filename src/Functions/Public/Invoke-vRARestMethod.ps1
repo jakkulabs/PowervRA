@@ -143,7 +143,7 @@
             Invoke-WebRequest @Params
         }
         else {
-            $Page = 1
+            $Page = 0
             Do {
                 $Result = Invoke-RestMethod @Params
                 Write-Output $Result
