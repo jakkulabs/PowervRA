@@ -1,4 +1,4 @@
-﻿function Get-vRAResource {
+function Get-vRAResource {
 <#
     .SYNOPSIS
     Get a deployed resource
@@ -73,7 +73,7 @@
         [String[]]$Name,
 
         [Parameter(Mandatory=$false,ParameterSetName="Standard")]
-        [ValidateSet("Deployment","Machine")]
+        [ValidateSet("Deployment","Machine","DynamicTypes")]
         [String]$Type,
 
         [Parameter(Mandatory=$false,ParameterSetName="Standard")]
@@ -165,9 +165,16 @@
                     $TotalPages = 99999 #Total pages is known after the 1st vRA REST query
                     
                     For ($nbPage=1; $nbPage -le $TotalPages; $nbPage++) {
-                        # --- Set the default URI with no filtering to return all resource types
-                        $URI = "/catalog-service/api/consumer/resourceViews/?withExtendedData=$($WithExtendedData)&withOperations=$($WithOperations)&managedOnly=$($ManagedOnly)&`$orderby=name asc&limit=$($Limit)&page=$($nbPage)"
+                        
+                        if ("DynamicTypes" -eq $Type) {
 
+                            $URI = "/catalog-service/api/consumer/resources/types/cs_DynamicTypes/?limit=$($Limit)&page=$($nbPage)"
+
+                        } else {
+                            # --- Set the default URI with no filtering to return all resource types
+                            $URI = "/catalog-service/api/consumer/resourceViews/?withExtendedData=$($WithExtendedData)&withOperations=$($WithOperations)&managedOnly=$($ManagedOnly)&`$orderby=name asc&limit=$($Limit)&page=$($nbPage)"
+                        
+                        }
                         # --- If type is passed set the filter
                         if ($PSBoundParameters.ContainsKey("Type")){
 
@@ -195,6 +202,12 @@
 
                                 }
 
+                                'DynamicTypes' {
+
+                                    break
+
+                                }
+
                             }
 
                             Write-Verbose -Message "Type $($Type) selected"
@@ -206,8 +219,18 @@
                         try {
                             $Response = Invoke-vRARestMethod -Method GET -URI $EscapedURI -Verbose:$VerbosePreference
                             
-                            foreach ($Resource in $Response.content) {
-                               intNewvRAObjectResource $Resource
+                            if ("DynamicTypes" -eq $Type) {
+
+                                foreach ($Resource in $Response.content) {
+                                    intNewvRAObjectResourceFromDynamicType $Resource
+                                }
+
+                            } else {
+
+                                foreach ($Resource in $Response.content) {
+                                intNewvRAObjectResource $Resource
+                                }
+
                             }
 
                             $TotalPages = $Response.metadata.totalPages
@@ -264,6 +287,41 @@ Function intNewvRAObjectResource {
         DateCreated = $Data.dateCreated
         LastUpdated = $Data.lastUpdated
         Lease = $Data.lease
+        Costs = $Data.costs
+        CostToDate = $Data.costToDate
+        TotalCost = $Data.totalCost
+        Links = $Data.links
+        IconId = $Data.iconId
+    }
+}
+
+Function intNewvRAObjectResourceFromDynamicType {
+    Param (
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
+        $Data
+    )
+
+    [PSCustomObject]@{
+        ResourceId = $Data.id
+        ResourceTypeRefId = $Data.resourceTypeRef.id
+        ResourceTypeRefLabel = $Data.resourceTypeRef.label
+        BusinessGroupId = $Data.organization.subtenantRef
+        BusinessGroupName = $Data.organization.subtenantLabel
+        TenantId = $Data.tenantId
+        CatalogItemLabel = $Data.catalogItem.label
+        CatalogItemId = $Data.catalogItem.id
+        ParentResourceId = $Data.parentResourceRef
+        HasChildren = $Data.hasChildren
+        Data = $Data.resourceData.entries
+        ResourceType = "DynamicType"
+        Name = $Data.name
+        Description = $Data.description
+        Status = $Data.status
+        RequestId = $Data.requestId      
+        Owners = $Data.owners
+        DateCreated = $Data.dateCreated
+        LastUpdated = $Data.lastUpdated
         Costs = $Data.costs
         CostToDate = $Data.costToDate
         TotalCost = $Data.totalCost
