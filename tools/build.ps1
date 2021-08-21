@@ -59,6 +59,9 @@ $Requirements = @(
 )
 
 # --- Install dependencies
+Register-PSRepository -Default
+Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+
 Write-Host "Installing required modules:"
 foreach ($RequiredModule in $Requirements) {
 
