@@ -58,6 +58,12 @@ $Requirements = @(
     }
 )
 
+# --- Configure default PowerShell Gallery Repository if not present
+if (-not (Get-PSRepository)){
+
+    Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+}
+
 # --- Install dependencies
 Write-Host "Installing required modules:"
 foreach ($RequiredModule in $Requirements) {
