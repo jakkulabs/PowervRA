@@ -42,7 +42,7 @@ $Requirements = @(
     },
     @{
         Name = "PSScriptAnalyzer"
-        Version = "1.19.1"
+        Version = "1.20.0"
     },
     @{
         Name = "BuildHelpers"
@@ -50,7 +50,7 @@ $Requirements = @(
     },
     @{
         Name = "Pester"
-        Version = "5.2.2"
+        Version = "5.3.1"
     },
     @{
         Name = "platyPS"
