@@ -2,19 +2,19 @@
 <#
     .SYNOPSIS
     Finds regular users
-    
+
     .DESCRIPTION
     Finds regular users in one of the identity providers configured for the tenant.
-    
+
     .PARAMETER Id
     The Id of the user
-    
+
     .PARAMETER Tenant
     The tenant of the user
-    
+
     .PARAMETER LocalUsersOnly
     Only return local users
-    
+
     .PARAMETER Limit
     The number of entries returned per page from the API. This has a default value of 100.
 
@@ -26,16 +26,16 @@
 
     .EXAMPLE
     Get-vRAUserPrincipal
-    
+
     .EXAMPLE
     Get-vRAUserPrincipal -LocalUsersOnly
 
     .EXAMPLE
     Get-vRAUserPrincipal -Id user@vsphere.local
-    
+
     .EXAMPLE
     Get-vRAUserPrincipal -UserName user@vsphere.local
-    
+
     .EXAMPLE
     Get-vRAUserPrincipal -PrincipalId user@vsphere.local
 #>
@@ -47,32 +47,32 @@
     [ValidateNotNullOrEmpty()]
     [Alias("UserName","PrincipalId")]
     [String[]]$Id,
-    
-    [parameter(Mandatory=$false,ParameterSetName="Standard")]  
-    [parameter(Mandatory=$false,ParameterSetName="byId")]    
+
+    [parameter(Mandatory=$false,ParameterSetName="Standard")]
+    [parameter(Mandatory=$false,ParameterSetName="byId")]
     [ValidateNotNullOrEmpty()]
-    [String]$Tenant = $Global:vRAConnection.Tenant,    
-    
+    [String]$Tenant = $Script:vRAConnection.Tenant,
+
     [parameter(Mandatory=$false, ParameterSetName="Standard")]
-    [Switch]$LocalUsersOnly,   
-          
+    [Switch]$LocalUsersOnly,
+
     [parameter(Mandatory=$false, ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
     [String]$Limit = "100"
-    
+
     )
-    
+
     begin {
         # --- Test for vRA API version
         xRequires -Version 7.0
     }
-    
+
     process {
-                
+
         try {
-            
+
             switch ($PSCmdlet.ParameterSetName){
-                
+
                 'ById'{
 
                     foreach ($UserId in $Id){
@@ -81,7 +81,7 @@
 
                         # --- Run vRA REST Request
                         $Response = Invoke-vRARestMethod -Method GET -URI $URI
-                    
+
                         [pscustomobject] @{
 
                             FirstName = $Response.firstName
@@ -96,28 +96,28 @@
                             Name = $Response.name
 
                         }
-                        
+
                     }
-                    
+
                     break
-                                    
+
                 }
-                
+
                 'Standard' {
-                        
+
                     if ($PSBoundParameters.ContainsKey("LocalUsersOnly")) {
-                        
+
                         $Params = "&localUsersOnly=true"
-                        
+
                     }
-                    
+
                     $URI = "/identity/api/tenants/$($Tenant)/principals?limit=$($Limit)$($Params)"
-                    
+
                     # --- Run vRA REST Request
                     $Response = Invoke-vRARestMethod -Method GET -URI $URI
-                    
+
                     foreach ($Principal in $Response.content) {
-                    
+
                         [pscustomobject] @{
 
                             FirstName = $Principal.firstName
@@ -132,24 +132,24 @@
                             Name = $Principal.name
 
                         }
-                        
+
                     }
-                    
-                    break                                
-                    
+
+                    break
+
                 }
-        
+
             }
-            
+
         }
         catch [Exception]{
 
             throw
-            
+
         }
-        
+
     }
-    
+
     end {}
-    
+
 }

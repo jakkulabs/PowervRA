@@ -2,10 +2,10 @@
 <#
     .SYNOPSIS
     Export a vRA Package
-    
+
     .DESCRIPTION
     Export a vRA Package
-    
+
     .PARAMETER Id
     Specify the ID of a Package
 
@@ -21,7 +21,7 @@
 
     .OUTPUTS
     System.IO.FileInfo
-    
+
     .EXAMPLE
     Export-vRAPackage -Id "b2d72c5d-775b-400c-8d79-b2483e321bae" -Path C:\Packages\Package01.zip
 
@@ -41,12 +41,12 @@
 
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName="ById")]
         [ValidateNotNullOrEmpty()]
-        [String[]]$Id,         
+        [String[]]$Id,
 
         [Parameter(Mandatory=$true,ParameterSetName="ByName")]
         [ValidateNotNullOrEmpty()]
         [String[]]$Name,
-        
+
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [String]$Path
@@ -59,15 +59,15 @@
         xRequires -Version 7.0
 
         function internalWorkings ($InternalPackage, $InternalId, $InternalPath) {
-            
+
             $Headers = @{
 
-                "Authorization" = "Bearer $($Global:vRAConnection.Token)";
+                "Authorization" = "Bearer $($Script:vRAConnection.Token)";
                 "Accept"="application/zip";
                 "Content-Type" = "Application/zip";
 
             }
-            
+
             $FileName = "$($InternalPackage.Name).zip"
 
             if (!$InternalPath) {
@@ -79,7 +79,7 @@
             else {
 
                 Write-Verbose -Message "Path parameter passed."
-                
+
                 if ($InternalPath.EndsWith("\")) {
 
                     Write-Verbose -Message "Ends with"
@@ -87,7 +87,7 @@
                     $InternalPath = $InternalPath.TrimEnd("\")
 
                 }
-                
+
                 $FullPath = "$($InternalPath)\$($FileName)"
             }
 
@@ -103,10 +103,10 @@
 
     Process {
 
-        try {    
+        try {
 
             switch ($PsCmdlet.ParameterSetName) {
-            
+
                 'ByName' {
 
                     foreach ($PackageName in $Name) {
@@ -114,7 +114,7 @@
                         $Package = Get-vRAPackage -Name $PackageName
                         $Id = $Package.Id
 
-                        internalWorkings -InternalPackage $Package -InternalId $Id -InternalPath $Path                   
+                        internalWorkings -InternalPackage $Package -InternalId $Id -InternalPath $Path
                     }
                 }
                 'ById' {

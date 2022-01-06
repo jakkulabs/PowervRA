@@ -2,13 +2,13 @@
 <#
     .SYNOPSIS
     Remove a vRA local user principal
-    
+
     .DESCRIPTION
     Remove a vRA local user principal
-    
+
     .PARAMETER Id
     The principal id of the user
-    
+
     .PARAMETER Tenant
     The tenant of the user
 
@@ -20,7 +20,7 @@
 
     .EXAMPLE
     Remove-vRAUserPrincipal -PrincipalId user@vsphere.local
-    
+
     .EXAMPLE
     Get-vRAUserPrincipal -Id user@vsphere.local | Remove-vRAUserPrincipal
 #>
@@ -32,44 +32,44 @@
     [ValidateNotNullOrEmpty()]
     [Alias("PrincipalId")]
     [String[]]$Id,
-    
+
     [parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
-    [String]$Tenant = $Global:vRAConnection.Tenant      
-    
-    )    
+    [String]$Tenant = $Script:vRAConnection.Tenant
+
+    )
 
     begin {
         # --- Test for vRA API version
         xRequires -Version 7.0
     }
-    
-    process {    
-            
+
+    process {
+
         foreach ($UserId in $Id){
-                
+
             try {
-                
+
                 if ($PSCmdlet.ShouldProcess($UserId)){
 
-                    $URI = "/identity/api/tenants/$($Tenant)/principals/$($UserId)"  
-                    
-                    Write-Verbose -Message "Preparing DELETE to $($URI)"                        
+                    $URI = "/identity/api/tenants/$($Tenant)/principals/$($UserId)"
 
-                    # --- Run vRA REST Request                    
+                    Write-Verbose -Message "Preparing DELETE to $($URI)"
+
+                    # --- Run vRA REST Request
                     Invoke-vRARestMethod -Method DELETE -URI $URI -Verbose:$VerbosePreference | Out-Null
-                    
+
                 }
-                
+
             }
             catch [Exception]{
 
                 throw
-                
-            } 
+
+            }
         }
     }
     end {
-        
+
     }
 }

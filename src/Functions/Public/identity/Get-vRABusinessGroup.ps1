@@ -2,10 +2,10 @@
 <#
     .SYNOPSIS
     Retrieve vRA Business Groups
-    
+
     .DESCRIPTION
     Retrieve vRA Business Groups
-    
+
     .PARAMETER TenantId
     Specify the ID of a Tenant
 
@@ -20,7 +20,7 @@
 
     .OUTPUTS
     System.Management.Automation.PSObject.
-    
+
     .EXAMPLE
     Get-vRABusinessGroup
 
@@ -33,20 +33,20 @@
 
     [parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
-    [String]$TenantId = $Global:vRAConnection.Tenant,
-    
+    [String]$TenantId = $Script:vRAConnection.Tenant,
+
     [parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
-    [String[]]$Name,     
-    
+    [String[]]$Name,
+
     [parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
     [String]$Limit = "100"
     )
-    
+
 # --- Test for vRA API version
 xRequires -Version 7.0
-                
+
 try {
 
     # --- Check the TenantId
@@ -65,9 +65,9 @@ try {
 
             # --- Run vRA REST Request
             $Response = Invoke-vRARestMethod -Method GET -URI $URI
-            
+
             $BusinessGroup = $Response.content
-            
+
             if (-not $BusinessGroup){
 
                 Write-Warning "Did not find Business Group $BusinessGroupName"
@@ -108,7 +108,7 @@ try {
         $Response = Invoke-vRARestMethod -Method GET -URI $URI
 
         foreach ($BusinessGroup in $Response.content){
-            
+
             # --- Get the role details
             $BusinessGroupRolesURI = "/identity/api/tenants/$($TenantId)/subtenants/$($BusinessGroup.id)/roles"
 

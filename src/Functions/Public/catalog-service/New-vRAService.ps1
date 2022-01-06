@@ -2,7 +2,7 @@
 <#
     .SYNOPSIS
     Create a vRA Service for the current tenant
-    
+
     .DESCRIPTION
     Create a vRA Service for the current tenant
 
@@ -31,7 +31,7 @@
 
     .PARAMETER JSON
     A json string of type service (catalog-service/api/docs/el_ns0_service.html)
-    
+
     .INPUTS
     System.String
 
@@ -40,10 +40,10 @@
 
     .EXAMPLE
     New-vRAService -Name "New Service"
-    
+
     .EXAMPLE
     New-vRAService -Name "New Service" -Description "A new service" -Owner user@vsphere.local -SupportTeam customgroup@vsphere.local -IconId "cafe_icon_Service01"
-    
+
     .EXAMPLE
     $JSON = @"
 
@@ -65,20 +65,20 @@
 "@
 
     $JSON | New-vRAService
-       
-    
+
+
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
-        
+
         [Parameter(Mandatory=$true,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
         [String]$Name,
-        
+
         [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
-        [String]$Description,            
+        [String]$Description,
 
         [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
@@ -91,23 +91,23 @@
         [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
         [String]$IconId,
-        
+
         [Parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="JSON")]
         [ValidateNotNullOrEmpty()]
-        [String]$JSON      
-     
-    )    
+        [String]$JSON
+
+    )
 
     Begin {
-    
+
     }
-    
+
     Process {
 
             if ($PSBoundParameters.ContainsKey("JSON")) {
 
                 $Data = ($JSON | ConvertFrom-Json)
-        
+
                 $Body = $JSON
                 $Name = $Data.name
             }
@@ -121,11 +121,11 @@
                         "statusName": "Active",
                         "version": 1,
                         "organization": {
-                            "tenantRef": "$($Global:vRAConnection.Tenant)",
+                            "tenantRef": "$($Script:vRAConnection.Tenant)",
                             "tenantLabel": null,
                             "subtenantRef": null,
                             "subtenantLabel": null
-                        },   
+                        },
                         "newDuration": null,
                         "iconId": "cafe_default_icon_genericService"
                     }
@@ -141,9 +141,9 @@
 
                         Write-Verbose -Message "Adding owner principal: $($Owner)"
 
-                        $CatalogPrincipal = Get-vRACatalogPrincipal -Id $Owner   
+                        $CatalogPrincipal = Get-vRACatalogPrincipal -Id $Owner
 
-                        $Object | Add-Member -MemberType NoteProperty -Name "owner" -Value $CatalogPrincipal                                         
+                        $Object | Add-Member -MemberType NoteProperty -Name "owner" -Value $CatalogPrincipal
 
                     }
 
@@ -152,7 +152,7 @@
 
                         Write-Verbose -Message "Adding support team principal: $($SupportTeam)"
 
-                        $CatalogPrincipal = Get-vRACatalogPrincipal -Id $SupportTeam   
+                        $CatalogPrincipal = Get-vRACatalogPrincipal -Id $SupportTeam
 
                         $Object | Add-Member -MemberType NoteProperty -Name "supportTeam" -Value $CatalogPrincipal
 
@@ -169,17 +169,17 @@
                     $Body = $Object | ConvertTo-Json -Compress
 
                 }
-                        
+
             }
-       
+
         # --- Create new service
         try {
             if ($PSCmdlet.ShouldProcess($Name)){
-                
-                # --- Build the URI string for the service         
-            
+
+                # --- Build the URI string for the service
+
                 $URI = "/catalog-service/api/services"
-                           
+
                 Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference | Out-Null
                 Get-vRAService -Name "$($Name)"
 
@@ -187,11 +187,11 @@
 
         }
         catch [Exception] {
-            
+
             throw
-            
+
         }
-    
+
     }
 
     End {

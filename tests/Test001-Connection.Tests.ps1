@@ -15,7 +15,7 @@ Describe -Name 'Connectivity Tests' -Fixture {
 
         $ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password -AsPlainText -Force
         Connect-vRAServer -Server $JSON.Connection.vRAAppliance -Tenant $JSON.Connection.Tenant -Username $JSON.Connection.Username -Password $ConnectionPassword -IgnoreCertRequirements
-        $($Global:vRAConnection.Token) | Should Be $true
+        $($Script:vRAConnection.Token) | Should Be $true
     }
 
 }
@@ -25,6 +25,6 @@ Describe -Name 'Disconnectivity Tests' -Fixture {
     It -Name 'Disconnects from a vRA Appliance' -Test {
 
         Disconnect-vRAServer -Confirm:$false
-        $($Global:vRAConnection.Token) | Should Be $null
+        $($Script:vRAConnection.Token) | Should Be $null
     }
 }

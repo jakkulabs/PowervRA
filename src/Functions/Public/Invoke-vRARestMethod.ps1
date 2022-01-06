@@ -87,13 +87,13 @@
     )
 
     # --- Test for existing connection to vRA
-    if (-not $Global:vRAConnection){
+    if (-not $Script:vRAConnection){
 
         throw "vRA Connection variable does not exist. Please run Connect-vRAServer first to create it"
     }
 
     # --- Create Invoke-RestMethod Parameters
-    $FullURI = "$($Global:vRAConnection.Server)$($URI)"
+    $FullURI = "$($Script:vRAConnection.Server)$($URI)"
 
     # --- Add default headers if not passed
     if (!$PSBoundParameters.ContainsKey("Headers")){
@@ -102,7 +102,7 @@
 
             "Accept"="application/json";
             "Content-Type" = "application/json";
-            "Authorization" = "Bearer $($Global:vRAConnection.Token)";
+            "Authorization" = "Bearer $($Script:vRAConnection.Token)";
         }
     }
 
@@ -128,15 +128,15 @@
     }
 
     # --- Support for PowerShell Core certificate checking
-    if (!($Global:vRAConnection.SignedCertificates) -and ($IsCoreCLR)) {
+    if (!($Script:vRAConnection.SignedCertificates) -and ($IsCoreCLR)) {
 
         $Params.Add("SkipCertificateCheck", $true);
     }
 
     # --- Support for PowerShell Core SSL protocol checking
-    if (($Global:vRAConnection.SslProtocol -ne 'Default') -and ($IsCoreCLR)) {
+    if (($Script:vRAConnection.SslProtocol -ne 'Default') -and ($IsCoreCLR)) {
 
-        $Params.Add("SslProtocol", $Global:vRAConnection.SslProtocol);
+        $Params.Add("SslProtocol", $Script:vRAConnection.SslProtocol);
     }
 
     try {

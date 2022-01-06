@@ -2,19 +2,19 @@ function New-vRAGroupPrincipal {
 <#
     .SYNOPSIS
     Create a vRA custom group
-    
+
     .DESCRIPTION
     Create a vRA Principal (user)
 
     .PARAMETER Tenant
     The tenant of the group
-    
+
     .PARAMETER Name
     Group name
-    
+
     .PARAMETER Description
     A description for the group
-    
+
     .PARAMETER JSON
     Body text to send in JSON format
 
@@ -26,7 +26,7 @@ function New-vRAGroupPrincipal {
 
     .EXAMPLE
     New-vRAGroupPrincipal -Name TestGroup01 -Description "Test Group 01"
-    
+
     .EXAMPLE
     $JSON = @"
         {
@@ -41,17 +41,17 @@ function New-vRAGroupPrincipal {
                 "name": "TestGroup01"
             }
         }
-"@    
-   
-#> 
+"@
+
+#>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low",DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
-    [parameter(Mandatory=$false,ParameterSetName="Standard")] 
+    [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [String]$Tenant = $Global:vRAConnection.Tenant,
-    
+    [String]$Tenant = $Script:vRAConnection.Tenant,
+
     [parameter(Mandatory=$true,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
     [String]$Name,
@@ -63,23 +63,23 @@ function New-vRAGroupPrincipal {
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="JSON")]
     [ValidateNotNullOrEmpty()]
     [String]$JSON
-    
-    )    
+
+    )
 
     begin {
-    
+
     }
-    
+
     process {
 
         try {
-    
+
             # --- Set Body for REST request depending on ParameterSet
             if ($PSBoundParameters.ContainsKey("JSON")){
-        
+
                 $Body = $JSON
                 $Tenant = ($JSON | ConvertFrom-Json).domain
-                
+
             }
             else {
 
@@ -102,27 +102,27 @@ function New-vRAGroupPrincipal {
 
             if ($PSCmdlet.ShouldProcess($Name)){
 
-                $URI = "/identity/api/tenants/$($Tenant)/groups"  
+                $URI = "/identity/api/tenants/$($Tenant)/groups"
 
-                Write-Verbose -Message "Preparing POST to $($URI)"     
+                Write-Verbose -Message "Preparing POST to $($URI)"
 
-                # --- Run vRA REST Request           
+                # --- Run vRA REST Request
                 Invoke-vRARestMethod -Method POST -URI $URI -Body $Body | Out-Null
-                
+
                 Get-vRAGroupPrincipal -Tenant $Tenant -Id "$($Name)@$($Tenant)"
-                
+
             }
 
         }
         catch [Exception]{
 
             throw
-            
+
         }
-        
+
     }
     end {
-        
+
     }
-        
+
 }

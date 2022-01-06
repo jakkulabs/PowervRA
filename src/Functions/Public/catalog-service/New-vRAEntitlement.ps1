@@ -21,7 +21,7 @@
     If this parameter is not specified, the entitlement will be created as DRAFT
 
     .PARAMETER EntitledCatalogItems
-    One or more entitled catalog item 
+    One or more entitled catalog item
 
     .PARAMETER EntitledResourceOperations
     The externalId of one or more entitled resource operation (e.g. Infrastructure.Machine.Action.PowerOn)
@@ -118,27 +118,27 @@
 
         [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
-        [bool]$LocalScopeForActions = $true,        
+        [bool]$LocalScopeForActions = $true,
 
         [Parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="JSON")]
         [ValidateNotNullOrEmpty()]
         [String]$JSON
 
-    )    
+    )
 
     Begin {
 
     }
-    
+
     Process {
 
         try {
-    
+
             # --- Set Body for REST request depending on ParameterSet
             if ($PSBoundParameters.ContainsKey("JSON")){
 
                 $Data = ($JSON | ConvertFrom-Json)
-        
+
                 $Body = $JSON
                 $Name = $Data.name
             }
@@ -149,7 +149,7 @@
 
                 $BusinessGroupObject = Get-vRABusinessGroup -Name $BusinessGroup
 
-                # --- Prepare payload        
+                # --- Prepare payload
                 $Body = @"
                     {
                       "description": "$($Description)",
@@ -162,7 +162,7 @@
                       "lastUpdatedDate": null,
                       "name": "$($Name)",
                       "organization": {
-                        "tenantRef": "$($Global:vRAConnection.Tenant)",
+                        "tenantRef": "$($Script:vRAConnection.Tenant)",
                         "tenantLabel": null,
                         "subtenantRef": "$($BusinessGroupObject.ID)",
                         "subtenantLabel": "$($BusinessGroupObject.Name)"
@@ -182,7 +182,7 @@
             if ($PSBoundParameters.ContainsKey("Principals") -or $PSBoundParameters.ContainsKey("EntitledCatalogItems")  -or $PSBoundParameters.ContainsKey("EntitledResourceOperations")  -or $PSBoundParameters.ContainsKey("EntitledServices")){
 
                 $Object = $Body | ConvertFrom-Json
-              
+
                 if ($PSBoundParameters.ContainsKey("Principals")) {
 
                     Write-Verbose -Message "Principal specified, changing status to ACTIVE"
@@ -213,7 +213,7 @@
                             label = $null
 
                         }
-                        
+
                         # --- Build entitled catalog item object and insert catalogItemRef
                         $EntitledCatalogItem = [PSCustomObject] @{
 
@@ -242,7 +242,7 @@
                             label = $null
 
                         }
-                        
+
                         # --- Build entitled service object and insert serviceRef
                         $EntitledService = [PSCustomObject] @{
 
@@ -314,7 +314,7 @@
         }
 
     }
-    
+
     End {
 
     }

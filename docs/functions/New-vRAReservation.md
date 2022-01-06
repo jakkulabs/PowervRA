@@ -41,7 +41,7 @@ $NetworkDefinitionArray += $Network1
 
 # --- Get the storage definition
 $StorageDefinitionArray = @()
-$Storage1 = New-vRAReservationStorageDefinition -Type 'vSphere' -ComputeResourceId $ComputeResource.Id -Path 'Datastore1' -ReservedSizeGB 10 -Priority 0 
+$Storage1 = New-vRAReservationStorageDefinition -Type 'vSphere' -ComputeResourceId $ComputeResource.Id -Path 'Datastore1' -ReservedSizeGB 10 -Priority 0
 $StorageDefinitionArray += $Storage1
 
 # --- Set the parameters and create the reservation
@@ -80,7 +80,7 @@ $NetworkDefinitionArray += $Network1
 
 # --- Get the storage definition
 $StorageDefinitionArray = @()
-$Storage1 = New-vRAReservationStorageDefinition -Type 'vSphere (vCenter)' -ComputeResourceId $ComputeResource.Id -Path 'Datastore1' -ReservedSizeGB 10 -Priority 0 
+$Storage1 = New-vRAReservationStorageDefinition -Type 'vSphere (vCenter)' -ComputeResourceId $ComputeResource.Id -Path 'Datastore1' -ReservedSizeGB 10 -Priority 0
 $StorageDefinitionArray += $Storage1
 
 # --- Set the parameters and create the reservation
@@ -148,7 +148,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: $Global:vRAConnection.Tenant
+Default value: $Script:vRAConnection.Tenant
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

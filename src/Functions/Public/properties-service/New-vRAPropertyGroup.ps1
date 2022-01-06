@@ -2,13 +2,13 @@
     <#
     .SYNOPSIS
     Create a custom Property Group
-    
+
     .DESCRIPTION
     Create a custom Property Group
 
     .PARAMETER Name
     The unique name (ID) of the Property
-    
+
     .PARAMETER Label
     The text to display in forms for the Property
 
@@ -20,7 +20,7 @@
 
     .PARAMETER Properties
     A hashtable representing the properties you would like to build into this new property group
-   
+
     .PARAMETER JSON
     Property Group to send in JSON format
 
@@ -32,8 +32,8 @@
 
     .EXAMPLE
     # Create a simple property group with no properties addded
-    New-vRAPropertyGroup -Name one 
-    
+    New-vRAPropertyGroup -Name one
+
     .EXAMPLE
     # Create a property group with a description and label
     New-vRAPropertyGroup -Name OneWithDescription -Label "On With Description" -Description "This is one with a label and description"
@@ -46,15 +46,15 @@
     # Create a property group with some properties added in the extended form
     New-vRAPropertyGroup -Name OneWithPropertiesExt -Label "One With Properties" -Properties @{"com.org.bool"=@{"mandatory"=$true; "defaultValue"=$false;}; "com.org.encryptedandshowonform"=@{"encrypted"=$true; "visibility"=$true; "defaultValue"="Un-encrypted string";};}
 
-#> 
+#>
     [CmdletBinding(SupportsShouldProcess,ConfirmImpact = "Low",DefaultParameterSetName = 'Default')][OutputType('System.Management.Automation.PSObject')]
 
     Param (
         [parameter(Mandatory = $true, ParameterSetName = "Default")]
         [ValidateNotNullOrEmpty()]
         [String]$Name,
-        
-        [parameter(Mandatory = $false)]    
+
+        [parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [String]$Label = $Name,
 
@@ -62,10 +62,10 @@
         [ValidateNotNullOrEmpty()]
         [String]$Description,
 
-        [parameter(Mandatory = $false)]    
+        [parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$Tenant = $Global:vRAConnection.Tenant,
-        
+        [String]$Tenant = $Script:vRAConnection.Tenant,
+
         [parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "Properties")]
         [ValidateNotNullOrEmpty()]
         [hashtable]$Properties,
@@ -81,7 +81,7 @@
         # --- Test for vRA API version
         xRequires -Version 7.0
     }
-    
+
     process {
 
         try {
@@ -91,7 +91,7 @@
             }
             else {
                 $propertiesRaw = ""
-                
+
                 # process properties sent in
                 foreach ($propKey in $Properties.Keys) {
                     $prop = $Properties[$propKey]
@@ -185,13 +185,13 @@
 "@
             }
 
-            $URI = "/properties-service/api/propertygroups"  
+            $URI = "/properties-service/api/propertygroups"
 
-            Write-Verbose -Message "Preparing POST to $($URI)"   
+            Write-Verbose -Message "Preparing POST to $($URI)"
 
-            Write-Verbose -Message "Posting Body: $($Body)"  
+            Write-Verbose -Message "Posting Body: $($Body)"
 
-            # --- Run vRA REST Request  
+            # --- Run vRA REST Request
             if ($PSCmdlet.ShouldProcess($Id)) {
                 Invoke-vRARestMethod -Method POST -URI $URI -Body $Body | Out-Null
                 Get-vRAPropertyGroup -Id $Name
@@ -199,10 +199,10 @@
         }
         catch [Exception] {
 
-            throw            
-        }        
+            throw
+        }
     }
     end {
-        
-    }    
+
+    }
 }

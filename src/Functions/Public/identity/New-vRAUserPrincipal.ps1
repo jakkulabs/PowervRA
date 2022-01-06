@@ -2,16 +2,16 @@
 <#
     .SYNOPSIS
     Create a vRA local user principal
-    
+
     .DESCRIPTION
     Create a vRA Principal (user)
 
     .PARAMETER Tenant
     The tenant of the user
-    
+
     .PARAMETER PrincipalId
     Principal id in user@company.com format
-    
+
     .PARAMETER FirstName
     First Name
 
@@ -26,10 +26,10 @@
 
     .PARAMETER Password
     Users password
-    
+
     .PARAMETER Credential
     Credential object
-    
+
     .PARAMETER JSON
     Body text to send in JSON format
 
@@ -66,80 +66,80 @@
         "name": "Test User"
         }
    "@
-   
+
    $JSON | New-vRAUserPrincipal
-   
-#> 
+
+#>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low",DefaultParameterSetName="Password")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
-    
+
     [parameter(Mandatory=$true,ParameterSetName="Password")]
     [ValidateNotNullOrEmpty()]
     [String]$PrincipalId,
-    
+
     [parameter(Mandatory=$false,ParameterSetName="Credential")]
-    [parameter(Mandatory=$false,ParameterSetName="Password")]    
+    [parameter(Mandatory=$false,ParameterSetName="Password")]
     [ValidateNotNullOrEmpty()]
-    [String]$Tenant = $Global:vRAConnection.Tenant,    
-    
+    [String]$Tenant = $Script:vRAConnection.Tenant,
+
     [parameter(Mandatory=$true,ParameterSetName="Credential")]
-    [parameter(Mandatory=$true,ParameterSetName="Password")] 
+    [parameter(Mandatory=$true,ParameterSetName="Password")]
     [ValidateNotNullOrEmpty()]
     [String]$FirstName,
 
     [parameter(Mandatory=$true,ParameterSetName="Credential")]
-    [parameter(Mandatory=$true,ParameterSetName="Password")] 
+    [parameter(Mandatory=$true,ParameterSetName="Password")]
     [ValidateNotNullOrEmpty()]
     [String]$LastName,
 
     [parameter(Mandatory=$true,ParameterSetName="Credential")]
-    [parameter(Mandatory=$true,ParameterSetName="Password")] 
+    [parameter(Mandatory=$true,ParameterSetName="Password")]
     [ValidateNotNullOrEmpty()]
     [String]$EmailAddress,
 
     [parameter(Mandatory=$false,ParameterSetName="Credential")]
-    [parameter(Mandatory=$false,ParameterSetName="Password")] 
+    [parameter(Mandatory=$false,ParameterSetName="Password")]
     [ValidateNotNullOrEmpty()]
     [String]$Description,
 
     [parameter(Mandatory=$true,ParameterSetName="Password")]
     [ValidateNotNullOrEmpty()]
     [SecureString]$Password,
-    
+
     [Parameter(Mandatory=$true,ParameterSetName="Credential")]
 	[ValidateNotNullOrEmpty()]
-	[Management.Automation.PSCredential]$Credential, 
+	[Management.Automation.PSCredential]$Credential,
 
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName="JSON")]
     [ValidateNotNullOrEmpty()]
     [String]$JSON
-    
-    )    
+
+    )
 
     begin {
         # --- Test for vRA API version
         xRequires -Version 7.0
     }
-    
+
     process {
 
         try {
-    
+
             # --- Set Body for REST request depending on ParameterSet
             if ($PSBoundParameters.ContainsKey("JSON")){
-        
+
                 $Body = $JSON
                 $Tenant = ($JSON | ConvertFrom-Json).tenantName
-                
+
             }
             else {
-            
+
                 if ($PSBoundParameters.ContainsKey("Credential")){
 
                     $PrincipalId = $Credential.UserName
                     $JSONPassword = $Credential.GetNetworkCredential().Password
-                    
+
                 }
 
                 if ($PSBoundParameters.ContainsKey("Password")) {
@@ -147,10 +147,10 @@
                     $JSONPassword = (New-Object System.Management.Automation.PSCredential("username", $Password)).GetNetworkCredential().Password
 
                 }
-                
+
                 $Name = ($PrincipalId -split "@")[0]
-                $Domain = ($PrincipalId -split "@")[1]                                  
-                            
+                $Domain = ($PrincipalId -split "@")[1]
+
                 $Body = @"
                 {
                     "locked" : "false",
@@ -170,27 +170,27 @@
 
             if ($PSCmdlet.ShouldProcess($PrincipalId)){
 
-                $URI = "/identity/api/tenants/$($Tenant)/principals"  
+                $URI = "/identity/api/tenants/$($Tenant)/principals"
 
-                Write-Verbose -Message "Preparing POST to $($URI)"     
+                Write-Verbose -Message "Preparing POST to $($URI)"
 
-                # --- Run vRA REST Request           
+                # --- Run vRA REST Request
                 Invoke-vRARestMethod -Method POST -URI $URI -Body $Body | Out-Null
-                
+
                 Get-vRAUserPrincipal -Tenant $Tenant -Id $PrincipalId
-                
+
             }
 
         }
         catch [Exception]{
 
             throw
-            
+
         }
-        
+
     }
     end {
-        
+
     }
-    
+
 }

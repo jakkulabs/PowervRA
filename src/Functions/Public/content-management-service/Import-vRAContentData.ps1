@@ -42,7 +42,7 @@
 
         $Headers = @{
 
-            "Authorization" = "Bearer $($Global:vRAConnection.Token)";
+            "Authorization" = "Bearer $($Script:vRAConnection.Token)";
             "Accept" = "Application/json"
             "Content-Type" = "text/yaml"
         }

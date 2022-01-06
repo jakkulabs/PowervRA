@@ -10,7 +10,7 @@ Describe -Name 'Iaas-Proxy-Provider Tests' -Fixture {
 
     Context -Name 'Network Profile' -Fixture {
 
-        $APIVersion = [version]$Global:vRAConnection.APIVersion
+        $APIVersion = [version]$Script:vRAConnection.APIVersion
         $RequiredVersion = [version]"7.1"
 
         if ($APIVersion -lt $RequiredVersion) {
@@ -150,7 +150,7 @@ Describe -Name 'Iaas-Proxy-Provider Tests' -Fixture {
                 $IPAddressList = $NetworkProfile | Get-vRANetworkProfileIPAddressList
                 $IPAddressList | Should Not Be $null
 
-            } 
+            }
 
             # --- UPDATE
             It -Name "Update named External Network Profile" -Test {
@@ -177,7 +177,7 @@ Describe -Name 'Iaas-Proxy-Provider Tests' -Fixture {
                 $NetworkProfileDescription = $NetworkProfile.Description
                 $UpdatedNetworkProfile = $NetworkProfile | Set-vRARoutedNetworkProfile -Description "$($NetworkProfileDescription) Updated" -Confirm:$false
                 $UpdatedNetworkProfile.Description | Should Be "$($NetworkProfileDescription) Updated"
-                
+
             }
 
             # --- DELETE
@@ -192,7 +192,7 @@ Describe -Name 'Iaas-Proxy-Provider Tests' -Fixture {
 
                 $NetworkProfile = Get-vRARoutedNetworkProfile -Name $RoutedProfileName
                 $NetworkProfile | Remove-vRARoutedNetworkProfile -Confirm:$false
-                
+
             }
 
             It -Name "Remove named External Network Profile" -Test {

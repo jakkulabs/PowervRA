@@ -2,19 +2,19 @@ function Get-vRAUserPrincipalGroupMembership {
 <#
     .SYNOPSIS
     Retrieve a list of groups that a user is a member of
-    
+
     .DESCRIPTION
     Retrieve a list of groups that a user is a member of
-    
+
     .PARAMETER Id
     The Id of the user
-    
+
     .PARAMETER Tenant
     The tenant of the user
-    
+
     .PARAMETER GroupType
     Return either custom or sso groups
-    
+
     .PARAMETER Limit
     The number of entries returned per page from the API. This has a default value of 100.
 
@@ -30,13 +30,13 @@ function Get-vRAUserPrincipalGroupMembership {
 
     .EXAMPLE
     Get-vRAUserPrincipal -Id user@vsphere.local | Get-vRAUserPrincipalGroupMembership
-    
+
     .EXAMPLE
     Get-vRAUserPrincipal -Id user@vsphere.local | Get-vRAUserPrincipalGroupMembership -GroupType SSO
 
     .EXAMPLE
     Get-vRAUserPrincipalGroupMembership -Id user@vsphere.local
-    
+
     .EXAMPLE
     Get-vRAUserPrincipalGroupMembership -UserPrincipal user@vsphere.local
 
@@ -48,33 +48,33 @@ function Get-vRAUserPrincipalGroupMembership {
         [ValidateNotNullOrEmpty()]
         [Alias("PrincipalId")]
         [String[]]$Id,
-        
-        [parameter(Mandatory=$false)]  
+
+        [parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-        [String]$Tenant = $Global:vRAConnection.Tenant,    
-        
+        [String]$Tenant = $Script:vRAConnection.Tenant,
+
         [parameter(Mandatory=$false)]
         [ValidateSet("SSO","CUSTOM")]
-        [String]$GroupType,   
-          
+        [String]$GroupType,
+
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [Int]$Limit = 100,
-    
+
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [Int]$Page = 1
     )
-    
+
     Begin {
         # --- Test for vRA API version
         xRequires -Version 7.0
     }
-    
+
     Process {
-                
+
         try {
-  
+
             foreach ($UserId in $Id){
 
                 $URI = "/identity/api/tenants/$($Tenant)/principals/$($UserId)/groups?limit=$($Limit)&page=$($Page)"
@@ -99,11 +99,11 @@ function Get-vRAUserPrincipalGroupMembership {
         }
         catch [Exception]{
 
-            throw $_        
+            throw $_
         }
     }
-    
+
     End {
 
-    }   
+    }
 }

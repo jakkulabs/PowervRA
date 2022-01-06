@@ -2,13 +2,13 @@
 <#
     .SYNOPSIS
     Create a custom Property Definition
-    
+
     .DESCRIPTION
     Create a custom Property Definition
 
     .PARAMETER Name
     The unique name (ID) of the Property
-    
+
     .PARAMETER Label
     The text to display in forms for the Property
 
@@ -26,7 +26,7 @@
 
     .PARAMETER Encrypted
     Switch to flag the Property as Encrypted
-    
+
     .PARAMETER String
     Switch to flag the Property type as String
 
@@ -56,7 +56,7 @@
 
     .PARAMETER DatetimeDisplay
     The form display option for Datetime
-    
+
     .PARAMETER JSON
     Property Definition to send in JSON format
 
@@ -69,7 +69,7 @@
     .EXAMPLE
     # Create a string dropdown with defined values
     New-vRAPropertyDefinition -Name one -String -StringDisplay DROPDOWN -ValueType Static -Values @{Name1="Value1";Name2="Value2"}
-    
+
     .EXAMPLE
     # Create an integer slider with min, max and increment
     New-vRAPropertyDefinition -Name IntegerName -Label "Select an Integer" -Integer -IntegerDisplay SLIDER -MinimumValue 1 -MaximumValue 10 -Increment 1
@@ -82,15 +82,15 @@
     # Create a new decimal slider with min, max and increment
     New-vRAPropertyDefinition -Name DecimalTest -Decimal -DecimalDisplay SLIDER -MinimumValue 0 -MaximumValue 10 -Increment 0.5
 
-#> 
+#>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="Low")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
         [parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [String]$Name,
-        
-        [parameter(Mandatory=$false)]    
+
+        [parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [String]$Label = $Name,
 
@@ -98,63 +98,63 @@
         [ValidateNotNullOrEmpty()]
         [String]$Description,
 
-        [parameter(Mandatory=$false)]    
+        [parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-        [String]$Tenant = $Global:vRAConnection.Tenant,
-        
-        [parameter(Mandatory=$false)]    
+        [String]$Tenant = $Script:vRAConnection.Tenant,
+
+        [parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [Int]$Index,
 
-        [parameter(Mandatory=$false)] 
+        [parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [Switch]$Required,
 
-        [parameter(Mandatory=$false)] 
+        [parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [Switch]$Encrypted,
 
-        [parameter(Mandatory=$false,ParameterSetName="String")] 
+        [parameter(Mandatory=$false,ParameterSetName="String")]
         [ValidateNotNullOrEmpty()]
         [Switch]$String,
 
-        [parameter(Mandatory=$true,ParameterSetName="String")] 
+        [parameter(Mandatory=$true,ParameterSetName="String")]
         [ValidateNotNullOrEmpty()]
         [ValidateSet("DROPDOWN","TEXTBOX","EMAIL","HYPERLINK","TEXTAREA")]
         [String]$StringDisplay,
 
-        [parameter(Mandatory=$false,ParameterSetName="Boolean")] 
+        [parameter(Mandatory=$false,ParameterSetName="Boolean")]
         [ValidateNotNullOrEmpty()]
         [Switch]$Boolean,
 
-        [parameter(Mandatory=$true,ParameterSetName="Boolean")] 
+        [parameter(Mandatory=$true,ParameterSetName="Boolean")]
         [ValidateNotNullOrEmpty()]
         [ValidateSet("CHECKBOX","YES_NO")]
         [String]$BooleanDisplay,
 
-        [parameter(Mandatory=$false,ParameterSetName="Integer")] 
+        [parameter(Mandatory=$false,ParameterSetName="Integer")]
         [ValidateNotNullOrEmpty()]
         [Switch]$Integer,
 
-        [parameter(Mandatory=$true,ParameterSetName="Integer")] 
+        [parameter(Mandatory=$true,ParameterSetName="Integer")]
         [ValidateNotNullOrEmpty()]
         [ValidateSet("DROPDOWN","SLIDER","TEXTBOX")]
         [String]$IntegerDisplay,
 
-        [parameter(Mandatory=$false,ParameterSetName="Decimal")] 
+        [parameter(Mandatory=$false,ParameterSetName="Decimal")]
         [ValidateNotNullOrEmpty()]
         [Switch]$Decimal,
 
-        [parameter(Mandatory=$true,ParameterSetName="Decimal")] 
+        [parameter(Mandatory=$true,ParameterSetName="Decimal")]
         [ValidateNotNullOrEmpty()]
         [ValidateSet("DROPDOWN","SLIDER","TEXTBOX")]
         [String]$DecimalDisplay,
 
-        [parameter(Mandatory=$false,ParameterSetName="Datetime")] 
+        [parameter(Mandatory=$false,ParameterSetName="Datetime")]
         [ValidateNotNullOrEmpty()]
         [Switch]$Datetime,
 
-        [parameter(Mandatory=$true,ParameterSetName="Datetime")] 
+        [parameter(Mandatory=$true,ParameterSetName="Datetime")]
         [ValidateNotNullOrEmpty()]
         [ValidateSet("DATE_TIME_PICKER")]
         [String]$DatetimeDisplay, # This is redundant, only one option
@@ -190,7 +190,7 @@
                     NewDynamicParam -Name "MinimumValue" -Mandatory -Type int -ParameterSet "Integer" -DPDictionary $Dictionary
                     NewDynamicParam -Name "MaximumValue" -Mandatory -Type int -ParameterSet "Integer" -DPDictionary $Dictionary
                     NewDynamicParam -Name "Increment" -Type decimal -ParameterSet "Integer" -DPDictionary $Dictionary
-                } else { 
+                } else {
                     # Otherwise add some optional for Integers
                     NewDynamicParam -Name "MinimumValue" -Type int -ParameterSet "Integer" -DPDictionary $Dictionary
                     NewDynamicParam -Name "MaximumValue" -Type int -ParameterSet "Integer" -DPDictionary $Dictionary
@@ -210,7 +210,7 @@
                     NewDynamicParam -Name "MinimumValue" -Mandatory -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
                     NewDynamicParam -Name "MaximumValue" -Mandatory -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
                     NewDynamicParam -Name "Increment" -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
-                } else { 
+                } else {
                     # Otherwise add some optional for Decimal
                     NewDynamicParam -Name "MinimumValue" -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
                     NewDynamicParam -Name "MaximumValue" -Type decimal -ParameterSet "Decimal" -DPDictionary $Dictionary
@@ -224,7 +224,7 @@
             }
             return $Dictionary
         }
-    } 
+    }
 
     begin {
 
@@ -241,7 +241,7 @@
             }
         }
     }
-    
+
     process {
 
         try {
@@ -258,7 +258,7 @@
                 } else {
                     $IndexString = $Index.ToString()
                 }
-                if($String) { 
+                if($String) {
                     $DataType = "STRING"
                     $Display = $StringDisplay
                 }
@@ -266,7 +266,7 @@
                     $DataType = "BOOLEAN"
                     $Display = $BooleanDisplay
                 }
-                if($Integer) { 
+                if($Integer) {
                     $DataType = "INTEGER"
                     $Display = $IntegerDisplay
                 }
@@ -274,7 +274,7 @@
                     $DataType = "DECIMAL"
                     $Display = $DecimalDisplay
                 }
-                if($Datetime) { 
+                if($Datetime) {
                     $DataType = "DATETIME"
                     $Display = $DatetimeDisplay
                 }
@@ -413,11 +413,11 @@ $($facets.Trim(","))
 
             }
 
-            $URI = "/properties-service/api/propertydefinitions"  
+            $URI = "/properties-service/api/propertydefinitions"
 
-            Write-Verbose -Message "Preparing POST to $($URI)"     
+            Write-Verbose -Message "Preparing POST to $($URI)"
 
-            # --- Run vRA REST Request  
+            # --- Run vRA REST Request
             if ($PSCmdlet.ShouldProcess($Id)) {
 
                 Invoke-vRARestMethod -Method POST -URI $URI -Body $Body | Out-Null
@@ -426,10 +426,10 @@ $($facets.Trim(","))
         }
         catch [Exception]{
 
-            throw            
-        }        
+            throw
+        }
     }
     end {
-        
-    }    
+
+    }
 }

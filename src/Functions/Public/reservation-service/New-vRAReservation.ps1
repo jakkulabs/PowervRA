@@ -95,7 +95,7 @@
 
     # --- Get the storage definition
     $StorageDefinitionArray = @()
-    $Storage1 = New-vRAReservationStorageDefinition -Type 'vSphere' -ComputeResourceId $ComputeResource.Id -Path 'Datastore1' -ReservedSizeGB 10 -Priority 0 
+    $Storage1 = New-vRAReservationStorageDefinition -Type 'vSphere' -ComputeResourceId $ComputeResource.Id -Path 'Datastore1' -ReservedSizeGB 10 -Priority 0
     $StorageDefinitionArray += $Storage1
 
     # --- Set the parameters and create the reservation
@@ -131,7 +131,7 @@
 
     # --- Get the storage definition
     $StorageDefinitionArray = @()
-    $Storage1 = New-vRAReservationStorageDefinition -Type 'vSphere (vCenter)' -ComputeResourceId $ComputeResource.Id -Path 'Datastore1' -ReservedSizeGB 10 -Priority 0 
+    $Storage1 = New-vRAReservationStorageDefinition -Type 'vSphere (vCenter)' -ComputeResourceId $ComputeResource.Id -Path 'Datastore1' -ReservedSizeGB 10 -Priority 0
     $StorageDefinitionArray += $Storage1
 
     # --- Set the parameters and create the reservation
@@ -169,7 +169,7 @@
 
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
-    [String]$Tenant = $Global:vRAConnection.Tenant,
+    [String]$Tenant = $Script:vRAConnection.Tenant,
 
     [parameter(Mandatory=$true,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
@@ -248,12 +248,12 @@
     [String]$NewName
 
     )
- 
+
     begin {
         # --- Test for vRA API version
         xRequires -Version 7.0
     }
-    
+
     process {
 
         try {
@@ -264,7 +264,7 @@
 
                     # --- Handle JSON PARAM
                     $Body = $JSON
-                    $Data = ($JSON | ConvertFrom-Json)      
+                    $Data = ($JSON | ConvertFrom-Json)
                     $Name = $Data.name
 
                     # --- if a new name has been passed set it
@@ -285,7 +285,7 @@
                 'Standard' {
 
                     Write-Verbose -Message "Preparing reservation payload"
-                  
+
                     $ReservationTypeId = (Get-vRAReservationType -Name $Type).id
 
                     $BusinessGroupId = (Get-vRABusinessGroup -TenantId $Tenant -Name $BusinessGroup).id
@@ -353,7 +353,7 @@
                     if ($PSBoundParameters.ContainsKey("ReservationPolicy")){
 
                         $ReservationPolicyId = (Get-vRAReservationPolicy -Name $ReservationPolicy).id
-                        $ReservationObject.reservationPolicyId = $ReservationPolicyId      
+                        $ReservationObject.reservationPolicyId = $ReservationPolicyId
                         Write-Verbose -Message "ReservationPolicyId for $($ReservationPolicy) is $($ReservationPolicyId)"
 
                     }
@@ -371,7 +371,7 @@
                     switch ($PSBoundParameters.Type) {
 
                         {$_ -in 'vSphere','vSphere (vCenter)'} {
-                            
+
                             # ---
                             # --- Alert Policy
                             # ---
@@ -403,10 +403,10 @@
 
                                 ]
 "@
-                            
-                            $ReservationObject.alertPolicy.alerts += $AlertsTemplate | ConvertFrom-Json                            
 
-                            # --- 
+                            $ReservationObject.alertPolicy.alerts += $AlertsTemplate | ConvertFrom-Json
+
+                            # ---
                             # --- Compute Resource
                             # ---
 
@@ -425,42 +425,42 @@
                                         "componentId" : null,
                                         "classId" : "ComputeResource",
                                         "id" : "$($ComputeResourceId)",
-                                        "label" : "$($ComputeResourceObject.label)"                  
-                            
+                                        "label" : "$($ComputeResourceObject.label)"
+
                                     }
 
                                 }
 "@
-                    
+
                             $ReservationObject.extensionData.entries += ($ComputeResourceTemplate | ConvertFrom-Json)
 
-                            # --- 
+                            # ---
                             # --- Machine Quota
                             # ---
 
                             Write-Verbose -Message "Setting machine quota to $($Quota)"
 
                             $MachineQuotaTemplate = @"
-                   
+
                                 {
                                     "key": "machineQuota",
                                     "value": {
                                         "type": "integer",
                                         "value": $($Quota)
-                                    }  
-                                } 
+                                    }
+                                }
 "@
-                                                                 
+
                             $ReservationObject.extensionData.entries += ($MachineQuotaTemplate | ConvertFrom-Json)
 
-                            # --- 
+                            # ---
                             # --- Reservation Networks
                             # ---
-                            
+
                             Write-Verbose -Message "Setting reservation networks"
 
                             $ReservationNetworksTemplate = @"
-                    
+
                                 {
                                     "key": "reservationNetworks",
                                     "value": {
@@ -509,7 +509,7 @@
                             }
 
                             $ReservationObject.extensionData.entries += $ReservationStorages
-                   
+
                             # ---
                             # --- Reservation Memory
                             # ---
@@ -518,7 +518,7 @@
 
                             # --- Calculate the memory value in MB
 
-                            $MemoryMB = [Math]::Round(($MemoryGB * 1024 * 1024 * 1024 / 1MB),4,[MidPointRounding]::AwayFromZero)  
+                            $MemoryMB = [Math]::Round(($MemoryGB * 1024 * 1024 * 1024 / 1MB),4,[MidPointRounding]::AwayFromZero)
 
                             $ReservationMemoryTemplate = @"
 
@@ -548,7 +548,7 @@
 
                             $ReservationObject.extensionData.entries += ($ReservationMemoryTemplate | ConvertFrom-Json)
 
-                            # --- 
+                            # ---
                             # --- Resource Pool
                             # ---
 
@@ -559,7 +559,7 @@
                                 $ResourcePoolObject = Get-vRAReservationComputeResourceResourcePool -Type $Type -ComputeResourceId $ComputeResourceId -Name $Resourcepool
 
                                 $ResourcePoolTemplate = @"
-                    
+
                                     {
                                         "key": "resourcePool",
                                         "value": {
@@ -569,11 +569,11 @@
                                             "id": "$($ResourcePoolObject.Id)",
                                             "label": "$($ResourcePoolObject.Label)"
                                         }
-                                    }                     
+                                    }
 "@
-                    
-                                $ReservationObject.extensionData.entries += ($ResourcePoolTemplate | ConvertFrom-Json)                
-                                    
+
+                                $ReservationObject.extensionData.entries += ($ResourcePoolTemplate | ConvertFrom-Json)
+
                             }
 
 
@@ -614,10 +614,10 @@
 
                                 ]
 "@
-                            
-                            $ReservationObject.alertPolicy.alerts += $AlertsTemplate | ConvertFrom-Json                            
 
-                            # --- 
+                            $ReservationObject.alertPolicy.alerts += $AlertsTemplate | ConvertFrom-Json
+
+                            # ---
                             # --- Compute Resource
                             # ---
 
@@ -636,42 +636,42 @@
                                         "componentId" : null,
                                         "classId" : "ComputeResource",
                                         "id" : "$($ComputeResourceId)",
-                                        "label" : "$($ComputeResourceObject.label)"                  
-                            
+                                        "label" : "$($ComputeResourceObject.label)"
+
                                     }
 
                                 }
 "@
-                    
+
                             $ReservationObject.extensionData.entries += ($ComputeResourceTemplate | ConvertFrom-Json)
 
-                            # --- 
+                            # ---
                             # --- Machine Quota
                             # ---
 
                             Write-Verbose -Message "Setting machine quota to $($Quota)"
 
                             $MachineQuotaTemplate = @"
-                   
+
                                 {
                                     "key": "machineQuota",
                                     "value": {
                                         "type": "integer",
                                         "value": $($Quota)
-                                    }  
-                                } 
+                                    }
+                                }
 "@
-                                                                 
+
                             $ReservationObject.extensionData.entries += ($MachineQuotaTemplate | ConvertFrom-Json)
 
-                            # --- 
+                            # ---
                             # --- Reservation Networks
                             # ---
-                            
+
                             Write-Verbose -Message "Setting reservation networks"
 
                             $ReservationNetworksTemplate = @"
-                    
+
                                 {
                                     "key": "reservationNetworks",
                                     "value": {
@@ -720,7 +720,7 @@
                             }
 
                             $ReservationObject.extensionData.entries += $ReservationStorages
-                   
+
                             # ---
                             # --- Reservation Memory
                             # ---
@@ -729,7 +729,7 @@
 
                             # --- Calculate the memory value in MB
 
-                            $MemoryMB = [Math]::Round(($MemoryGB * 1024 * 1024 * 1024 / 1MB),4,[MidPointRounding]::AwayFromZero)  
+                            $MemoryMB = [Math]::Round(($MemoryGB * 1024 * 1024 * 1024 / 1MB),4,[MidPointRounding]::AwayFromZero)
 
                             $ReservationMemoryTemplate = @"
 
@@ -764,53 +764,53 @@
                         }
 
                         {$_ -in 'Amazon','Amazon EC2'} {
-                        
+
                             Write-Verbose -Message "Support for this reservation type has not been added"
                             break
 
                         }
 
                         'OpenStack' {
-                        
+
                             Write-Verbose -Message "Support for this reservation type has not been added"
                             break
 
                         }
 
                         'vCloud Director' {
-                        
+
                             Write-Verbose -Message "Support for this reservation type has not been added"
-                            break                        
-                        
+                            break
+
                         }
 
                         {$_ -in 'Hyper-V','Hyper-V (Standalone)'} {
-                        
+
                             Write-Verbose -Message "Support for this reservation type has not been added"
-                            break                        
-                        
+                            break
+
                         }
 
                         {$_ -in 'KVM','KVM (RHEV)'} {
-                        
+
                             Write-Verbose -Message "Support for this reservation type has not been added"
-                            break                        
-                        
+                            break
+
                         }
 
                         {$_ -in 'SCVMM','Hyper-V (SCVMM)'} {
-                        
+
                             Write-Verbose -Message "Support for this reservation type has not been added"
-                            break                        
-                        
+                            break
+
                         }
 
                         'XenServer' {
-                        
+
                             Write-Verbose -Message "Support for this reservation type has not been added"
-                            break                        
-                        
-                        }                           
+                            break
+
+                        }
 
                     }
 
@@ -820,11 +820,11 @@
                 }
 
             }
-    
+
             if ($PSCmdlet.ShouldProcess($Name)){
 
                 $URI = "/reservation-service/api/reservations"
-                
+
                 # --- Run vRA REST Request
                 Invoke-vRARestMethod -Method POST -URI $URI -Body $Body -Verbose:$VerbosePreference | Out-Null
 
@@ -839,6 +839,6 @@
         }
     }
     end {
-        
+
     }
 }

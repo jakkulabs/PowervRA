@@ -66,7 +66,7 @@ $JSON = @"
           "domain": "vrademo.local",
           "name": "basicusers"
         }
-      \] 
+      \]
   } ,
   {
   "name": "Support User",
@@ -76,7 +76,7 @@ $JSON = @"
           "domain": "vrademo.local",
           "name": "supportusers"
         }
-      \] 
+      \]
   } \],
   "extensionData": {
     "entries": \[
@@ -113,7 +113,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: $Global:vRAConnection.Tenant
+Default value: $Script:vRAConnection.Tenant
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

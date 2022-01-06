@@ -42,17 +42,17 @@ function xRequires {
     )
 
     # --- Test for vRA API version
-    if (-not $Global:vRAConnection){
+    if (-not $Script:vRAConnection){
         throw "vRA Connection variable does not exist. Please run Connect-vRAServer first to create it"
     }
 
     # --- Convert version strings to [version] objects
-    $APIVersion = [version]$Global:vRAConnection.APIVersion
+    $APIVersion = [version]$Script:vRAConnection.APIVersion
     $RequiredVersion = [version]$Version
 
     if ($APIVersion -lt $RequiredVersion) {
         $PSCallStack = Get-PSCallStack
-        Write-Error -Message "$($PSCallStack[1].Command) is not supported with vRA API version $($Global:vRAConnection.APIVersion)"
+        Write-Error -Message "$($PSCallStack[1].Command) is not supported with vRA API version $($Script:vRAConnection.APIVersion)"
         break
     }
 }

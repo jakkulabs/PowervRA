@@ -2,16 +2,16 @@
 <#
     .SYNOPSIS
     Finds groups.
-    
+
     .DESCRIPTION
     Finds groups in one of the identity providers configured for the tenant.
-    
+
     .PARAMETER Id
     The Id of the group
-    
+
     .PARAMETER Tenant
     The tenant of the group
-    
+
     .PARAMETER Limit
     The number of entries returned per page from the API. This has a default value of 100.
 
@@ -23,51 +23,51 @@
 
     .EXAMPLE
     Get-vRAGroupPrincipal
-    
+
     .EXAMPLE
     Get-vRAGroupPrincipal -Id group@vsphere.local
-    
+
     .EXAMPLE
-    Get-vRAGroupPrincipal -PrincipalId group@vsphere.local    
+    Get-vRAGroupPrincipal -PrincipalId group@vsphere.local
 
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
-    [parameter(Mandatory=$true,ParameterSetName="ById")]    
+    [parameter(Mandatory=$true,ParameterSetName="ById")]
     [ValidateNotNullOrEmpty()]
     [Alias("PrincipalId")]
     [String[]]$Id,
-    
+
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
-    [parameter(Mandatory=$false,ParameterSetName="ById")]    
+    [parameter(Mandatory=$false,ParameterSetName="ById")]
     [ValidateNotNullOrEmpty()]
-    [String]$Tenant = $Global:vRAConnection.Tenant,          
-          
+    [String]$Tenant = $Script:vRAConnection.Tenant,
+
     [parameter(Mandatory=$false,ParameterSetName="Standard")]
     [ValidateNotNullOrEmpty()]
     [String]$Limit = "100"
-    
+
     )
-    
+
     begin {}
-    
+
     process {
-                
+
         try {
 
             switch ($PsCmdlet.ParameterSetName) {
-                
+
                 'ById' {
-                    
+
                     foreach ($GroupId in $Id){
 
                         $URI = "/identity/api/tenants/$($Tenant)/groups/$($GroupId)"
 
                         # --- Run vRA REST Request
                         $Response = Invoke-vRARestMethod -Method GET -URI $URI
-                    
+
                         [pscustomobject] @{
 
                             GroupType = $Response.groupType
@@ -76,23 +76,23 @@
                             Description = $Response.description
                             PrincipalId = "$($Response.principalId.name)@$($Response.principalId.domain)"
 
-                        }                                    
+                        }
 
                     }
-                    
-                    break                
-    
+
+                    break
+
                 }
-                
+
                 'Standard' {
-    
+
                     $URI = "/identity/api/tenants/$($Tenant)/groups?limit=$($Limit)"
-                    
+
                     # --- Run vRA REST Request
                     $Response = Invoke-vRARestMethod -Method GET -URI $URI
-                    
+
                     foreach ($Principal in $Response.content) {
-                    
+
                         [pscustomobject] @{
 
                             GroupType = $Principal.groupType
@@ -104,22 +104,22 @@
                         }
 
                     }
-                    
-                    break              
-                                    
+
+                    break
+
                 }
-                
+
             }
-            
+
         }
         catch [Exception]{
 
             throw
-            
+
         }
-        
+
     }
-    
+
     end {}
-        
+
 }

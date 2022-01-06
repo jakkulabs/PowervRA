@@ -1,10 +1,10 @@
 ﻿function Test-vRAPackage {
 <#
     .SYNOPSIS
-    Validates a vRA Content Package    
+    Validates a vRA Content Package
 
     .DESCRIPTION
-    Validates a vRA Content Package  
+    Validates a vRA Content Package
 
     .PARAMETER File
     The content package file
@@ -38,7 +38,7 @@
 
         # --- Set Set Line Feed
         $LF = "`r`n"
-   
+
     }
 
     process {
@@ -68,8 +68,8 @@
 
                 # --- Set custom headers for the request
                 $Headers = @{
-                
-                    "Authorization" = "Bearer $($Global:vRAConnection.Token)";
+
+                    "Authorization" = "Bearer $($Script:vRAConnection.Token)";
                     "Accept" = "Application/json"
                     "Accept-Encoding" = "gzip,deflate,sdch";
                     "Content-Type" = "multipart/form-data; boundary=$($Boundary)"

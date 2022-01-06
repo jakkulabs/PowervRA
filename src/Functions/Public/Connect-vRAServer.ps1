@@ -180,7 +180,7 @@
         $Response = Invoke-RestMethod @Params
 
         # --- Create Output Object
-        $Global:vRAConnection = [PSCustomObject] @{
+        $Script:vRAConnection = [PSCustomObject] @{
 
             Server = "https://$($Server)"
             Token = $Response.id
@@ -192,8 +192,8 @@
         }
 
         # --- Update vRAConnection with tenant and api version
-        $Global:vRAConnection.Tenant = (Get-vRATenant -Id $Tenant).id
-        $Global:vRAConnection.APIVersion = (Get-vRAVersion).APIVersion
+        $Script:vRAConnection.Tenant = (Get-vRATenant -Id $Tenant).id
+        $Script:vRAConnection.APIVersion = (Get-vRAVersion).APIVersion
 
     }
     catch [Exception]{

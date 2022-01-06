@@ -27,8 +27,8 @@ function Invoke-vRADataCollection {
         xRequires -Version 7.1
 
         # --- Get metadata for the request
-        $Tenant = $Global:vRAConnection.Tenant
-        $RequestedBy = $Global:vRAConnection.Username
+        $Tenant = $Script:vRAConnection.Tenant
+        $RequestedBy = $Script:vRAConnection.Username
         $DataCollectionWorkflowId = "9ef7fdb1-2385-4fe5-adc7-5527ca124da7"
 
         # --- Retrive the vRO inventory Id of the associated IaaS host (vCAC:vCACHost)
@@ -65,7 +65,7 @@ function Invoke-vRADataCollection {
         }
 
         # --- Submit the request
-        Invoke-vRARestMethod -Method POST -URI "/o11n-gateway-service/api/tenants/$($Tenant)/workflows/$($DataCollectionWorkflowId)" -Body ($Body | ConvertTo-Json -Depth 50) -Verbose:$VerbosePreference    
+        Invoke-vRARestMethod -Method POST -URI "/o11n-gateway-service/api/tenants/$($Tenant)/workflows/$($DataCollectionWorkflowId)" -Body ($Body | ConvertTo-Json -Depth 50) -Verbose:$VerbosePreference
     }
     catch {
 

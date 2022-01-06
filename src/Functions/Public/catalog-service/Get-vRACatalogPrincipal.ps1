@@ -2,14 +2,14 @@
 <#
     .SYNOPSIS
     Finds catalog principals
-    
+
     .DESCRIPTION
-    Internal function to find users or groups and return them as the api type catalogPrincipal.  
+    Internal function to find users or groups and return them as the api type catalogPrincipal.
 
     DOCS: catalog-service/api/docs/ns0_catalogPrincipal.html
-    
-    [pscustomobject] is returned with lowercase property names to commply with expected payload 
-    
+
+    [pscustomobject] is returned with lowercase property names to commply with expected payload
+
     .PARAMETER Id
     The Id of the group
 
@@ -21,12 +21,12 @@
 
     .EXAMPLE
     Get-vRACatalogPrincipal -Id group@vsphere.local
-    
+
     .EXAMPLE
     Get-vRACatalogPrincipal -Id user@vsphere.local
-    
+
     .EXAMPLE
-    Get-vRACatalogPrincipal -Id group@vsphere.local    
+    Get-vRACatalogPrincipal -Id group@vsphere.local
 
 #>
 [CmdletBinding(DefaultParameterSetName="Standard")][OutputType('System.Management.Automation.PSObject')]
@@ -53,7 +53,7 @@
                 # -- Test for user first
                 try {
 
-                    Write-Verbose -Message "Searching for USER $($PrincipalId)"  
+                    Write-Verbose -Message "Searching for USER $($PrincipalId)"
 
                     $User = Get-vRAUserPrincipal -Id $PrincipalId
 
@@ -61,7 +61,7 @@
 
                     $CatalogPrincipal = [pscustomobject] @{
 
-                        tenantName = $($Global:vRAConnection.Tenant)
+                        tenantName = $($Script:vRAConnection.Tenant)
                         ref = $($User.Principalid)
                         type = "USER"
                         value = $($User.Name)
@@ -80,15 +80,15 @@
 
                     try {
 
-                        Write-Verbose -Message "Searching for GROUP $($PrincipalId)"  
+                        Write-Verbose -Message "Searching for GROUP $($PrincipalId)"
 
                         $Group = Get-vRAGroupPrincipal -Id $PrincipalId
 
-                        Write-Verbose -Message "Group found!"  
+                        Write-Verbose -Message "Group found!"
 
                         $CatalogPrincipal = [pscustomobject] @{
 
-                            tenantName = $($Global:vRAConnection.Tenant)
+                            tenantName = $($Script:vRAConnection.Tenant)
                             ref =  $($Group.Principalid)
                             type = "GROUP"
                             value = $($Grop.Name)
