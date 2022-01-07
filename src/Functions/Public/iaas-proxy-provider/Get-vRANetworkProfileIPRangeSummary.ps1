@@ -41,50 +41,54 @@
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [Int]$Limit = 100,
-    
+
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [Int]$Page = 1
-       
-    )    
 
-    xRequires -Version 7.1
+    )
 
-    try {
+    begin {
+        xRequires -Version 7.1
+    }
 
-        $URI = "/iaas-proxy-provider/api/network/profiles/range-summaries/$($NetworkProfileId)?limit=$($limit)&page=$($page)"
+    process {
 
-        $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$verbosePreference
+        try {
 
-        foreach ($NetworkProfileRange in $Response.content) {
+            $URI = "/iaas-proxy-provider/api/network/profiles/range-summaries/$($NetworkProfileId)?limit=$($limit)&page=$($page)"
 
-            [PSCustomObject] @{
+            $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$verbosePreference
 
-                Id = $NetworkProfileRange.id
-                Name = $NetworkProfileRange.name
-                Description = $NetworkProfileRange.description
-                BeginIPv4Address = $NetworkProfileRange.beginIPv4Address
-                EndIPv4Address = $NetworkProfileRange.endIPv4Address
-                State = $NetworkProfileRange.state
-                CreatedDate = $NetworkProfileRange.createdDate
-                LastModifiedDate = $NetworkProfileRange.lastModifiedDate
-                TotalAddresses = $NetworkProfileRange.totalAddresses
-                AllocatedAddresses = $NetworkProfileRange.allocatedAddresses
-                UnallocatedAddresses = $NetworkProfileRange.unallocatedAddresses
-                DestroyedAddresses = $NetworkProfileRange.destroyedAddresses
-                ExpiredAddresses = $NetworkProfileRange.expiredAddresses
+            foreach ($NetworkProfileRange in $Response.content) {
+
+                [PSCustomObject] @{
+
+                    Id = $NetworkProfileRange.id
+                    Name = $NetworkProfileRange.name
+                    Description = $NetworkProfileRange.description
+                    BeginIPv4Address = $NetworkProfileRange.beginIPv4Address
+                    EndIPv4Address = $NetworkProfileRange.endIPv4Address
+                    State = $NetworkProfileRange.state
+                    CreatedDate = $NetworkProfileRange.createdDate
+                    LastModifiedDate = $NetworkProfileRange.lastModifiedDate
+                    TotalAddresses = $NetworkProfileRange.totalAddresses
+                    AllocatedAddresses = $NetworkProfileRange.allocatedAddresses
+                    UnallocatedAddresses = $NetworkProfileRange.unallocatedAddresses
+                    DestroyedAddresses = $NetworkProfileRange.destroyedAddresses
+                    ExpiredAddresses = $NetworkProfileRange.expiredAddresses
+
+                }
 
             }
 
+            Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
+
         }
+        catch [Exception]{
 
-        Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
-    
+            throw
+
+        }
     }
-    catch [Exception]{
-        
-        throw
-
-    }   
-     
 }

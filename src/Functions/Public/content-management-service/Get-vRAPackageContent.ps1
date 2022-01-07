@@ -2,10 +2,10 @@
 <#
     .SYNOPSIS
     Get content items for a given package
-    
+
     .DESCRIPTION
     Get content items for a given package
-    
+
     .PARAMETER Id
     Specify the ID of a Package
 
@@ -24,7 +24,7 @@
 
     .EXAMPLE
     Get-vRAPackage
-    
+
     .EXAMPLE
     Get-vRAPackage -Id "b2d72c5d-775b-400c-8d79-b2483e321bae"
 
@@ -49,54 +49,58 @@
 
 
     )
+    begin {
+        # --- Test for vRA API version
+        xRequires -Version 7.0
+    }
 
-    # --- Test for vRA API version
-    xRequires -Version 7.0
-    
-    try {                
-                         
-        foreach ($PackageId in $Id){
+    process {
 
-            $URI = "/content-management-service/api/packages/$($PackageId)/contents?limit=$($Limit)&page=$($Page)"
+        try {
 
-            # --- Run vRA REST Request
-            $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
+            foreach ($PackageId in $Id){
 
-            if ($Response.content.Count -eq 0) {
+                $URI = "/content-management-service/api/packages/$($PackageId)/contents?limit=$($Limit)&page=$($Page)"
 
-                Write-Verbose -Message "The specified package has no content"
-                return
+                # --- Run vRA REST Request
+                $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$VerbosePreference
 
-            }
-            
-            foreach ($Content in $Response.Content) {
+                if ($Response.content.Count -eq 0) {
 
-                [PSCustomObject] @{
-
-                    Id = $Content.id
-                    ContentId = $Content.contentId
-                    Name = $Content.name
-                    Description = $Content.description
-                    ContentTypeId = $Content.contentTypeId
-                    MimeType = $Content.mimeType
-                    TenantId = $Content.tenantId
-                    SubtenantId = $Content.subtenantId
-                    Dependencies = $Content.dependencies
-                    CreatedDate = $Content.createdDate
-                    LastUpdated = $Content.lastUpdated
-                    Version = $Content.version
+                    Write-Verbose -Message "The specified package has no content"
+                    return
 
                 }
 
+                foreach ($Content in $Response.Content) {
+
+                    [PSCustomObject] @{
+
+                        Id = $Content.id
+                        ContentId = $Content.contentId
+                        Name = $Content.name
+                        Description = $Content.description
+                        ContentTypeId = $Content.contentTypeId
+                        MimeType = $Content.mimeType
+                        TenantId = $Content.tenantId
+                        SubtenantId = $Content.subtenantId
+                        Dependencies = $Content.dependencies
+                        CreatedDate = $Content.createdDate
+                        LastUpdated = $Content.lastUpdated
+                        Version = $Content.version
+
+                    }
+
+                }
+
+                Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
+
             }
 
-             Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
+        }
+        catch [Exception]{
 
-        }                             
-            
-    }
-    catch [Exception]{
-
-        throw
+            throw
+        }
     }
 }

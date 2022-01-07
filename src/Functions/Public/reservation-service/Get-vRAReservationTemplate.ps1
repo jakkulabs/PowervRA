@@ -2,13 +2,13 @@
 <#
     .SYNOPSIS
     Get a reservation json template
-    
+
     .DESCRIPTION
     Get a reservation json template. This template can then be used to create a new reservation with the same properties
-    
+
     .PARAMETER Id
     The id of the reservation
-    
+
     .PARAMETER OutFile
     The path to an output file
 
@@ -35,47 +35,51 @@
     [parameter(Mandatory=$true, ValueFromPipelineByPropertyName)]
     [ValidateNotNullOrEmpty()]
     [String]$Id,
-    
+
     [parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
     [String]$OutFile
-       
-    )    
 
-    try {
+    )
+
+    begin {}
+
+    process {
+
+        try {
 
 
-        $URI = "/reservation-service/api/reservations/$($Id)"
-            
-        Write-Verbose -Message "Preparing GET to $($URI)"
+            $URI = "/reservation-service/api/reservations/$($Id)"
 
-        $Response = Invoke-vRARestMethod -Method GET -URI "$($URI)"
+            Write-Verbose -Message "Preparing GET to $($URI)"
 
-        Write-Verbose -Message "SUCCESS"
+            $Response = Invoke-vRARestMethod -Method GET -URI "$($URI)"
 
-        # --- Remove the id from the response
-        $Response.PSObject.Properties.Remove("id")
+            Write-Verbose -Message "SUCCESS"
 
-        if ($PSBoundParameters.ContainsKey("OutFile")) {
+            # --- Remove the id from the response
+            $Response.PSObject.Properties.Remove("id")
 
-            Write-Verbose -Message "Outputting response to $($OutFile)"
+            if ($PSBoundParameters.ContainsKey("OutFile")) {
 
-            # --- Output the response to file
-            $Response | ConvertTo-Json -Depth 100 | Out-File -FilePath $OutFile -Force
+                Write-Verbose -Message "Outputting response to $($OutFile)"
+
+                # --- Output the response to file
+                $Response | ConvertTo-Json -Depth 100 | Out-File -FilePath $OutFile -Force
+
+            }
+            else {
+
+                # --- Return the response
+                $Response | ConvertTo-Json -Depth 100
+
+            }
 
         }
-        else {
+        catch [Exception]{
 
-            # --- Return the response
-            $Response | ConvertTo-Json -Depth 100
+            throw
 
         }
-           
     }
-    catch [Exception]{
-        
-        throw
-
-    }   
-     
 }

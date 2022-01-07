@@ -12,9 +12,6 @@
     .PARAMETER Name
     Specify the Name of an ASD Blueprint
 
-    .PARAMETER Limit
-    The number of entries returned per page from the API. This has a default value of 100.
-
     .INPUTS
     System.String
 
@@ -40,62 +37,92 @@
 
     [parameter(Mandatory=$true,ValueFromPipeline=$false,ParameterSetName="ByName")]
     [ValidateNotNullOrEmpty()]
-    [String[]]$Name,
-
-    [parameter(Mandatory=$false,ValueFromPipeline=$false)]
-    [ValidateNotNullOrEmpty()]
-    [String]$Limit = "100"
+    [String[]]$Name
     )
 
-    try {
+    begin {}
+
+    process {
+
+        try {
 
 
-        switch ($PsCmdlet.ParameterSetName)
-        {
-            "ById"  {
+            switch ($PsCmdlet.ParameterSetName)
+            {
+                "ById"  {
 
-                foreach ($ASDBlueprintId in $Id){
+                    foreach ($ASDBlueprintId in $Id){
 
-                    $URI = "/advanced-designer-service/api/tenants/$($Script:vRAConnection.Tenant)/blueprints/$($ASDBlueprintId)"
+                        $URI = "/advanced-designer-service/api/tenants/$($Script:vRAConnection.Tenant)/blueprints/$($ASDBlueprintId)"
 
-                    # --- Run vRA REST Request
-                    $Response = Invoke-vRARestMethod -Method GET -URI $URI
+                        # --- Run vRA REST Request
+                        $Response = Invoke-vRARestMethod -Method GET -URI $URI
 
-                    [pscustomobject]@{
+                        [pscustomobject]@{
 
-                        Name = $Response.name
-                        Id = $Response.id.id
-                        Description = $Response.description
-                        WorkflowId = $Response.workflowId
-                        CatalogRequestInfoHidden = $Response.catalogRequestInfoHidden
-                        Forms = $Response.forms
-                        Status = $Response.status
-                        StatusName = $Response.statusName
-                        Version = $Response.version
-                        OutputParameter = $Response.outputParameter
+                            Name = $Response.name
+                            Id = $Response.id.id
+                            Description = $Response.description
+                            WorkflowId = $Response.workflowId
+                            CatalogRequestInfoHidden = $Response.catalogRequestInfoHidden
+                            Forms = $Response.forms
+                            Status = $Response.status
+                            StatusName = $Response.statusName
+                            Version = $Response.version
+                            OutputParameter = $Response.outputParameter
+                        }
                     }
+
+                    break
                 }
 
-                break
-            }
+                "ByName"  {
 
-            "ByName"  {
+                foreach ($ASDBlueprintName in $Name){
 
-               foreach ($ASDBlueprintName in $Name){
+                        $URI = "/advanced-designer-service/api/tenants/$($Script:vRAConnection.Tenant)/blueprints?`$filter=name%20eq%20'$($ASDBlueprintName)'"
 
-                    $URI = "/advanced-designer-service/api/tenants/$($Script:vRAConnection.Tenant)/blueprints?`$filter=name%20eq%20'$($ASDBlueprintName)'"
+                        # --- Run vRA REST Request
+                        $Response = Invoke-vRARestMethod -Method GET -URI $URI
+
+                        if ($Response.content){
+
+                            $ASDBlueprints = $Response.content
+                        }
+                        else {
+
+                            throw "Unable to find Service Blueprint with name $($ASDBlueprintName)"
+                        }
+
+                        foreach ($ASDBlueprint in $ASDBlueprints){
+
+                            [pscustomobject]@{
+
+                                Name = $ASDBlueprint.name
+                                Id = $ASDBlueprint.id.id
+                                Description = $ASDBlueprint.description
+                                WorkflowId = $ASDBlueprint.workflowId
+                                CatalogRequestInfoHidden = $ASDBlueprint.catalogRequestInfoHidden
+                                Forms = $ASDBlueprint.forms
+                                Status = $ASDBlueprint.status
+                                StatusName = $ASDBlueprint.statusName
+                                Version = $ASDBlueprint.version
+                                OutputParameter = $ASDBlueprint.outputParameter
+                            }
+                        }
+                    }
+
+                    break
+                }
+
+                "Standard"  {
+
+                    $URI = "/advanced-designer-service/api/tenants/$($Script:vRAConnection.Tenant)/blueprints"
 
                     # --- Run vRA REST Request
                     $Response = Invoke-vRARestMethod -Method GET -URI $URI
 
-                    if ($Response.content){
-
-                        $ASDBlueprints = $Response.content
-                    }
-                    else {
-
-                        throw "Unable to find Service Blueprint with name $($ASDBlueprintName)"
-                    }
+                    $ASDBlueprints = $Response.content
 
                     foreach ($ASDBlueprint in $ASDBlueprints){
 
@@ -113,43 +140,14 @@
                             OutputParameter = $ASDBlueprint.outputParameter
                         }
                     }
+
+                    break
                 }
-
-                break
-            }
-
-            "Standard"  {
-
-                $URI = "/advanced-designer-service/api/tenants/$($Script:vRAConnection.Tenant)/blueprints"
-
-                # --- Run vRA REST Request
-                $Response = Invoke-vRARestMethod -Method GET -URI $URI
-
-                $ASDBlueprints = $Response.content
-
-                foreach ($ASDBlueprint in $ASDBlueprints){
-
-                    [pscustomobject]@{
-
-                        Name = $ASDBlueprint.name
-                        Id = $ASDBlueprint.id.id
-                        Description = $ASDBlueprint.description
-                        WorkflowId = $ASDBlueprint.workflowId
-                        CatalogRequestInfoHidden = $ASDBlueprint.catalogRequestInfoHidden
-                        Forms = $ASDBlueprint.forms
-                        Status = $ASDBlueprint.status
-                        StatusName = $ASDBlueprint.statusName
-                        Version = $ASDBlueprint.version
-                        OutputParameter = $ASDBlueprint.outputParameter
-                    }
-                }
-
-                break
             }
         }
-    }
-    catch [Exception]{
+        catch [Exception]{
 
-        throw
+            throw
+        }
     }
 }

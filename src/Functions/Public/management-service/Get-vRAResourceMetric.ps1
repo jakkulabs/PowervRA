@@ -52,139 +52,143 @@
 
     )
 
-    # --- Test for vRA API version
-    xRequires -Version 7.0
+    begin {
+        # --- Test for vRA API version
+        xRequires -Version 7.0
+    }
 
-    try {
+    process {
 
-        switch ($PsCmdlet.ParameterSetName) {
+        try {
 
-            # --- Get metrics by resource id
-            'ById'{
+            switch ($PsCmdlet.ParameterSetName) {
 
-                foreach ($ResoureId in $Id ) {
+                # --- Get metrics by resource id
+                'ById'{
 
-                    $Resource = Get-vRAResource -Id $ResoureId
+                    foreach ($ResoureId in $Id ) {
 
-                    $MachineId = $Resource.Data.machineId
+                        $Resource = Get-vRAResource -Id $ResoureId
 
-                    Write-Verbose -Message "Found machineid $($MachineId) for resource $($Resource.name)"
+                        $MachineId = $Resource.Data.machineId
 
-                    # --- Using $filter param here because GET method doesn't return stats
+                        Write-Verbose -Message "Found machineid $($MachineId) for resource $($Resource.name)"
+
+                        # --- Using $filter param here because GET method doesn't return stats
+                        $URI = "/management-service/api/management/metrics"
+
+                        Write-Verbose -Message "Preparing GET to $($URI)"
+
+                        $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body "{}"
+
+                        $Metric = $Response.Content | Where-Object {$_.iaasUuid -eq $MachineId}
+
+                        Write-Verbose -Message "SUCCESS"
+
+                        [pscustomobject] @{
+
+                            Moref = $Metric.moref
+                            vCOPSUuid = $Metric.vcopsUuid
+                            IaasUuid = $Metric.iaasUuid
+                            ServerGuid = $Metric.serverGuid
+                            PendingRequest = $Metric.pendingRequest
+                            DailyCost = $Metric.dailyCost
+                            ExpirationDate = $Metric.expirationDate
+                            Health = $Metric.health
+                            Stats = $Metric.stats
+                            Strings = $Metric.strings
+
+                        }
+
+                    }
+
+                    break
+
+                }
+
+                # --- Get metrics by resource name
+                'ByName' {
+
+                    foreach ($ResourceName in $Name) {
+
+                        $Resource = Get-vRAResource -Name $ResourceName
+
+                        $MachineId = $Resource.Data.machineId
+
+                        Write-Verbose -Message "Found machineid $($MachineId) for resource $($ResourceName)"
+
+                        # --- Using $filter param here because GET method doesn't return stats
+                        $URI = "/management-service/api/management/metrics"
+
+                        Write-Verbose -Message "Preparing GET to $($URI)"
+
+                        $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body "{}"
+
+                        $Metric = $Response.Content | Where-Object {$_.iaasUuid -eq $MachineId}
+
+                        Write-Verbose -Message "SUCCESS"
+
+                        [pscustomobject] @{
+
+                            Moref = $Metric.moref
+                            vCOPSUuid = $Metric.vcopsUuid
+                            IaasUuid = $Metric.iaasUuid
+                            ServerGuid = $Metric.serverGuid
+                            PendingRequest = $Metric.pendingRequest
+                            DailyCost = $Metric.dailyCost
+                            ExpirationDate = $Metric.expirationDate
+                            Health = $Metric.health
+                            Stats = $Metric.stats
+                            Strings = $Metric.strings
+
+                        }
+
+                    }
+
+                    break
+
+                }
+
+                # --- No parameters passed so return all metrics
+                'Standard' {
+
                     $URI = "/management-service/api/management/metrics"
 
-                    Write-Verbose -Message "Preparing GET to $($URI)"
+                    Write-Verbose -Message "Preparing PUT to $($URI)"
 
                     $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body "{}"
 
-                    $Metric = $Response.Content | Where-Object {$_.iaasUuid -eq $MachineId}
-
                     Write-Verbose -Message "SUCCESS"
 
-                    [pscustomobject] @{
+                    foreach ($ResourceMetric in $Response.content) {
 
-                        Moref = $Metric.moref
-                        vCOPSUuid = $Metric.vcopsUuid
-                        IaasUuid = $Metric.iaasUuid
-                        ServerGuid = $Metric.serverGuid
-                        PendingRequest = $Metric.pendingRequest
-                        DailyCost = $Metric.dailyCost
-                        ExpirationDate = $Metric.expirationDate
-                        Health = $Metric.health
-                        Stats = $Metric.stats
-                        Strings = $Metric.strings
+                        [pscustomobject] @{
 
-                    }
+                            Moref = $ResourceMetric.moref
+                            vCOPSUuid = $ResourceMetric.vcopsUuid
+                            IaasUuid = $ResourceMetric.iaasUuid
+                            ServerGuid = $ResourceMetric.serverGuid
+                            PendingRequest = $ResourceMetric.pendingRequest
+                            DailyCost = $ResourceMetric.dailyCost
+                            ExpirationDate = $ResourceMetric.expirationDate
+                            Health = $ResourceMetric.health
+                            Stats = $ResourceMetric.stats
+                            Strings = $ResourceMetric.strings
 
-                }
-
-                break
-
-            }
-
-            # --- Get metrics by resource name
-            'ByName' {
-
-                foreach ($ResourceName in $Name) {
-
-                    $Resource = Get-vRAResource -Name $ResourceName
-
-                    $MachineId = $Resource.Data.machineId
-
-                    Write-Verbose -Message "Found machineid $($MachineId) for resource $($ResourceName)"
-
-                    # --- Using $filter param here because GET method doesn't return stats
-                    $URI = "/management-service/api/management/metrics"
-
-                    Write-Verbose -Message "Preparing GET to $($URI)"
-
-                    $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body "{}"
-
-                    $Metric = $Response.Content | Where-Object {$_.iaasUuid -eq $MachineId}
-
-                    Write-Verbose -Message "SUCCESS"
-
-                    [pscustomobject] @{
-
-                        Moref = $Metric.moref
-                        vCOPSUuid = $Metric.vcopsUuid
-                        IaasUuid = $Metric.iaasUuid
-                        ServerGuid = $Metric.serverGuid
-                        PendingRequest = $Metric.pendingRequest
-                        DailyCost = $Metric.dailyCost
-                        ExpirationDate = $Metric.expirationDate
-                        Health = $Metric.health
-                        Stats = $Metric.stats
-                        Strings = $Metric.strings
+                        }
 
                     }
 
-                }
-
-                break
-
-            }
-
-            # --- No parameters passed so return all metrics
-            'Standard' {
-
-                $URI = "/management-service/api/management/metrics"
-
-                Write-Verbose -Message "Preparing PUT to $($URI)"
-
-                $Response = Invoke-vRARestMethod -Method PUT -URI $URI -Body "{}"
-
-                Write-Verbose -Message "SUCCESS"
-
-                foreach ($ResourceMetric in $Response.content) {
-
-                    [pscustomobject] @{
-
-                        Moref = $ResourceMetric.moref
-                        vCOPSUuid = $ResourceMetric.vcopsUuid
-                        IaasUuid = $ResourceMetric.iaasUuid
-                        ServerGuid = $ResourceMetric.serverGuid
-                        PendingRequest = $ResourceMetric.pendingRequest
-                        DailyCost = $ResourceMetric.dailyCost
-                        ExpirationDate = $ResourceMetric.expirationDate
-                        Health = $ResourceMetric.health
-                        Stats = $ResourceMetric.stats
-                        Strings = $ResourceMetric.strings
-
-                    }
+                    break
 
                 }
-
-                break
 
             }
 
         }
+        catch [Exception]{
 
+            throw
+        }
     }
-    catch [Exception]{
-
-        throw
-    }
-
 }

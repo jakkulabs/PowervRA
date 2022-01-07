@@ -2,7 +2,7 @@
 <#
     .SYNOPSIS
     Creates a new network definition for a reservation.
-    
+
     .DESCRIPTION
     Creates a new network definition for a reservation. This cmdlet is used to create a custom
     complex network object. One or more of these can be added to an array and passed to New-vRAReservation.
@@ -11,13 +11,13 @@
     The reservation type
     Valid types vRA 7.1 and earlier: Amazon, Hyper-V, KVM, OpenStack, SCVMM, vCloud Air, vCloud Director, vSphere, XenServer
     Valid types vRA 7.2 and later: Amazon EC2, Azure, Hyper-V (SCVMM), Hyper-V (Standalone), KVM (RHEV), OpenStack, vCloud Air, vCloud Director, vSphere (vCenter), XenServer
-        
+
     .PARAMETER ComputeResourceId
     The id of the compute resource
 
     .PARAMETER NetworkPath
     The network path
-    
+
     .PARAMETER NetworkProfile
     The network profile
 
@@ -54,17 +54,17 @@
         [Parameter(Mandatory=$true,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
         [String]$NetworkPath,
-        
+
         [Parameter(Mandatory=$false,ParameterSetName="Standard")]
         [ValidateNotNullOrEmpty()]
         [String]$NetworkProfile
 
-    )    
+    )
 
     begin {
-    
+
     }
-    
+
     process {
 
         try {
@@ -73,7 +73,7 @@
 
                 # --- Define object
                 $NetworkDefinitionJSON = @"
-        
+
                     {
                         "type": "complex",
                         "componentTypeId": "com.vmware.csp.iaas.blueprint.service",
@@ -87,7 +87,7 @@
 
                     }
 "@
-        
+
                 # --- Convert the networkDefinition json to an object
                 $NetworkDefinition = $NetworkDefinitionJSON | ConvertFrom-Json
 
@@ -109,7 +109,7 @@
 
                     }
 
-                    $Profile = $Response.content[0]
+                    $ReturnedNetworkProfile = $Response.content[0]
 
                     $NetworkProfileJSON = @"
 
@@ -119,16 +119,16 @@
                                         "type":  "entityRef",
                                         "componentId":  null,
                                         "classId":  "Network",
-                                        "id":  "$($Profile.id)",
-                                        "label":  "$($Profile.name)"
+                                        "id":  "$($ReturnedNetworkProfile.id)",
+                                        "label":  "$($ReturnedNetworkProfile.name)"
                                     }
                         }
 "@
 
-                    $Profile = $NetworkProfileJSON | ConvertFrom-Json 
+                    $ReturnedNetworkProfile = $NetworkProfileJSON | ConvertFrom-Json
 
                     # --- Add the network profile to the network definition
-                    $NetworkDefinition.values.entries += $Profile
+                    $NetworkDefinition.values.entries += $ReturnedNetworkProfile
 
                 }
 
@@ -143,6 +143,6 @@
         }
     }
     end {
-        
+
     }
 }

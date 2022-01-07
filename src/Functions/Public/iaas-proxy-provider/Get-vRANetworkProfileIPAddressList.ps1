@@ -1,10 +1,10 @@
 ﻿function Get-vRANetworkProfileIPAddressList {
 <#
     .SYNOPSIS
-    Get a list of IP addresses available within the network profile    
+    Get a list of IP addresses available within the network profile
 
     .DESCRIPTION
-    Get a list of IP addresses available within the network profile    
+    Get a list of IP addresses available within the network profile
 
     .PARAMETER NetworkProfileId
     The id of the network profile
@@ -41,44 +41,47 @@
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [Int]$Limit = 100,
-    
+
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [Int]$Page = 1
-       
-    )    
 
-    xRequires -Version 7.1
+    )
+    begin {
+        xRequires -Version 7.1
+    }
 
-    try {
+    process {
 
-        $URI = "/iaas-proxy-provider/api/network/profiles/addresses/$($NetworkProfileId)?limit=$($limit)&page=$($page)"
+        try {
 
-        $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$verbosePreference
+            $URI = "/iaas-proxy-provider/api/network/profiles/addresses/$($NetworkProfileId)?limit=$($limit)&page=$($page)"
 
-        foreach ($NetworkProfileIPAddress in $Response.content) {
+            $Response = Invoke-vRARestMethod -Method GET -URI $URI -Verbose:$verbosePreference
 
-            [PSCustomObject] @{
+            foreach ($NetworkProfileIPAddress in $Response.content) {
 
-                Id = $NetworkProfileIPAddress.id
-                IPv4Address = $NetworkProfileIPAddress.ipv4Address
-                IPSortValue = $NetworkProfileIPAddress.ipSortValue
-                State = $NetworkProfileIPAddress.state
-                StateValue = $NetworkProfileIPAddress.stateValue
-                CreatedDate = $NetworkProfileIPAddress.createdDate
-                LastModifiedDate = $NetworkProfileIPAddress.lastModifiedDate
+                [PSCustomObject] @{
+
+                    Id = $NetworkProfileIPAddress.id
+                    IPv4Address = $NetworkProfileIPAddress.ipv4Address
+                    IPSortValue = $NetworkProfileIPAddress.ipSortValue
+                    State = $NetworkProfileIPAddress.state
+                    StateValue = $NetworkProfileIPAddress.stateValue
+                    CreatedDate = $NetworkProfileIPAddress.createdDate
+                    LastModifiedDate = $NetworkProfileIPAddress.lastModifiedDate
+
+                }
 
             }
 
+            Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
+
         }
+        catch [Exception]{
 
-        Write-Verbose -Message "Total: $($Response.metadata.totalElements) | Page: $($Response.metadata.number) of $($Response.metadata.totalPages) | Size: $($Response.metadata.size)"
-    
+            throw
+
+        }
     }
-    catch [Exception]{
-        
-        throw
-
-    }   
-     
 }

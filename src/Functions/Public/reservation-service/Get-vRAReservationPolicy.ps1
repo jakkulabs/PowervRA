@@ -2,10 +2,10 @@
 <#
     .SYNOPSIS
     Retrieve vRA Reservation Policies
-    
+
     .DESCRIPTION
     Retrieve vRA Reservation Policies
-    
+
     .PARAMETER Id
     Specify the ID of a Reservation Policy
 
@@ -23,7 +23,7 @@
 
     .EXAMPLE
     Get-vRAReservationPolicy
-    
+
     .EXAMPLE
     Get-vRAReservationPolicy -Id "068afd10-560f-4360-aa52-786a28573fdc"
 
@@ -36,48 +36,76 @@
 
     [parameter(Mandatory=$true,ValueFromPipeline=$false,ParameterSetName="ById")]
     [ValidateNotNullOrEmpty()]
-    [String[]]$Id,         
+    [String[]]$Id,
 
     [parameter(Mandatory=$true,ValueFromPipeline=$false,ParameterSetName="ByName")]
     [ValidateNotNullOrEmpty()]
-    [String[]]$Name, 
-    
+    [String[]]$Name,
+
     [parameter(Mandatory=$false,ValueFromPipeline=$false)]
     [ValidateNotNullOrEmpty()]
-    [String]$Limit = "100" 
+    [String]$Limit = "100"
     )
 
-    try {                
-        switch ($PsCmdlet.ParameterSetName) 
-        { 
-            "ById"  {                
-                
-                foreach ($ReservationPolicyId in $Id){
+    begin {}
 
-                    $URI = "/reservation-service/api/reservations/policies/$($ReservationPolicyId)"
+    process {
 
-                    # --- Run vRA REST Request
-                    $Response = Invoke-vRARestMethod -Method GET -URI $URI
+        try {
+            switch ($PsCmdlet.ParameterSetName)
+            {
+                "ById"  {
 
-                    [pscustomobject]@{
+                    foreach ($ReservationPolicyId in $Id){
 
-                        Name = $Response.name
-                        Id = $Response.id                
-                        Description = $Response.description
-                        CreatedDate = $Response.createdDate
-                        LastUpdated = $Response.lastUpdated
-                        ReservationPolicyTypeId = $Response.reservationPolicyTypeId
+                        $URI = "/reservation-service/api/reservations/policies/$($ReservationPolicyId)"
+
+                        # --- Run vRA REST Request
+                        $Response = Invoke-vRARestMethod -Method GET -URI $URI
+
+                        [pscustomobject]@{
+
+                            Name = $Response.name
+                            Id = $Response.id
+                            Description = $Response.description
+                            CreatedDate = $Response.createdDate
+                            LastUpdated = $Response.lastUpdated
+                            ReservationPolicyTypeId = $Response.reservationPolicyTypeId
+                        }
                     }
-                }                              
-            
-                break
-            }
 
-            "ByName"  {                
+                    break
+                }
 
-                foreach ($ReservationPolicyName in $Name){
+                "ByName"  {
 
-                    $URI = "/reservation-service/api/reservations/policies?`$filter=name%20eq%20'$($ReservationPolicyName)'&reservationPolicyTypeId%20eq%20'Infrastructure.Reservation.Policy.ComputeResource'"
+                    foreach ($ReservationPolicyName in $Name){
+
+                        $URI = "/reservation-service/api/reservations/policies?`$filter=name%20eq%20'$($ReservationPolicyName)'&reservationPolicyTypeId%20eq%20'Infrastructure.Reservation.Policy.ComputeResource'"
+
+                        # --- Run vRA REST Request
+                        $Response = Invoke-vRARestMethod -Method GET -URI $URI
+
+                        foreach ($ReservationPolicy in $Response.content){
+
+                            [pscustomobject]@{
+
+                                Name = $ReservationPolicy.name
+                                Id = $ReservationPolicy.id
+                                Description = $ReservationPolicy.description
+                                CreatedDate = $ReservationPolicy.createdDate
+                                LastUpdated = $ReservationPolicy.lastUpdated
+                                ReservationPolicyTypeId = $ReservationPolicy.reservationPolicyTypeId
+                            }
+                        }
+                    }
+
+                    break
+                }
+
+                "Standard"  {
+
+                    $URI = "/reservation-service/api/reservations/policies?`$filter=reservationPolicyTypeId%20eq%20'Infrastructure.Reservation.Policy.ComputeResource'&limit=$($Limit)"
 
                     # --- Run vRA REST Request
                     $Response = Invoke-vRARestMethod -Method GET -URI $URI
@@ -87,44 +115,21 @@
                         [pscustomobject]@{
 
                             Name = $ReservationPolicy.name
-                            Id = $ReservationPolicy.id                
+                            Id = $ReservationPolicy.id
                             Description = $ReservationPolicy.description
                             CreatedDate = $ReservationPolicy.createdDate
                             LastUpdated = $ReservationPolicy.lastUpdated
                             ReservationPolicyTypeId = $ReservationPolicy.reservationPolicyTypeId
                         }
                     }
+
+                    break
                 }
-                
-                break
-            }
-
-            "Standard"  {
-
-                $URI = "/reservation-service/api/reservations/policies?`$filter=reservationPolicyTypeId%20eq%20'Infrastructure.Reservation.Policy.ComputeResource'&limit=$($Limit)"
-
-                # --- Run vRA REST Request
-                $Response = Invoke-vRARestMethod -Method GET -URI $URI
-
-                foreach ($ReservationPolicy in $Response.content){
-
-                    [pscustomobject]@{
-
-                        Name = $ReservationPolicy.name
-                        Id = $ReservationPolicy.id                
-                        Description = $ReservationPolicy.description
-                        CreatedDate = $ReservationPolicy.createdDate
-                        LastUpdated = $ReservationPolicy.lastUpdated
-                        ReservationPolicyTypeId = $ReservationPolicy.reservationPolicyTypeId
-                    }
-                }
-                
-                break
             }
         }
-    }
-    catch [Exception]{
+        catch [Exception]{
 
-        throw
+            throw
+        }
     }
 }
