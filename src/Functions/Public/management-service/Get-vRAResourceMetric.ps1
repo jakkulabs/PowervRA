@@ -12,9 +12,6 @@
     .PARAMETER Name
     The name of the catalog resource
 
-    .PARAMETER Limit
-    The number of entries returned per page from the API. This has a default value of 100.
-
     .INPUTS
     System.String
 
@@ -44,12 +41,7 @@
 
     [parameter(Mandatory=$false, ValueFromPipelineByPropertyName, ParameterSetName="ByName")]
     [ValidateNotNullOrEmpty()]
-    [String[]]$Name,
-
-    [parameter(Mandatory=$false)]
-    [ValidateNotNullOrEmpty()]
-    [String]$Limit = "100"
-
+    [String[]]$Name
     )
 
     begin {
