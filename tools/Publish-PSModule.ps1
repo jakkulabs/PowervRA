@@ -44,7 +44,7 @@ try {
     }
 
     Write-Verbose "Publishing module"
-    Publish-Module -Path $Path -NuGetApiKey $ApiKey -Repository $Repository
+    Publish-Module -Path $Path -NuGetApiKey $ApiKey -Repository $Repository -Force
 }
 catch {
     throw "$_"
