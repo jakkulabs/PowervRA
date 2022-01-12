@@ -49,6 +49,7 @@
         try {
 
             foreach ($PrincipalId in $Id){
+                $CatalogPrincipal = $null
 
                 # -- Test for user first
                 try {
