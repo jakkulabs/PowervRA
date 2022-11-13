@@ -166,11 +166,16 @@
                     if ($Username -match '@') {
                         # Log in using the advanced authentication API
                         $User = $Username.split('@')[0]
-                        $Domain = $Username.split('@')[1]
+                        
+                        if ($Username -like "*@*@*") {
+                            # If the username contains 2x @, the first part is probably an email address.
+                            $User = $User + $Username.split('@')[1]
+                        }
+
                         $RawBody = @{
                             username = $User
                             password = $JSONPassword
-                            domain = $Domain
+                            domain = $Username.split('@')[-1]
                         }
                     } else {
                         # -- Login with the basic authentication API
