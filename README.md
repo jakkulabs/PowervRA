@@ -9,7 +9,8 @@ PowervRA is a PowerShell module built on top of the services exposed by the vRea
 
 ### vRealize Automation
 
-**PowervRA 4.x and above is only compatible with vRA 8.x and the Cloud version. The API was completely changed after vRA 7.x and PowervRA has been re-written to support that going forward.**
+**PowervRA 4.x and above is only compatible with vRA 8.x and the Cloud version. The API was completely changed after vRA 7.x and PowervRA has been re-written to support that going forward.**  
+**PowervRA 6.x is only compatible with vRA 8.12 and up**
 
 | Version | Tested |
 | --- | --- |
@@ -50,6 +51,7 @@ Listed here are the breaking changes made which required the major version to be
 
 | PowervRA Version | Breaking Change |
 | --- | --- |
+|5.x -> 6.x| Switched to URL `/csp/gateway/am/api/login?access_token` for `Connect-vRAServer` required in vRA 8.12|
 |4.x -> 5.x| Removed UserAttribute Parameter from `Connect-vRAServer` |
 |3.x -> 4.x| Re-written module to work with new vRA 8.x and Cloud API |
 
