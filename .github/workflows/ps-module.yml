@@ -92,23 +92,6 @@ jobs:
       - name: Run mkdocs
         run: mkdocs gh-deploy --force
 
-  test_release:
-
-    name: Test Release module
-    if: |
-      github.ref == 'refs/heads/master' ||
-      startsWith(github.ref, 'refs/heads/support')
-    runs-on: windows-latest
-    needs: build
-    steps:
-
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-
-      - name: Publish Module to Test PowerShell gallery
-        run: .\Tools\Publish-PSModule.ps1 -ApiKey ${{ secrets.PSTestGalleryApiKey }} -Path ".\Release\PowervRA" -CheckForExistingVersion -PreRelease -Verbose
-        shell: pwsh
-
   prod_release:
 
     name: Prod Release module
