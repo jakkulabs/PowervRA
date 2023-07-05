@@ -1,0 +1,2204 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://jakkulabs.github.io/PowervRA/functions/Set-vRAProject/">
+      
+      
+        <link rel="prev" href="../Restart-vRAMachineGuestOS/">
+      
+      
+        <link rel="next" href="../Start-vRAMachine/">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.18">
+    
+    
+      
+        <title>Set-vRAProject - PowervRA Module Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.26e3688c.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#set-vraproject" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PowervRA Module Documentation" class="md-header__button md-logo" aria-label="PowervRA Module Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PowervRA Module Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Set-vRAProject
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PowervRA Module Documentation" class="md-nav__button md-logo" aria-label="PowervRA Module Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    PowervRA Module Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          Functions
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Functions
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Connect-vRAServer/" class="md-nav__link">
+        Connect-vRAServer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Disconnect-vRAServer/" class="md-nav__link">
+        Disconnect-vRAServer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRAAPIVersion/" class="md-nav__link">
+        Get-vRAAPIVersion
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRABlockDevice/" class="md-nav__link">
+        Get-vRABlockDevice
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRABlueprint/" class="md-nav__link">
+        Get-vRABlueprint
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRABlueprintVersion/" class="md-nav__link">
+        Get-vRABlueprintVersion
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRACatalogItem/" class="md-nav__link">
+        Get-vRACatalogItem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRACloudAccount/" class="md-nav__link">
+        Get-vRACloudAccount
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRACloudZone/" class="md-nav__link">
+        Get-vRACloudZone
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRACodeStreamExecution/" class="md-nav__link">
+        Get-vRACodeStreamExecution
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRACodeStreamPipeline/" class="md-nav__link">
+        Get-vRACodeStreamPipeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRACodeStreamVariable/" class="md-nav__link">
+        Get-vRACodeStreamVariable
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRAContentSource/" class="md-nav__link">
+        Get-vRAContentSource
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRADeployment/" class="md-nav__link">
+        Get-vRADeployment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRAExternalNetworkIPRange/" class="md-nav__link">
+        Get-vRAExternalNetworkIPRange
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRAFabricAWSVolumeType/" class="md-nav__link">
+        Get-vRAFabricAWSVolumeType
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRAFabricAzureStorageAccount/" class="md-nav__link">
+        Get-vRAFabricAzureStorageAccount
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRAFabricCompute/" class="md-nav__link">
+        Get-vRAFabricCompute
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRAFabricImage/" class="md-nav__link">
+        Get-vRAFabricImage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRAFabricNetwork/" class="md-nav__link">
+        Get-vRAFabricNetwork
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRAFlavorProfile/" class="md-nav__link">
+        Get-vRAFlavorProfile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRAImageProfile/" class="md-nav__link">
+        Get-vRAImageProfile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRALoadBalancer/" class="md-nav__link">
+        Get-vRALoadBalancer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRAMachine/" class="md-nav__link">
+        Get-vRAMachine
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRAMachineDisk/" class="md-nav__link">
+        Get-vRAMachineDisk
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRANetwork/" class="md-nav__link">
+        Get-vRANetwork
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRANetworkDomain/" class="md-nav__link">
+        Get-vRANetworkDomain
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRANetworkIPRange/" class="md-nav__link">
+        Get-vRANetworkIPRange
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRANetworkProfile/" class="md-nav__link">
+        Get-vRANetworkProfile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRAOnboardingDeployment/" class="md-nav__link">
+        Get-vRAOnboardingDeployment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRAOnboardingPlan/" class="md-nav__link">
+        Get-vRAOnboardingPlan
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRAOnboardingPlanExecution/" class="md-nav__link">
+        Get-vRAOnboardingPlanExecution
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRAOnboardingResource/" class="md-nav__link">
+        Get-vRAOnboardingResource
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRAProject/" class="md-nav__link">
+        Get-vRAProject
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRARegion/" class="md-nav__link">
+        Get-vRARegion
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRARegionEnumerationvSphere/" class="md-nav__link">
+        Get-vRARegionEnumerationvSphere
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRARequest/" class="md-nav__link">
+        Get-vRARequest
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRASecurityGroup/" class="md-nav__link">
+        Get-vRASecurityGroup
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRAStorageProfile/" class="md-nav__link">
+        Get-vRAStorageProfile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRATag/" class="md-nav__link">
+        Get-vRATag
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRAvSphereFabricDatastore/" class="md-nav__link">
+        Get-vRAvSphereFabricDatastore
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRAvSphereFabricNetwork/" class="md-nav__link">
+        Get-vRAvSphereFabricNetwork
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Get-vRAvSphereFabricStoragePolicy/" class="md-nav__link">
+        Get-vRAvSphereFabricStoragePolicy
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Invoke-vRAOnboardingPlan/" class="md-nav__link">
+        Invoke-vRAOnboardingPlan
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Invoke-vRARestMethod/" class="md-nav__link">
+        Invoke-vRARestMethod
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../New-vRACloudAccountAzure/" class="md-nav__link">
+        New-vRACloudAccountAzure
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../New-vRACloudAccountGCP/" class="md-nav__link">
+        New-vRACloudAccountGCP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../New-vRACloudAccountvSphere/" class="md-nav__link">
+        New-vRACloudAccountvSphere
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../New-vRAMachineAttachedDisk/" class="md-nav__link">
+        New-vRAMachineAttachedDisk
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../New-vRANetworkProfile/" class="md-nav__link">
+        New-vRANetworkProfile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../New-vRAOnboardingDeployment/" class="md-nav__link">
+        New-vRAOnboardingDeployment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../New-vRAOnboardingPlan/" class="md-nav__link">
+        New-vRAOnboardingPlan
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../New-vRAOnboardingResource/" class="md-nav__link">
+        New-vRAOnboardingResource
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../New-vRAProject/" class="md-nav__link">
+        New-vRAProject
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../New-vRAVirtualDisk/" class="md-nav__link">
+        New-vRAVirtualDisk
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Remove-vRACloudAccount/" class="md-nav__link">
+        Remove-vRACloudAccount
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Remove-vRACodeStreamExecution/" class="md-nav__link">
+        Remove-vRACodeStreamExecution
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Remove-vRACodeStreamVariable/" class="md-nav__link">
+        Remove-vRACodeStreamVariable
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Remove-vRAOnboardingDeployment/" class="md-nav__link">
+        Remove-vRAOnboardingDeployment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Remove-vRAOnboardingPlan/" class="md-nav__link">
+        Remove-vRAOnboardingPlan
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Remove-vRAOnboardingResource/" class="md-nav__link">
+        Remove-vRAOnboardingResource
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Remove-vRAProject/" class="md-nav__link">
+        Remove-vRAProject
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Resize-vRAMachine/" class="md-nav__link">
+        Resize-vRAMachine
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Resize-vRAVirtualDisk/" class="md-nav__link">
+        Resize-vRAVirtualDisk
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Restart-vRAMachine/" class="md-nav__link">
+        Restart-vRAMachine
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Restart-vRAMachineGuestOS/" class="md-nav__link">
+        Restart-vRAMachineGuestOS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Set-vRAProject
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Set-vRAProject
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#synopsis" class="md-nav__link">
+    SYNOPSIS
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#syntax" class="md-nav__link">
+    SYNTAX
+  </a>
+  
+    <nav class="md-nav" aria-label="SYNTAX">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#byid-default" class="md-nav__link">
+    ById (Default)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#byname" class="md-nav__link">
+    ByName
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json" class="md-nav__link">
+    JSON
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    DESCRIPTION
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    EXAMPLES
+  </a>
+  
+    <nav class="md-nav" aria-label="EXAMPLES">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-1" class="md-nav__link">
+    EXAMPLE 1
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-2" class="md-nav__link">
+    EXAMPLE 2
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    PARAMETERS
+  </a>
+  
+    <nav class="md-nav" aria-label="PARAMETERS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#-id" class="md-nav__link">
+    -Id
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-name" class="md-nav__link">
+    -Name
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-newname" class="md-nav__link">
+    -NewName
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-description" class="md-nav__link">
+    -Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-zones" class="md-nav__link">
+    -Zones
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-members" class="md-nav__link">
+    -Members
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-administrators" class="md-nav__link">
+    -Administrators
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-viewers" class="md-nav__link">
+    -Viewers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-operationtimeout" class="md-nav__link">
+    -OperationTimeout
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-sharedresources" class="md-nav__link">
+    -SharedResources
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-placementpolicy" class="md-nav__link">
+    -PlacementPolicy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-customproperties" class="md-nav__link">
+    -CustomProperties
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-json" class="md-nav__link">
+    -JSON
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-whatif" class="md-nav__link">
+    -WhatIf
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-confirm" class="md-nav__link">
+    -Confirm
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commonparameters" class="md-nav__link">
+    CommonParameters
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inputs" class="md-nav__link">
+    INPUTS
+  </a>
+  
+    <nav class="md-nav" aria-label="INPUTS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#systemstring" class="md-nav__link">
+    System.String
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#systemswitch" class="md-nav__link">
+    System.Switch
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pscustomobject" class="md-nav__link">
+    PSCustomObject
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#outputs" class="md-nav__link">
+    OUTPUTS
+  </a>
+  
+    <nav class="md-nav" aria-label="OUTPUTS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#systemmanagementautomationpsobject" class="md-nav__link">
+    System.Management.Automation.PSObject
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    NOTES
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-links" class="md-nav__link">
+    RELATED LINKS
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Start-vRAMachine/" class="md-nav__link">
+        Start-vRAMachine
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stop-vRAMachine/" class="md-nav__link">
+        Stop-vRAMachine
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stop-vRAMachineGuestOS/" class="md-nav__link">
+        Stop-vRAMachineGuestOS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Suspend-vRAMachine/" class="md-nav__link">
+        Suspend-vRAMachine
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Update-vRACodeStreamVariable/" class="md-nav__link">
+        Update-vRACodeStreamVariable
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Update-vRAExternalNetworkIPRange/" class="md-nav__link">
+        Update-vRAExternalNetworkIPRange
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Update-vRAvSphereFabricNetwork/" class="md-nav__link">
+        Update-vRAvSphereFabricNetwork
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#synopsis" class="md-nav__link">
+    SYNOPSIS
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#syntax" class="md-nav__link">
+    SYNTAX
+  </a>
+  
+    <nav class="md-nav" aria-label="SYNTAX">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#byid-default" class="md-nav__link">
+    ById (Default)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#byname" class="md-nav__link">
+    ByName
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json" class="md-nav__link">
+    JSON
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    DESCRIPTION
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    EXAMPLES
+  </a>
+  
+    <nav class="md-nav" aria-label="EXAMPLES">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-1" class="md-nav__link">
+    EXAMPLE 1
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-2" class="md-nav__link">
+    EXAMPLE 2
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    PARAMETERS
+  </a>
+  
+    <nav class="md-nav" aria-label="PARAMETERS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#-id" class="md-nav__link">
+    -Id
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-name" class="md-nav__link">
+    -Name
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-newname" class="md-nav__link">
+    -NewName
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-description" class="md-nav__link">
+    -Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-zones" class="md-nav__link">
+    -Zones
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-members" class="md-nav__link">
+    -Members
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-administrators" class="md-nav__link">
+    -Administrators
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-viewers" class="md-nav__link">
+    -Viewers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-operationtimeout" class="md-nav__link">
+    -OperationTimeout
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-sharedresources" class="md-nav__link">
+    -SharedResources
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-placementpolicy" class="md-nav__link">
+    -PlacementPolicy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-customproperties" class="md-nav__link">
+    -CustomProperties
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-json" class="md-nav__link">
+    -JSON
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-whatif" class="md-nav__link">
+    -WhatIf
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-confirm" class="md-nav__link">
+    -Confirm
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commonparameters" class="md-nav__link">
+    CommonParameters
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inputs" class="md-nav__link">
+    INPUTS
+  </a>
+  
+    <nav class="md-nav" aria-label="INPUTS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#systemstring" class="md-nav__link">
+    System.String
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#systemswitch" class="md-nav__link">
+    System.Switch
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pscustomobject" class="md-nav__link">
+    PSCustomObject
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#outputs" class="md-nav__link">
+    OUTPUTS
+  </a>
+  
+    <nav class="md-nav" aria-label="OUTPUTS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#systemmanagementautomationpsobject" class="md-nav__link">
+    System.Management.Automation.PSObject
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    NOTES
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-links" class="md-nav__link">
+    RELATED LINKS
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="set-vraproject">Set-vRAProject</h1>
+<h2 id="synopsis">SYNOPSIS</h2>
+<p>Update a vRA Cloud Project</p>
+<h2 id="syntax">SYNTAX</h2>
+<h3 id="byid-default">ById (Default)</h3>
+<pre><code>Set-vRAProject -Id &lt;String&gt; [-NewName &lt;String&gt;] [-Description &lt;String&gt;] [-Zones &lt;PSObject[]&gt;]
+ [-Members &lt;String[]&gt;] [-Administrators &lt;String[]&gt;] [-Viewers &lt;String[]&gt;] [-OperationTimeout &lt;Int32&gt;]
+ [-SharedResources &lt;String&gt;] [-PlacementPolicy &lt;String&gt;] [-CustomProperties &lt;Hashtable&gt;] [-WhatIf] [-Confirm]
+ [&lt;CommonParameters&gt;]
+</code></pre>
+<h3 id="byname">ByName</h3>
+<pre><code>Set-vRAProject -Name &lt;String&gt; [-NewName &lt;String&gt;] [-Description &lt;String&gt;] [-Zones &lt;PSObject[]&gt;]
+ [-Members &lt;String[]&gt;] [-Administrators &lt;String[]&gt;] [-Viewers &lt;String[]&gt;] [-OperationTimeout &lt;Int32&gt;]
+ [-SharedResources &lt;String&gt;] [-PlacementPolicy &lt;String&gt;] [-CustomProperties &lt;Hashtable&gt;] [-WhatIf] [-Confirm]
+ [&lt;CommonParameters&gt;]
+</code></pre>
+<h3 id="json">JSON</h3>
+<pre><code>Set-vRAProject -JSON &lt;String&gt; [-WhatIf] [-Confirm] [&lt;CommonParameters&gt;]
+</code></pre>
+<h2 id="description">DESCRIPTION</h2>
+<p>Update a vRA Cloud Project</p>
+<h2 id="examples">EXAMPLES</h2>
+<h3 id="example-1">EXAMPLE 1</h3>
+<pre><code>$CloudZone = [PSCustomObject] @{
+</code></pre>
+<p>zoneId = 'e6b9d1r2d2115a7558039ae2387c'
+    priority = 1
+    maxNumberInstances = 10
+    memoryLimitMb = 107374
+}</p>
+<p>$CustomProperties = @{}
+$CustomProperties.Add('Property1', "Value1")
+$CustomProperties.Add('Property2', "Value2")</p>
+<p>$ProjectArguments = @{
+    Id = 'i84848484848484'
+    Name = 'Test Project'
+    Description = 'Test Project'
+    Zones = $CloudZone
+    Members = 'user1@test.com','user2@test.com'
+    Administrators = 'admin1@test.com','admin2@test.com'
+    OperationTimeout = 3600
+    SharedResources = 'true'
+    CustomProperties = $CustomProperties
+}</p>
+<p>Set-vRAProject @ProjectArguments</p>
+<h3 id="example-2">EXAMPLE 2</h3>
+<pre><code>$JSON = @&quot;
+    {
+        &quot;id&quot;: &quot;i8585858585858&quot;
+        &quot;name&quot;: &quot;Test Project&quot;,
+        &quot;description&quot;: &quot;Test Project&quot;,
+        &quot;zones&quot;: [
+            {
+                &quot;zoneId&quot;: &quot;e6b9d1r2d2115a7558039ae2387c&quot;,
+                &quot;priority&quot;: 1,
+                &quot;maxNumberInstances&quot;: 10,
+                &quot;memoryLimitMB&quot;: 107374
+            },
+            {
+                &quot;zoneId&quot;: &quot;r2d2026e33c3648334bcb67eac669&quot;,
+                &quot;priority&quot;: 2,
+                &quot;maxNumberInstances&quot;: 100,
+                &quot;memoryLimitMB&quot;: 107374
+            }
+        ],
+        &quot;members&quot;: [
+            {
+                &quot;email&quot;: &quot;user1@test.com&quot;
+            },
+            {
+                &quot;email&quot;: &quot;user2@test.com&quot;
+            }
+        ],
+        &quot;administrators&quot;: [
+            {
+                &quot;email&quot;: &quot;admin1@test.com&quot;
+            },
+            {
+                &quot;email&quot;: &quot;admin2@test.com&quot;
+            }
+        ],
+        &quot;constraints&quot;: {},
+        &quot;operationTimeout&quot;: 3600,
+        &quot;sharedResources&quot;: true
+    }
+&quot;@
+</code></pre>
+<p>$JSON | Set-vRAProject</p>
+<h2 id="parameters">PARAMETERS</h2>
+<h3 id="-id">-Id</h3>
+<p>The ID of the Project to update</p>
+<pre><code class="language-yaml">Type: String
+Parameter Sets: ById
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-name">-Name</h3>
+<p>The Name of the Project to update</p>
+<pre><code class="language-yaml">Type: String
+Parameter Sets: ByName
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-newname">-NewName</h3>
+<p>The Name to rename the Project to</p>
+<pre><code class="language-yaml">Type: String
+Parameter Sets: ById, ByName
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-description">-Description</h3>
+<p>A description of the Project</p>
+<pre><code class="language-yaml">Type: String
+Parameter Sets: ById, ByName
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-zones">-Zones</h3>
+<p>PSCustomObject(s) with properties for a Cloud Zone</p>
+<pre><code class="language-yaml">Type: PSObject[]
+Parameter Sets: ById, ByName
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-members">-Members</h3>
+<p>Members to set to the Project</p>
+<pre><code class="language-yaml">Type: String[]
+Parameter Sets: ById, ByName
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-administrators">-Administrators</h3>
+<p>Administrators to set to the Project</p>
+<pre><code class="language-yaml">Type: String[]
+Parameter Sets: ById, ByName
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-viewers">-Viewers</h3>
+<p>Viewers to set to the Project</p>
+<pre><code class="language-yaml">Type: String[]
+Parameter Sets: ById, ByName
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-operationtimeout">-OperationTimeout</h3>
+<p>Operation Timeout in seconds</p>
+<pre><code class="language-yaml">Type: Int32
+Parameter Sets: ById, ByName
+Aliases:
+
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-sharedresources">-SharedResources</h3>
+<p>Deployments are shared between all users in the project</p>
+<pre><code class="language-yaml">Type: String
+Parameter Sets: ById, ByName
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-placementpolicy">-PlacementPolicy</h3>
+<p>Placement Policy - Valid values: "DEFAULT" or "SPREAD"</p>
+<pre><code class="language-yaml">Type: String
+Parameter Sets: ById, ByName
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-customproperties">-CustomProperties</h3>
+<p>Specify the custom properties that should be added to all requests in this project
+Note the vRA API does not appear to support removing existing Custom Properties
+Custom Properties specifed here will be added to those already existing</p>
+<pre><code class="language-yaml">Type: Hashtable
+Parameter Sets: ById, ByName
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-json">-JSON</h3>
+<p>A JSON string with the body payload</p>
+<pre><code class="language-yaml">Type: String
+Parameter Sets: JSON
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-whatif">-WhatIf</h3>
+<p>Shows what would happen if the cmdlet runs.
+The cmdlet is not run.</p>
+<pre><code class="language-yaml">Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-confirm">-Confirm</h3>
+<p>Prompts you for confirmation before running the cmdlet.</p>
+<pre><code class="language-yaml">Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="commonparameters">CommonParameters</h3>
+<p>This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see <a href="http://go.microsoft.com/fwlink/?LinkID=113216">about_CommonParameters</a>.</p>
+<h2 id="inputs">INPUTS</h2>
+<h3 id="systemstring">System.String</h3>
+<h3 id="systemswitch">System.Switch</h3>
+<h3 id="pscustomobject">PSCustomObject</h3>
+<h2 id="outputs">OUTPUTS</h2>
+<h3 id="systemmanagementautomationpsobject">System.Management.Automation.PSObject</h3>
+<h2 id="notes">NOTES</h2>
+<h2 id="related-links">RELATED LINKS</h2>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.74e28a9f.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.220ee61c.min.js"></script>
+      
+    
+  </body>
+</html>
