@@ -136,7 +136,7 @@
                 # --- if a refresh token is supplied, we use iaas login
                 if ($PSBoundParameters.ContainsKey("APIToken")){
                     # -- iaas login with refresh token
-                    $URI = "https://$($Server)/iaas/login"
+                    $URI = "https://$($Server)/iaas/api/login"
 
                     # --- Create Invoke-RestMethod Parameters
                     $RawBody = @{
@@ -162,7 +162,7 @@
                     }
 
                     # --- Logging in with a domain
-                    $URI = "https://$($Server)/csp/gateway/am/idp/auth/login?access_token"
+                    $URI = "https://$($Server)/csp/gateway/am/api/login?access_token"
                     if ($Username -match '@') {
                         # Log in using the advanced authentication API
                         $User = $Username.split('@')[0]
